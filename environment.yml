@@ -1,0 +1,25 @@
+name: konnektor
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  #Test
+  - pytest
+  - pytest-cov
+  - pytest-xdist
+  - coverage
+  - mypy
+  #Typing
+  - gufe
+  - typing-extensions
+  # Sci
+  - numpy
+  - scipy
+  - networkx
+  # Chem
+  - rdkit
+  - openfe #to be removed! - need network type
+  # docs
+  - myst-parser
+  - pydata-sphinx-theme
