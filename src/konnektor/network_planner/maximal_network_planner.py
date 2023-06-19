@@ -9,13 +9,13 @@ from ._abstract_network_planner import _AbstractNetworkPlanner, Network
 
 
 class maximalNetworkPlanner(_AbstractNetworkPlanner):
-    def generate_network(
-        ligands: Iterable[SmallMoleculeComponent],
-        mappers: Iterable[AtomMapper],
-        scorer: Optional[Callable[[AtomMapper], float]] = None,
-        progress: Union[bool, Callable[[Iterable], Iterable]] = True,
-        # allow_disconnected=True
-    ):
+    def generate_network(self,
+                         nodes: Iterable[SmallMoleculeComponent],
+                         mappers: Iterable[AtomMapper],
+                         scorer: Optional[Callable[[AtomMapper], float]] = None,
+                         progress: Union[bool, Callable[[Iterable], Iterable]] = True,
+                         # allow_disconnected=True
+                         ):
         """Create a network with all possible proposed mappings.
 
         This will attempt to create (and optionally score) all possible mappings
@@ -29,7 +29,7 @@ class maximalNetworkPlanner(_AbstractNetworkPlanner):
 
         Parameters
         ----------
-        ligands : Iterable[SmallMoleculeComponent]
+        nodes : Iterable[SmallMoleculeComponent]
           the ligands to include in the LigandNetwork
         mappers : Iterable[LigandAtomMapper]
           the AtomMappers to use to propose mappings.  At least 1 required,
@@ -42,7 +42,7 @@ class maximalNetworkPlanner(_AbstractNetworkPlanner):
           tqdm progress bar that only appears after 1.5 seconds. You can also
           provide a custom progress bar wrapper as a callable.
         """
-        nodes = list(ligands)
+        nodes = list(nodes)
 
         if progress is True:
             # default is a tqdm progress bar

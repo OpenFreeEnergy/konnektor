@@ -14,5 +14,5 @@ class _AbstractNetworkPlanner(abc.ABC):
         self.generate_network(*args, **kwargs)
 
     @abc.abstractmethod
-    def generate_network(self)->Network:
+    def generate_network(self, edges, weights)->Network:
         pass

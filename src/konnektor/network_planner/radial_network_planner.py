@@ -2,6 +2,8 @@
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
 import math
+import numpy as np
+import networkx as nx
 from typing import Iterable, Callable
 import itertools
 
@@ -12,12 +14,24 @@ from openfe.setup import LigandNetwork    # only temproary
 from ._abstract_network_planner import _AbstractNetworkPlanner, Network
 
 
-class RadialNetworkPlanner(_AbstractNetworkPlanner):
+class radialNetworkPlanner(_AbstractNetworkPlanner):
 
-    def generate_network(self, ligands: Iterable[SmallMoleculeComponent],
-                                central_ligand: SmallMoleculeComponent,
-                                mappers: Iterable[AtomMapper],
-                                scorer: Callable[[AtomMapping], float]=None)->Network:
+    def __init__(self,  metric_aggregation_method:Callable=None):
+        self.metric_aggregation_method = metric_aggregation_method
+
+
+    def _central_lig_selection(self, edges, weights)->int:
+        nodes = set([n for e in edges for n in e])
+        edge_weights = list(zip(edges, weights))
+
+        node_scores = {n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for n in nodes}
+        aggregated_scores = list(map(lambda x: (x[0], np.sum(x[1])), node_scores.items()))
+        sorted_node_scores = list(sorted(aggregated_scores, key=lambda x: x[1]))
+
+        opt_node = sorted_node_scores[0]
+        return opt_node
+
+    def generate_network(self,edges, weights, central_node=None) -> nx.Graph:
         """Generate a radial network with all ligands connected to a central node
 
         Also known as hub and spoke or star-map, this plans a Network where
@@ -51,29 +65,16 @@ class RadialNetworkPlanner(_AbstractNetworkPlanner):
           If no scorer is supplied, the first mapping provided by the iterable
           of mappers will be used.
         """
-        edges = []
 
-        for ligand in ligands:
-            best_score = math.inf
-            best_mapping = None
+        if(central_node is None):
+            central_node = self._central_lig_selection(edges=edges, weights=weights)
 
-            for mapping in itertools.chain.from_iterable(
-                mapper.suggest_mappings(central_ligand, ligand)
-                for mapper in mappers
-            ):
-                if not scorer:
-                    best_mapping = mapping
-                    break
+        radial_edges = []
+        for edge, weight in zip(edges):
+            if(central_node in edge):
+                radial_edges.append([edge[0], edge[1], weight])
 
-                score = scorer(mapping)
-                mapping = mapping.with_annotations({"score": score})
+        rg = nx.Graph()
+        rg.add_weighted_edges_from(ebunch_to_add=edges)
 
-                if score < best_score:
-                    best_mapping = mapping
-                    best_score = score
-
-            if best_mapping is None:
-                raise ValueError(f"No mapping found for {ligand}")
-            edges.append(best_mapping)
-
-        return LigandNetwork(edges)
+        return rg
