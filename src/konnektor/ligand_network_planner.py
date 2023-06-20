@@ -2,7 +2,7 @@ import abc
 from openfe.setup import LigandNetwork
 import network_planner
 import itertools
-from typing import Iterable, List, Tuple
+from typing import Iterable, List, Tuple, Union
 
 from gufe import SmallMoleculeComponent
 

@@ -1,4 +1,3 @@
-import itertools
 import logging
 import numpy as np
 from datetime import datetime
@@ -8,10 +7,7 @@ from typing import Iterable, List, Tuple
 import networkx as nx
 from networkx import Graph
 
-from gufe import SmallMoleculeComponent, AtomMapper
-
-from openfe.setup.ligand_network import LigandNetwork  # only temproary
-from ._abstract_network_planner import _AbstractNetworkPlanner, Network
+from ._abstract_network_planner import _AbstractNetworkPlanner
 
 log = logging.getLogger(__name__)
 
@@ -176,6 +172,108 @@ class cyclic_network_planner(_AbstractNetworkPlanner):
         log.debug("\tNode Cycle appearance: " + str(connectivity_dict))
 
         return selected_cycles
+
+    def generate_network_double_greedy(self, edges: List[Tuple[int, int]], weights: List[float], edge_limitor=10) -> Graph:
+        log.error("Building Cyclic Graph - START")
+        start_time_total = datetime.now()
+
+        ew = dict(zip(map(lambda x: tuple(sorted(list(x))), edges), weights))
+        nodes = [n for e in edges for n in e]
+
+        start_time_cycle_generation = datetime.now()
+        log.error("Priority Queue Gen init - " + str(start_time_cycle_generation))
+
+        # build
+        self.orig_g = self._translate_input(edges=edges, weights=weights)
+        from collections import defaultdict
+        min_node = defaultdict(list)
+        for (e1, e2), v in sorted(ew.items(), key=lambda x: x[1]):
+            if(len(min_node) == len(nodes) and not all([len(min_node[n]) < edge_limitor for n in min_node])):
+                break
+            if(len(min_node[e1]) < edge_limitor):
+                min_node[e1].append((e1, e2))
+            if(len(min_node[e2]) < edge_limitor):
+                min_node[e2].append((e1, e2))
+
+
+        """
+        for target_node in nodes:
+            me = []
+            for k in kr_ew:
+                e = r_ew[k]
+                if edge_limitor <= len(me):
+                    break
+                elif target_node in e:
+                    me.append(e)
+            min_node[target_node] = me
+        """
+        end_time_cycle_generation = datetime.now()
+        duration_cycle_generation = end_time_cycle_generation - start_time_cycle_generation
+        log.error("\tDuration: " + str(duration_cycle_generation))
+        log.error("Priority Queue Gen complete\n")
+
+
+        start_time_cycle_selection = datetime.now()
+        log.error("Cycle Selection init - " + str(start_time_cycle_selection))
+        # build_cycles for each node:
+        all_cycles_per_node = {}
+        all_edge_collection = []
+        all_node_collection = []
+        for target_node, prioqueue in min_node.items():
+            not_target_node = lambda e: not (e[0] == target_node or e[1] == target_node)
+
+            node_cycles = []
+            for i in range(self.node_cycle_connectivity):
+                start_edge = prioqueue[i]
+                cycle_edges = [start_edge]  # start edge
+                cycle_nodes = set(start_edge)
+                all_edge_collection.append(start_edge)
+                all_node_collection.extend(list(start_edge))
+                
+                adding_node = lambda e: len(cycle_nodes.intersection(set(e))) == 1
+                use_edge = lambda e: not e in cycle_edges and adding_node(e) and not_target_node(e)
+
+                successor_node = prioqueue[i][1] if (target_node == prioqueue[i][0]) else prioqueue[i][0]
+                for j in range(self.max_sub_cycle_size - 2):
+                    tmp_prio_queue = min_node[successor_node]
+
+                    min_es = [e for e in tmp_prio_queue if (use_edge(e))]
+                    if (len(min_es) == 0):
+                        break
+                    else:
+                        min_e = min_es[0]
+
+                    cycle_edges.append(min_e)
+
+                    cycle_nodes = cycle_nodes.union(min_e)
+                    all_edge_collection.append(tuple(min_e))
+                    successor_node = min_e[1] if (successor_node == min_e[0]) else min_e[0]
+
+                if(len(cycle_edges) == self.max_sub_cycle_size-1):
+                    cycle_edges.append(tuple(sorted([successor_node, target_node])))
+                    node_cycles.append(cycle_edges)
+            all_cycles_per_node[target_node] = node_cycles
+
+        self.all_cycles = set([tuple(c) for cs in all_cycles_per_node.values() for c in cs])
+        all_edges = set([e for c in self.all_cycles for e in c])
+        end_time_cycle_selection = datetime.now()
+        duration_cycle_selection = end_time_cycle_selection - start_time_cycle_selection
+        log.error("\tDuration: " + str(duration_cycle_selection))
+        log.error("Cycle Selection complete\n")
+
+        log.debug("Building Cyclic Graph - DONE")
+        end_time_total = datetime.now()
+        duration_total = end_time_total - start_time_total
+
+        log.error("\nTimings:\n--------")
+        log.error("\t Cycle generation duration: " + str(duration_cycle_generation))
+        log.error("\t Cycle selection duration: " + str(duration_cycle_selection))
+        log.error("\t total duration: " + str(duration_total))
+
+        fg = nx.Graph()
+        [fg.add_node(n) for n in nodes]
+        fg.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], ew[e]) for e in all_edges])
+        return fg
 
     """
         Cycle metrics
