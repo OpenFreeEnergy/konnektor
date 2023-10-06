@@ -4,12 +4,13 @@
 [![Documentation Status](https://readthedocs.org/projects/konnektor/badge/?version=latest)](https://konnektor.readthedocs.io/en/latest/?badge=latest)
 
 # Konnektor: The tools for building networks for your FE calcuations
+====================================================================
 
 Konnektor offers at the moment basic network planers. 
 
 More will be here soon!
 
-Implemented Network Layouts:
+## Usage
 ```python3
 import numpy as np
 from openfe_benchmarks import benzenes
@@ -46,3 +47,18 @@ fig.show()
 ```
 
 ![](.img/network_layouts.png)
+
+
+## Installation
+you can install Kartograf via the package manager of your choice:
+
+For Development purposes:
+```shell
+git clone https://github.com/OpenFreeEnergy/konnektor.git
+
+cd konnektor
+conda env create -f environment.yml
+
+conda activate konnektor
+pip install .
+```
