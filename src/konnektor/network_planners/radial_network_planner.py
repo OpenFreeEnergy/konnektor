@@ -36,5 +36,4 @@ class RadialLigandNetworkPlanner(easyLigandNetworkPlanner):
                 selected_mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
                             for mapping in mapping_generator]
 
-            print(selected_mappings)
             return LigandNetwork(edges=selected_mappings, nodes=ligands)

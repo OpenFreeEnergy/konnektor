@@ -3,11 +3,11 @@ import networkx as nx
 from matplotlib import pyplot as plt
 
 ofe_colors =  [(49 / 256, 57 / 256, 77 / 256, 1),  # Badass Blue
-                  (184 / 256, 87 / 256, 65 / 256, 1),  # Feeling spicy
-                  (0, 147 / 256, 132 / 256, 1),  # Feeling sick
-                  (217 / 256, 196 / 256, 177 / 256, 1),  # Beastlygrey
-                  (102 / 256, 102 / 256, 102 / 256, 1),  # Sandy Sergio
-                  (0 / 256, 47 / 256, 74 / 256, 1), ]  # otherBlue]
+              (184 / 256, 87 / 256, 65 / 256, 1),  # Feeling spicy
+              (0, 147 / 256, 132 / 256, 1),  # Feeling sick
+              (217 / 256, 196 / 256, 177 / 256, 1),  # Beastlygrey
+              (102 / 256, 102 / 256, 102 / 256, 1),  # Sandy Sergio
+              (0 / 256, 47 / 256, 74 / 256, 1), ]  # otherBlue]
 
 
 def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3):

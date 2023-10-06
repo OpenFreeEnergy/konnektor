@@ -32,7 +32,7 @@ networkers = [MaximalNetworkPlanner, RadialLigandNetworkPlanner,
 networks = []
 for networker_cls, name in zip(networkers,["Max", "Radial", "MST", "Cyclic"]):
     networker = networker_cls(mapper=KartografAtomMapper(), scorer=default_lomap_score)
-    network = networker(compounds)
+    network = networker.generate_ligand_network(compounds)
     network.name=name
     networks.append(network)
 
