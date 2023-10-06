@@ -3,3 +3,11 @@
 [![coverage](https://codecov.io/gh/OpenFreeEnergy/konnektor/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenFreeEnergy/konnektor)
 [![Documentation Status](https://readthedocs.org/projects/konnektor/badge/?version=latest)](https://konnektor.readthedocs.io/en/latest/?badge=latest)
 
+# Konnektor: The tools for building networks for your FE calcuations
+
+Konnektor offers at the moment basic network planers. 
+
+More will be here soon!
+
+Implemented Network Layouts:
+![](.img/network_layouts.png)
