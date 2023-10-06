@@ -9,6 +9,7 @@ from konnektor.network_generator_algorithms import CyclicNetworkGenerator
 from konnektor.tests.data.conf import nine_mols_edges
 
 
+#more test here also for the params
 def test_mst_network_generation_find_center(nine_mols_edges):
         expected_edges = [('lig_15', 'lig_12'), ('lig_15', 'lig_16'), ('lig_15', 'lig_13'),
                           ('lig_15', 'lig_14'), ('lig_15', 'lig_10'), ('lig_15', 'lig_11'),

@@ -5,7 +5,7 @@ from gufe import SmallMoleculeComponent
 from openfe import LigandNetwork
 
 from network_generator_algorithms import CyclicNetworkGenerator
-from network_planner._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from network_planners._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
 class CyclicLigandNetworkPlanner(easyLigandNetworkPlanner):

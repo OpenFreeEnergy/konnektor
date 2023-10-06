@@ -20,15 +20,14 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
         for edge, weight in zip(edges, weights):
             wedges.append([edge[0], edge[1], weight])
 
-        self.g = g = nx.Graph()
-        g.add_weighted_edges_from(ebunch_to_add=wedges)
+        self.g = nx.Graph()
+        self.g.add_weighted_edges_from(ebunch_to_add=wedges)
 
         # Next analyze that network to create minimal spanning network. Because
         # we carry the original (directed) AtomMapping, we don't lose
         # direction information when converting to an undirected graph.
-        min_edges = nx.minimum_spanning_edges(g, weight='score')
-
-        mse = [edge_data for edge_data in min_edges]
+        min_edges = nx.minimum_spanning_edges(self.g, weight='weight')
+        mse = [(e1, e2, edge_data['weight']) for e1, e2, edge_data in min_edges]
 
         mg = nx.Graph()
         mg.add_weighted_edges_from(ebunch_to_add=mse)

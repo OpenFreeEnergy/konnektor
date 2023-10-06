@@ -8,3 +8,6 @@
 Konnektor offers at the moment basic network planers. 
 
 More will be here soon!
+
+Implemented Network Layouts:
+![](.img/network_layouts.png)

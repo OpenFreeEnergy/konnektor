@@ -1,7 +1,7 @@
 from openfe import LigandNetwork
 
 from network_generator_algorithms import MstNetworkGenerator
-from network_planner._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from network_planners._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
 class MinimalSpanningTreeLigandNetworkPlanner(easyLigandNetworkPlanner):
@@ -27,7 +27,7 @@ class MinimalSpanningTreeLigandNetworkPlanner(easyLigandNetworkPlanner):
 
         # Translate Mappings to graphable:
         edge_map = {(ligands.index(m.componentA), ligands.index(m.componentB)): m for m in mappings}
-        edges = list(sorted(edge_map.keys()))
+        edges = list(edge_map.keys())
         weights = [edge_map[k].annotations['score'] for k in edges]
 
         mg = self.network_generator.generate_network(edges, weights)
@@ -38,6 +38,6 @@ class MinimalSpanningTreeLigandNetworkPlanner(easyLigandNetworkPlanner):
             raise RuntimeError("Unable to create edges for some nodes: "
                                + str(list(missing_nodes)))
 
-        selected_mappings = [edge_map[k] for k in mg.edges]
+        selected_mappings = [edge_map[k] if(k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges]
 
         return LigandNetwork(edges=selected_mappings, nodes=ligands)

@@ -45,10 +45,10 @@ class easyLigandNetworkPlanner(abc.ABC):
 
 '''
 class ligandNetworkPlanner():
-    def __int__(self, mappers=[], scorers=[], network_planner=None):
+    def __int__(self, mappers=[], scorers=[], network_planners=None):
         self.mappers = mappers
         self.mapping_scorer = scorers
-        self.network_planner = network_planner
+        self.network_planners = network_planners
 
     def __call__(self, *args, **kwargs):
         self.generate_ligand_network()
@@ -64,6 +64,6 @@ class ligandNetworkPlanner():
             for mol_mappings, mol_score in zip(mapping_mappper, mapping_scores):
                 mappings_scores.extend(list(zimp(mol_mappings, mol_score)))
 
-        self.network_planner()
+        self.network_planners()
 
 '''
