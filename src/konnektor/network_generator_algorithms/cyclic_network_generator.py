@@ -7,12 +7,12 @@ from typing import Iterable, List, Tuple
 import networkx as nx
 from networkx import Graph
 
-from ._abstract_network_planner import _AbstractNetworkPlanner
+from ._abstract_network_generator import _AbstractNetworkGenerator
 
 log = logging.getLogger(__name__)
 
 
-class cyclic_network_planner(_AbstractNetworkPlanner):
+class CyclicNetworkGenerator(_AbstractNetworkGenerator):
 
     def __init__(self, node_cycle_connectivity: int = 2,
                  sub_cycle_size_range: Iterable[int] = 3):
@@ -62,7 +62,7 @@ class cyclic_network_planner(_AbstractNetworkPlanner):
         log.debug("\tDuration: " + str(duration_cycle_selection))
         log.debug("Cycle Selection complete\n")
 
-        cyclic_graph = self._reduce_graph_to_cycles(selected_cycles=self._selected_cycles, graph=self.orig_g)
+        self.cyclic_graph = self._reduce_graph_to_cycles(selected_cycles=self._selected_cycles, graph=self.orig_g)
 
         log.debug("Building Cyclic Graph - DONE")
         end_time_total = datetime.now()
@@ -73,7 +73,7 @@ class cyclic_network_planner(_AbstractNetworkPlanner):
         log.error("\t Cycle selection duration: " + str(duration_cycle_selection))
         log.error("\t total duration: " + str(duration_total))
 
-        return cyclic_graph
+        return self.cyclic_graph
 
     """
     Cycle building
@@ -255,6 +255,7 @@ class cyclic_network_planner(_AbstractNetworkPlanner):
             all_cycles_per_node[target_node] = node_cycles
 
         self.all_cycles = set([tuple(c) for cs in all_cycles_per_node.values() for c in cs])
+
         all_edges = set([e for c in self.all_cycles for e in c])
         end_time_cycle_selection = datetime.now()
         duration_cycle_selection = end_time_cycle_selection - start_time_cycle_selection
@@ -270,10 +271,10 @@ class cyclic_network_planner(_AbstractNetworkPlanner):
         log.error("\t Cycle selection duration: " + str(duration_cycle_selection))
         log.error("\t total duration: " + str(duration_total))
 
-        fg = nx.Graph()
-        [fg.add_node(n) for n in nodes]
-        fg.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], ew[e]) for e in all_edges])
-        return fg
+        self.cyclic_graph = nx.Graph()
+        [self.cyclic_graph.add_node(n) for n in nodes]
+        self.cyclic_graph.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], ew[e]) for e in all_edges])
+        return self.cyclic_graph
 
     """
         Cycle metrics

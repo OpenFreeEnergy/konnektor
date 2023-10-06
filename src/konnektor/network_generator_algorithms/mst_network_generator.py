@@ -10,18 +10,17 @@ from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
 
 from openfe.setup.ligand_network import LigandNetwork    # only temproary
-from ._abstract_network_planner import _AbstractNetworkPlanner, Network
+from ._abstract_network_generator import _AbstractNetworkGenerator, Network
 
-class mstNetworkPlanner(_AbstractNetworkPlanner):
+class MstNetworkGenerator(_AbstractNetworkGenerator):
 
 
     def generate_network(self, edges, weights):
-
         wedges = []
         for edge, weight in zip(edges, weights):
             wedges.append([edge[0], edge[1], weight])
 
-        g = nx.Graph()
+        self.g = g = nx.Graph()
         g.add_weighted_edges_from(ebunch_to_add=wedges)
 
         # Next analyze that network to create minimal spanning network. Because
@@ -29,7 +28,7 @@ class mstNetworkPlanner(_AbstractNetworkPlanner):
         # direction information when converting to an undirected graph.
         min_edges = nx.minimum_spanning_edges(g, weight='score')
 
-        mse = [edge_data for _, _, _, edge_data in min_edges]
+        mse = [edge_data for edge_data in min_edges]
 
         mg = nx.Graph()
         mg.add_weighted_edges_from(ebunch_to_add=mse)

@@ -1,80 +1,41 @@
-# This code is part of OpenFE and is licensed under the MIT license.
-# For details, see https://github.com/OpenFreeEnergy/kartograf
-
-import math
-import numpy as np
-import networkx as nx
-from typing import Iterable, Callable
 import itertools
+from typing import Iterable
 
-from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
+from openfe import LigandNetwork
 
-from openfe.setup import LigandNetwork    # only temproary
-from ._abstract_network_planner import _AbstractNetworkPlanner, Network
-
-
-class radialNetworkPlanner(_AbstractNetworkPlanner):
-
-    def __init__(self,  metric_aggregation_method:Callable=None):
-        self.metric_aggregation_method = metric_aggregation_method
+from konnektor.network_generator_algorithms import RadialNetworkGenerator
+from network_planner._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
-    def _central_lig_selection(self, edges, weights)->int:
-        nodes = set([n for e in edges for n in e])
-        edge_weights = list(zip(edges, weights))
+class RadialLigandNetworkPlanner(easyLigandNetworkPlanner):
 
-        node_scores = {n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for n in nodes}
-        aggregated_scores = list(map(lambda x: (x[0], np.sum(x[1])), node_scores.items()))
-        sorted_node_scores = list(sorted(aggregated_scores, key=lambda x: x[1]))
+    def __init__(self, mapper, scorer):
+        super().__init__(mapper=mapper, scorer=scorer, network_generator=RadialNetworkGenerator())
 
-        opt_node = sorted_node_scores[0]
-        return opt_node
 
-    def generate_network(self,edges, weights, central_node=None) -> nx.Graph:
-        """Generate a radial network with all ligands connected to a central node
 
-        Also known as hub and spoke or star-map, this plans a Network where
-        all ligands are connected via a central ligand.
+    def generate_ligand_network(self, ligands: Iterable[SmallMoleculeComponent], central_ligand:SmallMoleculeComponent=None) ->LigandNetwork:
+            # Build Full Graph
+            ligands = list(ligands)
 
-        Parameters
-        ----------
-        ligands : iterable of SmallMoleculeComponents
-          the ligands to arrange around the central ligand
-        central_ligand : SmallMoleculeComponent
-          the ligand to use as the hub/central ligand
-        mappers : iterable of AtomMappers
-          mappers to use, at least 1 required
-        scorer : scoring function, optional
-          a callable which returns a float for any AtomMapping.  Used to
-          assign scores to potential mappings, higher scores indicate worse
-          mappings.
+            if(central_ligand is None):
+                #Full Graph Construction
+                ligands, mappings = self._input_generate_all_possible_mappings(ligands=ligands)
 
-        Raises
-        ------
-        ValueError
-          if no mapping between the central ligand and any other ligand can be
-          found
+                #Translate Mappings to graphable:
+                edge_map = {(ligands.index(m.componentA), ligands.index(m.componentB)): m for m in mappings}
+                edges = list(sorted(edge_map.keys()))
+                weights = [edge_map[k].annotations['score'] for k in edges]
 
-        Returns
-        -------
-        network : Network
-          will have an edge between each ligand and the central ligand, with the
-          mapping being the best possible mapping found using the supplied atom
-          mappers.
-          If no scorer is supplied, the first mapping provided by the iterable
-          of mappers will be used.
-        """
+                edges_ids = self.network_generator.generate_network(edges=edges, weights=weights)
+                print(edges_ids)
+                selected_mappings = [edge_map[tuple(k[:2])] for k in edges_ids]
 
-        if(central_node is None):
-            central_node = self._central_lig_selection(edges=edges, weights=weights)
+            else:   #Given central ligands: less effort. - Trivial Case
+                mapping_generator = [self.mapper.suggest_mappings(central_ligand, molA) for molA in ligands]
+                selected_mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
+                            for mapping in mapping_generator]
 
-        radial_edges = []
-        for edge, weight in zip(edges):
-            if(central_node in edge):
-                radial_edges.append([edge[0], edge[1], weight])
-
-        rg = nx.Graph()
-        rg.add_weighted_edges_from(ebunch_to_add=edges)
-
-        return rg
+            print(selected_mappings)
+            return LigandNetwork(edges=selected_mappings, nodes=ligands)

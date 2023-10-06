@@ -5,7 +5,7 @@ from gufe import network
 class Network():
     pass
 
-class _AbstractNetworkPlanner(abc.ABC):
+class _AbstractNetworkGenerator(abc.ABC):
 
     def __int__(self):
         pass

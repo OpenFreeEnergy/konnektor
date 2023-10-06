@@ -1,18 +1,22 @@
 import itertools
 
 from typing import Iterable, Callable, Union, Optional
+import functools
+from tqdm import tqdm
 
 from gufe import SmallMoleculeComponent, AtomMapper
 
 from openfe.setup.ligand_network import LigandNetwork    # only temproary
-from ._abstract_network_planner import _AbstractNetworkPlanner, Network
+from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
-class maximalNetworkPlanner(_AbstractNetworkPlanner):
-    def generate_network(self,
+class MaximalNetworkPlanner(easyLigandNetworkPlanner):
+    def __init__(self, mapper, scorer):
+        super().__init__(mapper=mapper, scorer=scorer,
+                       network_generator=None)
+
+    def generate_ligand_network(self,
                          nodes: Iterable[SmallMoleculeComponent],
-                         mappers: Iterable[AtomMapper],
-                         scorer: Optional[Callable[[AtomMapper], float]] = None,
                          progress: Union[bool, Callable[[Iterable], Iterable]] = True,
                          # allow_disconnected=True
                          ):
@@ -53,12 +57,11 @@ class maximalNetworkPlanner(_AbstractNetworkPlanner):
         # otherwise, it should be a user-defined callable
 
         mapping_generator = itertools.chain.from_iterable(
-            mapper.suggest_mappings(molA, molB)
+            self.mapper.suggest_mappings(molA, molB)
             for molA, molB in progress(itertools.combinations(nodes, 2))
-            for mapper in mappers
         )
-        if scorer:
-            mappings = [mapping.with_annotations({'score': scorer(mapping)})
+        if self.scorer:
+            mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
                         for mapping in mapping_generator]
         else:
             mappings = list(mapping_generator)
