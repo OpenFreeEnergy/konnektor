@@ -44,16 +44,16 @@ jobs:
       - name: "Test imports"
         run: |
           # if we add more to this, consider changing to for + env vars
-          python -Ic "import kartograf"
+          python -Ic "import konnektor"
       - name: "Environment Information"
         run: |
           mamba info -a
           mamba list
       - name: "Run tests"
         run: |
-          pytest -n 2 -v --cov=kartograf --cov-report=xml
+          pytest -n 2 -v --cov=konnektor --cov-report=xml
       - name: codecov
-        if: ${{ github.repository == 'OpenFreeEnergy/kartograf' && github.event != 'schedule'}}
+        if: ${{ github.repository == 'OpenFreeEnergy/konnektor' && github.event != 'schedule'}}
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
