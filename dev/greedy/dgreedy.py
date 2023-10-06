@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from konnektor import cyclic_network_planner
+from konnektor.network_generator_algorithms import CyclicNetworkGenerator
 
 sub_cycle_size_range = 3
 node_cycle_connectivity = 2 #a node should be at least in n cycles
@@ -14,7 +14,7 @@ for n in steps: #range(10, 81, 10):
     edges = [(x,y) for i, x in enumerate(nodes) for y in nodes[i+1:]]
     weights = np.random.random_sample(len(edges))
 
-    network_planner = cyclic_network_planner(node_cycle_connectivity=node_cycle_connectivity, sub_cycle_size_range=sub_cycle_size_range)
+    network_planner = CyclicNetworkGenerator(node_cycle_connectivity=node_cycle_connectivity, sub_cycle_size_range=sub_cycle_size_range)
     cg = network_planner.generate_network_double_greedy(edges=edges, weights=weights)
     cgs.append([network_planner.orig_g, cg])
     print()
