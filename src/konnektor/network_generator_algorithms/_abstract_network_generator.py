@@ -11,7 +11,7 @@ class _AbstractNetworkGenerator(abc.ABC):
         pass
 
     def __call__(self, *args, **kwargs):
-        self.generate_network(*args, **kwargs)
+        return self.generate_network(*args, **kwargs)
 
     @abc.abstractmethod
     def generate_network(self, edges, weights)->Network:

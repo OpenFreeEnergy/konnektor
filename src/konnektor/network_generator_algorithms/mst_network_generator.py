@@ -15,7 +15,7 @@ from ._abstract_network_generator import _AbstractNetworkGenerator, Network
 class MstNetworkGenerator(_AbstractNetworkGenerator):
 
 
-    def generate_network(self, edges, weights):
+    def generate_network(self, edges, weights) -> nx.Graph:
         wedges = []
         for edge, weight in zip(edges, weights):
             wedges.append([edge[0], edge[1], weight])

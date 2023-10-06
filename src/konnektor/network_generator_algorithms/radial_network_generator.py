@@ -74,10 +74,16 @@ class RadialNetworkGenerator(_AbstractNetworkGenerator):
         if(central_node is None):
             central_node, avg_score = self._central_lig_selection(edges=edges, weights=weights)
 
-        radial_edges = []
+        wedges = []
         for edge, weight in zip(edges, weights):
             if(central_node in edge):
-                radial_edges.append([edge[0], edge[1], weight])
+                wedges.append([edge[0], edge[1], weight])
 
         #Todo: Warning if something was not connected to the central ligand?
-        return radial_edges
+        nodes = set([n for e in edges for n in e])
+
+        self.radial_graph = nx.Graph()
+        [self.radial_graph.add_node(n) for n in nodes]
+        self.radial_graph.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], e[2]) for e in wedges])
+
+        return self.radial_graph
