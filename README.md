@@ -10,4 +10,39 @@ Konnektor offers at the moment basic network planers.
 More will be here soon!
 
 Implemented Network Layouts:
+```python3
+import numpy as np
+from openfe_benchmarks import benzenes
+from kartograf import KartografAtomMapper
+from konnektor.visualization import draw_ligand_network
+from openfe.setup.atom_mapping.lomap_scorers import default_lomap_score
+
+#Get Input Data
+compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"], 
+                        benzenes.get_system().ligand_components))
+
+#Build Networks
+from konnektor.network_planners import (MaximalNetworkPlanner, RadialLigandNetworkPlanner, 
+                                        MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner)
+
+networkers = [MaximalNetworkPlanner, RadialLigandNetworkPlanner,
+              MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner]
+
+networks = []
+for networker_cls, name in zip(networkers,["Max", "Radial", "MST", "Cyclic"]):
+    networker = networker_cls(mapper=KartografAtomMapper(), scorer=default_lomap_score)
+    network = networker(compounds)
+    network.name=name
+    networks.append(network)
+
+#Visualize
+fig, axes = plt.subplots(ncols=2, nrows=2, figsize=[16,9])
+axes= np.array(axes).flat
+for ax, net in zip(axes, [max_network, radial_network, mst_network, cyclic_network]):
+    draw_ligand_network(network=net, title=net.name, ax=ax, node_size=1500)
+    ax.axis("off")
+    
+fig.show()
+```
+
 ![](.img/network_layouts.png)
