@@ -130,3 +130,6 @@ dmypy.json
 
 #version
 _version.py
+
+#IDE
+.idea
