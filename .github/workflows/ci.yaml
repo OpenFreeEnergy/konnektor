@@ -36,7 +36,7 @@ jobs:
             python-version: ${{ matrix.python-version }}
             miniforge-variant: Mambaforge
             environment-file: environment.yml
-            activate-environment: kartograf
+            activate-environment: konnektor
 
       - name: "Install"
         run: pip install --no-deps -e .
