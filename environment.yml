@@ -4,6 +4,7 @@ channels:
 dependencies:
   - python
   - pip
+  - setuptools
   #Test
   - pytest
   - pytest-cov
