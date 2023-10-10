@@ -50,7 +50,7 @@ fig.show()
 ![](.img/network_layouts.png)
 
 
-Additionally we are working on Molecule diversity based Network:
+Additionally we are working on Molecule diversity based Networks here with HIF2A:
 ![](.img/Divesity_network.png)
 
 ## Installation
