@@ -16,11 +16,14 @@ authors=[
     {name="Richard J Gowers", email="richardjgowers@gmail.com"},
 ]
 dependencies = [
-  'rdkit',
+  'setuptools',
   'scipy',
   'numpy',
   'networkx',
-  'gufe'
+  'gufe',
+  'rdkit',
+  'scikit-mol',
+  'scikit-learn',
 ]
 description="Konnektor is a package for calculating networks."
 readme="README.md"
