@@ -1,10 +1,14 @@
 import abc
+import logging
 import itertools
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, List
 
 from openfe.setup import LigandNetwork
 
-from gufe import SmallMoleculeComponent
+from gufe import SmallMoleculeComponent, AtomMapper
+
+log = logging.getLogger(__name__)
+#log.setLevel(logging.WARNING)
 
 class easyLigandNetworkPlanner(abc.ABC):
     def __init__(self, mapper, scorer, network_generator):
@@ -43,27 +47,48 @@ class easyLigandNetworkPlanner(abc.ABC):
         return LigandNetwork(edges=selected_edges, nodes=ligands)
 
 
-'''
-class ligandNetworkPlanner():
-    def __int__(self, mappers=[], scorers=[], network_planners=None):
-        self.mappers = mappers
-        self.mapping_scorer = scorers
-        self.network_planners = network_planners
+    def concatenate_networks(self, ligandNetworks:List[LigandNetwork], nEdges:int = 3) -> LigandNetwork:
 
-    def __call__(self, *args, **kwargs):
-        self.generate_ligand_network()
+        selected_edges = []
+        selected_nodes = []
+        connecting_edges = []
 
-    def generate_ligand_network(self, ligands:Iterable):
+        log.info("Number of edges in individual networks:\n"+str(sum([len(s.edges) for s in ligandNetworks]))+"/"+str([len(s.edges) for s in ligandNetworks]))
+        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligandNetworks, 2):
+            compoundsA = list(ligandNetworkA.nodes)
+            compoundsB = list(ligandNetworkB.nodes)
 
-        mappings = [[[mapper(molA, molB) for molB in ligands[i:]] for i, molA in enumerate(ligands)] for mapper in self.mappers]
-        scores = [[[(mapping_scorer(mapping) for mapping_scorer in self.mapping_scorer) for mapping in molA_mappings] for molA_mappings in mapper_mappings] for mapper_mappings in mappings]
+            #bipartite Graph
+            mappings = []
+            for cA in compoundsA:
+                for cB in compoundsB:
+                    m = [mapping.with_annotations({'score': self.scorer(mapping)}) for mapping in self.mapper.suggest_mappings(cA,cB)]
+                    mappings.extend(m)
 
-        #flatten_stuff
-        mappings_scores =[]
-        for mapping_mappper, mapping_scores in zip(mappings, scores):
-            for mol_mappings, mol_score in zip(mapping_mappper, mapping_scores):
-                mappings_scores.extend(list(zimp(mol_mappings, mol_score)))
+            #prio Queue
+            mappings = list(sorted(mappings, key=lambda x: x.annotations["score"]))
+            connecting_nodes = []
 
-        self.network_planners()
+            #nEdges diversity increase:
+            for mapping in mappings:
+                nodes = [mapping.componentA.name, mapping.componentB.name]
+                if(all([not n in connecting_nodes for n in nodes])):
+                    connecting_edges.append(mapping)
+                    connecting_nodes.extend(nodes)
+                    if(len(connecting_edges)>=nEdges):
+                        break
 
-'''
+            log.info("Adding ConnectingEdges: "+str(len(connecting_edges)))
+
+            selected_edges.extend(ligandNetworkA.edges)
+            selected_edges.extend(ligandNetworkB.edges)
+            selected_nodes.extend(compoundsA)
+            selected_nodes.extend(compoundsB)
+
+        selected_edges = list(set(selected_edges))
+        selected_edges.extend(connecting_edges)
+        log.info("Total Concatenating Edges: "+str(len(connecting_edges)))
+        log.info("Total Concatenated Edges: "+str(len(selected_edges)))
+
+        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
+        return concat_LigandNetwork

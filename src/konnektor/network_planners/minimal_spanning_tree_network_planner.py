@@ -23,6 +23,7 @@ class MinimalSpanningTreeLigandNetworkPlanner(easyLigandNetworkPlanner):
 
     def generate_ligand_network(self, ligands) ->LigandNetwork:
 
+
         ligands, mappings = self._input_generate_all_possible_mappings(ligands=ligands)
 
         # Translate Mappings to graphable:

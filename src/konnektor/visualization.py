@@ -10,7 +10,7 @@ ofe_colors =  [(49 / 256, 57 / 256, 77 / 256, 1),  # Badass Blue
               (0 / 256, 47 / 256, 74 / 256, 1), ]  # otherBlue]
 
 
-def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3):
+def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3, fontsize=18):
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
     edges = list(sorted(edge_map.keys()))
@@ -30,6 +30,6 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
 
     nx.draw_networkx(g, with_labels=True, ax=ax, node_size=node_size, width=edge_width,
                      node_color=ofe_colors[-1], edge_color=ofe_colors[3], font_color=[1,1,1])
-    ax.set_title(title+" Network #edges "+str(len(g.edges)))
+    ax.set_title(title+" Network #edges "+str(len(g.edges)), fontsize=fontsize)
 
     return fig

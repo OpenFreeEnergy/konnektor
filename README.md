@@ -50,6 +50,9 @@ fig.show()
 ![](.img/network_layouts.png)
 
 
+Additionally we are working on Molecule diversity based Network:
+![](.img/Divesity_network.png)
+
 ## Installation
 you can install Kartograf via the package manager of your choice:
 

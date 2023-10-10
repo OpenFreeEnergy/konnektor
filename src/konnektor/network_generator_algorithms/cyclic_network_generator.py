@@ -10,7 +10,7 @@ from networkx import Graph
 from ._abstract_network_generator import _AbstractNetworkGenerator
 
 log = logging.getLogger(__name__)
-
+log.setLevel(logging.WARNING)
 
 class CyclicNetworkGenerator(_AbstractNetworkGenerator):
 
@@ -34,44 +34,44 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         self.cycle_metric = self._score_summation  # how to evaluate the cost of a cycle.
 
     def generate_network(self, edges: List[Tuple[int, int]], weights: List[float]) -> Graph:
-        log.debug("Building Cyclic Graph - START")
+        log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
 
         self.orig_g = self._translate_input(edges, weights)
 
         # Generate paths of given size
         start_time_path_generation = datetime.now()
-        log.debug("Cycle Selection init - " + str(start_time_path_generation))
+        log.info("Cycle Selection init - " + str(start_time_path_generation))
 
         self._cyclic_paths_scored = self._generate_cyclic_paths(graph=self.orig_g)
 
         end_time_path_generation = datetime.now()
         duration_path_generation = end_time_path_generation - start_time_path_generation
-        log.debug("\tDuration: " + str(duration_path_generation))
-        log.debug("Cycle Selection complete\n")
+        log.info("\tDuration: " + str(duration_path_generation))
+        log.info("Cycle Selection complete\n")
 
         # Select Cycles, to give each node a given connectivity:
         start_time_cycle_selection = datetime.now()
-        log.debug("Cycle Selection init - " + str(start_time_cycle_selection))
+        log.info("Cycle Selection init - " + str(start_time_cycle_selection))
 
         self._selected_cycles = self._greedy_select_cylces_by_node_connectivity(
             cyclic_paths_scored=self._cyclic_paths_scored, graph=self.orig_g)
 
         end_time_cycle_selection = datetime.now()
         duration_cycle_selection = end_time_cycle_selection - start_time_cycle_selection
-        log.debug("\tDuration: " + str(duration_cycle_selection))
-        log.debug("Cycle Selection complete\n")
+        log.info("\tDuration: " + str(duration_cycle_selection))
+        log.info("Cycle Selection complete\n")
 
         self.cyclic_graph = self._reduce_graph_to_cycles(selected_cycles=self._selected_cycles, graph=self.orig_g)
 
-        log.debug("Building Cyclic Graph - DONE")
+        log.info("Building Cyclic Graph - DONE")
         end_time_total = datetime.now()
         duration_total = end_time_total - start_time_total
 
-        log.error("\nTimings:\n--------")
-        log.error("\t Cycle generation duration: " + str(duration_path_generation))
-        log.error("\t Cycle selection duration: " + str(duration_cycle_selection))
-        log.error("\t total duration: " + str(duration_total))
+        log.info("TIMINGS:")
+        log.info("\t Cycle generation duration: " + str(duration_path_generation))
+        log.info("\t Cycle selection duration: " + str(duration_cycle_selection))
+        log.info("\t total duration: " + str(duration_total))
 
         return self.cyclic_graph
 
@@ -80,7 +80,7 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
     """
 
     def _translate_input(self, edges: List[Tuple[int, int]], weights: List[float]) -> Graph:
-        log.debug("\tTranslate input to Networkx Graph")
+        log.info("\tTranslate input to Networkx Graph")
 
         # build Edges:
         w_edges = []
@@ -99,7 +99,7 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
 
     def _reduce_graph_to_cycles(self, selected_cycles, graph: Graph) -> Graph:
         # Build new Edges for New Graph
-        log.debug("\tBuild Graph with new edge selection")
+        log.info("\tBuild Graph with new edge selection")
         new_edges = []
         for c in selected_cycles:
             for i in range(len(c)):
@@ -123,16 +123,16 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
             raise ValueError("a cycle can not be larger, than the number of nodes.")
 
         # Build Paths
-        log.debug("\tGenerate all paths up to size " + str(self.max_sub_cycle_size))
+        log.info("\tGenerate all paths up to size " + str(self.max_sub_cycle_size))
         raw_cycles = [c for c in nx.simple_cycles(graph, length_bound=self.max_sub_cycle_size)]
-        log.debug("\tFound  " + str(len(raw_cycles)) + " cycles")
+        log.info("\tFound  " + str(len(raw_cycles)) + " cycles")
 
         # Filter cycle sizes:
-        log.debug("\tFilter too small cycles")
+        log.info("\tFilter too small cycles")
         selected_cycle_by_size = set([tuple(x) for x in raw_cycles if (len(x) in self.sub_cycle_size_range)])
 
         # Get Cycle Weigths -> Dist matrix
-        log.debug("\tAggregate edge weight to cycle weigth")
+        log.info("\tAggregate edge weight to cycle weigth")
         cyclic_paths_scored = []
         for c in selected_cycle_by_size:
             d = self.cycle_metric(list(c), graph)  # cycle cost
@@ -144,11 +144,11 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
     def _greedy_select_cylces_by_node_connectivity(self, cyclic_paths_scored: Tuple[List[int], float], graph: Graph) -> \
     List[List[int]]:
         # Build priorityQueue for MST selection
-        log.debug("\tBuild Cycle Priority Queue")
+        log.info("\tBuild Cycle Priority Queue")
         cycle_priority_queue = list(map(lambda x: x[0], sorted(cyclic_paths_scored, key=lambda x: x[1])))
 
         # Greedy opt algorithm: optimize connectivity criteria + select cycles Kruskal-MST like
-        log.debug("\tOptimize such that each node appears in " + str(self.node_cycle_connectivity) + " Cycles")
+        log.info("\tOptimize such that each node appears in " + str(self.node_cycle_connectivity) + " Cycles")
         connectivity_dict = {k: 0 for k in graph}
         selected_cycles = []
 
@@ -168,20 +168,20 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
                 else:
                     continue
 
-        log.debug("\tNumber  of required Cycles: " + str(len(selected_cycles)))
-        log.debug("\tNode Cycle appearance: " + str(connectivity_dict))
+        log.info("\tNumber  of required Cycles: " + str(len(selected_cycles)))
+        log.info("\tNode Cycle appearance: " + str(connectivity_dict))
 
         return selected_cycles
 
     def generate_network_double_greedy(self, edges: List[Tuple[int, int]], weights: List[float], edge_limitor=10) -> Graph:
-        log.error("Building Cyclic Graph - START")
+        log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
 
         ew = dict(zip(map(lambda x: tuple(sorted(list(x))), edges), weights))
         nodes = [n for e in edges for n in e]
 
         start_time_cycle_generation = datetime.now()
-        log.error("Priority Queue Gen init - " + str(start_time_cycle_generation))
+        log.info("Priority Queue Gen init - " + str(start_time_cycle_generation))
 
         # build
         self.orig_g = self._translate_input(edges=edges, weights=weights)
@@ -209,12 +209,12 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         """
         end_time_cycle_generation = datetime.now()
         duration_cycle_generation = end_time_cycle_generation - start_time_cycle_generation
-        log.error("\tDuration: " + str(duration_cycle_generation))
-        log.error("Priority Queue Gen complete\n")
+        log.info("\tDuration: " + str(duration_cycle_generation))
+        log.info("Priority Queue Gen complete\n")
 
 
         start_time_cycle_selection = datetime.now()
-        log.error("Cycle Selection init - " + str(start_time_cycle_selection))
+        log.info("Cycle Selection init - " + str(start_time_cycle_selection))
         # build_cycles for each node:
         all_cycles_per_node = {}
         all_edge_collection = []
@@ -259,17 +259,17 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         all_edges = set([e for c in self.all_cycles for e in c])
         end_time_cycle_selection = datetime.now()
         duration_cycle_selection = end_time_cycle_selection - start_time_cycle_selection
-        log.error("\tDuration: " + str(duration_cycle_selection))
-        log.error("Cycle Selection complete\n")
+        log.info("\tDuration: " + str(duration_cycle_selection))
+        log.info("Cycle Selection complete\n")
 
-        log.debug("Building Cyclic Graph - DONE")
+        log.info("Building Cyclic Graph - DONE")
         end_time_total = datetime.now()
         duration_total = end_time_total - start_time_total
 
-        log.error("\nTimings:\n--------")
-        log.error("\t Cycle generation duration: " + str(duration_cycle_generation))
-        log.error("\t Cycle selection duration: " + str(duration_cycle_selection))
-        log.error("\t total duration: " + str(duration_total))
+        log.info("TIMINGS:")
+        log.info("\t Cycle generation duration: " + str(duration_cycle_generation))
+        log.info("\t Cycle selection duration: " + str(duration_cycle_selection))
+        log.info("\t total duration: " + str(duration_total))
 
         self.cyclic_graph = nx.Graph()
         [self.cyclic_graph.add_node(n) for n in nodes]

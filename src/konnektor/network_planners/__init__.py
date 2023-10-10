@@ -1,5 +1,6 @@
-from .cyclic_network_palnner import CyclicLigandNetworkPlanner
+from .cyclic_network_planner import CyclicLigandNetworkPlanner
 from .maximal_network_planner import MaximalNetworkPlanner
 from .minimal_spanning_tree_network_planner import MinimalSpanningTreeLigandNetworkPlanner
 from .radial_network_planner import RadialLigandNetworkPlanner
+from .diversity_network_planner import DiversityNetworkPlanner
 

@@ -2,7 +2,7 @@ import itertools
 
 from typing import Iterable, Callable, Union, Optional
 import functools
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from gufe import SmallMoleculeComponent, AtomMapper
 
@@ -55,6 +55,8 @@ class MaximalNetworkPlanner(easyLigandNetworkPlanner):
         elif progress is False:
             progress = lambda x: x
         # otherwise, it should be a user-defined callable
+
+        ligands, mappings = self._input_generate_all_possible_mappings(ligands=nodes)
 
         mapping_generator = itertools.chain.from_iterable(
             self.mapper.suggest_mappings(molA, molB)
