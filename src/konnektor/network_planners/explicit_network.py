@@ -19,31 +19,8 @@ class ExplicitNetwork(easyLigandNetworkPlanner):
                          edges: Iterable[Tuple[SmallMoleculeComponent,SmallMoleculeComponent]],
                          progress: Union[bool, Callable[[Iterable], Iterable]] = True,
                          ):
-        """Create a network with all possible proposed mappings.
+        """Create a network with pre-defined edges.
 
-        This will attempt to create (and optionally score) all possible mappings
-        (up to $N(N-1)/2$ for each mapper given). There may be fewer actual
-        mappings that this because, when a mapper cannot return a mapping for a
-        given pair, there is simply no suggested mapping for that pair.
-        This network is typically used as the starting point for other network
-        generators (which then optimize based on the scores) or to debug atom
-        mappers (to see which mappings the mapper fails to generate).
-
-
-        Parameters
-        ----------
-        nodes : Iterable[SmallMoleculeComponent]
-          the ligands to include in the LigandNetwork
-        mappers : Iterable[LigandAtomMapper]
-          the AtomMappers to use to propose mappings.  At least 1 required,
-          but many can be given, in which case all will be tried to find the
-          lowest score edges
-        scorer : Scoring function
-          any callable which takes a LigandAtomMapping and returns a float
-        progress : Union[bool, Callable[Iterable], Iterable]
-          progress bar: if False, no progress bar will be shown. If True, use a
-          tqdm progress bar that only appears after 1.5 seconds. You can also
-          provide a custom progress bar wrapper as a callable.
         """
         nodes = list(set([n for e in edges for n in e]))
 

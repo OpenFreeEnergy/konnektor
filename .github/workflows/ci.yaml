@@ -39,7 +39,7 @@ jobs:
             activate-environment: konnektor
 
       - name: "Install"
-        run: pip install --no-deps -e .
+        run: pip install --no-deps .
 
       - name: "Test imports"
         run: |
