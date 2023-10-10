@@ -1,6 +1,6 @@
 [build-system]
 requires=[
-	#"setuptools>=61.0",
+	"setuptools>=61.0",
 	"versioningit",
 ]
 build-backend = "setuptools.build_meta"
@@ -16,7 +16,6 @@ authors=[
     {name="Richard J Gowers", email="richardjgowers@gmail.com"},
 ]
 dependencies = [
-  'setuptools',
   'scipy',
   'numpy',
   'networkx',
