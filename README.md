@@ -1,3 +1,8 @@
+
+<p align="center">
+    <img src=".img/KonnektorLogo_trasnp.png" width=35%/>
+</p>
+
 Konnektor: Tools for Networks in your FE Calculations
 ====================================================================
 
@@ -19,31 +24,32 @@ from kartograf import KartografAtomMapper
 from konnektor.visualization import draw_ligand_network
 from openfe.setup.atom_mapping.lomap_scorers import default_lomap_score
 
-#Get Input Data
-compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"], 
+compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
                         benzenes.get_system().ligand_components))
 
-#Build Networks
-from konnektor.network_planners import (MaximalNetworkPlanner, RadialLigandNetworkPlanner, 
+from konnektor.network_planners import (MaximalNetworkPlanner, RadialLigandNetworkPlanner,
                                         MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner)
 
 networkers = [MaximalNetworkPlanner, RadialLigandNetworkPlanner,
-              MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner]
+              MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner, DiversityNetworkPlanner]
 
 networks = []
-for networker_cls, name in zip(networkers,["Max", "Radial", "MST", "Cyclic"]):
+for networker_cls, name in zip(networkers,["Max", "Radial", "MST", "Cyclic", "Div"]):
     networker = networker_cls(mapper=KartografAtomMapper(), scorer=default_lomap_score)
     network = networker.generate_ligand_network(compounds)
     network.name=name
     networks.append(network)
 
 #Visualize
-fig, axes = plt.subplots(ncols=2, nrows=2, figsize=[16,9])
+fig, axes = plt.subplots(ncols=2, nrows=3, figsize=[16,3*9])
 axes= np.array(axes).flat
+fs=22
 for ax, net in zip(axes, [max_network, radial_network, mst_network, cyclic_network]):
-    draw_ligand_network(network=net, title=net.name, ax=ax, node_size=1500)
+    draw_ligand_network(network=net, title=net.name, ax=ax, node_size=1500, fontsize=fs)
     ax.axis("off")
-    
+
+axes[-1].axis("off")
+
 fig.show()
 ```
 
