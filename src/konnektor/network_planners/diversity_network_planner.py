@@ -1,12 +1,8 @@
-import itertools
-
 from typing import Iterable, Callable, Union, Optional
-import functools
-from tqdm.auto import tqdm
 
 from gufe import SmallMoleculeComponent, AtomMapper
+from konnektor.utils import LigandNetwork    # only temproary
 
-from openfe.setup.ligand_network import LigandNetwork    # only temproary
 from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 from sklearn.cluster import KMeans
@@ -14,7 +10,7 @@ from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerpri
 from scikit_mol.descriptors import MolecularDescriptorTransformer
 
 from konnektor.utils import CompoundDiversityClustering
-
+from konnektor.network_connecting_algorithms.bipartite_MST_connect import mst_concatenate
 
 class DiversityNetworkPlanner(easyLigandNetworkPlanner):
     def __init__(self, mapper, scorer,
@@ -58,6 +54,7 @@ class DiversityNetworkPlanner(easyLigandNetworkPlanner):
                 sub_networks.append(sub_network)
 
         # Connect the Networks:
-        concat_network = planner.concatenate_networks(ligandNetworks=sub_networks, nEdges=3)
+        con = mst_concatenate(mapper=self.mapper, scorer=self.scorer)
+        concat_network = con.concatenate_networks(ligand_networks=sub_networks, n_edges=3)
 
         return concat_network

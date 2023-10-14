@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 
 from gufe import SmallMoleculeComponent, AtomMapper
 
-from openfe.setup.ligand_network import LigandNetwork    # only temproary
+from konnektor.utils  import LigandNetwork    # only temproary
 from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 

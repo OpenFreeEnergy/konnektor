@@ -9,7 +9,7 @@ from typing import Iterable, Callable
 from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
 
-from openfe.setup.ligand_network import LigandNetwork    # only temproary
+from konnektor.utils import LigandNetwork    # only temproary
 from ._abstract_network_generator import _AbstractNetworkGenerator, Network
 
 class MstNetworkGenerator(_AbstractNetworkGenerator):

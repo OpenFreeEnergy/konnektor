@@ -10,7 +10,7 @@ import itertools
 from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
 
-from openfe.setup import LigandNetwork    # only temproary
+from  konnektor.utils import LigandNetwork    # only temproary
 from ._abstract_network_generator import _AbstractNetworkGenerator, Network
 
 

@@ -1,12 +1,10 @@
-import itertools
-
-from typing import Iterable, Callable, Union, Tuple
 import functools
 from tqdm.auto import tqdm
+from typing import Iterable, Callable, Union, Tuple
 
 from gufe import SmallMoleculeComponent, AtomMapper
 
-from openfe.setup.ligand_network import LigandNetwork    # only temproary
+from konnektor.utils import LigandNetwork
 from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
@@ -18,7 +16,7 @@ class ExplicitNetwork(easyLigandNetworkPlanner):
     def generate_ligand_network(self,
                          edges: Iterable[Tuple[SmallMoleculeComponent,SmallMoleculeComponent]],
                          progress: Union[bool, Callable[[Iterable], Iterable]] = True,
-                         ):
+                         ) -> LigandNetwork:
         """Create a network with pre-defined edges.
 
         """

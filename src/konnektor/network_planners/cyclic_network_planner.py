@@ -1,11 +1,10 @@
-import itertools
 from typing import Union, List, Iterable
 
 from gufe import SmallMoleculeComponent
-from openfe import LigandNetwork
+from konnektor.utils import LigandNetwork
 
-from network_generator_algorithms import CyclicNetworkGenerator
-from network_planners._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from ..network_generator_algorithms import CyclicNetworkGenerator
+from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
 class CyclicLigandNetworkPlanner(easyLigandNetworkPlanner):

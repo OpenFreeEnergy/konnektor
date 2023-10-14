@@ -2,10 +2,10 @@ import itertools
 from typing import Iterable
 
 from gufe import SmallMoleculeComponent
-from openfe import LigandNetwork
+from konnektor.utils import LigandNetwork
 
-from konnektor.network_generator_algorithms import RadialNetworkGenerator
-from network_planners._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from ..network_generator_algorithms import RadialNetworkGenerator
+from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
 class RadialLigandNetworkPlanner(easyLigandNetworkPlanner):
@@ -15,7 +15,8 @@ class RadialLigandNetworkPlanner(easyLigandNetworkPlanner):
 
 
 
-    def generate_ligand_network(self, ligands: Iterable[SmallMoleculeComponent], central_ligand:SmallMoleculeComponent=None) ->LigandNetwork:
+    def generate_ligand_network(self, ligands: Iterable[SmallMoleculeComponent],
+                                central_ligand:SmallMoleculeComponent=None) -> LigandNetwork:
             # Build Full Graph
             ligands = list(ligands)
 

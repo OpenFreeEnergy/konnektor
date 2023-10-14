@@ -149,27 +149,61 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
 
         # Greedy opt algorithm: optimize connectivity criteria + select cycles Kruskal-MST like
         log.info("\tOptimize such that each node appears in " + str(self.node_cycle_connectivity) + " Cycles")
-        connectivity_dict = {k: 0 for k in graph}
-        selected_cycles = []
+        cycle_connectivity_dict = {k: 0 for k in graph}
 
         # opt criteria
+        i=0
+        j=0
         termination_criteria = lambda d: all([v >= self.node_cycle_connectivity for k, v in d.items()])
-        while not termination_criteria(connectivity_dict):
+        selected_cycles = []
+        #print("cycles", len(cycle_priority_queue))
+        while not termination_criteria(cycle_connectivity_dict):
+            #print("ITER", j, i)
 
             # MST like iteration
-            selected_cycles = []
-            for c in cycle_priority_queue:
-                if termination_criteria(connectivity_dict):  # efficiency break
+            c = cycle_priority_queue[i]
+            if (any([cycle_connectivity_dict[n] < self.node_cycle_connectivity for n in c]) and c not in selected_cycles):
+                #print("select cycle:", c)
+                selected_cycles.append(c)
+                for n in c:
+                    cycle_connectivity_dict[n] += 1
+
+                #Be efficient, remove already counted cycles
+                cyclic_paths_scored = list(filter(lambda x: x[0] != c, cyclic_paths_scored))
+
+                # update cycle score - punish by note appearance:
+                resort_f = lambda x: x[1] * max([cycle_connectivity_dict[i] for i in x[0]])
+                cycle_priority_queue = list(map(lambda x: x[0], sorted(cyclic_paths_scored, key=resort_f)))
+                i=0
+            else:
+                i=i+1%len(cycle_priority_queue)
+
+            #no inf loop!
+            if(j>1000):
+                #print("did not converge!")
+                break
+            else:
+                j+=1
+
+            """
+            Old and rusty :P
+            for i in iterator:
+                c = cycle_priority_queue[i]
+                if termination_criteria(cycle_connectivity_dict):  # efficiency break
                     break
-                elif (any([connectivity_dict[n] < self.node_cycle_connectivity for n in c])):
+                elif (any([cycle_connectivity_dict[n] < self.node_cycle_connectivity for n in c])):
                     selected_cycles.append(c)
                     for n in c:
-                        connectivity_dict[n] += 1
+                        cycle_connectivity_dict[n] += 1
+
+
                 else:
                     continue
-
+            """
+        #print(cycle_connectivity_dict)
+        self.cycle_connectivity_dict =cycle_connectivity_dict
         log.info("\tNumber  of required Cycles: " + str(len(selected_cycles)))
-        log.info("\tNode Cycle appearance: " + str(connectivity_dict))
+        log.info("\tNode Cycle appearance: " + str(cycle_connectivity_dict))
 
         return selected_cycles
 
