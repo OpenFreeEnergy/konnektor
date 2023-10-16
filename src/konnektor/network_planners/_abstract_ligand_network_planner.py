@@ -25,7 +25,7 @@ class easyLigandNetworkPlanner(abc.ABC):
         mapping_generator = itertools.chain.from_iterable(
             self.mapper.suggest_mappings(molA, molB)
             for molA, molB in itertools.combinations(ligands, 2))
-        mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
+        mappings = [mapping.with_annotations({'score': self.scorer(mapping), 'type': "core"})
                     for mapping in mapping_generator]
 
         #mapping_scores = [mapping.annotations['score'] for mapping in mappings]
