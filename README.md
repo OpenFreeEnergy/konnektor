@@ -1,6 +1,6 @@
 
 <p align="center">
-    <img src=".img/KonnektorLogo_trasnp.png" width=35%/>
+    <img src=".img/konnektor_logo_style4.png" width=35%/>
 </p>
 
 Konnektor: Tools for Networks in your FE Calculations
