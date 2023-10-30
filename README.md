@@ -1,7 +1,7 @@
 
 <p align="center">
     <img src=".img/konnektor_logo_style5.png" id="gh-dark-mode-only"  width=35%/>
-    <img src=".img/konnektor_logo_style4.png" id="gh-light-mode-only"  width=35%/>
+    <!--<img src=".img/konnektor_logo_style4.png" id="gh-light-mode-only"  width=35%/>-->
 </p>
 
 
