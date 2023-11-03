@@ -58,7 +58,7 @@ fig.show()
 ![](.img/network_layouts.png)
 
 
-Additionally we are working on Molecule diversity based Networks here with HIF2A:
+Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
 ![](.img/Divesity_network.png)
 
 ## Installation
