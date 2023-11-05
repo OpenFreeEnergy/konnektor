@@ -16,7 +16,7 @@ Konnektor: Tools for Networks in your FE Calculations
 [![coverage](https://codecov.io/gh/OpenFreeEnergy/konnektor/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenFreeEnergy/konnektor)
 [![Documentation Status](https://readthedocs.org/projects/konnektor/badge/?version=latest)](https://konnektor.readthedocs.io/en/latest/?badge=latest)
 
-[![Pip Install](https://img.shields.io/badge/pip%20install-kartograf-d9c4b1)](https://pypi.org/project/konnektor/)
+[![Pip Install](https://img.shields.io/badge/pip%20install-konnektor-d9c4b1)](https://pypi.org/project/konnektor/)
 
 Konnektor offers at the moment basic network planers. 
 
