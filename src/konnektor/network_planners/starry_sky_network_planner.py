@@ -11,7 +11,7 @@ class StarrySkyLigandNetworkPlanner(easyLigandNetworkPlanner):
 
     def __init__(self, mapper, scorer, target_node_connectivity: int = 3):
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=StarrySkyNetworkGenerator()) #target_node_connectivity=target_node_connectivity))
+                         network_generator=StarrySkyNetworkGenerator(target_node_connectivity=target_node_connectivity))
 
     def generate_ligand_network(self, ligands: Iterable[SmallMoleculeComponent]) -> LigandNetwork:
         # Build Full Graph

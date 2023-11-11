@@ -13,22 +13,31 @@ class StarrySkyNetworkGenerator(_AbstractNetworkGenerator):
         self.target_node_connectivity = target_node_connectivity
 
     def generate_network(self, edges, weights) -> nx.Graph:
-        # Build WEdges
-        wedges = []
-        for edge, weight in zip(edges, weights):
-            wedges.append([edge[0], edge[1], weight])
+        w_edges = []
+        nodes = []
+        for e, w in zip(edges, weights):
+            w_edges.append((e[0], e[1], w))
+            # w_edges.append((e[1], e[0], w))
+            nodes.extend(e)
 
-        # Select Edges sorted by weight
         node_edges = defaultdict(list)
-        for e1, e2, w in sorted(wedges, key=lambda x: x[2]):
-            if (e1 in node_edges and len(node_edges[e1]) < self.target_node_connectivity):
+        node_con = {n: 0 for n in nodes}  # early termination crit
+        for e1, e2, w in sorted(w_edges, key=lambda x: x[2]):
+            print(e1, e2, w)
+            if (len(node_edges[e1]) < self.target_node_connectivity):
                 node_edges[e1].append((e1, e2, w))
+                node_con[e1] += 1
 
-            if (e2 in node_edges and len(node_edges[e2]) < self.target_node_connectivity):
+            if (len(node_edges[e2]) < self.target_node_connectivity):
                 node_edges[e2].append((e1, e2, w))
+                node_con[e2] += 1
 
-        # Return Final Graph
-        self.g = nx.Graph()
-        self.g.add_weighted_edges_from(ebunch_to_add=node_edges)
+            if (all(v == self.target_node_connectivity for v in node_con.values())):
+                break
+
+        edges = list(set([e for el in node_edges.values() for e in el]))
+
+        g = nx.Graph()
+        g.add_weighted_edges_from(ebunch_to_add=edges)
 
         return self.g
