@@ -22,7 +22,7 @@ class StarrySkyLigandNetworkPlanner(easyLigandNetworkPlanner):
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations['score'] for k in edges]
 
-        cg = self.network_generator.generate_network(edges=edges, weights=weights)
+        sg = self.network_generator.generate_network(edges=edges, weights=weights)
 
-        selected_mappings = [edge_map[k] for k in cg.edges]
+        selected_mappings = [edge_map[k] if(k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in sg.edges]
         return LigandNetwork(edges=selected_mappings, nodes=ligands)

@@ -14,11 +14,10 @@ class MaximalNetworkPlanner(easyLigandNetworkPlanner):
     def __init__(self, mapper, scorer):
         super().__init__(mapper=mapper, scorer=scorer,
                        network_generator=None)
+        self.progress = False
 
-    def generate_ligand_network(self,
-                         nodes: Iterable[SmallMoleculeComponent],
-                         progress: Union[bool, Callable[[Iterable], Iterable]] = True,
-                         # allow_disconnected=True
+    def generate_ligand_network(self,  nodes: Iterable[SmallMoleculeComponent],
+
                          ):
         """Create a network with all possible proposed mappings.
 
@@ -48,11 +47,11 @@ class MaximalNetworkPlanner(easyLigandNetworkPlanner):
         """
         nodes = list(nodes)
 
-        if progress is True:
+        if self.progress is True:
             # default is a tqdm progress bar
             total = len(nodes) * (len(nodes) - 1) // 2
             progress = functools.partial(tqdm, total=total, delay=1.5)
-        elif progress is False:
+        else:
             progress = lambda x: x
         # otherwise, it should be a user-defined callable
 
