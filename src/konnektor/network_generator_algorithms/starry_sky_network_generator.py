@@ -9,7 +9,7 @@ from ._abstract_network_generator import _AbstractNetworkGenerator
 
 class StarrySkyNetworkGenerator(_AbstractNetworkGenerator):
 
-    def __int__(self, target_node_connectivity: int = 2):
+    def __init__(self, target_node_connectivity: int = 2):
         self.target_node_connectivity = target_node_connectivity
 
     def generate_network(self, edges, weights) -> nx.Graph:
@@ -37,7 +37,7 @@ class StarrySkyNetworkGenerator(_AbstractNetworkGenerator):
 
         edges = list(set([e for el in node_edges.values() for e in el]))
 
-        g = nx.Graph()
-        g.add_weighted_edges_from(ebunch_to_add=edges)
+        self.g = nx.Graph()
+        self.g.add_weighted_edges_from(ebunch_to_add=edges)
 
         return self.g
