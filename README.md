@@ -1,16 +1,22 @@
-
 <p align="center">
-    <img src=".img/KonnektorLogo_trasnp.png" width=35%/>
+    <picture align="center">
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/OpenFreeEnergy/konnektor/blob/36fc908f89777b8d67ce837a354adc699de6f405/.img/konnektor_logo_style5.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/OpenFreeEnergy/konnektor/blob/36fc908f89777b8d67ce837a354adc699de6f405/.img/konnektor_logo_style4.png">
+      <img alt="Konnektor`s fancy logo" src="https://github.com/OpenFreeEnergy/konnektor/blob/36fc908f89777b8d67ce837a354adc699de6f405/.img/konnektor_logo_style4.png" width=35% >
+    </picture>
 </p>
+
 
 Konnektor: Tools for Networks in your FE Calculations
 ====================================================================
 
+[//]: # (Badges)
 [![Logo](https://img.shields.io/badge/OSMF-OpenFreeEnergy-%23002f4a)](https://openfree.energy/)
 [![build](https://github.com/OpenFreeEnergy/konnektor/actions/workflows/ci.yaml/badge.svg)](https://github.com/OpenFreeEnergy/konnektor/actions/workflows/ci.yaml)
 [![coverage](https://codecov.io/gh/OpenFreeEnergy/konnektor/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenFreeEnergy/konnektor)
 [![Documentation Status](https://readthedocs.org/projects/konnektor/badge/?version=latest)](https://konnektor.readthedocs.io/en/latest/?badge=latest)
 
+[![Pip Install](https://img.shields.io/badge/pip%20install-konnektor-d9c4b1)](https://pypi.org/project/konnektor/)
 
 Konnektor offers at the moment basic network planers. 
 
@@ -56,7 +62,7 @@ fig.show()
 ![](.img/network_layouts.png)
 
 
-Additionally we are working on Molecule diversity based Networks here with HIF2A:
+Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
 ![](.img/Divesity_network.png)
 
 ## Installation
