@@ -21,6 +21,13 @@ Konnektor: Tools for Networks in your FE Calculations
 Konnektor offers at the moment basic network planers. 
 
 More will be here soon!
+### Implemented Simple Network Layouts
+![](.img/network_layouts.png)
+
+### Tools for constructing more complex Networks
+Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
+![](.img/Divesity_network.png)
+
 
 ## Usage
 ```python3
@@ -59,11 +66,6 @@ axes[-1].axis("off")
 fig.show()
 ```
 
-![](.img/network_layouts.png)
-
-
-Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
-![](.img/Divesity_network.png)
 
 ## Installation
 you can install Kartograf via the package manager of your choice:
