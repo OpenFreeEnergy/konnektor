@@ -68,15 +68,34 @@ fig.show()
 
 
 ## Installation
-you can install Kartograf via the package manager of your choice:
 
-For Development purposes:
+### Latest release
+Kartograf can be installed via the package following package managers:
+
+```shell
+pip install konnnektor
+```
+
+### Developement version
+The developing setup of Kartograf works like this:
+
 ```shell
 git clone https://github.com/OpenFreeEnergy/konnektor.git
 
 cd konnektor
-conda env create -f environment.yml
+mamba env create -f environment.yml
 
+mamba activate konnektor
+pip install -e .
+
+```
+
+## License
+This library is made available under the MIT open source license.
+
+## Authors
+
+The OpenFE development team.
 conda activate konnektor
 pip install .
 ```
