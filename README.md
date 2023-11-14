@@ -70,14 +70,14 @@ fig.show()
 ## Installation
 
 ### Latest release
-Kartograf can be installed via the package following package managers:
+Konnektor can be installed via the package following package managers:
 
 ```shell
 pip install konnnektor
 ```
 
 ### Developement version
-The developing setup of Kartograf works like this:
+The developing setup of Konnektor works like this:
 
 ```shell
 git clone https://github.com/OpenFreeEnergy/konnektor.git
