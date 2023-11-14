@@ -3,7 +3,7 @@ from typing import Union, List, Iterable
 from gufe import SmallMoleculeComponent
 from konnektor.utils import LigandNetwork
 
-from ..network_generator_algorithms import CyclicNetworkGenerator
+from src.konnektor.algorithms.network_generator_algorithms import CyclicNetworkGenerator
 from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 

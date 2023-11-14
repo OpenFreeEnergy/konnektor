@@ -1,2 +1,2 @@
-from .cluster_molecules import CompoundDiversityClustering
+from src.konnektor.network_clustering_algorithms.cluster_molecules import CompoundDiversityClustering
 from .LigandNetwork import LigandNetwork

@@ -1,10 +1,9 @@
-import itertools
 from typing import Iterable
 
 from gufe import SmallMoleculeComponent
 from konnektor.utils import LigandNetwork
 
-from ..network_generator_algorithms import RadialNetworkGenerator
+from src.konnektor.algorithms.network_generator_algorithms import RadialNetworkGenerator
 from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
 
 
