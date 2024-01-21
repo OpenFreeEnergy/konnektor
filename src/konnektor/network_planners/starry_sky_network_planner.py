@@ -4,18 +4,21 @@ from gufe import SmallMoleculeComponent
 from konnektor.utils import LigandNetwork
 
 from ..network_generator_algorithms import StarrySkyNetworkGenerator
-from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from ._abstract_ligand_network_planner import LigandNetworkPlanner
+from .maximal_network_planner import MaximalNetworkPlanner
 
-
-class StarrySkyLigandNetworkPlanner(easyLigandNetworkPlanner):
+class StarrySkyLigandNetworkPlanner(LigandNetworkPlanner):
 
     def __init__(self, mapper, scorer, target_node_connectivity: int = 3):
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=StarrySkyNetworkGenerator(target_node_connectivity=target_node_connectivity))
+                         network_generator=StarrySkyNetworkGenerator(target_node_connectivity=target_node_connectivity),
+                         _initial_edge_lister=MaximalNetworkPlanner(mapper=mapper, scorer=scorer))
 
     def generate_ligand_network(self, ligands: Iterable[SmallMoleculeComponent]) -> LigandNetwork:
         # Build Full Graph
-        ligands, mappings = self._input_generate_all_possible_mappings(ligands=ligands)
+        initial_networks = self._initial_edge_lister.generate_ligand_network(
+            nodes=ligands)
+        mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
         edge_map = {(ligands.index(m.componentA), ligands.index(m.componentB)): m for m in mappings}

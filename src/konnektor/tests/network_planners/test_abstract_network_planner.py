@@ -4,8 +4,6 @@ from rdkit import Chem
 import pytest
 import networkx as nx
 
-import openfe.setup
-
 from rdkit.Chem import AllChem
 
 import konnektor
@@ -18,5 +16,4 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 
 import gufe
-import openfe
 from gufe import SmallMoleculeComponent, LigandAtomMapping

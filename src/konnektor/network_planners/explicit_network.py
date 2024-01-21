@@ -5,10 +5,10 @@ from typing import Iterable, Callable, Union, Tuple
 from gufe import SmallMoleculeComponent, AtomMapper
 
 from konnektor.utils import LigandNetwork
-from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from ._abstract_ligand_network_planner import LigandNetworkPlanner
 
 
-class ExplicitNetwork(easyLigandNetworkPlanner):
+class ExplicitNetwork(LigandNetworkPlanner):
     def __init__(self, mapper, scorer=None):
         super().__init__(mapper=mapper, scorer=scorer,
                        network_generator=None)

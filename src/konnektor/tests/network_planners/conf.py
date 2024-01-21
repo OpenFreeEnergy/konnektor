@@ -9,9 +9,9 @@ from rdkit.Chem import AllChem
 
 import konnektor
 from konnektor import network_planners
-from gufe import SmallMoleculeComponent, LigandAtomMapping
 
-import openfe
+from gufe import AtomMapper
+from gufe import SmallMoleculeComponent, LigandAtomMapping
 
 
 
@@ -35,17 +35,48 @@ def atom_mapping_basic_test_files():
         '2-naftanol',
         'methylcyclohexane',
         'toluene']:
-        with importlib.resources.path('openfe.tests.data.lomap_basic',
+        with importlib.resources.path('konnektor.tests.data',
                                       f + '.mol2') as fn:
             mol = Chem.MolFromMol2File(str(fn), removeHs=False)
             files[f] = SmallMoleculeComponent(mol, name=f)
 
     return files
 
+class GenAtomMapper(AtomMapper):
+    def suggest_mappings(self, componentA:SmallMoleculeComponent,
+                         componentB:SmallMoleculeComponent):
+        atomsA = range(componentA.to_rdkit().GetNumAtoms())
+        atomsB = range(componentB.to_rdkit().GetNumAtoms())
 
-class BadMapper(openfe.setup.atom_mapping.LigandAtomMapper):
-    def _mappings_generator(self, molA, molB):
-        yield {0: 0}
+        yield LigandAtomMapping(componentA, componentB,
+                                componentA_to_componentB={k:v for k,v in zip(
+                                    atomsA, atomsB)})
+
+class BadMapper(AtomMapper):
+    def suggest_mappings(self, componentA:SmallMoleculeComponent,
+                         componentB:SmallMoleculeComponent):
+        yield LigandAtomMapping(componentA, componentB,
+                                componentA_to_componentB={0:0})
+
+class SuperBadMapper(AtomMapper):
+    def suggest_mappings(self, componentA:SmallMoleculeComponent,
+                         componentB:SmallMoleculeComponent):
+        yield LigandAtomMapping(componentA, componentB,
+                                componentA_to_componentB={})
+
+
+class ErrorMapper(AtomMapper):
+    def suggest_mappings(self, componentA:SmallMoleculeComponent,
+                         componentB:SmallMoleculeComponent):
+        #raise StopIteration('No mapping found for')# Check for good solution
+        # here
+        raise ValueError('No mapping found for')
+
+
+
+def genScorer(mapping):
+    return 1.0 / len(mapping.componentA_to_componentB)
+
 
 @pytest.fixture(scope='session')
 def toluene_vs_others(atom_mapping_basic_test_files):
@@ -54,3 +85,5 @@ def toluene_vs_others(atom_mapping_basic_test_files):
               if k != central_ligand_name]
     toluene = atom_mapping_basic_test_files[central_ligand_name]
     return toluene, others
+
+

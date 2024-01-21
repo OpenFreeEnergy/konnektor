@@ -1,20 +1,48 @@
 import itertools
+import functools
+import multiprocessing as mult
+
+from tqdm.auto import tqdm
 
 from typing import Iterable, Callable, Union, Optional
-import functools
-from tqdm.auto import tqdm
 
 from gufe import SmallMoleculeComponent, AtomMapper
 
 from konnektor.utils  import LigandNetwork    # only temproary
-from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from ._abstract_ligand_network_planner import LigandNetworkPlanner
 
 
-class MaximalNetworkPlanner(easyLigandNetworkPlanner):
-    def __init__(self, mapper, scorer):
+def thread_mapping(args):
+    '''
+    Helper function working as thread for parallel execution.
+    Parameters
+    ----------
+    compound_pair
+
+    Returns
+    -------
+
+    '''
+    jobID, compound_pairs, mapper, scorer = args
+    mapping_generator = [next(mapper.suggest_mappings(
+        compound_pair[0], compound_pair[1])) for
+        compound_pair in compound_pairs]
+
+    if scorer:
+        mappings = [mapping.with_annotations(
+            {'score': scorer(mapping)})
+            for mapping in mapping_generator]
+    else:
+        mappings = list(mapping_generator)
+
+    return mappings
+
+class MaximalNetworkPlanner(LigandNetworkPlanner):
+    def __init__(self, mapper, scorer, progress=False, nprocesses=1):
         super().__init__(mapper=mapper, scorer=scorer,
-                       network_generator=None)
-        self.progress = False
+                       network_generator=None, _initial_edge_lister=self)
+        self.progress = progress
+        self.nprocesses = nprocesses
 
     def generate_ligand_network(self,  nodes: Iterable[SmallMoleculeComponent],
 
@@ -46,26 +74,44 @@ class MaximalNetworkPlanner(easyLigandNetworkPlanner):
           provide a custom progress bar wrapper as a callable.
         """
         nodes = list(nodes)
-
-        if self.progress is True:
+        total = len(nodes) * (len(nodes) - 1) // 2
+        n_batches = 1
+        if self.progress is True and self.nprocesses<2:
             # default is a tqdm progress bar
-            total = len(nodes) * (len(nodes) - 1) // 2
-            progress = functools.partial(tqdm, total=total, delay=1.5)
+            progress = functools.partial(tqdm, total=total, delay=1.5,
+                                         desc="Mapping")
+        elif self.progress is True and self.nprocesses>1:
+            n_batches = 10*self.nprocesses
+            progress = functools.partial(tqdm, total=n_batches, delay=1.5,
+                                         desc="Mapping")
         else:
             progress = lambda x: x
-        # otherwise, it should be a user-defined callable
 
-        ligands, mappings = self._input_generate_all_possible_mappings(ligands=nodes)
+        # Parallel or not Parallel:
+        if(self.nprocesses > 1):
+            # size of each batch +fetch division rest
+            batch_num = (total//n_batches)+1
 
-        mapping_generator = itertools.chain.from_iterable(
-            self.mapper.suggest_mappings(molA, molB)
-            for molA, molB in progress(itertools.combinations(nodes, 2))
-        )
-        if self.scorer:
-            mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
-                        for mapping in mapping_generator]
+            # Prepare parallel execution.
+            jobs = [(job_id, combination, self.mapper, self.scorer) for job_id,
+                    combination in enumerate(itertools.batched(
+                    itertools.combinations(nodes,2), batch_num))]
+
+            #Execute parallelism
+            mappings = []
+            with mult.Pool(self.nprocesses) as p:
+                for sub_result in progress(p.imap(thread_mapping, jobs)):
+                    mappings.extend(sub_result)
         else:
-            mappings = list(mapping_generator)
+            mapping_generator = itertools.chain.from_iterable(
+                self.mapper.suggest_mappings(molA, molB)
+                for molA, molB in progress(itertools.combinations(nodes, 2))
+            )
+            if self.scorer:
+                mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
+                            for mapping in mapping_generator]
+            else:
+                mappings = list(mapping_generator)
 
         network = LigandNetwork(mappings, nodes=nodes)
         return network

@@ -13,7 +13,7 @@ log.setLevel(logging.WARNING)
 
 class CompoundDiversityClustering():
     def __init__(self, featurize:TransformerMixin = RDKitFingerprintTransformer(),
-                cluster:ClusterMixin = KMeans(n_clusters=2)):
+                cluster:ClusterMixin = KMeans(n_clusters=2, n_init="auto")):
         self.featurize = featurize
         self.cluster = cluster
 

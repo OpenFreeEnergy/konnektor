@@ -2,10 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import pytest
-
-import openfe
-import openfe.setup
-
 """
 
 Not sure if this should be part of konnektor... would rather push it to OpenFE

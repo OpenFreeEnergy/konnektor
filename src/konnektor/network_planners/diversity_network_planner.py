@@ -3,7 +3,7 @@ from typing import Iterable, Callable, Union, Optional
 from gufe import SmallMoleculeComponent, AtomMapper
 from konnektor.utils import LigandNetwork    # only temproary
 
-from ._abstract_ligand_network_planner import easyLigandNetworkPlanner
+from ._abstract_ligand_network_planner import LigandNetworkPlanner
 
 from sklearn.cluster import KMeans
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
@@ -12,7 +12,7 @@ from scikit_mol.descriptors import MolecularDescriptorTransformer
 from konnektor.utils import CompoundDiversityClustering
 from konnektor.network_connecting_algorithms.bipartite_MST_connect import mst_concatenate
 
-class DiversityNetworkPlanner(easyLigandNetworkPlanner):
+class DiversityNetworkPlanner(LigandNetworkPlanner):
     def __init__(self, mapper, scorer,
                  node_featurizer=RDKitFingerprintTransformer(),
                  clustering= KMeans(n_clusters=3)):

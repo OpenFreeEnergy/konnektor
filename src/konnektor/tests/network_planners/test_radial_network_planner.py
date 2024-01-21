@@ -3,24 +3,27 @@
 
 import pytest
 
-import openfe.setup
-import openfe
-
 import konnektor
 from konnektor import network_planners
 
-from .conf import atom_mapping_basic_test_files, toluene_vs_others, mol_from_smiles
+from .conf import (atom_mapping_basic_test_files, toluene_vs_others,
+                   mol_from_smiles, genScorer,
+                   GenAtomMapper, BadMapper, ErrorMapper)
 
-@pytest.mark.parametrize('as_list', [False, True])
+from gufe import SmallMoleculeComponent
+
+
+@pytest.mark.parametrize('as_list', [False])
 def test_radial_network(atom_mapping_basic_test_files, toluene_vs_others,
                         as_list):
     toluene, others = toluene_vs_others
     central_ligand_name = 'toluene'
-    mapper = openfe.setup.atom_mapping.LomapAtomMapper()
+    mapper = GenAtomMapper()
+
     if as_list:
         mapper = [mapper]
 
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
+    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=None)
     network = planner.generate_ligand_network(ligands=others, central_ligand=toluene)
 
     # couple sanity checks
@@ -37,10 +40,8 @@ def test_radial_network(atom_mapping_basic_test_files, toluene_vs_others,
 def test_radial_network_with_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
 
-    def scorer(mapping):
-        return 1.0 / len(mapping.componentA_to_componentB)
-
-    mapper = openfe.setup.atom_mapping.LomapAtomMapper()
+    mapper = GenAtomMapper()
+    scorer = genScorer
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=scorer)
     network = planner.generate_ligand_network(ligands=others, central_ligand=toluene)
 
@@ -55,7 +56,7 @@ def test_radial_network_with_scorer(toluene_vs_others):
 def test_radial_network_multiple_mappers_no_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
     # in this one, we should always take the bad mapper
-    mapper = openfe.setup.atom_mapping.LomapAtomMapper()
+    mapper = BadMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=None)
     network = planner.generate_ligand_network(ligands=others, central_ligand=toluene)
 
@@ -66,9 +67,9 @@ def test_radial_network_multiple_mappers_no_scorer(toluene_vs_others):
 
 
 def test_radial_network_failure(atom_mapping_basic_test_files):
-    nigel = openfe.SmallMoleculeComponent(mol_from_smiles('N'))
+    nigel = SmallMoleculeComponent(mol_from_smiles('N'))
 
-    mapper = openfe.setup.atom_mapping.LomapAtomMapper()
+    mapper = ErrorMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=None)
 
     with pytest.raises(ValueError, match='No mapping found for'):

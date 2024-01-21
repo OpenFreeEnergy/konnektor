@@ -17,8 +17,10 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
 
     def generate_network(self, edges, weights) -> nx.Graph:
         wedges = []
+        nodes = []
         for edge, weight in zip(edges, weights):
             wedges.append([edge[0], edge[1], weight])
+            nodes.extend(list(edge))
 
         self.g = nx.Graph()
         self.g.add_weighted_edges_from(ebunch_to_add=wedges)
@@ -30,6 +32,7 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
         mse = [(e1, e2, edge_data['weight']) for e1, e2, edge_data in min_edges]
 
         mg = nx.Graph()
+        mg.add_nodes_from(nodes)
         mg.add_weighted_edges_from(ebunch_to_add=mse)
-
+        #mg.connected = nx.is_connected(mg)
         return mg
