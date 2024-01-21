@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 import networkx as nx
 
-from konnektor.network_generator_algorithms import CyclicNetworkGenerator
+from konnektor.algorithms.network_generator import CyclicNetworkGenerator
 from konnektor.tests.data.conf import nine_mols_edges
 
 

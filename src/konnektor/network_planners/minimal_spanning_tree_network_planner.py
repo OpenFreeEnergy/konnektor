@@ -1,6 +1,6 @@
 from  konnektor.utils import LigandNetwork
 
-from ..network_generator_algorithms import MstNetworkGenerator
+from ..algorithms.network_generator import MstNetworkGenerator
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
 from .maximal_network_planner import MaximalNetworkPlanner
 

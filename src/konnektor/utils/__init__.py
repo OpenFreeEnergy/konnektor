@@ -1,2 +1,1 @@
-from .cluster_molecules import CompoundDiversityClustering
 from gufe import LigandNetwork
