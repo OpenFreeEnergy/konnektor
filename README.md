@@ -21,6 +21,13 @@ Konnektor: Tools for Networks in your FE Calculations
 Konnektor offers at the moment basic network planers. 
 
 More will be here soon!
+### Implemented Simple Network Layouts
+![](.img/network_layouts.png)
+
+### Tools for constructing more complex Networks
+Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
+![](.img/Divesity_network.png)
+
 
 ## Usage
 ```python3
@@ -59,22 +66,36 @@ axes[-1].axis("off")
 fig.show()
 ```
 
-![](.img/network_layouts.png)
-
-
-Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
-![](.img/Divesity_network.png)
 
 ## Installation
-you can install Kartograf via the package manager of your choice:
 
-For Development purposes:
+### Latest release
+Konnektor can be installed via the package following package managers:
+
+```shell
+pip install konnnektor
+```
+
+### Developement version
+The developing setup of Konnektor works like this:
+
 ```shell
 git clone https://github.com/OpenFreeEnergy/konnektor.git
 
 cd konnektor
-conda env create -f environment.yml
+mamba env create -f environment.yml
 
+mamba activate konnektor
+pip install -e .
+
+```
+
+## License
+This library is made available under the MIT open source license.
+
+## Authors
+
+The OpenFE development team.
 conda activate konnektor
 pip install .
 ```

@@ -1,5 +1,3 @@
-from ..network_connecting_algorithms import bipartite_MST_connect
-
 from .cyclic_network_planner import CyclicLigandNetworkPlanner
 from .starry_sky_network_planner import StarrySkyLigandNetworkPlanner
 from .maximal_network_planner import MaximalNetworkPlanner
