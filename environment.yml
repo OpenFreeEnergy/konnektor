@@ -17,8 +17,12 @@ dependencies:
   - numpy
   - scipy
   - networkx
+  - scikit-learn
   # Chem
   - rdkit
   # docs
   - myst-parser
   - pydata-sphinx-theme
+
+  pip:
+    - scikit-mol
