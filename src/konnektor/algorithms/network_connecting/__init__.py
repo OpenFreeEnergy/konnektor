@@ -1,1 +1,1 @@
-from .bipartite_match_connector import MstConcatenate
+from .bipartite_match_connector import MatchingConcatenator
