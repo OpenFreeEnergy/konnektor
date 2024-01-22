@@ -70,6 +70,7 @@ jobs:
           pip install --no-deps git+https://github.com/OpenFreeEnergy/kartograf.git
           # Only need to test the notebook(s) in examples/
           pytest -v --nbval-lax examples/
+
       - name: codecov
         if: ${{ github.repository == 'OpenFreeEnergy/konnektor' && github.event != 'schedule'}}
         uses: codecov/codecov-action@v3

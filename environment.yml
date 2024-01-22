@@ -10,6 +10,7 @@ dependencies:
   - pytest-xdist
   - coverage
   - mypy
+  - nbval
   #Typing
   - gufe
   - typing-extensions
