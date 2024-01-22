@@ -60,7 +60,7 @@ jobs:
           micromamba list
       - name: "Run tests"
         run: |
-          pytest -n auto -v --cov=konnektor --cov-report=xml
+          pytest -n auto -v --cov=konnektor --cov-report=xml --ignore=dev
       - name: "Test Notebooks"
         run: |
           # openfe is a dep for the notebooks example, but not the package
