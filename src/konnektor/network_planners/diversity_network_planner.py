@@ -10,7 +10,7 @@ from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerpri
 from scikit_mol.descriptors import MolecularDescriptorTransformer
 
 from ..algorithms.node_clustering import CompoundDiversityClustering
-from ..algorithms.network_connecting import mst_concatenate
+from ..algorithms.network_connecting import MstConcatenate
 
 class DiversityNetworkPlanner(LigandNetworkPlanner):
     def __init__(self, mapper, scorer,
@@ -54,7 +54,7 @@ class DiversityNetworkPlanner(LigandNetworkPlanner):
                 sub_networks.append(sub_network)
 
         # Connect the Networks:
-        con = mst_concatenate(mapper=self.mapper, scorer=self.scorer)
-        concat_network = con.concatenate_networks(ligand_networks=sub_networks, n_edges=3)
+        con = MstConcatenate(mapper=self.mapper, scorer=self.scorer)
+        concat_network = con.concatenate_networks(ligand_networks=sub_networks, n_connecting_edges=3)
 
         return concat_network

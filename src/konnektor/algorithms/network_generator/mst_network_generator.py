@@ -34,5 +34,5 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
         mg = nx.Graph()
         mg.add_nodes_from(nodes)
         mg.add_weighted_edges_from(ebunch_to_add=mse)
-        #mg.connected = nx.is_connected(mg)
+        mg.connected = nx.is_connected(mg)
         return mg

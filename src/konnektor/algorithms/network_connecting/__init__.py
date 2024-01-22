@@ -1,1 +1,1 @@
-from .bipartite_MST_connect import mst_concatenate
+from .bipartite_MST_connector import MstConcatenate

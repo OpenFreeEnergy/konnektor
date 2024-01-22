@@ -6,12 +6,23 @@ from konnektor.utils import LigandNetwork
 
 log = logging.getLogger(__name__)
 
-class mst_concatenate():
-    def __init__(self, mapper, scorer):
+class MstConcatenate():
+    def __init__(self, mapper, scorer,  n_connecting_edges: int = 3):
         self.mapper = mapper
         self.scorer = scorer
-    def concatenate_networks(self, ligand_networks: List[LigandNetwork], n_edges: int = 3) -> LigandNetwork:
+        self.n_connecting_edges = n_connecting_edges
+    def concatenate_networks(self, ligand_networks: List[LigandNetwork]) -> LigandNetwork:
+        """
+        TODO Separate networking from Ligand stuff
+        Parameters
+        ----------
+        ligand_networks
+        n_connecting_edges
 
+        Returns
+        -------
+
+        """
         selected_edges = []
         selected_nodes = []
         connecting_edges = []
@@ -40,7 +51,7 @@ class mst_concatenate():
                     connecting_edges.append(mapping)
                     connecting_nodes.extend(nodes)
 
-                    if len(connecting_edges) >= n_edges:
+                    if len(connecting_edges) >= self.n_connecting_edges:
                         break
 
             log.info("Adding ConnectingEdges:  " + str(len(connecting_edges)))

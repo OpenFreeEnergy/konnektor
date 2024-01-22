@@ -12,6 +12,7 @@ from konnektor import network_planners
 
 from gufe import AtomMapper
 from gufe import SmallMoleculeComponent, LigandAtomMapping
+from gufe import LigandNetwork, LigandAtomMapping
 
 
 
@@ -72,8 +73,6 @@ class ErrorMapper(AtomMapper):
         # here
         raise ValueError('No mapping found for')
 
-
-
 def genScorer(mapping):
     return 1.0 / len(mapping.componentA_to_componentB)
 
@@ -87,3 +86,23 @@ def toluene_vs_others(atom_mapping_basic_test_files):
     return toluene, others
 
 
+
+@pytest.fixture(scope='session')
+def ligand_network_ab(atom_mapping_basic_test_files):
+        mappingsA = []
+        mappingsB = []
+
+        for _,mA in atom_mapping_basic_test_files.items():
+            for _,mB in atom_mapping_basic_test_files.items():
+                m= LigandAtomMapping(mA, mB, {}
+                                     ).with_annotations({'score': 1})
+                if mA==mB:
+                    continue
+                elif mA.name.startswith("2") and mB.name.startswith("2"):
+                    mappingsA.append(m)
+                elif not (mA.name.startswith("2") or mB.name.startswith("2")):
+                    mappingsB.append(m)
+
+        lna = LigandNetwork(edges=mappingsA)
+        lnb = LigandNetwork(edges=mappingsB)
+        return (lna, lnb)
