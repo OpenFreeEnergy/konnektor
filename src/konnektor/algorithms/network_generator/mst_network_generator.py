@@ -5,22 +5,19 @@ import itertools
 import networkx as nx
 
 from typing import Iterable, Callable
-
-from gufe import AtomMapper, AtomMapping
-from gufe import SmallMoleculeComponent
-
-from konnektor.utils import LigandNetwork    # only temproary
 from ._abstract_network_generator import _AbstractNetworkGenerator, Network
 
 class MstNetworkGenerator(_AbstractNetworkGenerator):
 
-
-    def generate_network(self, edges, weights) -> nx.Graph:
+    def generate_network(self, edges, weights, n_edges=None) -> nx.Graph:
         wedges = []
         nodes = []
         for edge, weight in zip(edges, weights):
             wedges.append([edge[0], edge[1], weight])
             nodes.extend(list(edge))
+
+        if(n_edges is None):
+            n_edges=len(nodes)-1 # max number of MST edges
 
         self.g = nx.Graph()
         self.g.add_weighted_edges_from(ebunch_to_add=wedges)
@@ -29,7 +26,8 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
         # we carry the original (directed) AtomMapping, we don't lose
         # direction information when converting to an undirected graph.
         min_edges = nx.minimum_spanning_edges(self.g, weight='weight')
-        mse = [(e1, e2, edge_data['weight']) for e1, e2, edge_data in min_edges]
+        mse = [(e1, e2, edge_data['weight']) for i, (e1, e2, edge_data) in
+               enumerate(min_edges) if(i<n_edges)]
 
         mg = nx.Graph()
         mg.add_nodes_from(nodes)

@@ -5,3 +5,4 @@ from .minimal_spanning_tree_network_planner import MinimalSpanningTreeLigandNetw
 from .radial_network_planner import RadialLigandNetworkPlanner
 from .diversity_network_planner import DiversityNetworkPlanner
 
+from .mst_concatenator import MstConcatenate
