@@ -53,7 +53,7 @@ jobs:
       - name: "Test imports"
         run: |
           # if we add more to this, consider changing to for + env vars
-          python -Ic "import kartograf"
+          python -Ic "import konnektor"
       - name: "Environment Information"
         run: |
           micromamba info 
