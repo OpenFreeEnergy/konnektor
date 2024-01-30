@@ -54,7 +54,7 @@ class DiversityNetworkPlanner(LigandNetworkPlanner):
                 sub_networks.append(sub_network)
 
         # Connect the Networks:
-        con = MstConcatenate(mapper=self.mapper, scorer=self.scorer)
-        concat_network = con.concatenate_networks(ligand_networks=sub_networks, n_connecting_edges=3)
+        con = MstConcatenate(mapper=self.mapper, scorer=self.scorer, n_connecting_edges=3)
+        concat_network = con.concatenate_networks(ligand_networks=sub_networks)
 
         return concat_network
