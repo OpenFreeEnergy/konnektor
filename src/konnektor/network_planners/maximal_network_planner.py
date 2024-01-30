@@ -93,9 +93,11 @@ class MaximalNetworkPlanner(LigandNetworkPlanner):
             batch_num = (total//n_batches)+1
 
             # Prepare parallel execution.
+            combinations =  itertools.combinations(nodes,2)
+            batches = (combinations[i:i + n] for i in range(0, len(combinations), n_batches))
+
             jobs = [(job_id, combination, self.mapper, self.scorer) for job_id,
-                    combination in enumerate(itertools.batched(
-                    itertools.combinations(nodes,2), batch_num))]
+                    combination in enumerate(batches)]
 
             #Execute parallelism
             mappings = []
