@@ -16,7 +16,6 @@ authors=[
     {name="Richard J Gowers", email="richardjgowers@gmail.com"},
 ]
 dependencies = [
-  'itertools >= 3.12',
   'scipy',
   'numpy',
   'networkx',
@@ -27,7 +26,7 @@ dependencies = [
 ]
 description="Konnektor is a package for calculating networks."
 readme="README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.12"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
