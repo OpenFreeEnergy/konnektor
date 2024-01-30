@@ -43,7 +43,19 @@ def atom_mapping_basic_test_files():
 
     return files
 
-class GenAtomMapper(AtomMapper):
+class DummyAtomMapper(AtomMapper):
+    def  _defaults():
+        pass
+
+    @classmethod
+    def _from_dict(cls, kwargs):.
+        return cls(**kwargs)
+        
+    def _to_dict(self):
+        return vars(self)
+        pass
+        
+class GenAtomMapper(DummyAtomMapper):
     def suggest_mappings(self, componentA:SmallMoleculeComponent,
                          componentB:SmallMoleculeComponent):
         atomsA = range(componentA.to_rdkit().GetNumAtoms())
@@ -53,20 +65,20 @@ class GenAtomMapper(AtomMapper):
                                 componentA_to_componentB={k:v for k,v in zip(
                                     atomsA, atomsB)})
 
-class BadMapper(AtomMapper):
+class BadMapper(DummyAtomMapper):
     def suggest_mappings(self, componentA:SmallMoleculeComponent,
                          componentB:SmallMoleculeComponent):
         yield LigandAtomMapping(componentA, componentB,
                                 componentA_to_componentB={0:0})
 
-class SuperBadMapper(AtomMapper):
+class SuperBadMapper(DummyAtomMapper):
     def suggest_mappings(self, componentA:SmallMoleculeComponent,
                          componentB:SmallMoleculeComponent):
         yield LigandAtomMapping(componentA, componentB,
                                 componentA_to_componentB={})
 
 
-class ErrorMapper(AtomMapper):
+class ErrorMapper(DummyAtomMapper):
     def suggest_mappings(self, componentA:SmallMoleculeComponent,
                          componentB:SmallMoleculeComponent):
         #raise StopIteration('No mapping found for')# Check for good solution
