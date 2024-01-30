@@ -3,7 +3,7 @@ channels:
 dependencies:
   - kartograf >=1
   - openfe >=0.15
-  - itertools >= 3.12
+  - itertools >=3.12
   - pip
   - pip:
     - git+https://github.com/OpenFreeEnergy/openfe-benchmarks.git
