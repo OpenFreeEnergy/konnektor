@@ -20,7 +20,12 @@ Konnektor: Tools for Networks in your FE Calculations
 
 Konnektor is a package offering multiple ways on constructing free energy networks and modifying those.
 
-👷 **WARNING: This repository is highly under development and more will be here soon!**👷
+👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷 
+
+**WARNING: This repository is highly under development and more will be here soon!** 
+
+👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
+
 
 
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
