@@ -51,7 +51,6 @@ class LigandNetworkPlanner(abc.ABC):
         self.network_generator = network_generator
         self.nprocesses=nprocesses
         self._initial_edge_lister = _initial_edge_lister
-        self._initial_edge_lister.nprocesses=1
 
     def __call__(self, *args, **kwargs)-> LigandNetwork:
         return self.generate_ligand_network(*args, **kwargs)
