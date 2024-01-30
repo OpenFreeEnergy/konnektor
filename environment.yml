@@ -2,9 +2,8 @@ name: konnektor
 channels:
   - conda-forge
 dependencies:
-  - python
+  - python >=3.12
   - pip
-  - itertools >=3.12
   #Test
   - pytest
   - pytest-cov
