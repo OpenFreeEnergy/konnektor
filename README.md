@@ -20,7 +20,14 @@ Konnektor: Tools for Networks in your FE Calculations
 
 Konnektor offers at the moment basic network planers. 
 
-More will be here soon!
+More will be here soon! 
+
+**WARNING** This repository is highly under development!
+
+
+Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
+
+
 ### Implemented Simple Network Layouts
 ![](.img/network_layouts.png)
 
