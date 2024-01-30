@@ -7,3 +7,4 @@ dependencies:
   - pip:
     - git+https://github.com/OpenFreeEnergy/openfe-benchmarks.git
     - git+https://github.com/OpenFreeEnergy/konnektor.git
+    - scikit-mol
