@@ -48,7 +48,7 @@ class DummyAtomMapper(AtomMapper):
         pass
 
     @classmethod
-    def _from_dict(cls, kwargs):.
+    def _from_dict(cls, kwargs):
         return cls(**kwargs)
         
     def _to_dict(self):
