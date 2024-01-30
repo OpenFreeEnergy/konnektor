@@ -4,7 +4,7 @@ channels:
 dependencies:
   - python
   - pip
-  - itertools >= 3.12
+  - itertools >=3.12
   #Test
   - pytest
   - pytest-cov
