@@ -16,6 +16,7 @@ authors=[
     {name="Richard J Gowers", email="richardjgowers@gmail.com"},
 ]
 dependencies = [
+  'itertools >= 3.12',
   'scipy',
   'numpy',
   'networkx',
