@@ -2,6 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import importlib
+import inspect
 import pytest
 from importlib import resources
 from rdkit import Chem
