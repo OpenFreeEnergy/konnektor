@@ -10,7 +10,7 @@ from gufe import SmallMoleculeComponent, AtomMapper
 
 from konnektor.utils  import LigandNetwork    # only temproary
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
-from ._parallel_pattern import _parallel_map_scoring
+from ._parallel_mapping_pattern import _parallel_map_scoring
 
 class MaximalNetworkPlanner(LigandNetworkPlanner):
     def __init__(self, mapper, scorer, progress=False, nprocesses=1):
