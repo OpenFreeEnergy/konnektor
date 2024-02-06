@@ -18,9 +18,19 @@ Konnektor: Tools for Networks in your FE Calculations
 
 [![Pip Install](https://img.shields.io/badge/pip%20install-konnektor-d9c4b1)](https://pypi.org/project/konnektor/)
 
-Konnektor offers at the moment basic network planers. 
+Konnektor is a package offering multiple ways on constructing free energy networks and modifying those.
 
-More will be here soon!
+👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
+
+**WARNING: This repository is highly under development and more will be here soon!** 
+
+👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
+
+
+
+Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
+
+
 ### Implemented Simple Network Layouts
 ![](.img/network_layouts.png)
 

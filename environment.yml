@@ -26,4 +26,5 @@ dependencies:
   - pydata-sphinx-theme
 
   - pip:
+    - dill
     - scikit-mol
