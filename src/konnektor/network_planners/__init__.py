@@ -2,6 +2,8 @@ from .cyclic_network_planner import CyclicLigandNetworkPlanner
 from .starry_sky_network_planner import StarrySkyLigandNetworkPlanner
 from .maximal_network_planner import MaximalNetworkPlanner
 from .minimal_spanning_tree_network_planner import MinimalSpanningTreeLigandNetworkPlanner
+from .redundant_minimal_spanning_tree_network_planner import RedundantMinimalSpanningTreeLigandNetworkPlanner
+
 from .radial_network_planner import RadialLigandNetworkPlanner
 from .diversity_network_planner import DiversityNetworkPlanner
 
