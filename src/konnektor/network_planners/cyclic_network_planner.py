@@ -31,7 +31,7 @@ class CyclicLigandNetworkPlanner(LigandNetworkPlanner):
             weights = [edge_map[k].annotations['score'] for k in edges]
 
             print("calculate Network")
-            cg = self.network_generator.generate_network_double_greedy(edges=edges, weights=weights)
+            cg = self.network_generator.generate_network(edges=edges, weights=weights)
 
             selected_mappings = [edge_map[k] for k in cg.edges]
             print("Done")
