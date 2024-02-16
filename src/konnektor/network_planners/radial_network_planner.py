@@ -8,7 +8,7 @@ from ..algorithms.network_generator import RadialNetworkGenerator
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
 from .maximal_network_planner import MaximalNetworkPlanner
 
-class RadialLigandNetworkPlanner(LigandNetworkPlanner):
+class StarLigandNetworkPlanner(LigandNetworkPlanner):
 
     def __init__(self, mapper, scorer):
         super().__init__(mapper=mapper, scorer=scorer, network_generator=RadialNetworkGenerator(),
@@ -49,3 +49,5 @@ class RadialLigandNetworkPlanner(LigandNetworkPlanner):
                                      mapping in mapping_generator]
 
             return LigandNetwork(edges=selected_mappings, nodes=ligands)
+
+RadialLigandNetworkPlanner = StarLigandNetworkPlanner

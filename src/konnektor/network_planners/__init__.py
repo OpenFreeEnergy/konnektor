@@ -1,10 +1,17 @@
-from .cyclic_network_planner import CyclicLigandNetworkPlanner
-from .starry_sky_network_planner import StarrySkyLigandNetworkPlanner
+#Network Generators
 from .maximal_network_planner import MaximalNetworkPlanner
+## Starmap Like Networks
+from .radial_network_planner import StarLigandNetworkPlanner
+RadialLigandNetworkPlanner = StarLigandNetworkPlanner
+from .starry_sky_network_planner import StarrySkyLigandNetworkPlanner
+
+## MST like Networks
 from .minimal_spanning_tree_network_planner import MinimalSpanningTreeLigandNetworkPlanner
 from .redundant_minimal_spanning_tree_network_planner import RedundantMinimalSpanningTreeLigandNetworkPlanner
 
-from .radial_network_planner import RadialLigandNetworkPlanner
+## Other
+from .cyclic_network_planner import CyclicLigandNetworkPlanner
 from .diversity_network_planner import DiversityNetworkPlanner
 
+# Network Concatenation
 from .mst_concatenator import MstConcatenate
