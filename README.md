@@ -36,7 +36,7 @@ Try our interactive demo: [![Open In Colab](https://colab.research.google.com/as
 
 ### Tools for constructing more complex Networks
 Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
-![](.img/Divesity_network.png)
+![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/c4ee0b63-7580-4825-b0cb-dc076e4cb9f4)
 
 
 ## Usage
