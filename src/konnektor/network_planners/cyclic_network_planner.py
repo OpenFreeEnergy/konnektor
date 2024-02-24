@@ -25,15 +25,15 @@ class CyclicLigandNetworkPlanner(LigandNetworkPlanner):
             mappings = initial_networks.edges
 
             # Translate Mappings to graphable:
-            print("prepare network")
+            #print("prepare network")
             edge_map = {(ligands.index(m.componentA), ligands.index(m.componentB)): m for m in mappings}
             edges = list(sorted(edge_map.keys()))
             weights = [edge_map[k].annotations['score'] for k in edges]
 
-            print("calculate Network")
+            #print("calculate Network")
             cg = self.network_generator.generate_network(edges=edges, weights=weights)
 
             selected_mappings = [edge_map[k] for k in cg.edges]
-            print("Done")
+            #print("Done")
 
             return LigandNetwork(edges=selected_mappings, nodes=ligands)

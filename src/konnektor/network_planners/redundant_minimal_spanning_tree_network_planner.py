@@ -7,7 +7,7 @@ from .maximal_network_planner import MaximalNetworkPlanner
 
 class RedundantMinimalSpanningTreeLigandNetworkPlanner(LigandNetworkPlanner):
 
-    def __init__(self, mapper, scorer, n_redundancy:int=3):
+    def __init__(self, mapper, scorer, n_redundancy:int=2):
         """Plan a Network which connects all ligands n times with minimal cost.
         This planner uses n_redundancy times the MST algorithm on the full
         graph, disallowing to use an already selected edge twice for the MST calculation.

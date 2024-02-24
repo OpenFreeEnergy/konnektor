@@ -9,3 +9,5 @@ from .network_planners import(
     CyclicLigandNetworkPlanner,
     DiversityNetworkPlanner,
 )
+
+from . import analysis

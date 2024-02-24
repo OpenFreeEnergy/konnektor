@@ -35,10 +35,11 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
     edges = list(sorted(edge_map.keys()))
     weights = [edge_map[k].annotations['score'] for k in edges]
 
+    #g = network.graph
     g = nx.Graph()
     [g.add_node(n.name) for n in ligands]
-    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e,w in zip(edges,weights)])
-
+    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e,w in zip(
+     edges,weights)])
 
     if(ax is None):
         fig = plt.figure(figsize=[16,9])
@@ -53,6 +54,6 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
 
     nx.draw_networkx(g, with_labels=True, ax=ax, node_size=node_size, width=edge_width,
                      node_color=cs, edge_color=ofe_colors[3], font_color=[1,1,1])
-    ax.set_title(title+" Network #edges "+str(len(g.edges)), fontsize=fontsize)
+    ax.set_title(title, fontsize=fontsize) #+" #edges "+str(len(g.edges))
 
     return fig
