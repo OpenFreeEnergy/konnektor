@@ -32,7 +32,7 @@ Try our interactive demo: [![Open In Colab](https://colab.research.google.com/as
 
 
 ### Implemented Simple Network Layouts
-![](.img/network_layouts.png)
+![](.img/Network_Overview.png)
 
 ### Tools for constructing more complex Networks
 we are implementing tools for more complex Network generation:
