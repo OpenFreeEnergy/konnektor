@@ -32,6 +32,8 @@ Try our interactive demo: [![Open In Colab](https://colab.research.google.com/as
 
 
 ### Implemented Simple Network Layouts
+Several Network layouts are implemented in Konnektor. Many of them bring 
+advantages and disadvantages, check below.
 ![](.img/Network_Overview.png)
 
 ### Tools for constructing more complex Networks
