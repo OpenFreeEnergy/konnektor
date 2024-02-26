@@ -112,6 +112,6 @@ This library is made available under the MIT open source license.
 ## Authors
 
 The OpenFE development team.
-conda activate konnektor
-pip install .
-```
+
+## Acknowledgments
+Thanks to Enrico Ruijsenaars, Jenke Scheen and Josh Horton for great discussions!
