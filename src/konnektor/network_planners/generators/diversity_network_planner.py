@@ -51,7 +51,7 @@ class DiversityNetworkPlanner(LigandNetworkPlanner):
             else:# Need to generate the Empty Network here!
                 continue
                 sub_network = LigandNetwork(edges=set([]), nodes=mols)
-                sub_networks.append(sub_network)
+                sub_networks.append_node(sub_network)
 
         # Connect the Networks:
         con = MstConcatenate(mapper=self.mapper, scorer=self.scorer, n_connecting_edges=3)

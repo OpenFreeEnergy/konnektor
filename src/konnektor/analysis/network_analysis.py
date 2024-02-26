@@ -52,7 +52,7 @@ def robustness(network, failure_rate=0.05, nrepeats=100):
         nn = network
         for _ in range(npics):
             i = random.randrange(0, len(edges), 1)
-            nn = tools.delete_edge(nn, edges[i])
+            nn = tools.delete_transformation(nn, edges[i])
         connected.append(get_is_connected(nn))
 
     r = np.mean(list(map(float, connected)))
