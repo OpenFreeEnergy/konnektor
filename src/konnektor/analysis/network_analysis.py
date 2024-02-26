@@ -3,7 +3,7 @@ import numpy as np
 import networkx as nx
 from gufe import LigandNetwork
 
-from ..utils import network_tools as tools
+from .. import network_tools as tools
 
 
 def get_is_connected(cg:LigandNetwork)-> bool:

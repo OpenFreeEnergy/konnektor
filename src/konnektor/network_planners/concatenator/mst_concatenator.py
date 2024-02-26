@@ -3,7 +3,7 @@ import itertools
 from typing import List
 from konnektor.utils import LigandNetwork
 
-from ..algorithms.network_generator import MstNetworkGenerator
+from ...algorithms.network_generator import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
 

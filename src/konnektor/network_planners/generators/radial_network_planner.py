@@ -4,7 +4,7 @@ from typing import Iterable
 from gufe import SmallMoleculeComponent
 from konnektor.utils import LigandNetwork
 
-from ..algorithms.network_generator import RadialNetworkGenerator
+from ...algorithms.network_generator import RadialNetworkGenerator
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
 from .maximal_network_planner import MaximalNetworkPlanner
 

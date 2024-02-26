@@ -8,9 +8,7 @@ from .network_planners import (MaximalNetworkPlanner,
                                CyclicLigandNetworkPlanner,
                                DiversityNetworkPlanner,
                                )
+from .network_tools import concatenate, merge, append_node, delete_transformation, cluster_compound
 
-from .network_planners import (merge, concatenate, delete_transformation,
-                               append_node, cluster_compound
-                               )
 from . import analysis
 from .visualization import draw_ligand_network

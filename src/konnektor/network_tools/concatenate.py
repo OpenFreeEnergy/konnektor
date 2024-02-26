@@ -1,5 +1,5 @@
 from gufe import LigandNetwork, LigandAtomMapping, SmallMoleculeComponent
-from ..concatenator.mst_concatenator import MstConcatenate
+from ..network_planners.concatenator.mst_concatenator import MstConcatenate
 
 def concatenate(network1:LigandNetwork,
                     network2:LigandNetwork,
