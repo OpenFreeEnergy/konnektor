@@ -9,7 +9,7 @@ from sklearn.cluster import KMeans
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
 from scikit_mol.descriptors import MolecularDescriptorTransformer
 
-from ...algorithms.node_clustering import CompoundDiversityClustering
+from ...network_tools.cluster_molecules import CompoundDiversityClustering
 from ..concatenator import MstConcatenate
 
 class DiversityNetworkPlanner(LigandNetworkPlanner):

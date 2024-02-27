@@ -3,7 +3,7 @@ from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
 
-from ..algorithms.node_clustering import CompoundDiversityClustering
+from .node_clustering import CompoundDiversityClustering
 
 
 def delete_transformation(network :LigandNetwork,

@@ -10,5 +10,5 @@ from .network_planners import (MaximalNetworkPlanner,
                                )
 from .network_tools import concatenate, merge, append_node, delete_transformation, cluster_compound
 
-from . import analysis
+from . import network_analysis
 from .visualization import draw_ligand_network

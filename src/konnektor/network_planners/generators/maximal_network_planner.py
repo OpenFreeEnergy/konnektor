@@ -1,12 +1,11 @@
 import itertools
 import functools
-import multiprocessing as mult
 
 from tqdm.auto import tqdm
 
-from typing import Iterable, Callable, Union, Optional
+from typing import Iterable, Union
 
-from gufe import SmallMoleculeComponent, AtomMapper
+from gufe import SmallMoleculeComponent
 
 from konnektor.utils  import LigandNetwork    # only temproary
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
