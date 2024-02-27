@@ -30,24 +30,9 @@ Konnektor is a package offering multiple ways on constructing free energy networ
 
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
 
-
-### Implemented Simple Network Layouts
-Several Network layouts are implemented in Konnektor. Many of them bring 
-advantages and disadvantages, check below.
-![](.img/Network_Overview.png)
-
-### Tools for constructing more complex Networks
-we are implementing tools for more complex Network generation:
-![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/5fbb253c-f0d3-41bf-bd92-f520b1363b6d)
-
-### Enable More Complex Higher Order Networks
-Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
-![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/c4ee0b63-7580-4825-b0cb-dc076e4cb9f4)
-
-
-## Usage
+## Code Example
 ```python3
-# Here we generate some import data.
+# Here we generate some input data.
 from openfe_benchmarks import benzenes
 compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
                         benzenes.get_system().ligand_components))
@@ -68,6 +53,22 @@ fig = draw_ligand_network(network=network, title=network.name)
 
 fig.show()
 ```
+![example fig](.img/example_out.png)
+
+
+## Content
+### Implemented Simple Network Layouts
+Several Network layouts are implemented in Konnektor. Many of them bring 
+advantages and disadvantages, check below.
+![](.img/Network_Overview.png)
+
+### Tools for constructing more complex Networks
+we are implementing tools for more complex Network generation:
+![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/5fbb253c-f0d3-41bf-bd92-f520b1363b6d)
+
+### Enable More Complex Higher Order Networks
+Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
+![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/c4ee0b63-7580-4825-b0cb-dc076e4cb9f4)
 
 
 ## Installation
