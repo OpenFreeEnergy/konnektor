@@ -47,37 +47,24 @@ Additionally we are working on Molecule diversity based Networks here with HIF2A
 
 ## Usage
 ```python3
-import numpy as np
+# Here we generate some import data.
 from openfe_benchmarks import benzenes
-from kartograf import KartografAtomMapper
-from konnektor.visualization import draw_ligand_network
-from openfe.setup.atom_mapping.lomap_scorers import default_lomap_score
-
 compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
                         benzenes.get_system().ligand_components))
 
-from konnektor.network_planners import (MaximalNetworkPlanner, RadialLigandNetworkPlanner,
-                                        MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner)
+# Pick your Favourite Network layout with favourite AtomMapper and Scorer
+from openfe.setup import KartografAtomMapper, lomap_scorers
+from konnektor.network_planners import CyclicLigandNetworkPlanner
+networker = CyclicLigandNetworkPlanner(mapper=KartografAtomMapper(), 
+                                       scorer=lomap_scorers.default_lomap_score)
 
-networkers = [MaximalNetworkPlanner, RadialLigandNetworkPlanner,
-              MinimalSpanningTreeLigandNetworkPlanner, CyclicLigandNetworkPlanner, DiversityNetworkPlanner]
+# Generate Network
+network =networker.generate_ligand_network(compounds)
+network.name="Cyclic Network"
 
-networks = []
-for networker_cls, name in zip(networkers,["Max", "Radial", "MST", "Cyclic", "Div"]):
-    networker = networker_cls(mapper=KartografAtomMapper(), scorer=default_lomap_score)
-    network = networker.generate_ligand_network(compounds)
-    network.name=name
-    networks.append(network)
-
-#Visualize
-fig, axes = plt.subplots(ncols=2, nrows=3, figsize=[16,3*9])
-axes= np.array(axes).flat
-fs=22
-for ax, net in zip(axes, [max_network, radial_network, mst_network, cyclic_network]):
-    draw_ligand_network(network=net, title=net.name, ax=ax, node_size=1500, fontsize=fs)
-    ax.axis("off")
-
-axes[-1].axis("off")
+# Visualize the generated network
+from konnektor.visualization import draw_ligand_network
+fig = draw_ligand_network(network=network, title=network.name)
 
 fig.show()
 ```

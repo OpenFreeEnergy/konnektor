@@ -61,7 +61,6 @@ def test_minimal_spanning_network_connectedness(rminimal_spanning_network_redund
 
 @pytest.skip
 def test_minimal_spanning_network_regression(rminimal_spanning_network_redundancy):
-    # issue #244, this was previously giving non-reproducible (yet valid)
     # this is stochastically failing and working.!
     nred = rminimal_spanning_network_redundancy[1]
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
