@@ -1,11 +1,8 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
-import itertools
 import networkx as nx
-
-from typing import Iterable, Callable
-from ._abstract_network_generator import _AbstractNetworkGenerator, Network
+from ._abstract_network_generator import _AbstractNetworkGenerator
 
 class MstNetworkGenerator(_AbstractNetworkGenerator):
 

@@ -1,9 +1,10 @@
-from gufe import LigandNetwork, LigandAtomMapping, SmallMoleculeComponent
 from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
 
-from .node_clustering import CompoundDiversityClustering
+from gufe import LigandNetwork, LigandAtomMapping, SmallMoleculeComponent
+
+from .cluster_molecules import CompoundDiversityClustering
 
 
 def delete_transformation(network :LigandNetwork,

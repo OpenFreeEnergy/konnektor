@@ -1,9 +1,5 @@
 import abc
-
-from gufe import network
-
-class Network():
-    pass
+import networkx as nx
 
 class _AbstractNetworkGenerator(abc.ABC):
 
@@ -14,5 +10,5 @@ class _AbstractNetworkGenerator(abc.ABC):
         return self.generate_network(*args, **kwargs)
 
     @abc.abstractmethod
-    def generate_network(self, edges, weights)->Network:
+    def generate_network(self, edges, weights)->nx.Graph:
         pass

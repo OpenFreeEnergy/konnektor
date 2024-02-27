@@ -43,12 +43,14 @@ int]:
     return dict(zip(uni, cou))
 
 
-def robustness(network, failure_rate=0.05, nrepeats=100):
+def get_edge_failure_robustness(network, failure_rate=0.05, nrepeats=100):
+
     edges = list(network.edges)
+    npics = int(np.round(len(network.edges) * failure_rate)) if (
+            np.round(len(network.edges) * failure_rate) > 1) else 1
+
     connected=[]
     for _ in range(nrepeats):
-        npics = int(np.round(len(network.edges) * failure_rate)) if (
-                    np.round(len(network.edges) * failure_rate) > 1) else 1
         nn = network
         for _ in range(npics):
             i = random.randrange(0, len(edges), 1)

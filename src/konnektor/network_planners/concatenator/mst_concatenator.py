@@ -3,7 +3,7 @@ import itertools
 from typing import List
 from konnektor.utils import LigandNetwork
 
-from netx_netcon import MstNetworkGenerator
+from ..generators.netx_netgen import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
 
@@ -12,7 +12,7 @@ class MstConcatenate():
         self.mapper = mapper
         self.scorer = scorer
         self.n_connecting_edges = n_connecting_edges
-        self.network_generator =MstNetworkGenerator()
+        self.network_generator = MstNetworkGenerator()
     def concatenate_networks(self, ligand_networks: List[LigandNetwork]) -> LigandNetwork:
         """
         TODO Separate networking from Ligand stuff

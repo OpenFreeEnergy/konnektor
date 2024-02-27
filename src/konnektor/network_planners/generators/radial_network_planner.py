@@ -1,8 +1,6 @@
-import itertools
 from typing import Iterable
 
-from gufe import SmallMoleculeComponent
-from konnektor.utils import LigandNetwork
+from gufe import SmallMoleculeComponent, LigandNetwork
 
 from .netx_netgen import RadialNetworkGenerator
 from ._abstract_ligand_network_planner import LigandNetworkPlanner

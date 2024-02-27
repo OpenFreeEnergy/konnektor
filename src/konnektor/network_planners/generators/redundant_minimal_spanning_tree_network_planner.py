@@ -1,4 +1,4 @@
-from  konnektor.utils import LigandNetwork
+from gufe import LigandNetwork
 
 from .netx_netgen import MstNetworkGenerator
 from ._abstract_ligand_network_planner import LigandNetworkPlanner

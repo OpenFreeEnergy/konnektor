@@ -2,11 +2,8 @@ import functools
 from tqdm.auto import tqdm
 from typing import Iterable, Callable, Union, Tuple
 
-from gufe import SmallMoleculeComponent, AtomMapper
-
-from konnektor.utils import LigandNetwork
+from gufe import SmallMoleculeComponent, LigandNetwork
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
-
 
 class ExplicitNetwork(LigandNetworkPlanner):
     def __init__(self, mapper, scorer=None):

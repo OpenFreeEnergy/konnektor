@@ -1,8 +1,6 @@
-from typing import Iterable, Callable, Union, Optional
+from typing import Iterable, Callable, Union
 
-from gufe import SmallMoleculeComponent, AtomMapper
-from konnektor.utils import LigandNetwork    # only temproary
-
+from gufe import SmallMoleculeComponent, LigandNetwork
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
 
 from sklearn.cluster import KMeans

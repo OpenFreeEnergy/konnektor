@@ -59,8 +59,10 @@ def test_minimal_spanning_network_connectedness(rminimal_spanning_network_redund
     assert nx.is_connected(nx.MultiGraph(minimal_spanning_network.graph))
 
 
+
 def test_minimal_spanning_network_regression(rminimal_spanning_network_redundancy):
     # issue #244, this was previously giving non-reproducible (yet valid)
+    # this is stochastically failing and working.!
     nred = rminimal_spanning_network_redundancy[1]
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
 
@@ -81,6 +83,7 @@ def test_minimal_spanning_network_regression(rminimal_spanning_network_redundanc
 
     print(len(ref), nred, (len(ref)*nred)-nred, len(edge_ids))
     assert len(edge_ids) == (len(ref)*nred)-nred
+
     #assert edge_ids == ref #This should not be tested here! go to MST generator
 
 

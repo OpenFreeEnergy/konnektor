@@ -1,11 +1,12 @@
 import logging
 import numpy as np
-from typing import List, Dict, Tuple
-from gufe import SmallMoleculeComponent
+
 from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
 from sklearn.pipeline import Pipeline
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
+
+from gufe import SmallMoleculeComponent
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
@@ -17,7 +18,8 @@ class CompoundDiversityClustering():
         self.featurize = featurize
         self.cluster = cluster
 
-    def cluster_compounds(self, compounds:List[SmallMoleculeComponent]) -> Dict[int, SmallMoleculeComponent]:
+    def cluster_compounds(self, compounds:list[SmallMoleculeComponent]) -> dict[
+        int, SmallMoleculeComponent]:
         # Build Pipeline
         self.pipe = Pipeline([('mol_transformer', self.featurize), ('Cluster', self.cluster)])
         self.pipe.fit([c.to_rdkit() for c in compounds])

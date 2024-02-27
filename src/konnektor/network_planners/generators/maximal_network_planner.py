@@ -5,9 +5,8 @@ from tqdm.auto import tqdm
 
 from typing import Iterable, Union
 
-from gufe import SmallMoleculeComponent
+from gufe import SmallMoleculeComponent, LigandNetwork
 
-from konnektor.utils  import LigandNetwork    # only temproary
 from ._abstract_ligand_network_planner import LigandNetworkPlanner
 from ._parallel_mapping_pattern import _parallel_map_scoring
 

@@ -1,26 +1,13 @@
 import logging
-import itertools
-from typing import List
-
-import itertools
 import networkx as nx
 
-from typing import Iterable, Callable
-
-from gufe import AtomMapper, AtomMapping
-from gufe import SmallMoleculeComponent
-
-from konnektor.utils import LigandNetwork    # only temproary
-
-
-from ..network_generator import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
 
 class MatchingConcatenator():
 
     def concatenate_networks(self, nodesA, nodesB,
-                             edges, weights):
+                             edges, weights)->nx.Graph:
         """
         TODO Separate networking from Ligand stuff
         Parameters

@@ -5,7 +5,7 @@ import pytest
 import numpy as np
 import networkx as nx
 
-from konnektor.algorithms.network_generator import RadialNetworkGenerator
+from konnektor.network_planners.generators.netx_netgen import RadialNetworkGenerator
 from konnektor.tests.data.conf import nine_mols_edges
 
 

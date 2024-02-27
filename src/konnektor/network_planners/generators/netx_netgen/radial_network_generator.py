@@ -1,17 +1,13 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
-import math
 import numpy as np
 import networkx as nx
-from typing import Iterable, Callable
-import itertools
+from typing import Callable
 
-from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
 
-from  konnektor.utils import LigandNetwork    # only temproary
-from ._abstract_network_generator import _AbstractNetworkGenerator, Network
+from ._abstract_network_generator import _AbstractNetworkGenerator
 
 
 class RadialNetworkGenerator(_AbstractNetworkGenerator):

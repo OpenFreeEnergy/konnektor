@@ -1,43 +1,11 @@
 import abc
 import logging
-import itertools
-import functools
-import multiprocessing as mult
+from typing import Iterable
 
-from tqdm.auto import tqdm
-from typing import Iterable, Tuple
-
-from gufe import SmallMoleculeComponent
-from konnektor.utils  import LigandNetwork
+from gufe import SmallMoleculeComponent, LigandNetwork
 
 log = logging.getLogger(__name__)
 #log.setLevel(logging.WARNING)
-
-
-def thread_mapping(args):
-    '''
-    Helper function working as thread for parallel execution.
-    Parameters
-    ----------
-    compound_pair
-
-    Returns
-    -------
-
-    '''
-    jobID, compound_pairs, mapper, scorer = args
-    mapping_generator = [next(mapper.suggest_mappings(
-        compound_pair[0], compound_pair[1])) for
-        compound_pair in compound_pairs]
-
-    if scorer:
-        mappings = [mapping.with_annotations(
-            {'score': scorer(mapping)})
-            for mapping in mapping_generator]
-    else:
-        mappings = list(mapping_generator)
-
-    return mappings
 
 
 class LigandNetworkPlanner(abc.ABC):

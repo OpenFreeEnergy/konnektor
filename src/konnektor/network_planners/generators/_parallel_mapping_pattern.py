@@ -1,10 +1,10 @@
 from tqdm.auto import tqdm
 import functools
-import itertools
 import multiprocessing as mult
 
 from gufe import SmallMoleculeComponent
 from gufe import AtomMapper, AtomMapping
+
 
 def thread_mapping(args)->list[AtomMapping]:
     '''

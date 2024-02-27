@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
 import networkx as nx
-from collections import defaultdict
 
 from ._abstract_network_generator import _AbstractNetworkGenerator
 
