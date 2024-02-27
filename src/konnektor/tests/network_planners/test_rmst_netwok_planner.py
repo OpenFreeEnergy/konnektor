@@ -59,8 +59,9 @@ def test_minimal_spanning_network_connectedness(rminimal_spanning_network_redund
     assert nx.is_connected(nx.MultiGraph(minimal_spanning_network.graph))
 
 
-@pytest.skip
-def test_minimal_spanning_network_regression(rminimal_spanning_network_redundancy):
+@pytest.mark.skip(reason="stochastically wrong and right")
+def test_minimal_spanning_network_regression(
+    rminimal_spanning_network_redundancy):
     # this is stochastically failing and working.!
     nred = rminimal_spanning_network_redundancy[1]
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
