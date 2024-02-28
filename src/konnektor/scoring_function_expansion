@@ -1,0 +1,14 @@
+"""
+This is pseudo code, trying to caputre the need for adding weights for experimental values.
+
+"""
+from gufe import LigandAtomMapping
+
+
+def wrap_experimental_scoring(func)->callable:
+  def experimental_score(mapping: LigandAtomMapping)->float:
+  	if(map.exp and gold_scorer(map)< 0.8):
+  		return 0
+  	Else:
+  		return gold_scorer(map)
+
