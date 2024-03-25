@@ -1,6 +1,6 @@
 import logging
 import itertools
-from typing import List
+from typing import Iterable
 from konnektor.utils import LigandNetwork
 
 from ..generators.netx_netgen import MstNetworkGenerator
@@ -13,7 +13,7 @@ class MstConcatenate():
         self.scorer = scorer
         self.n_connecting_edges = n_connecting_edges
         self.network_generator = MstNetworkGenerator()
-    def concatenate_networks(self, ligand_networks: List[LigandNetwork]) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
         TODO Separate networking from Ligand stuff
         Parameters

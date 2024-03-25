@@ -1,10 +1,11 @@
+from typing import Iterable
 from gufe import LigandNetwork, SmallMoleculeComponent
 
 from ..network_planners.concatenator.mst_concatenator import MstConcatenate
 
-def concatenate(network1:LigandNetwork,
-                    network2:LigandNetwork,
-           concatenator:MstConcatenate=MstConcatenate)->LigandNetwork:
+
+def concatenate_networks(networks:Iterable[LigandNetwork],
+                         concatenator)->LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
@@ -23,14 +24,14 @@ def concatenate(network1:LigandNetwork,
         returns the concatenated network
     """
 
-    concatenated_network = concatenator.concatenate_networks([network1,
-                                                             network2])
+    concat_network = concatenator.concatenate_networks(ligand_networks=networks)
 
-    return concatenated_network
+    return concat_network
 
-def append_node(network :LigandNetwork,
-                compound :SmallMoleculeComponent,
-                concatenator :MstConcatenate =MstConcatenate)->LigandNetwork:
+
+def append_node(network: LigandNetwork,
+                compound: SmallMoleculeComponent,
+                concatenator: MstConcatenate)->LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
