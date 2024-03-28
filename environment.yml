@@ -21,6 +21,8 @@ dependencies:
   - scikit-learn
   # Chem
   - rdkit
+  # Vis
+  - ipycytoscape
   # docs
   - myst-parser
   - pydata-sphinx-theme
