@@ -1,3 +1,5 @@
+from typing import Iterable
+
 from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
@@ -19,11 +21,12 @@ def delete_transformation(network :LigandNetwork,
     return LigandNetwork(edges=filtered_edges, nodes=network.nodes)
 
 
-def cluster_compound(compounds: list[SmallMoleculeComponent],
+def cluster_compound(compounds: Iterable[SmallMoleculeComponent],
                      featurize:TransformerMixin = RDKitFingerprintTransformer(),
                     cluster:ClusterMixin = KMeans(n_clusters=5, n_init="auto")
                      )->dict[int,
 list[SmallMoleculeComponent]]:
+    
     clusterer = CompoundDiversityClustering( featurize = featurize,cluster=cluster)
     return clusterer.cluster_compounds(compounds)
 
