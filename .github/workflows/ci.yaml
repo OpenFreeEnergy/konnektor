@@ -63,10 +63,7 @@ jobs:
           pytest -n auto -v --cov=konnektor --cov-report=xml --ignore=dev
       - name: "Test Notebooks"
         run: |
-          # openfe is a dep for the notebooks example, but not the package
-          micromamba install openfe=0.15
           # another dep I don't want to include in the env
-          pip install --no-deps git+https://github.com/OpenFreeEnergy/openfe-benchmarks.git
           pip install --no-deps git+https://github.com/OpenFreeEnergy/kartograf.git
           # Only need to test the notebook(s) in examples/
           pytest -v --nbval-lax examples/
