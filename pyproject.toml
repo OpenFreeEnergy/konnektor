@@ -23,6 +23,7 @@ dependencies = [
   'rdkit',
   'scikit-mol',
   'scikit-learn',
+  'ipycytoscape'
 ]
 description="Konnektor is a package for calculating networks."
 readme="README.md"
