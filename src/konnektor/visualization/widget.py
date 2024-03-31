@@ -57,27 +57,48 @@ def mol2svg(mol):
     return impath
 
 
-def build_cytoscape(network, layout="concentric", show_mol_img=True):
+def map2svg(mapping):
+    grid_x, grid_y = {1: (1, 1), 2: (2, 1), }[2]
+    d2d = rdMolDraw2D.MolDraw2DSVG(
+        grid_x * 300, grid_y * 300, 300, 300)
+    d2d.SetColour((1, 1, 1))
+
+    svg = draw_mapping(mol1=mapping.componentA.to_rdkit(),
+                       mol2=mapping.componentB.to_rdkit(),
+                       mol1_to_mol2=mapping.componentA_to_componentB,
+                       d2d=d2d)
+    impath = 'data:image/svg+xml;charset=utf-8,' + parse.quote(svg, safe="")
+
+    return impath
+
+
+def build_cytoscape(network, layout="concentric", show_molecules=True, show_mappings=False):
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
     edges = list(sorted(edge_map.keys()))
     weights = [edge_map[k].annotations['score'] for k in edges]
-    imgs = [edge_map[k] for k in edges]
+
     connectivities = np.array(get_node_connectivities(network))
     mixins = np.clip(connectivities / (sum(connectivities) / len(connectivities)), a_min=0, a_max=2) / 2
-
     cs = list(map(lambda x: color_gradient(mix=x), mixins))
 
     # build a graph
     g = nx.Graph()
-    [g.add_node(n.name, name=n.name, img=mol2svg(n.to_rdkit()), col=c) for n, c in zip(ligands, cs)]
-    g.add_weighted_edges_from(
-        ebunch_to_add=[(e[0], e[1], "{:2.2F}".format(w),) for e, w, i in zip(edges, weights, imgs)])
+
+    [g.add_node(n.name, name=n.name, classes="ligand", img=mol2svg(n.to_rdkit()), col=c) for n, c in zip(ligands, cs)]
+    [g.add_node(f"{e[0]}-{e[1]}", classes="mapping", name=f"{e[0]}-{e[1]}", lab=f"{e[0]} - {e[1]}\nscore: {w:2.2F}",
+                weight="{:2.2F}".format(w), img=map2svg(edge_map[e])) for e, w in zip(edges, weights)]
+
+    for e, w in zip(edges, weights):
+        g.add_edge(e[0], f"{e[0]}-{e[1]}")
+        g.add_edge(f"{e[0]}-{e[1]}", e[1])
+
+    # [g.add_edge(e[0], e[1], weight="{:2.2F}".format(w), edge_img=i, name=f"{e[0]}-{e[1]}") for e, w, i in zip(edges, weights, imgs)]
     g = g.to_undirected()
 
     # Styling
-    node_style = {
-        'selector': 'node',
+    node_style_ligand = {
+        'selector': 'node.ligand',
         'css': {
             'content': 'data(name)',
             'text-valign': 'center',
@@ -94,11 +115,38 @@ def build_cytoscape(network, layout="concentric", show_mol_img=True):
             'border-color': 'data(col)',
         }
     }
-    if show_mol_img:
-        node_style["css"]["background-image"] = "data(img)"
-        node_style["css"]["text-valign"] = "top"
-        node_style["css"]["width"] = 350
-        node_style["css"]["height"] = 300
+    if show_molecules:
+        node_style_ligand["css"]["background-image"] = "data(img)"
+        node_style_ligand["css"]["text-valign"] = "top"
+        node_style_ligand["css"]["width"] = 350
+        node_style_ligand["css"]["height"] = 300
+
+    node_style_mapping = {
+        'selector': 'node.mapping',
+        'css': {
+            'content': 'data(lab)',
+            'text-valign': 'center',
+            'text-outline-width': 1,
+            'text-outline-color': '#31394d',
+            "text-wrap": "wrap",
+            "font-size": 20,
+            'color': '#31394d',
+            'shape': 'roundrectangle',
+            'width': 150,
+            'height': 100,
+            'nested': True,
+            'background-color': '#d9c4b1',
+            'background-fit': 'contain',
+            'border-width': 5,
+            'border-color': '#d9c4b1',
+        }
+    }
+    if show_molecules and show_mappings:
+        node_style_mapping["css"]["background-image"] = "data(img)"
+        node_style_mapping["css"]["background-color"] = "white"
+        node_style_mapping["css"]["text-valign"] = "top"
+        node_style_mapping["css"]["width"] = 300
+        node_style_mapping["css"]["height"] = 150
 
     edge_style = {
         'selector': 'edge',
@@ -111,34 +159,36 @@ def build_cytoscape(network, layout="concentric", show_mol_img=True):
             "font-size": 26,
             'text-background-color': '#d9c4b1',  # Set the background color
             'text-background-opacity': 0.7,  # Adjust opacity (0 to 1)
+            'tooltip': 'data(weight)',
+            'tooltip-background-image': 'data(edge_img)',
         }
     }
 
     selected_style = {
         'selector': ':selected',
         'css': {
-            'background-color': '#ede3da',
-            'line-color': '#ede3da',
-            'target-arrow-color': '#ede3da',
-            'source-arrow-color': '#ede3da',
-            'text-outline-color': '#ede3da'
+            'background-color': 'red',
+            'line-color': 'red',
+            'target-arrow-color': 'red',
+            'source-arrow-color': 'red',
+            'text-outline-color': 'red'
         }
     }
 
-    undirected = ipycytoscape.CytoscapeWidget()
-    undirected.graph.add_graph_from_networkx(g)
-    undirected.set_style([node_style, edge_style, selected_style])
+    undirected = ipycytoscape.CytoscapeWidget(g, )
+    undirected.set_tooltip_source("name")
+    undirected.set_style([node_style_ligand, node_style_mapping, edge_style])
     undirected.set_layout(name=layout, nodeSpacing=50, edgeLengthVal=50)
     return undirected
 
 
-def draw_network_widget(network, layout="concentric", show_mol_img=True):
-    @interact(network=fixed(network), layout=['dagre', 'breadthfirst', 'concentric', 'cose'],
-              show_mol_img=[True, False])
-    def interactive_widget(network=network, layout=layout, show_mol_img=show_mol_img):
-        v = build_cytoscape(network=network, layout=layout, show_mol_img=show_mol_img)
+def draw_network_widget(network, layout="cose", show_molecules=True, show_mappings=False, ):
+    @interact(network=fixed(network), layout=['dagre', 'cola', 'breadthfirst',
+                                              'circular', 'preset', 'concentric', 'cose'])
+    def interactive_widget(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings):
+        v = build_cytoscape(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings)
         return v
 
-    return interactive_widget(network=network, layout=layout, show_mol_img=show_mol_img)
+    return interactive_widget(network=network, layout=layout, show_molecules=show_molecules)
 
 
