@@ -37,6 +37,9 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/OpenFreeEnergy/konnektor"
 
+[tool.setuptools.package-data]
+konnektor = ["**/*.sdf",]
+
 [tool.versioningit]
 default-version = "1+unknown"
 
