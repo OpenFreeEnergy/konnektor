@@ -1,4 +1,5 @@
 from rdkit import Chem
+from rdkit.Chem import AllChem
 from gufe import SmallMoleculeComponent
 
 from gufe import LigandAtomMapping

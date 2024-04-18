@@ -2,6 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
 from .network_planners import (MaximalNetworkPlanner,
+                                HeuristicMaximalNetworkPlanner,
                                RadialLigandNetworkPlanner,
                                StarrySkyLigandNetworkPlanner,
                                MinimalSpanningTreeLigandNetworkPlanner,

@@ -3,7 +3,9 @@ import logging
 from typing import Iterable
 
 from gufe import SmallMoleculeComponent, LigandNetwork
+from gufe import AtomMapper
 
+from .netx_netgen._abstract_network_generator import _AbstractNetworkGenerator
 log = logging.getLogger(__name__)
 #log.setLevel(logging.WARNING)
 
@@ -12,8 +14,18 @@ class LigandNetworkPlanner(abc.ABC):
     progress: bool = False
     nprocesses: int
 
-    def __init__(self, mapper, scorer, network_generator, nprocesses:int=1,
+    def __init__(self, mapper: AtomMapper, scorer, network_generator:_AbstractNetworkGenerator, nprocesses:int=1,
                  _initial_edge_lister=None):
+        """
+
+        Parameters
+        ----------
+        mapper
+        scorer
+        network_generator
+        nprocesses
+        _initial_edge_lister
+        """
         self.mapper = mapper
         self.scorer =  scorer
         self.network_generator = network_generator

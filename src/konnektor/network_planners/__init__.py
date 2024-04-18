@@ -1,5 +1,7 @@
 #Network Generators
 from .generators.maximal_network_planner import MaximalNetworkPlanner
+from .generators.heuristic_maximal_network_planner import HeuristicMaximalNetworkPlanner
+
 ## Starmap Like Networks
 from .generators.radial_network_planner import StarLigandNetworkPlanner
 RadialLigandNetworkPlanner = StarLigandNetworkPlanner

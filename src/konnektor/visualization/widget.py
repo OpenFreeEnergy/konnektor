@@ -79,8 +79,13 @@ def build_cytoscape(network, layout="concentric", show_molecules=True, show_mapp
     weights = [edge_map[k].annotations['score'] for k in edges]
 
     connectivities = np.array(get_node_connectivities(network))
-    mixins = np.clip(connectivities / (sum(connectivities) / len(connectivities)), a_min=0, a_max=2) / 2
-    cs = list(map(lambda x: color_gradient(mix=x), mixins))
+    if(len(connectivities) == 0):
+        mixins=np.array([0])
+        cs = list(map(lambda x: color_gradient(mix=x), mixins))
+
+    else:
+        mixins = np.clip(connectivities / (sum(connectivities) / len(connectivities)), a_min=0, a_max=2) / 2
+        cs = list(map(lambda x: color_gradient(mix=x), mixins))
 
     # build a graph
     g = nx.Graph()

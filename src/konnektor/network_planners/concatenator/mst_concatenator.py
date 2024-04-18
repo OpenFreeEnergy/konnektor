@@ -53,6 +53,7 @@ class MstConcatenate():
 
             selected_mappings = [edge_map[k] if (k in edge_map) else edge_map[
                     tuple(list(k)[::-1])] for k in mg.edges]
+            log.info("Adding ConnectingEdges:  " + str(len(selected_mappings)))
 
             """ # prio queue kruska approach
             connecting_nodes = []
@@ -69,7 +70,6 @@ class MstConcatenate():
                     if len(connecting_edges) >= self.n_connecting_edges:
                         break
             """
-            log.info("Adding ConnectingEdges:  " + str(len(selected_mappings)))
 
             # Constructed final Edges:
             # Add all old network edges:
@@ -82,7 +82,6 @@ class MstConcatenate():
 
         concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
 
-        log.info("Total Concatenating Edges:  " + str(len(selected_mappings)))
         log.info("Total Concatenated Edges:  " + str(len(selected_edges)))
 
         return concat_LigandNetwork
