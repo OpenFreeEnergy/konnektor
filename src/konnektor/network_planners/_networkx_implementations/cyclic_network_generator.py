@@ -1,16 +1,16 @@
 import logging
-import numpy as np
 from datetime import datetime
-
 from typing import Iterable, List, Tuple
 
 import networkx as nx
+import numpy as np
 from networkx import Graph
 
 from ._abstract_network_generator import _AbstractNetworkGenerator
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
+
 
 class CyclicNetworkGenerator(_AbstractNetworkGenerator):
 
@@ -142,7 +142,7 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         return cyclic_paths_scored
 
     def _greedy_select_cylces_by_node_connectivity(self, cyclic_paths_scored: Tuple[List[int], float], graph: Graph) -> \
-    List[List[int]]:
+            List[List[int]]:
         # Build priorityQueue for MST selection
         log.info("\tBuild Cycle Priority Queue")
         cycle_priority_queue = list(map(lambda x: x[0], sorted(cyclic_paths_scored, key=lambda x: x[1])))
@@ -152,38 +152,39 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         cycle_connectivity_dict = {k: 0 for k in graph}
 
         # opt criteria
-        i=0
-        j=0
+        i = 0
+        j = 0
         termination_criteria = lambda d: all([v >= self.node_cycle_connectivity for k, v in d.items()])
         selected_cycles = []
-        #print("cycles", len(cycle_priority_queue))
+        # print("cycles", len(cycle_priority_queue))
         while not termination_criteria(cycle_connectivity_dict):
-            #print("ITER", j, i)
+            # print("ITER", j, i)
 
             # MST like iteration
             c = cycle_priority_queue[i]
-            if (any([cycle_connectivity_dict[n] < self.node_cycle_connectivity for n in c]) and c not in selected_cycles):
-                #print("select cycle:", c)
+            if (any([cycle_connectivity_dict[n] < self.node_cycle_connectivity for n in
+                     c]) and c not in selected_cycles):
+                # print("select cycle:", c)
                 selected_cycles.append(c)
                 for n in c:
                     cycle_connectivity_dict[n] += 1
 
-                #Be efficient, remove already counted cycles
+                # Be efficient, remove already counted cycles
                 cyclic_paths_scored = list(filter(lambda x: x[0] != c, cyclic_paths_scored))
 
                 # update cycle score - punish by note appearance:
                 resort_f = lambda x: x[1] * max([cycle_connectivity_dict[i] for i in x[0]])
                 cycle_priority_queue = list(map(lambda x: x[0], sorted(cyclic_paths_scored, key=resort_f)))
-                i=0
+                i = 0
             else:
-                i=i+1%len(cycle_priority_queue)
+                i = i + 1 % len(cycle_priority_queue)
 
-            #no inf loop!
-            if(j>1000):
-                #print("did not converge!")
+            # no inf loop!
+            if (j > 1000):
+                # print("did not converge!")
                 break
             else:
-                j+=1
+                j += 1
 
             """
             Old and rusty :P
@@ -200,14 +201,15 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
                 else:
                     continue
             """
-        #print(cycle_connectivity_dict)
-        self.cycle_connectivity_dict =cycle_connectivity_dict
+        # print(cycle_connectivity_dict)
+        self.cycle_connectivity_dict = cycle_connectivity_dict
         log.info("\tNumber  of required Cycles: " + str(len(selected_cycles)))
         log.info("\tNode Cycle appearance: " + str(cycle_connectivity_dict))
 
         return selected_cycles
 
-    def generate_network_double_greedy(self, edges: List[Tuple[int, int]], weights: List[float], edge_limitor=10) -> Graph:
+    def generate_network_double_greedy(self, edges: List[Tuple[int, int]], weights: List[float],
+                                       edge_limitor=10) -> Graph:
         log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
 
@@ -222,13 +224,12 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         from collections import defaultdict
         min_node = defaultdict(list)
         for (e1, e2), v in sorted(ew.items(), key=lambda x: x[1]):
-            if(len(min_node) == len(nodes) and not all([len(min_node[n]) < edge_limitor for n in min_node])):
+            if (len(min_node) == len(nodes) and not all([len(min_node[n]) < edge_limitor for n in min_node])):
                 break
-            if(len(min_node[e1]) < edge_limitor):
+            if (len(min_node[e1]) < edge_limitor):
                 min_node[e1].append((e1, e2))
-            if(len(min_node[e2]) < edge_limitor):
+            if (len(min_node[e2]) < edge_limitor):
                 min_node[e2].append((e1, e2))
-
 
         """
         for target_node in nodes:
@@ -246,7 +247,6 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
         log.info("\tDuration: " + str(duration_cycle_generation))
         log.info("Priority Queue Gen complete\n")
 
-
         start_time_cycle_selection = datetime.now()
         log.info("Cycle Selection init - " + str(start_time_cycle_selection))
         # build_cycles for each node:
@@ -263,7 +263,7 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
                 cycle_nodes = set(start_edge)
                 all_edge_collection.append(start_edge)
                 all_node_collection.extend(list(start_edge))
-                
+
                 adding_node = lambda e: len(cycle_nodes.intersection(set(e))) == 1
                 use_edge = lambda e: not e in cycle_edges and adding_node(e) and not_target_node(e)
 
@@ -283,7 +283,7 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
                     all_edge_collection.append(tuple(min_e))
                     successor_node = min_e[1] if (successor_node == min_e[0]) else min_e[0]
 
-                if(len(cycle_edges) == self.max_sub_cycle_size-1):
+                if (len(cycle_edges) == self.max_sub_cycle_size - 1):
                     cycle_edges.append(tuple(sorted([successor_node, target_node])))
                     node_cycles.append(cycle_edges)
             all_cycles_per_node[target_node] = node_cycles
@@ -332,4 +332,4 @@ class CyclicNetworkGenerator(_AbstractNetworkGenerator):
             e = g.get_edge_data(n1, n2)
             d += e['weight']
 
-        return d/len(c)
+        return d / len(c)

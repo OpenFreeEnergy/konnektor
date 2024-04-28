@@ -8,7 +8,7 @@ import networkx as nx
 import gufe
 from gufe import LigandNetwork
 
-from konnektor.network_planners import MinimalSpanningTreeLigandNetworkPlanner
+from konnektor.network_planners import MinimalSpanningTreeLigandNetworkGenerator
 from .conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
                    GenAtomMapper, BadMapper, ErrorMapper)
 
@@ -18,8 +18,8 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
                ]
 
     mapper = GenAtomMapper()
-    planner = MinimalSpanningTreeLigandNetworkPlanner(mapper=mapper, scorer=genScorer)
-    network = planner.generate_ligand_network(ligands=ligands)
+    planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper, scorer=genScorer)
+    network = planner.generate_ligand_network(compounds=ligands)
 
     assert isinstance(network, LigandNetwork)
     assert list(network.edges)
@@ -30,8 +30,8 @@ def minimal_spanning_network(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
 
-    planner = MinimalSpanningTreeLigandNetworkPlanner(mapper=mapper, scorer=genScorer)
-    network = planner.generate_ligand_network(ligands=others + [toluene])
+    planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper, scorer=genScorer)
+    network = planner.generate_ligand_network(compounds=others + [toluene])
 
     return network
 
@@ -82,7 +82,7 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     mapper = ErrorMapper()
 
     with pytest.raises(RuntimeError, match="Unable to create edges"):
-        planner = MinimalSpanningTreeLigandNetworkPlanner(mapper=mapper,
-                                                          scorer=genScorer)
-        network = planner.generate_ligand_network(ligands=others + [toluene, nimrod])
+        planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper,
+                                                            scorer=genScorer)
+        network = planner.generate_ligand_network(compounds=others + [toluene, nimrod])
 

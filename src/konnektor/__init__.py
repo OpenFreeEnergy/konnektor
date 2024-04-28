@@ -1,13 +1,13 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
-from .network_planners import (MaximalNetworkPlanner,
-                                HeuristicMaximalNetworkPlanner,
+from .network_planners import (MaximalNetworkGenerator,
+                               HeuristicMaximalNetworkGenerator,
                                RadialLigandNetworkPlanner,
-                               StarrySkyLigandNetworkPlanner,
-                               MinimalSpanningTreeLigandNetworkPlanner,
-                               CyclicLigandNetworkPlanner,
-                               DiversityNetworkPlanner,
+                               NNodeEdgesNetworkGenerator,
+                               MinimalSpanningTreeLigandNetworkGenerator,
+                               CyclicLigandNetworkGenerator,
+                               TwoDimensionalLigandNetworkGenerator,
                                )
 from .network_tools import concatenate, merge, append_node, delete_transformation, cluster_compound
 

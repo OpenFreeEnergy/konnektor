@@ -2,7 +2,9 @@
 # For details, see https://github.com/OpenFreeEnergy/kartograf
 
 import networkx as nx
+
 from ._abstract_network_generator import _AbstractNetworkGenerator
+
 
 class MstNetworkGenerator(_AbstractNetworkGenerator):
 
@@ -13,8 +15,8 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
             wedges.append([edge[0], edge[1], weight])
             nodes.extend(list(edge))
 
-        if(n_edges is None):
-            n_edges=len(nodes)-1 # max number of MST edges
+        if (n_edges is None):
+            n_edges = len(nodes) - 1  # max number of MST edges
 
         self.g = nx.Graph()
         self.g.add_weighted_edges_from(ebunch_to_add=wedges)
@@ -24,7 +26,7 @@ class MstNetworkGenerator(_AbstractNetworkGenerator):
         # direction information when converting to an undirected graph.
         min_edges = nx.minimum_spanning_edges(self.g, weight='weight')
         mse = [(e1, e2, edge_data['weight']) for i, (e1, e2, edge_data) in
-               enumerate(min_edges) if(i<n_edges)]
+               enumerate(min_edges) if (i < n_edges)]
 
         mg = nx.Graph()
         mg.add_nodes_from(nodes)

@@ -1,8 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
-import numpy as np
 import networkx as nx
 
 from konnektor.network_planners.generators.netx_netgen import CyclicNetworkGenerator

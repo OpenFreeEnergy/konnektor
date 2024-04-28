@@ -4,7 +4,7 @@
 import pytest
 
 from konnektor import network_planners
-from konnektor.network_planners import MaximalNetworkPlanner
+from konnektor.network_planners import MaximalNetworkGenerator
 from .conf import (atom_mapping_basic_test_files, toluene_vs_others,
                    mol_from_smiles, genScorer,
                    GenAtomMapper, BadMapper, ErrorMapper)
@@ -20,7 +20,7 @@ def test_generate_maximal_network(toluene_vs_others, with_progress,
 
     scorer = genScorer if with_scorer else None
 
-    planner = MaximalNetworkPlanner(
+    planner = MaximalNetworkGenerator(
         mapper=mapper, scorer=scorer, progress=with_progress, nprocesses=n_process)
     network = planner.generate_ligand_network(others + [toluene])
 

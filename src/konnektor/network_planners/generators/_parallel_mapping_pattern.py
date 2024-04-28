@@ -1,12 +1,12 @@
-from tqdm.auto import tqdm
 import functools
 import multiprocessing as mult
 
-from gufe import SmallMoleculeComponent
 from gufe import AtomMapper, AtomMapping
+from gufe import SmallMoleculeComponent
+from tqdm.auto import tqdm
 
 
-def thread_mapping(args)->list[AtomMapping]:
+def thread_mapping(args) -> list[AtomMapping]:
     '''
     Helper function working as thread for parallel execution.
 
@@ -38,9 +38,9 @@ def thread_mapping(args)->list[AtomMapping]:
 
 def _parallel_map_scoring(possible_edges: list[tuple[SmallMoleculeComponent,
 SmallMoleculeComponent]],
-                          scorer:callable, mapper:AtomMapper,
-                          n_processes:int,
-                          show_progress:bool=True)->list[AtomMapping]:
+                          scorer: callable, mapper: AtomMapper,
+                          n_processes: int,
+                          show_progress: bool = True) -> list[AtomMapping]:
     """
     This helper function parallelize mapping and scoring of a given list of
     molecule pairs.

@@ -6,7 +6,9 @@ import networkx as nx
 from ._abstract_network_generator import _AbstractNetworkGenerator
 
 
-class StarrySkyNetworkGenerator(_AbstractNetworkGenerator):
+# Todo: check that the resulting graph is connnected.
+
+class NNodeEdgesNetworkGenerator(_AbstractNetworkGenerator):
 
     def __init__(self, target_node_connectivity: int = 2):
         self.target_node_connectivity = target_node_connectivity
@@ -25,11 +27,11 @@ class StarrySkyNetworkGenerator(_AbstractNetworkGenerator):
             e1 = edge[0]
             e2 = edge[1]
             if (node_con[e1] < self.target_node_connectivity):
-                if(edge not in final_edges): final_edges.append(edge)
+                if (edge not in final_edges): final_edges.append(edge)
                 node_con[e1] += 1
 
             if (node_con[e2] < self.target_node_connectivity):
-                if(edge not in final_edges): final_edges.append(edge)
+                if (edge not in final_edges): final_edges.append(edge)
                 node_con[e2] += 1
 
             if (all(v == self.target_node_connectivity for v in node_con.values())):

@@ -1,49 +1,74 @@
-from gufe import LigandNetwork
+from typing import Iterable
 
-from .netx_netgen import MstNetworkGenerator
-from ._abstract_ligand_network_planner import LigandNetworkPlanner
-from .maximal_network_planner import MaximalNetworkPlanner
+from gufe import LigandNetwork, Component, AtomMapper, AtomMappingScorer
+from konnektor.network_planners.generators.netx_netgen import MstNetworkGenerator
+
+from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from .maximal_network_planner import MaximalNetworkGenerator
 
 
-class MinimalSpanningTreeLigandNetworkPlanner(LigandNetworkPlanner):
+class MinimalSpanningTreeLigandNetworkGenerator(LigandNetworkGenerator):
 
-    def __init__(self, mapper, scorer):
-        """Plan a Network which connects all ligands with minimal cost
+    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+                 nprocesses: int = 1, _initial_edge_lister: LigandNetworkGenerator = None):
+        """
+        The minimal spanning tree ligand network planner, builds an MST for a given set of ligands. The edges of the the graph,
+        are represented by an AtomMapping, which is scored by the AtomMappingScorer. The MST algorithm gives in theory the most efficient graph possible.
+        However, the MST is not very robust, in case of one failing edge.
 
         Parameters
         ----------
-        mappers : Iterable[AtomMapper]
-        the AtomMappers to use to propose mappings.  At least 1 required,
-        but many can be given, in which case all will be tried to find the
-        lowest score edges
-        scorer : Scoring function
-        any callable which takes a AtomMapping and returns a float
+        mapper : AtomMapper
+            the atom mapper is required, to define the connection between two ligands.
+        scorer : AtomMappingScorer
+            scoring function evaluating an atom mapping, and giving a score between [0,1].
+        nprocesses: int, optional
+            number of processes that can be used for the network generation. (default: 1)
+        _initial_edge_lister: LigandNetworkPlanner, optional
+            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
+            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
         """
+        if _initial_edge_lister is None:
+            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)
+
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=MstNetworkGenerator(),
-                         _initial_edge_lister=MaximalNetworkPlanner(
-                             mapper=mapper, scorer=scorer))
+                         nprocesses=nprocesses,
+                         _initial_edge_lister=_initial_edge_lister)
 
-    def generate_ligand_network(self, ligands) ->LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
+        """
+        Generate a MST network from a list of components.
 
+        Parameters
+        ----------
+        components: Iterable[Component]
+        the components to be used for the LigandNetwork
+
+        Returns
+        -------
+        LigandNetwork
+            a ligand network following the MST rules.
+
+        """
 
         initial_network = self._initial_edge_lister.generate_ligand_network(
-            nodes=ligands)
+            components=components)
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
-        edge_map = {(ligands.index(m.componentA), ligands.index(m.componentB)): m for m in mappings}
+        edge_map = {(components.index(m.componentA), components.index(m.componentB)): m for m in mappings}
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations['score'] for k in edges]
 
         mg = self.network_generator.generate_network(edges, weights)
 
         if not mg.connected:
-            nodes_index = {l:ligands.index(l) for l in ligands}
-            missing_nodes = [l for l in ligands if(nodes_index[l] in mg.nodes)]
+            nodes_index = {l: components.index(l) for l in components}
+            missing_nodes = [l for l in components if (nodes_index[l] in mg.nodes)]
             raise RuntimeError("Unable to create edges for some nodes: "
                                + str(list(missing_nodes)))
 
-        selected_mappings = [edge_map[k] if(k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges]
+        selected_mappings = [edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges]
 
-        return LigandNetwork(edges=selected_mappings, nodes=ligands)
+        return LigandNetwork(edges=selected_mappings, nodes=components)
