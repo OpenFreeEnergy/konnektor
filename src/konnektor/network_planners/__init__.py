@@ -5,7 +5,7 @@ from .generators.n_node_edges_network_planner import (
     NNodeEdgesNetworkGenerator)
 ## Starmap Like Networks
 from .generators.radial_network_planner import StarLigandNetworkGenerator
-
+from .generators.two_dimensional_network_planners import StarrySkyNetwork
 RadialLigandNetworkPlanner = StarLigandNetworkGenerator
 
 ## MST like Networks
@@ -15,7 +15,7 @@ from .generators.redundant_minimal_spanning_tree_network_planner import \
 
 ## Other
 from .generators.cyclic_network_planner import CyclicLigandNetworkGenerator
-from .generators.diversity_network_planner import TwoDimensionalLigandNetworkGenerator
+from .generators.two_dimensional_network_planners import TwoDimensionalLigandNetworkGenerator
 
 # Network Concatenation
 from .concatenator import MstConcatenate

@@ -9,6 +9,7 @@ from tqdm.auto import tqdm
 from ._abstract_ligand_network_generator import LigandNetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
+#Todo: is graph connectivity ensured?
 
 class HeuristicMaximalNetworkGenerator(LigandNetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, n_samples: int = 100, progress: bool = False,
@@ -16,6 +17,8 @@ class HeuristicMaximalNetworkGenerator(LigandNetworkGenerator):
         """
         The Heuristic Maximal Network planner builds for given set of compounds a set of edges per node build graph under the assumption each component can be connected to another.
         The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
+
+        This class is can be used as initial_edge_lister
 
         Parameters
         ----------
@@ -29,6 +32,8 @@ class HeuristicMaximalNetworkGenerator(LigandNetworkGenerator):
             if true a progress bar will be displayed. (default: False)
         nprocesses: int
             number of processes that can be used for the network generation. (default: 1)
+
+
         """
         super().__init__(mapper=mapper, scorer=scorer,
                          nprocesses=nprocesses,

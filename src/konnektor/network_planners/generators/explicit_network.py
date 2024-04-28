@@ -31,6 +31,8 @@ class ExplicitNetwork(LigandNetworkGenerator):
         """
         Create a network with pre-defined edges.
 
+        This class is can be used as initial_edge_lister
+
         Parameters
         ----------
         edges: Iterable[Tuple[Component,Component]]

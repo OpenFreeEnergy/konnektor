@@ -16,6 +16,8 @@ class MaximalNetworkGenerator(LigandNetworkGenerator):
         The Maximal Network planner builds for given set of compounds a fully connected graph under the assumption each component can be connected to another.
         The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
 
+        This class is can be used as initial_edge_lister
+
         Parameters
         ----------
         mapper: AtomMapper

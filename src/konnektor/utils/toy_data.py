@@ -1,27 +1,39 @@
+from typing import Iterable
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from gufe import SmallMoleculeComponent
 
-from gufe import LigandAtomMapping
+from gufe import LigandAtomMapping, AtomMapper, AtomMappingScorer, AtomMapping
 import numpy as np
 
 
-def build_random_dataset(n=20):
-    class genMapper:
-        def suggest_mappings(self, molA, molB):
-            yield LigandAtomMapping(molA, molB, {})
+class genMapper(AtomMapper):
+    def __init__(self):
+        pass
 
-    class genScorer:
-        vals = np.random.random(int(n ** 2))
+    def suggest_mappings(self, molA, molB)->AtomMapping:
+        yield LigandAtomMapping(molA, molB, {})
+
+class genScorer(AtomMappingScorer):
+    def __init__(self, n_scores:int):
+        vals = np.random.random(int(n_scores ** 2))
         i = 0
 
-        def __call__(self, x):
-            v = self.vals[self.i]
-            self.i = (self.i + 1) % n
-            return v
+    def __call__(self, x)->float:
+        v = self.vals[self.i]
+        self.i = (self.i + 1) % self.n_scores
+        return v
 
-    mols = [Chem.AddHs(Chem.MolFromSmiles("C" * i)) for i in range(1, int(n))]
+
+def build_random_dataset(n=20)-> (Iterable[SmallMoleculeComponent], AtomMapper, AtomMappingScorer):
+
+    gen_mapper = genMapper()
+    gen_scorer = genScorer(n_scores=n)
+
+    #generate random Molecules
+    smiles = ["".join(np.random.choice(["C", "O", "N", "S"], replace=True, size= i%30)) for i in range(1, int(n))]
+    mols = [Chem.AddHs(Chem.MolFromSmiles(smiles)) for i in smiles]
     [Chem.rdDistGeom.EmbedMolecule(m) for m in mols]
     compounds = [SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)]
 
-    return compounds, genMapper, genScorer
+    return compounds, gen_mapper, gen_scorer

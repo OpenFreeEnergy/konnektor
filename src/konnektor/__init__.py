@@ -8,6 +8,8 @@ from .network_planners import (MaximalNetworkGenerator,
                                MinimalSpanningTreeLigandNetworkGenerator,
                                CyclicLigandNetworkGenerator,
                                TwoDimensionalLigandNetworkGenerator,
+                               StarrySkyNetwork,
+                               MstConcatenate,
                                )
 from .network_tools import concatenate, merge, append_node, delete_transformation, cluster_compound
 
