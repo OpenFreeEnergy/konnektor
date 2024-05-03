@@ -1,3 +1,4 @@
+import gufe
 import networkx as nx
 import numpy as np
 from urllib import parse
@@ -66,7 +67,7 @@ def map2svg(mapping):
     return impath
 
 
-def build_cytoscape(network, layout="concentric", show_molecules=True, show_mappings=False):
+def build_cytoscape(network: gufe.LigandNetwork, layout="concentric", show_molecules=True, show_mappings=False):
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
     edges = list(sorted(edge_map.keys()))
@@ -191,7 +192,21 @@ def build_cytoscape(network, layout="concentric", show_molecules=True, show_mapp
     return undirected
 
 
-def draw_network_widget(network, layout="cose", show_molecules=True, show_mappings=False, ):
+def draw_network_widget(network: gufe.LigandNetwork, layout="cose", show_molecules=True, show_mappings=False):
+    """For use in a jupyter noterbook, visualise a LigandNetwork
+
+    Parameters
+    ----------
+    network: gufe.LigandNetwork
+      the network to visualise
+    layout : str, optional
+      how to initially layout the nodes, can be one of X/Y/Z
+      defaults to 'cose'
+    show_molecule: bool, optional
+      if to show molecule images on the representation, default True
+    show_mappings: bool, optional
+      if to show mapping images on the representation, default False
+    """
     @interact(network=fixed(network), layout=['dagre', 'cola', 'breadthfirst',
                                               'circular', 'preset', 'concentric', 'cose'])
     def interactive_widget(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings):
