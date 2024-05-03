@@ -9,18 +9,12 @@ import ipycytoscape
 
 from gufe.visualization.mapping_visualization import draw_mapping
 
-ofe_colors = [(49 / 256, 57 / 256, 77 / 256),  # Badass Blue
-              (184 / 256, 87 / 256, 65 / 256),  # Feeling spicy
-              (0, 147 / 256, 132 / 256),  # Feeling sick
-              (217 / 256, 196 / 256, 177 / 256),  # Beastlygrey
-              (217 / 256, 196 / 256, 177 / 256),  # Sandy Sergio
-              (238 / 256, 192 / 256, 68 / 256),  # GOld
-              (0 / 256, 47 / 256, 74 / 256), ]  # otherBlue]
+from . import OFE_COLORS
 
 rgb2hex = lambda r, g, b: '#%02x%02x%02x' % (int(r * 256), int(g * 256), int(b * 256))
 
 
-def color_gradient(c1=ofe_colors[1], c2=ofe_colors[2], c3=ofe_colors[1], mix=0):
+def color_gradient(c1=OFE_COLORS[1], c2=OFE_COLORS[2], c3=OFE_COLORS[1], mix=0):
     c1 = np.array(c1)
     c2 = np.array(c2)
     c3 = np.array(c3)
