@@ -20,7 +20,10 @@ def color_gradient(c1=OFE_COLORS[1], c2=OFE_COLORS[2], c3=OFE_COLORS[1], mix=0):
     return c
 
 
-def get_node_connectivities(cg):
+def get_node_connectivities(cg) -> list[int]:
+    """The connectivity of each node"""
+    # TODO: why is this summing n?
+    #       shouldn't it be [sum(1 for e in edges_of(n)) for n in cg.nodes]
     return [sum([n in e for e in cg.edges]) for n in cg.nodes]
 
 
