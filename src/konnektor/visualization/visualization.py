@@ -6,12 +6,12 @@ from . import OFE_COLORS
 
 
 def color_gradient(c1=OFE_COLORS[1], c2=OFE_COLORS[2], c3=OFE_COLORS[1], mix=0):
-    c1=np.array(c1)
-    c2=np.array(c2)
-    c3=np.array(c3)
+    c1 = np.array(c1)
+    c2 = np.array(c2)
+    c3 = np.array(c3)
     mix = np.array(mix, ndmin=1)
 
-    if(mix > 0.5):
+    if mix > 0.5:
         m = mix-0.5
         c = (0.5-m)*c2 + m*c3
     else:
@@ -19,9 +19,9 @@ def color_gradient(c1=OFE_COLORS[1], c2=OFE_COLORS[2], c3=OFE_COLORS[1], mix=0):
         c = (0.5-m)*c1 + m*c2
     return c
 
+
 def get_node_connectivities(cg):
     return [sum([n in e for e in cg.edges]) for n in cg.nodes]
-
 
 
 def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3, fontsize=18):
@@ -32,14 +32,15 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
 
     #g = network.graph
     g = nx.Graph()
-    [g.add_node(n.name) for n in ligands]
-    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e,w in zip(
-     edges,weights)])
+    for n in ligands:
+        g.add_node(n.name)
+    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w)
+                                             for e, w in zip(edges, weights)])
 
-    if(ax is None):
-        fig, ax = plt.subplots(figsize=[16,9])
+    if ax is None:
+        fig, ax = plt.subplots(figsize=[16, 9])
     else:
-        fig=None
+        fig = None
 
     connectivities = np.array(get_node_connectivities(network))
     mixins = np.clip(connectivities / (sum(connectivities)/len(connectivities)), a_min=0, a_max=2)/2
