@@ -73,20 +73,30 @@ def build_cytoscape(network, layout="concentric", show_molecules=True, show_mapp
     weights = [edge_map[k].annotations['score'] for k in edges]
 
     connectivities = np.array(get_node_connectivities(network))
-    if(len(connectivities) == 0):
-        mixins=np.array([0])
+    if not len(connectivities):
+        mixins = np.array([0])
         cs = list(map(lambda x: color_gradient(mix=x), mixins))
-
     else:
         mixins = np.clip(connectivities / (sum(connectivities) / len(connectivities)), a_min=0, a_max=2) / 2
         cs = list(map(lambda x: color_gradient(mix=x), mixins))
 
-    # build a graph
     g = nx.Graph()
 
-    [g.add_node(n.name, name=n.name, classes="ligand", img=mol2svg(n.to_rdkit()), col=c) for n, c in zip(ligands, cs)]
-    [g.add_node(f"{e[0]}-{e[1]}", classes="mapping", name=f"{e[0]}-{e[1]}", lab=f"{e[0]} - {e[1]}\nscore: {w:2.2F}",
-                weight="{:2.2F}".format(w), img=map2svg(edge_map[e])) for e, w in zip(edges, weights)]
+    g.add_nodes_from(
+        (n.name,
+         {'name': n.name, 'classes': 'ligand',
+          'img': mol2svg(n.to_rdkit()), 'col': c},
+         )
+        for n, c in zip(ligands, cs)
+    )
+    g.add_nodes_from(
+        (f'{e[0]}-{e[1]}',
+         {'name': f'{e[0]}-{e[1]}', 'classes': 'mapping',
+          'lab': f'{e[0]} - {e[1]}\nscore: {w:2.2F}',
+          'weight': f'{w:2.2F}', 'img': map2svg(edge_map[e])},
+         )
+        for e, w in zip(edges, weights)
+    )
 
     for e, w in zip(edges, weights):
         g.add_edge(e[0], f"{e[0]}-{e[1]}")
