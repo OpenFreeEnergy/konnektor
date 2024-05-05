@@ -130,8 +130,8 @@ def build_random_mst_network(n_compounds=30, rand_seed=42, uni_score: bool = Fal
     if uni_score:
         genScorer.get_score = lambda compound: 1
 
-    from konnektor.network_planners import MinimalSpanningTreeLigandNetworkGenerator
-    planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=genMapper, scorer=genScorer)
+    from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
+    planner = MinimalSpanningTreeNetworkGenerator(mapper=genMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network

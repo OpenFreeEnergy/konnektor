@@ -3,16 +3,16 @@ from typing import Iterable
 from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
 from konnektor.network_planners._networkx_implementations import NNodeEdgesNetworkGenerator
 
-from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_planner import MaximalNetworkGenerator
 
 
-class NNodeEdgesNetworkGenerator(LigandNetworkGenerator):
+class NNodeEdgesNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
                  target_node_connectivity: int = 3,
                  nprocesses: int = 1,
-                 _initial_edge_lister: LigandNetworkGenerator = None):
+                 _initial_edge_lister: NetworkGenerator = None):
         """
         the NNodeEdges Network planner, is building a graph, in which each node is connected by at least the target_node_connectivity.
 

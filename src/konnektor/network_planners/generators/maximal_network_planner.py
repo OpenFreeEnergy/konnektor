@@ -6,11 +6,11 @@ from gufe import AtomMapper, AtomMappingScorer
 from gufe import LigandNetwork, Component
 from tqdm.auto import tqdm
 
-from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
-class MaximalNetworkGenerator(LigandNetworkGenerator):
+class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, progress: bool = False, nprocesses: int = 1):
         """
         The Maximal Network planner builds for given set of compounds a fully connected graph under the assumption each component can be connected to another.

@@ -8,7 +8,7 @@ import networkx as nx
 import gufe
 from gufe import LigandNetwork
 
-from konnektor.network_planners import RedundantMinimalSpanningTreeLigandNetworkGenerator
+from konnektor.network_planners import RedundantMinimalSpanningTreeNetworkGenerator
 from .conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
                    GenAtomMapper, BadMapper, ErrorMapper)
 
@@ -18,9 +18,9 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
                ]
 
     mapper = GenAtomMapper()
-    planner = RedundantMinimalSpanningTreeLigandNetworkGenerator(mapper=mapper,
-                                                                 scorer=genScorer,
-                                                                 n_redundancy=1)
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mapper=mapper,
+                                                           scorer=genScorer,
+                                                           n_redundancy=1)
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
@@ -32,9 +32,9 @@ def rminimal_spanning_network_redundancy(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
     nred=3
-    planner = RedundantMinimalSpanningTreeLigandNetworkGenerator(mapper=mapper,
-                                                                 scorer=genScorer,
-                                                                 n_redundancy=nred)
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mapper=mapper,
+                                                           scorer=genScorer,
+                                                           n_redundancy=nred)
     network = planner.generate_ligand_network(components=others + [toluene])
 
     return network, nred
@@ -95,7 +95,7 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     mapper = ErrorMapper()
 
     with pytest.raises(RuntimeError, match="Unable to create edges"):
-        planner = RedundantMinimalSpanningTreeLigandNetworkGenerator(mapper=mapper,
-                                                                     scorer=genScorer)
+        planner = RedundantMinimalSpanningTreeNetworkGenerator(mapper=mapper,
+                                                               scorer=genScorer)
         network = planner.generate_ligand_network(components=others + [toluene, nimrod])
 

@@ -3,7 +3,7 @@ import logging
 from typing import Iterable
 
 from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
-from ._abstract_ligand_network_concatenator import LigandNetworkConcatenator
+from ._abstract_network_concatenator import NetworkConcatenator
 from .._networkx_implementations import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 
 # Todo: check this algorithm again
 
-class MstConcatenate(LigandNetworkConcatenator):
+class MstConcatenate(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, n_connecting_edges: int = 3, nprocesses: int = 1):
         """
         This concatenator is connnecting two Networks with a kruskal like approach up to the number of connecting edges.

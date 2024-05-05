@@ -3,17 +3,17 @@ from typing import Union, List, Iterable
 from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
 from konnektor.network_planners._networkx_implementations import CyclicNetworkGenerator
 
-from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_planner import MaximalNetworkGenerator
 
 
 # Todo: check this algorithm again
 
-class CyclicLigandNetworkGenerator(LigandNetworkGenerator):
+class CyclicNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
                  node_present_in_cycles: int = 2, cycle_sizes: Union[int, List[int]] = 3,
-                 nprocesses: int = 1, _initial_edge_lister: LigandNetworkGenerator = None):
+                 nprocesses: int = 1, _initial_edge_lister: NetworkGenerator = None):
         """
         the cyclic ligand planner tries to build up a network in which each node is contained in n cycles of a given size or size range.
         In order to do so, and to be time efficient, the class uses greedy algorithms to solve the problem.
@@ -39,7 +39,7 @@ class CyclicLigandNetworkGenerator(LigandNetworkGenerator):
         """
 
         network_generator = CyclicNetworkGenerator(node_cycle_connectivity=node_present_in_cycles,
-                                                   sub_cycle_size_range=cycle_sizes),
+                                                   sub_cycle_size_range=cycle_sizes)
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)
 

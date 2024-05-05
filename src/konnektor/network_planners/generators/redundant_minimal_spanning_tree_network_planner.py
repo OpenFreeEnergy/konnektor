@@ -3,14 +3,14 @@ from typing import Iterable
 from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
 from konnektor.network_planners._networkx_implementations import MstNetworkGenerator
 
-from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_planner import MaximalNetworkGenerator
 
 
-class RedundantMinimalSpanningTreeLigandNetworkGenerator(LigandNetworkGenerator):
+class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, n_redundancy: int = 2, nprocesses: int = 1,
-                 _initial_edge_lister: LigandNetworkGenerator = None):
+                 _initial_edge_lister: NetworkGenerator = None):
         """Plan a Network which connects all ligands n times with minimal cost.
         This planner uses n_redundancy times the MST algorithm on the full
         graph, disallowing to use an already selected edge twice for the MST calculation.

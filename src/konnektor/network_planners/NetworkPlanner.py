@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 # Todo: move to gufe Network planner
 
-class LigandNetworkPlanner(abc.ABC):
+class NetworkPlanner(abc.ABC):
 
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer):
         """This class is an implementation for the LigandNetworkPlanner interface.

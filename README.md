@@ -55,10 +55,10 @@ compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig
 
 # Pick your Favourite Network layout with favourite AtomMapper and Scorer
 from openfe.setup import KartografAtomMapper, lomap_scorers
-from konnektor.network_planners import CyclicLigandNetworkGenerator
+from konnektor.network_planners import CyclicNetworkGenerator
 
-networker = CyclicLigandNetworkGenerator(mapper=KartografAtomMapper(),
-                                         scorer=lomap_scorers.default_lomap_score)
+networker = CyclicNetworkGenerator(mapper=KartografAtomMapper(),
+                                   scorer=lomap_scorers.default_lomap_score)
 
 # Generate Network
 network = networker.generate_ligand_network(compounds)

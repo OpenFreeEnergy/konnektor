@@ -6,12 +6,12 @@ import numpy as np
 from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
 from tqdm.auto import tqdm
 
-from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
 #Todo: is graph connectivity ensured?
 
-class HeuristicMaximalNetworkGenerator(LigandNetworkGenerator):
+class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, n_samples: int = 100, progress: bool = False,
                  nprocesses: int = 1):
         """

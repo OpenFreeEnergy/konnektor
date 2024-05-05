@@ -2,20 +2,22 @@ import abc
 import logging
 from typing import Iterable
 
-from gufe import AtomMapper
+from gufe import AtomMapper, AtomMappingScorer
 from gufe import LigandNetwork, Component
-from konnektor.network_planners._networkx_implementations import _AbstractNetworkGenerator
 
-from ..LigandNetworkPlanner import LigandNetworkPlanner
+from .._networkx_implementations._abstract_network_generator import _AbstractNetworkGenerator
+from ..NetworkPlanner import NetworkPlanner
 
 log = logging.getLogger(__name__)
 
 
-class LigandNetworkGenerator(LigandNetworkPlanner):
+class NetworkConcatenator(NetworkPlanner):
     progress: bool = False
     nprocesses: int
 
-    def __init__(self, mapper: AtomMapper, scorer, network_generator: _AbstractNetworkGenerator, nprocesses: int = 1,
+    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+                 network_generator: _AbstractNetworkGenerator,
+                 nprocesses: int = 1,
                  _initial_edge_lister=None):
         """This class is an implementation for the LigandNetworkPlanner interface.
         It defines the std. class for a Konnektor LigandNetworkPlanner
@@ -35,13 +37,13 @@ class LigandNetworkGenerator(LigandNetworkPlanner):
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
 
         """
+
         # generic Network_Planner attribsd
         super().__init__(mapper=mapper, scorer=scorer)
 
         # Konnektor specific variables
         self.network_generator = network_generator
         self.nprocesses = nprocesses
-
         self._initial_edge_lister = _initial_edge_lister
 
         # pass on the parallelization to the edge lister
@@ -50,18 +52,21 @@ class LigandNetworkGenerator(LigandNetworkPlanner):
         if self._initial_edge_lister is not None and hasattr(self._initial_edge_lister, "nprocesses"):
             self.nprocesses = nprocesses
 
+    def __call__(self, *args, **kwargs) -> LigandNetwork:
+        return self.concatenate_networks(*args, **kwargs)
+
     @abc.abstractmethod
-    def generate_ligand_network(self, compounds: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+        """
 
         Parameters
         ----------
-        compounds : Iterable[Component]
-        the ligands to include in the Network
+        ligand_networks: Iterable[LigandNetwork]
+            an iterable of ligand networks, that shall be connected.
 
         Returns
         -------
         LigandNetwork
-            the resulting ligand network.
+            returns a concatenated LigandNetwork object, containing all networks.
+
         """
-        raise NotImplementedError()

@@ -3,14 +3,14 @@ from typing import Iterable
 from gufe import LigandNetwork, Component, AtomMapper, AtomMappingScorer
 from konnektor.network_planners._networkx_implementations import MstNetworkGenerator
 
-from ._abstract_ligand_network_generator import LigandNetworkGenerator
+from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_planner import MaximalNetworkGenerator
 
 
-class MinimalSpanningTreeLigandNetworkGenerator(LigandNetworkGenerator):
+class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
-                 nprocesses: int = 1, _initial_edge_lister: LigandNetworkGenerator = None):
+                 nprocesses: int = 1, _initial_edge_lister: NetworkGenerator = None):
         """
         The minimal spanning tree ligand network planner, builds an MST for a given set of ligands. The edges of the the graph,
         are represented by an AtomMapping, which is scored by the AtomMappingScorer. The MST algorithm gives in theory the most efficient graph possible.

@@ -8,7 +8,7 @@ import networkx as nx
 import gufe
 from gufe import LigandNetwork
 
-from konnektor.network_planners import MinimalSpanningTreeLigandNetworkGenerator
+from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 from .conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
                    GenAtomMapper, BadMapper, ErrorMapper)
 
@@ -18,7 +18,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
                ]
 
     mapper = GenAtomMapper()
-    planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
@@ -30,7 +30,7 @@ def minimal_spanning_network(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
 
-    planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
     network = planner.generate_ligand_network(components=others + [toluene])
 
     return network
@@ -82,7 +82,7 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     mapper = ErrorMapper()
 
     with pytest.raises(RuntimeError, match="Unable to create edges"):
-        planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper,
-                                                            scorer=genScorer)
+        planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper,
+                                                      scorer=genScorer)
         network = planner.generate_ligand_network(compounds=others + [toluene, nimrod])
 
