@@ -46,8 +46,7 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
     pos = nx.spring_layout(g, weight=1)
 
     if(ax is None):
-        fig = plt.figure(figsize=[16,9])
-        ax = fig.gca()
+        fig, ax = plt.subplots(figsize=[16,9])
     else:
         fig=None
 
