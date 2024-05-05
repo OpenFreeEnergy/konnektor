@@ -2,10 +2,10 @@ import abc
 import logging
 from typing import Iterable
 
-from gufe import AtomMapper
+from gufe import AtomMapper, AtomMappingScorer
 from gufe import LigandNetwork, Component
 
-from .netx_netgen._abstract_network_generator import _AbstractNetworkGenerator
+from .._networkx_implementations._abstract_network_generator import _AbstractNetworkGenerator
 from ..LigandNetworkPlanner import LigandNetworkPlanner
 
 log = logging.getLogger(__name__)
@@ -53,19 +53,20 @@ class LigandNetworkConcatenator(LigandNetworkPlanner):
             self.nprocesses = nprocesses
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
-        return self.generate_ligand_network(*args, **kwargs)
+        return self.concatenate_networks(*args, **kwargs)
 
     @abc.abstractmethod
-    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+        """
 
         Parameters
         ----------
-        compounds : Iterable[Component]
-        the ligands to include in the Network
+        ligand_networks: Iterable[LigandNetwork]
+            an iterable of ligand networks, that shall be connected.
 
         Returns
         -------
         LigandNetwork
-            the resulting ligand network.
+            returns a concatenated LigandNetwork object, containing all networks.
+
         """

@@ -24,7 +24,7 @@ def test_radial_network(atom_mapping_basic_test_files, toluene_vs_others,
         mapper = [mapper]
 
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=None)
-    network = planner.generate_ligand_network(components=others, central_ligand=toluene)
+    network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     # couple sanity checks
     assert len(network.nodes) == len(atom_mapping_basic_test_files)
@@ -43,7 +43,7 @@ def test_radial_network_with_scorer(toluene_vs_others):
     mapper = GenAtomMapper()
     scorer = genScorer
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=scorer)
-    network = planner.generate_ligand_network(components=others, central_ligand=toluene)
+    network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)
 
@@ -58,7 +58,7 @@ def test_radial_network_multiple_mappers_no_scorer(toluene_vs_others):
     # in this one, we should always take the bad mapper
     mapper = BadMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=None)
-    network = planner.generate_ligand_network(components=others, central_ligand=toluene)
+    network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)
 
@@ -73,5 +73,5 @@ def test_radial_network_failure(atom_mapping_basic_test_files):
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mapper=mapper, scorer=None)
 
     with pytest.raises(ValueError, match='No mapping found for'):
-        network = planner.generate_ligand_network(components=[nigel], central_ligand=atom_mapping_basic_test_files['toluene'])
+        network = planner.generate_ligand_network(components=[nigel], central_component=atom_mapping_basic_test_files['toluene'])
 

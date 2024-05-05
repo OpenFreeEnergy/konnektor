@@ -3,7 +3,7 @@
 
 import networkx as nx
 
-from konnektor.network_planners.generators.netx_netgen import MstNetworkGenerator
+from konnektor.network_planners._networkx_implementations import MstNetworkGenerator
 from konnektor.tests.data.conf import nine_mols_edges
 
 

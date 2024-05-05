@@ -4,7 +4,7 @@ from typing import Iterable
 
 from gufe import AtomMapper
 from gufe import LigandNetwork, Component
-from konnektor.network_planners.generators.netx_netgen import _AbstractNetworkGenerator
+from konnektor.network_planners._networkx_implementations import _AbstractNetworkGenerator
 
 from ..LigandNetworkPlanner import LigandNetworkPlanner
 

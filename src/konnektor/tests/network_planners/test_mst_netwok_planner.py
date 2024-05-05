@@ -19,7 +19,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
 
     mapper = GenAtomMapper()
     planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper, scorer=genScorer)
-    network = planner.generate_ligand_network(compounds=ligands)
+    network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
     assert list(network.edges)
@@ -31,7 +31,7 @@ def minimal_spanning_network(toluene_vs_others):
     mapper = GenAtomMapper()
 
     planner = MinimalSpanningTreeLigandNetworkGenerator(mapper=mapper, scorer=genScorer)
-    network = planner.generate_ligand_network(compounds=others + [toluene])
+    network = planner.generate_ligand_network(components=others + [toluene])
 
     return network
 

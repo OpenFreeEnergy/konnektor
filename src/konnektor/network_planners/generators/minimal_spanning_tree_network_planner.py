@@ -1,7 +1,7 @@
 from typing import Iterable
 
 from gufe import LigandNetwork, Component, AtomMapper, AtomMappingScorer
-from konnektor.network_planners.generators.netx_netgen import MstNetworkGenerator
+from konnektor.network_planners._networkx_implementations import MstNetworkGenerator
 
 from ._abstract_ligand_network_generator import LigandNetworkGenerator
 from .maximal_network_planner import MaximalNetworkGenerator

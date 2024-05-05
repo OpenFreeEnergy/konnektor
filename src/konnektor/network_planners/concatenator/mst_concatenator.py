@@ -2,10 +2,9 @@ import itertools
 import logging
 from typing import Iterable
 
-from konnektor.network_planners.generators.netx_netgen import MstNetworkGenerator
-
+from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 from ._abstract_ligand_network_concatenator import LigandNetworkConcatenator
-from ...utils import LigandNetwork
+from .._networkx_implementations import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
 
