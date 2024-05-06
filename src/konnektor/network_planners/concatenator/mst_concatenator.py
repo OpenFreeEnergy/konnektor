@@ -1,28 +1,49 @@
-import logging
 import itertools
+import logging
 from typing import Iterable
-from konnektor.utils import LigandNetwork
 
-from ..generators.netx_netgen import MstNetworkGenerator
+from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
+from ._abstract_network_concatenator import NetworkConcatenator
+from .._networkx_implementations import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
 
-class MstConcatenate():
-    def __init__(self, mapper, scorer,  n_connecting_edges: int = 3):
-        self.mapper = mapper
-        self.scorer = scorer
-        self.n_connecting_edges = n_connecting_edges
-        self.network_generator = MstNetworkGenerator()
-    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+
+# Todo: check this algorithm again
+
+class MstConcatenate(NetworkConcatenator):
+    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, n_connecting_edges: int = 3, nprocesses: int = 1):
         """
-        TODO Separate networking from Ligand stuff
+        This concatenator is connnecting two Networks with a kruskal like approach up to the number of connecting edges.
+
         Parameters
         ----------
-        ligand_networks
-        n_connecting_edges
+        mapper: AtomMapper
+            the atom mapper is required, to define the connection between two ligands.
+        scorer: AtomMappingScorer
+            scoring function evaluating an atom mapping, and giving a score between [0,1].
+        n_connecting_edges: int, optional
+            number of connecting edges. (default: 3)
+        nprocesses: int
+            number of processes that can be used for the network generation. (default: 1)
+        """
+        super().__init__(mapper=mapper, scorer=scorer, network_generator=MstNetworkGenerator(), nprocesses=nprocesses)
+        self.n_connecting_edges = n_connecting_edges
+
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+        """
+
+        Parameters
+        ----------
+        ligand_networks: Iterable[LigandNetwork]
+            an iterable of ligand networks, that shall be connected.
+        n_connecting_edges: int
+            number of edges, to connect the networks
 
         Returns
         -------
+        LigandNetwork
+            returns a concatenated LigandNetwork object, containing all networks.
 
         """
 
@@ -32,11 +53,12 @@ class MstConcatenate():
         selected_nodes = []
         for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
             # Generate Bipartite Graph
+            # Todo: use max network here!
             ligands = []
             bipartite_graph_mappings = []
             for cA in list(ligandNetworkA.nodes):
                 for cB in list(ligandNetworkB.nodes):
-                    m = [mapping.with_annotations({'score': self.scorer(mapping), "type":"connect"})
+                    m = [mapping.with_annotations({'score': self.scorer(mapping), "type": "connect"})
                          for mapping in self.mapper.suggest_mappings(cA, cB)]
                     bipartite_graph_mappings.extend(m)
                     ligands.extend([cA, cB])
@@ -52,7 +74,7 @@ class MstConcatenate():
                                                          n_edges=self.n_connecting_edges)
 
             selected_mappings = [edge_map[k] if (k in edge_map) else edge_map[
-                    tuple(list(k)[::-1])] for k in mg.edges]
+                tuple(list(k)[::-1])] for k in mg.edges]
             log.info("Adding ConnectingEdges:  " + str(len(selected_mappings)))
 
             """ # prio queue kruska approach

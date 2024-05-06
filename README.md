@@ -45,24 +45,28 @@ Additionally we are working on Molecule diversity based Networks here with HIF2A
 ![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/c4ee0b63-7580-4825-b0cb-dc076e4cb9f4)
 
 ## Code Example
+
 ```python3
 # Here we generate some input data.
 from openfe_benchmarks import benzenes
+
 compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
                         benzenes.get_system().ligand_components))
 
 # Pick your Favourite Network layout with favourite AtomMapper and Scorer
 from openfe.setup import KartografAtomMapper, lomap_scorers
-from konnektor.network_planners import CyclicLigandNetworkPlanner
-networker = CyclicLigandNetworkPlanner(mapper=KartografAtomMapper(), 
-                                       scorer=lomap_scorers.default_lomap_score)
+from konnektor.network_planners import CyclicNetworkGenerator
+
+networker = CyclicNetworkGenerator(mapper=KartografAtomMapper(),
+                                   scorer=lomap_scorers.default_lomap_score)
 
 # Generate Network
-network =networker.generate_ligand_network(compounds)
-network.name="Cyclic Network"
+network = networker.generate_ligand_network(compounds)
+network.name = "Cyclic Network"
 
 # Visualize the generated network
 from konnektor.visualization import draw_ligand_network
+
 fig = draw_ligand_network(network=network, title=network.name)
 
 fig.show()
