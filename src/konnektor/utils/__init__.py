@@ -1,1 +1,0 @@
-from gufe import LigandNetwork

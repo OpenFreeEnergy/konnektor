@@ -6,7 +6,7 @@ from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerpri
 
 from gufe import LigandNetwork, LigandAtomMapping, SmallMoleculeComponent
 
-from .cluster_molecules import CompoundDiversityClustering
+from .cluster_components import ComponentsDiversityClustering
 
 
 def delete_transformation(network :LigandNetwork,
@@ -27,7 +27,7 @@ def cluster_compound(compounds: Iterable[SmallMoleculeComponent],
                      )->dict[int,
 list[SmallMoleculeComponent]]:
     
-    clusterer = CompoundDiversityClustering( featurize = featurize,cluster=cluster)
+    clusterer = ComponentsDiversityClustering(featurize = featurize, cluster=cluster)
     return clusterer.cluster_compounds(compounds)
 
 

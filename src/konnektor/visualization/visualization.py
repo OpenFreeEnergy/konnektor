@@ -30,6 +30,7 @@ def get_node_connectivities(cg):
 
 
 def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3, fontsize=18):
+
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
     edges = list(sorted(edge_map.keys()))
@@ -41,6 +42,9 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
     g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e,w in zip(
      edges,weights)])
 
+    # graph vis layout
+    pos = nx.spring_layout(g, weight=1)
+
     if(ax is None):
         fig, ax = plt.subplots(figsize=[16,9])
     else:
@@ -51,7 +55,7 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
 
     cs = list(map(lambda x: color_gradient(mix=x), mixins))
 
-    nx.draw_networkx(g, with_labels=True, ax=ax, node_size=node_size, width=edge_width,
+    nx.draw_networkx(g, pos=pos, with_labels=True, ax=ax, node_size=node_size, width=edge_width,
                      node_color=cs, edge_color=ofe_colors[3], font_color=[1,1,1])
     ax.set_title(title, fontsize=fontsize) #+" #edges "+str(len(g.edges))
 

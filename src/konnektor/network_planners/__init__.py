@@ -1,19 +1,20 @@
-#Network Generators
-from .generators.maximal_network_planner import MaximalNetworkPlanner
-from .generators.heuristic_maximal_network_planner import HeuristicMaximalNetworkPlanner
-
+# Network Generators
+from .generators.heuristic_maximal_network_planner import HeuristicMaximalNetworkGenerator
+from .generators.maximal_network_planner import MaximalNetworkGenerator
+from .generators.n_node_edges_network_planner import (
+    NNodeEdgesNetworkGenerator)
 ## Starmap Like Networks
-from .generators.radial_network_planner import StarLigandNetworkPlanner
-RadialLigandNetworkPlanner = StarLigandNetworkPlanner
-from .generators.starry_sky_network_planner import (
-    StarrySkyLigandNetworkPlanner)
+from .generators.star_network_planner import StarNetworkGenerator, RadialLigandNetworkPlanner
+from .generators.two_dimensional_network_planners import StarrySkyNetworkGenerator
 
 ## MST like Networks
-from .generators.minimal_spanning_tree_network_planner import MinimalSpanningTreeLigandNetworkPlanner
-from .generators.redundant_minimal_spanning_tree_network_planner import RedundantMinimalSpanningTreeLigandNetworkPlanner
+from .generators.minimal_spanning_tree_network_planner import MinimalSpanningTreeNetworkGenerator
+from .generators.redundant_minimal_spanning_tree_network_planner import \
+    RedundantMinimalSpanningTreeNetworkGenerator
 
 ## Other
-from .generators.cyclic_network_planner import CyclicLigandNetworkPlanner
-from .generators.diversity_network_planner import DiversityNetworkPlanner
+from .generators.cyclic_network_planner import CyclicNetworkGenerator
+from .generators.two_dimensional_network_planners import TwoDimensionalNetworkGenerator
 
 # Network Concatenation
+from .concatenator import MstConcatenate
