@@ -2,11 +2,11 @@ from typing import Iterable
 
 from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
-from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
+from scikit_mol.fingerprints import RDKitFingerprintTransformer
 
 from gufe import LigandNetwork, LigandAtomMapping, SmallMoleculeComponent
 
-from .cluster_components import ComponentsDiversityClustering
+from konnektor.network_tools.clustering.cluster_components import ComponentsDiversityClustering
 
 
 def delete_transformation(network :LigandNetwork,

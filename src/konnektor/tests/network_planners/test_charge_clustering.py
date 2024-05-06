@@ -3,7 +3,7 @@ import pytest
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
-from konnektor.network_tools import charge_clustering
+from konnektor.network_tools.clustering import charge_clustering
 
 
 @pytest.fixture
