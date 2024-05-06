@@ -1,3 +1,4 @@
+import gufe
 import networkx as nx
 import numpy as np
 from urllib import parse
@@ -9,18 +10,12 @@ import ipycytoscape
 
 from gufe.visualization.mapping_visualization import draw_mapping
 
-ofe_colors = [(49 / 256, 57 / 256, 77 / 256),  # Badass Blue
-              (184 / 256, 87 / 256, 65 / 256),  # Feeling spicy
-              (0, 147 / 256, 132 / 256),  # Feeling sick
-              (217 / 256, 196 / 256, 177 / 256),  # Beastlygrey
-              (217 / 256, 196 / 256, 177 / 256),  # Sandy Sergio
-              (238 / 256, 192 / 256, 68 / 256),  # GOld
-              (0 / 256, 47 / 256, 74 / 256), ]  # otherBlue]
+from . import OFE_COLORS
 
 rgb2hex = lambda r, g, b: '#%02x%02x%02x' % (int(r * 256), int(g * 256), int(b * 256))
 
 
-def color_gradient(c1=ofe_colors[1], c2=ofe_colors[2], c3=ofe_colors[1], mix=0):
+def color_gradient(c1=OFE_COLORS[1], c2=OFE_COLORS[2], c3=OFE_COLORS[1], mix=0):
     c1 = np.array(c1)
     c2 = np.array(c2)
     c3 = np.array(c3)
@@ -72,27 +67,37 @@ def map2svg(mapping):
     return impath
 
 
-def build_cytoscape(network, layout="concentric", show_molecules=True, show_mappings=False):
+def build_cytoscape(network: gufe.LigandNetwork, layout="concentric", show_molecules=True, show_mappings=False):
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
     edges = list(sorted(edge_map.keys()))
     weights = [edge_map[k].annotations['score'] for k in edges]
 
     connectivities = np.array(get_node_connectivities(network))
-    if(len(connectivities) == 0):
-        mixins=np.array([0])
+    if not len(connectivities):
+        mixins = np.array([0])
         cs = list(map(lambda x: color_gradient(mix=x), mixins))
-
     else:
         mixins = np.clip(connectivities / (sum(connectivities) / len(connectivities)), a_min=0, a_max=2) / 2
         cs = list(map(lambda x: color_gradient(mix=x), mixins))
 
-    # build a graph
     g = nx.Graph()
 
-    [g.add_node(n.name, name=n.name, classes="ligand", img=mol2svg(n.to_rdkit()), col=c) for n, c in zip(ligands, cs)]
-    [g.add_node(f"{e[0]}-{e[1]}", classes="mapping", name=f"{e[0]}-{e[1]}", lab=f"{e[0]} - {e[1]}\nscore: {w:2.2F}",
-                weight="{:2.2F}".format(w), img=map2svg(edge_map[e])) for e, w in zip(edges, weights)]
+    g.add_nodes_from(
+        (n.name,
+         {'name': n.name, 'classes': 'ligand',
+          'img': mol2svg(n.to_rdkit()), 'col': c},
+         )
+        for n, c in zip(ligands, cs)
+    )
+    g.add_nodes_from(
+        (f'{e[0]}-{e[1]}',
+         {'name': f'{e[0]}-{e[1]}', 'classes': 'mapping',
+          'lab': f'{e[0]} - {e[1]}\nscore: {w:2.2F}',
+          'weight': f'{w:2.2F}', 'img': map2svg(edge_map[e])},
+         )
+        for e, w in zip(edges, weights)
+    )
 
     for e, w in zip(edges, weights):
         g.add_edge(e[0], f"{e[0]}-{e[1]}")
@@ -187,9 +192,23 @@ def build_cytoscape(network, layout="concentric", show_molecules=True, show_mapp
     return undirected
 
 
-def draw_network_widget(network, layout="cose", show_molecules=True, show_mappings=False, ):
+def draw_network_widget(network: gufe.LigandNetwork, layout="cose", show_molecules=True, show_mappings=False):
+    """For use in a jupyter noterbook, visualise a LigandNetwork
+
+    Parameters
+    ----------
+    network: gufe.LigandNetwork
+      the network to visualise
+    layout : str, optional
+      how to initially layout the nodes, can be one of X/Y/Z
+      defaults to 'cose'
+    show_molecule: bool, optional
+      if to show molecule images on the representation, default True
+    show_mappings: bool, optional
+      if to show mapping images on the representation, default False
+    """
     @interact(network=fixed(network), layout=['dagre', 'cola', 'breadthfirst',
-                                              'circular', 'preset', 'concentric', 'cose'])
+                                              'concentric', 'cose'])
     def interactive_widget(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings):
         v = build_cytoscape(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings)
         return v
