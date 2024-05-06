@@ -208,7 +208,7 @@ def draw_network_widget(network: gufe.LigandNetwork, layout="cose", show_molecul
       if to show mapping images on the representation, default False
     """
     @interact(network=fixed(network), layout=['dagre', 'cola', 'breadthfirst',
-                                              'circular', 'preset', 'concentric', 'cose'])
+                                              'concentric', 'cose'])
     def interactive_widget(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings):
         v = build_cytoscape(network=network, layout=layout, show_molecules=show_molecules, show_mappings=show_mappings)
         return v
