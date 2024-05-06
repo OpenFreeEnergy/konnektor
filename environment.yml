@@ -12,7 +12,7 @@ dependencies:
   - mypy
   - nbval
   #Typing
-  # - gufe
+  - gufe
   - typing-extensions
   # Sci
   - numpy
@@ -30,4 +30,3 @@ dependencies:
   - pip:
     - dill
     - scikit-mol
-    - git+https://github.com/OpenFreeEnergy/gufe@main
