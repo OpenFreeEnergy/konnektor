@@ -9,11 +9,12 @@ from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerpri
 from gufe import Component
 
 from .auxilliary_featurizer import ChargeTransformer
+from ._abstract_clusterer import _AbstractClusterer
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
 
-class ComponentsDiversityClustering():
+class ComponentsDiversityClustering(_AbstractClusterer):
     def __init__(self, featurize:TransformerMixin = MorganFingerprintTransformer(),
                 cluster:ClusterMixin = KMeans(n_clusters=5, n_init="auto"),
                  n_processes:int = 1):
@@ -81,26 +82,3 @@ class ComponentsDiversityClustering():
             cluster_compounds[clusterID] = [components[i] for i,l in enumerate(labels) if (l == clusterID)]
 
         return cluster_compounds
-
-
-class ChargeClustering(ComponentsDiversityClustering):
-
-    def __init__(self, featurize:TransformerMixin = ChargeTransformer(),
-                cluster:ClusterMixin = DBSCAN(),
-                 n_processes:int = 1):
-        """
-        This class can be use to seperate components by different features, like charge or morgan fingerprints.
-
-        Parameters
-        ----------
-        featurize: TransformerMixin, optional
-            A scikit-learn and scikit-mol compatible featurizer, takes a rdkit mol and transforms to an np.array[number].
-            As default the  Charge featurizer.
-        cluster: ClusterMixin
-            a scikit-learn compatible clustering algorithm.
-            as default a DBSCAN is used.
-        parallel: int, optional
-            tries to push the parallelization triggers of featurize and cluster
-
-        """
-        super().__init__(featurize=featurize, cluster=cluster, n_processes=n_processes)
