@@ -1,7 +1,7 @@
 from typing import Union, List, Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
-from konnektor.network_planners._networkx_implementations import CyclicNetworkGenerator
+from konnektor.network_planners._networkx_implementations import CyclicNetworkGenerator as nx_CNG
 
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_planner import MaximalNetworkGenerator
@@ -38,7 +38,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
         """
 
-        network_generator = CyclicNetworkGenerator(node_cycle_connectivity=node_present_in_cycles,
+        network_generator = nx_CNG(node_cycle_connectivity=node_present_in_cycles,
                                                    sub_cycle_size_range=cycle_sizes)
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)

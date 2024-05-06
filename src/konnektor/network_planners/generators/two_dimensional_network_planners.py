@@ -8,11 +8,12 @@ from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
 
 # Clustering
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
-from sklearn.cluster import HDBSCAN
+from sklearn.cluster import HDBSCAN, KMeans
 
 from ._abstract_network_generator import NetworkGenerator
 
-from .. import RadialLigandNetworkPlanner
+from .cyclic_network_planner import CyclicNetworkGenerator
+from .star_network_planner import StarNetworkGenerator
 from ..concatenator import MstConcatenate
 from ...network_tools import append_node, concatenate_networks
 from ...network_tools.cluster_components import ComponentsDiversityClustering
@@ -21,13 +22,13 @@ log = logging.getLogger()
 log.setLevel(logging.INFO)
 
 # Todo: go over this again.
-
+#Todo: Better Naming!
 class TwoDimensionalNetworkGenerator(NetworkGenerator):
     def __init__(self,
-                 sub_network_planners: Iterable[NetworkGenerator] = (RadialLigandNetworkPlanner),
+                 sub_network_planners: Iterable[NetworkGenerator] = (CyclicNetworkGenerator,),
                  concatenator: MstConcatenate = MstConcatenate,
                  clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
-                     featurize=RDKitFingerprintTransformer(), cluster=HDBSCAN()),
+                     featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)),
                  mapper: AtomMapper = None, scorer: AtomMappingScorer = None,
                  nprocesses: int = 1, progress: bool = False
                  ):
@@ -147,7 +148,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
 class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
     def __init__(self,
                  clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
-                     featurize=MorganFingerprintTransformer(), cluster=HDBSCAN(metric="jaccard", alpha=2048)),
+                     featurize=MorganFingerprintTransformer(), cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1/2048)),
                  mapper: AtomMapper = None,
                  scorer: AtomMappingScorer = None,
                  nprocesses: int = 1, progress: bool = False
@@ -173,7 +174,7 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
         '''
 
         super().__init__(clusterer=clusterer,
-                         sub_network_planners=[RadialLigandNetworkPlanner],
+                         sub_network_planners=[StarNetworkGenerator],
                          concatenator = MstConcatenate,
                          mapper=mapper, scorer=scorer,
                          progress=progress,

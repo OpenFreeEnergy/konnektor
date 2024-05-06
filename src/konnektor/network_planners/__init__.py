@@ -4,7 +4,7 @@ from .generators.maximal_network_planner import MaximalNetworkGenerator
 from .generators.n_node_edges_network_planner import (
     NNodeEdgesNetworkGenerator)
 ## Starmap Like Networks
-from .generators.radial_network_planner import StarNetworkGenerator, RadialLigandNetworkPlanner
+from .generators.star_network_planner import StarNetworkGenerator, RadialLigandNetworkPlanner
 from .generators.two_dimensional_network_planners import StarrySkyNetworkGenerator
 
 ## MST like Networks
