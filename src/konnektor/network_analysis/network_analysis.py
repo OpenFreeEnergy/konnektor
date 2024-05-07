@@ -22,7 +22,7 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     bool
         if the Ligand Network graph is connected
     """
-    return nx.is_connected(ligand_network.graph.to_undirected())
+    return ligand_network.is_connected()
 
 
 def get_graph_score(ligand_network: LigandNetwork) -> float:
