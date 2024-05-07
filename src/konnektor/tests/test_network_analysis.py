@@ -57,7 +57,7 @@ def test_get_edge_failure_robustness(graph_exrob_failr):
     (grapher, expected_robustness, failure_rate, exact) = graph_exrob_failr
     g=grapher(n_compounds, rand_seed=42)
 
-    robustness = get_edge_failure_robustness(g, failure_rate=failure_rate, nrepeats=100)
+    robustness = get_edge_failure_robustness(g, failure_rate=failure_rate, nrepeats=100, seed=42)
 
     if exact:
         np.testing.assert_allclose(actual=robustness, desired=expected_robustness)
