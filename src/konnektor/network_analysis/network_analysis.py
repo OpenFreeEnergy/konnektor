@@ -4,6 +4,7 @@ from typing import Union
 import numpy as np
 import networkx as nx
 from gufe import LigandNetwork, SmallMoleculeComponent
+from typing import Optional
 
 from .. import network_tools as tools
 
@@ -137,7 +138,8 @@ int]:
 
 def get_edge_failure_robustness(ligand_network: LigandNetwork,
                                 failure_rate: float = 0.05,
-                                nrepeats: int = 100) -> float:
+                                nrepeats: int = 100,
+                                seed: Optional[int]=None) -> float:
     """
     Estimate the robustness of a LigandNetwork, by removing n edges,
     corresponding to the percentage given by the failure_rate.
@@ -148,33 +150,31 @@ def get_edge_failure_robustness(ligand_network: LigandNetwork,
     Parameters
     ----------
     ligand_network: LigandNetwork
-    failure_rate: float
-        number of failing edges.
-    nrepeats: int
-        how often shall the process be sampled.
+    failure_rate: float, optional
+       failure rate of edges, default 0.05 i.e. 5%
+    nrepeats: int, optional
+       how often shall the process be sampled.
+    seed: int, optional
+       seed the random process, useful for replicating results or testing
 
     Returns
     -------
     float
-        returns a value between 0 (was always disconnected) and 1 (never was disconnected), as indicator how often a network was disconnected after removing the edges.
+      returns the probability that the network remained connected after removing
+      failed edges, between 0.0 (indicating the network was always disconnected)
+      and 1.0 (network was never disconnected)
     """
-
     edges = list(ligand_network.edges)
-    npics = int(np.round(len(ligand_network.edges) * failure_rate)) if (
-            np.round(len(ligand_network.edges) * failure_rate) > 1) else 1
+    npics = max(int(np.round(len(edges) * failure_rate)), 1)
 
     connected = []
+    rng = np.random.default_rng(seed=seed)
     for _ in range(nrepeats):
         nn = ligand_network
-        tedges = deepcopy(edges)
-        for _ in range(npics):
-            i = random.randrange(0, len(tedges), 1)
-            nn = tools.delete_transformation(nn, tedges[i])
 
-            # Remove edge, os it can not be repicked
-            tedges.remove(tedges[i])
-            if len(tedges) == 0:
-                break
+        edges_to_del = rng.choice(len(edges), npics, replace=False)
+        for e in edges_to_del:
+            nn = tools.delete_transformation(nn, edges[e])
 
         connected.append(get_is_connected(nn))
 
