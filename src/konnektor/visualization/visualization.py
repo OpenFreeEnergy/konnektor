@@ -37,11 +37,9 @@ def draw_ligand_network(network, title="", ax=None, node_size=2050, edge_width=3
     g = nx.Graph()
     for n in ligands:
         g.add_node(n.name)
-    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w)
+    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e, w in zip(edges, weights)])
 
-                                             # graph vis layout
-                                             pos = nx.spring_layout(g, weight=1)
-    for e, w in zip(edges, weights)])
+    pos = nx.spring_layout(g, weight=1)
 
     if ax is None:
         fig, ax = plt.subplots(figsize=[16, 9])
