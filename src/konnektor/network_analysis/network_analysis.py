@@ -177,6 +177,6 @@ def get_edge_failure_robustness(ligand_network: LigandNetwork,
             nn = tools.delete_transformation(nn, edges[e])
 
         connected.append(get_is_connected(nn))
-
-    r = np.mean(list(map(float, connected)))
+    # np.mean on list of bools give expected float answer
+    r = np.mean(connected)
     return r
