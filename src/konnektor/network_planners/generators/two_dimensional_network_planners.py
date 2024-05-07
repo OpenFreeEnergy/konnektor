@@ -16,7 +16,7 @@ from .cyclic_network_planner import CyclicNetworkGenerator
 from .star_network_planner import StarNetworkGenerator
 from ..concatenator import MstConcatenate
 from ...network_tools import append_node, concatenate_networks
-from ...network_tools.cluster_components import ComponentsDiversityClustering
+from ...network_tools.clustering.cluster_components import ComponentsDiversityClustering
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
