@@ -2,7 +2,7 @@ import functools
 import itertools
 from typing import Iterable
 
-from gufe import AtomMapper, AtomMappingScorer
+from gufe import AtomMapper
 from gufe import LigandNetwork, Component
 from tqdm.auto import tqdm
 
@@ -11,7 +11,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
 class MaximalNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, progress: bool = False, nprocesses: int = 1):
+    def __init__(self, mapper: AtomMapper, scorer, progress: bool = False, nprocesses: int = 1):
         """
         The Maximal Network planner builds for given set of compounds a fully connected graph under the assumption each component can be connected to another.
         The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.

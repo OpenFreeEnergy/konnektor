@@ -4,7 +4,7 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 from gufe import SmallMoleculeComponent, LigandNetwork
 
-from gufe import LigandAtomMapping, AtomMapper, AtomMappingScorer, AtomMapping
+from gufe import LigandAtomMapping, AtomMapper, AtomMapping
 import numpy as np
 
 
@@ -32,7 +32,7 @@ class genMapper(AtomMapper):
         return vars(self)
 
 
-class genScorer(AtomMappingScorer):
+class genScorer:  # (AtomMappingScorer):
     def __init__(self, n_scores: int, rand_seed: int = None):
         """
         Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
@@ -54,6 +54,10 @@ class genScorer(AtomMappingScorer):
         self.n_scores = n_scores
         self.i = 0
 
+    def __call__(self, mapping):
+        # todo: remove once subclassed from gufe
+        return self.get_score(mapping)
+
     def get_score(self, mapping: AtomMapping) -> float:
         """
         return the score, at position self.i
@@ -74,8 +78,7 @@ class genScorer(AtomMappingScorer):
         return v
 
 
-def build_random_dataset(n_compounds: int = 20, rand_seed: int = None) -> (
-        Iterable[SmallMoleculeComponent], AtomMapper, AtomMappingScorer):
+def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
     """
     This function builds a random dataset of n_compounds artificial molecules.
     Additionally the generic scorer and mapper matching the compounds is returned.

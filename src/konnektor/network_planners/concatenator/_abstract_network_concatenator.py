@@ -2,7 +2,7 @@ import abc
 import logging
 from typing import Iterable
 
-from gufe import AtomMapper, AtomMappingScorer
+from gufe import AtomMapper
 from gufe import LigandNetwork, Component
 
 from .._networkx_implementations._abstract_network_generator import _AbstractNetworkGenerator
@@ -15,7 +15,7 @@ class NetworkConcatenator(NetworkPlanner):
     progress: bool = False
     nprocesses: int
 
-    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+    def __init__(self, mapper: AtomMapper, scorer,
                  network_generator: _AbstractNetworkGenerator,
                  nprocesses: int = 1,
                  _initial_edge_lister=None):
