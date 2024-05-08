@@ -49,6 +49,7 @@ def test_get_node_connectives():
     np.testing.assert_array_almost_equal(expected_arr, [n for i,n in cons.items()])
 
 
+@pytest.mark.flaky(reruns=3)  # pytest-rerunfailures;
 @pytest.mark.parametrize("grapher,expected_robustness,failure_rate,exact", [
     (build_random_fully_connected_network, 1, 0.05, True),  # never gets disconnected
     (build_random_fully_connected_network, 0.5, 0.55, False),  # some middleish, prone to fail, repeat!
