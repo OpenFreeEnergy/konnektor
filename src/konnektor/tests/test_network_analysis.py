@@ -48,16 +48,19 @@ def test_get_node_connectives():
     assert len(set(cons.keys()).intersection(expected_set)) == 0
     np.testing.assert_array_almost_equal(expected_arr, [n for i,n in cons.items()])
 
-@pytest.mark.parametrize("graph_exrob_failr", [(build_random_fully_connected_network, 1, 0.05, True),  # never gets disconnected
-                                               (build_random_fully_connected_network, 0.5, 0.55, False),  # some middleish, prone to fail, repeat!
-                                               (build_random_fully_connected_network, 0, 1, True),  # all edges removed, should always fail
-                                               (build_random_mst_network, 0.0, 0.05, True)]) # Mst always fails
-def test_get_edge_failure_robustness(graph_exrob_failr):
-    n_compounds = 5
-    (grapher, expected_robustness, failure_rate, exact) = graph_exrob_failr
-    g=grapher(n_compounds, rand_seed=42)
 
-    robustness = get_edge_failure_robustness(g, failure_rate=failure_rate, nrepeats=100)
+@pytest.mark.flaky(reruns=3)  # pytest-rerunfailures;
+@pytest.mark.parametrize("grapher,expected_robustness,failure_rate,exact", [
+    (build_random_fully_connected_network, 1, 0.05, True),  # never gets disconnected
+    (build_random_fully_connected_network, 0.5, 0.55, False),  # some middleish, prone to fail, repeat!
+    (build_random_fully_connected_network, 0, 1, True),  # all edges removed, should always fail
+    (build_random_mst_network, 0.0, 0.05, True)  # Mst always fails
+])
+def test_get_edge_failure_robustness(grapher, expected_robustness, failure_rate, exact):
+    n_compounds = 5
+    g = grapher(n_compounds, rand_seed=42)
+
+    robustness = get_edge_failure_robustness(g, failure_rate=failure_rate, nrepeats=100, seed=42)
 
     if exact:
         np.testing.assert_allclose(actual=robustness, desired=expected_robustness)

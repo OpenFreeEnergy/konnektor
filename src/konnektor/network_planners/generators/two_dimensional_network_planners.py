@@ -4,7 +4,7 @@ import logging
 from tqdm import tqdm
 from typing import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
+from gufe import Component, LigandNetwork, AtomMapper
 
 # Clustering
 from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
@@ -16,7 +16,7 @@ from .cyclic_network_planner import CyclicNetworkGenerator
 from .star_network_planner import StarNetworkGenerator
 from ..concatenator import MstConcatenate
 from ...network_tools import append_node, concatenate_networks
-from ...network_tools.cluster_components import ComponentsDiversityClustering
+from ...network_tools.clustering.cluster_components import ComponentsDiversityClustering
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -29,7 +29,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
                  concatenator: MstConcatenate = MstConcatenate,
                  clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
                      featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)),
-                 mapper: AtomMapper = None, scorer: AtomMappingScorer = None,
+                 mapper: AtomMapper = None, scorer = None,
                  nprocesses: int = 1, progress: bool = False
                  ):
         ''' Implements the general concept of multidimensional networks.
@@ -150,7 +150,7 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
                  clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
                      featurize=MorganFingerprintTransformer(), cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1/2048)),
                  mapper: AtomMapper = None,
-                 scorer: AtomMappingScorer = None,
+                 scorer = None,
                  nprocesses: int = 1, progress: bool = False
                  ):
         '''  The StarrySkyNetworkGenerator is an advanced network algorithm,
