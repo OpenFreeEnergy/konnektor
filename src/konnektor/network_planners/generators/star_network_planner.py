@@ -1,6 +1,6 @@
 from typing import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
+from gufe import Component, LigandNetwork, AtomMapper
 from konnektor.network_planners._networkx_implementations import RadialNetworkGenerator
 
 from ._abstract_network_generator import NetworkGenerator
@@ -9,7 +9,7 @@ from .maximal_network_planner import MaximalNetworkGenerator
 
 class StarNetworkGenerator(NetworkGenerator):
 
-    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+    def __init__(self, mapper: AtomMapper, scorer,
                  nprocesses: int = 1, _initial_edge_lister: NetworkGenerator = None):
         """
         The Star Ligand Network Planner or Radial Ligand Network Planner, set's one ligand into the center of a graph and connects all other ligands to it.

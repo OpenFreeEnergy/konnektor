@@ -1,6 +1,6 @@
 from typing import Union, List, Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
+from gufe import Component, LigandNetwork, AtomMapper
 from konnektor.network_planners._networkx_implementations import CyclicNetworkGenerator as nx_CNG
 
 from ._abstract_network_generator import NetworkGenerator
@@ -11,7 +11,7 @@ from .maximal_network_planner import MaximalNetworkGenerator
 
 class CyclicNetworkGenerator(NetworkGenerator):
 
-    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+    def __init__(self, mapper: AtomMapper, scorer,
                  node_present_in_cycles: int = 2, cycle_sizes: Union[int, List[int]] = 3,
                  nprocesses: int = 1, _initial_edge_lister: NetworkGenerator = None):
         """
