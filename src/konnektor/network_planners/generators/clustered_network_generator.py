@@ -17,14 +17,13 @@ from .cyclic_network_generator import CyclicNetworkGenerator
 from .star_network_generator import StarNetworkGenerator
 from ..concatenators import MstConcatenator
 from ...network_tools import append_node, concatenate_networks
+from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 
-
 # Todo: go over this again.
-# Todo: Better Naming!
-class TwoDimensionalNetworkGenerator(NetworkGenerator):
+class ClusteredNetworkGenerator(NetworkGenerator):
     def __init__(self,
                  sub_network_planners: Iterable[NetworkGenerator] = (
                  CyclicNetworkGenerator,),
@@ -33,9 +32,9 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
                      featurize=RDKitFingerprintTransformer(),
                      cluster=KMeans(n_clusters=3)),
                  mapper: AtomMapper = None, scorer=None,
-                 nprocesses: int = 1, progress: bool = False
+                 n_processes: int = 1, progress: bool = False
                  ):
-        ''' Implements the general concept of multidimensional networks.
+        ''' Implements the general concept of nd-space clustered networks.
 
         Parameters
         ----------
@@ -51,7 +50,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
             scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
         '''
@@ -61,7 +60,10 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
         self.clusterer = clusterer
 
         if hasattr(self.clusterer.cluster, "n_jobs"):
-            self.clusterer.cluster.njobs = nprocesses
+            self.clusterer.cluster.njobs = n_processes
+
+        if not isinstance(sub_network_planners, list):
+            sub_network_planners = [sub_network_planners]
 
         self.sub_network_planners = []
         for sub_net_planner in sub_network_planners:
@@ -70,13 +72,13 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
                                                       scorer=scorer)
             else:
                 sub_net_planner_obj = sub_net_planner
-            sub_net_planner_obj.nprocesses = nprocesses
+            sub_net_planner_obj.n_processes = n_processes
             self.sub_network_planners.append(sub_net_planner_obj)
 
         self.concatenator = concatenator(mapper=mapper,
                                          scorer=scorer) if inspect.isclass(
             concatenator) else concatenator
-        self.concatenator.nprocesses = nprocesses
+        self.concatenator.nprocesses = n_processes
         self.progress = progress
 
     def generate_ligand_network(self,
@@ -155,15 +157,15 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
         return concat_network
 
 
-class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
+class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
     def __init__(self,
-                 clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
+                 mapper: AtomMapper,
+                 scorer,
+                 clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
                      featurize=MorganFingerprintTransformer(),
                      cluster=HDBSCAN(metric="jaccard", min_cluster_size=3,
                                      alpha=1 / 2048)),
-                 mapper: AtomMapper = None,
-                 scorer=None,
-                 nprocesses: int = 1, progress: bool = False
+                 n_processes: int = 1, progress: bool = False
                  ):
         '''  The StarrySkyNetworkGenerator is an advanced network algorithm,
         that clusters the provided ligands, based on the clusterer class.
@@ -172,15 +174,15 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
 
         Parameters
         ----------
-        clusterer: ComponentsDiversityClusterer
-            This class is seperating the Components along the first dimension.
         mapper: AtomMapper
             the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
         scorer: AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
+        clusterer: ComponentsDiversityClusterer
+            This class is seperating the Components along the first dimension.
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
         '''
@@ -190,5 +192,5 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
                          concatenator=MstConcatenator,
                          mapper=mapper, scorer=scorer,
                          progress=progress,
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          )

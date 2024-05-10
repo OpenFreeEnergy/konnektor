@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 # Todo: check this algorithm again
 
 class MstConcatenator(NetworkConcatenator):
-    def __init__(self, mapper: AtomMapper, scorer, n_connecting_edges: int = 3,
+    def __init__(self, mapper: AtomMapper, scorer, n_connecting_edges: int = 2,
                  nprocesses: int = 1,
                  _initial_edge_lister: NetworkConcatenator = None):
         """
@@ -58,9 +58,11 @@ class MstConcatenator(NetworkConcatenator):
 
         """
 
-        log.info("Number of edges in individual networks:\n " + str(
-            sum([len(s.edges) for s in ligand_networks])) +
-                 "/ " + str([len(s.edges) for s in ligand_networks]))
+
+        log.info(
+            f"Number of edges in individual networks:\n"
+            f"{sum([len(s.edges) for s in ligand_networks])}/"
+            f"{[len(s.edges) for s in ligand_networks]}")
 
         selected_edges = []
         selected_nodes = []
@@ -91,7 +93,7 @@ class MstConcatenator(NetworkConcatenator):
             selected_mappings = [edge_map[k] if (k in edge_map) else edge_map[
                 tuple(list(k)[::-1])] for k in mg.edges]
 
-            log.info("Adding ConnectingEdges:  " + str(len(selected_mappings)))
+            log.info(f"Adding ConnectingEdges: {len(selected_mappings)}")
 
             # Add network connecting edges
             selected_edges.extend(selected_mappings)
@@ -104,6 +106,6 @@ class MstConcatenator(NetworkConcatenator):
 
         concat_LigandNetwork = LigandNetwork(edges=selected_edges,
                                              nodes=set(selected_nodes))
-        log.info("Total Concatenated Edges:  " + str(len(selected_edges)))
+        log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
         return concat_LigandNetwork

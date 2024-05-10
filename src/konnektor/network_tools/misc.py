@@ -58,27 +58,6 @@ def delete_component(network: LigandNetwork,
     return LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
 
 
-def cluster_components(compounds: Iterable[Component],
-                       clusterer: _AbstractClusterer
-                       ) -> dict[int, list[Component]]:
-    """
-    This is a helper function for using the clustering alsgorithms.
-    TODO: Implement this
-    Not Implemented!
-
-    Parameters
-    ----------
-    compounds: Iterable[SmallMoleculeComponent]
-    clusterer: _AbstractClusterer
-        the function used to featurize the
-
-    Returns
-    -------
-
-    """
-    raise NotImplementedError()
-
-
 def cyclize_around_component(network: LigandNetwork,
                              node: Component) -> LigandNetwork:
     """

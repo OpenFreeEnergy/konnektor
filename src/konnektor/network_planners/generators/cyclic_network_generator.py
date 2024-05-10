@@ -18,8 +18,10 @@ class CyclicNetworkGenerator(NetworkGenerator):
                  nprocesses: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
-        the cyclic ligand planner tries to build up a network in which each node is contained in n cycles of a given size or size range.
-        In order to do so, and to be time efficient, the class uses greedy algorithms to solve the problem.
+        the cyclic ligand planner tries to build up a network in which each
+        node is contained in n cycles of a given size or size range.
+        In order to do so, and to be time efficient, the class uses greedy
+        algorithms to solve the problem.
 
         Parameters
         ----------
@@ -33,11 +35,15 @@ class CyclicNetworkGenerator(NetworkGenerator):
             the number of cycles, the node should be present in.
         cycle_sizes: Union[int, List[int]]
             the cycle size in the graph, that is used for designing the graph.
+            When providing a list[int], a range of sizes is allowed.
         nprocesses: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            number of processes that can be used for the network generation.
+            (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
+            this LigandNetworkPlanner is used to give the initial set of edges.
+             For standard usage, the Maximal NetworPlanner is used.
+            However in large scale approaches, it might be interesting to use
+            the heuristicMaximalNetworkPlanner. (default: MaximalNetworkPlanner)
 
         """
 

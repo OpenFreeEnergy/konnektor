@@ -20,9 +20,8 @@ class NetworkConcatenator(NetworkPlanner):
                  network_generator: _AbstractNetworkAlgorithm,
                  nprocesses: int = 1,
                  _initial_edge_lister=None):
-        """This class is an implementation for the LigandNetworkPlanner
-        interface. It defines the std. class for a
-        Konnektor LigandNetworkPlanner
+        """Base Class for the the LigandNetworkConcatenator classes.
+         It defines the std. class for a Konnektor LigandNetworkPlanner
 
         Parameters
         ----------
