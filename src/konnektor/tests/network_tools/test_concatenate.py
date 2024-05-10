@@ -10,11 +10,11 @@ from konnektor.utils.toy_data import build_n_random_mst_network, \
 
 @pytest.mark.parametrize("n_sub_networks", [2, 3, 4])
 def test_concatenate_mst_networks(n_sub_networks):
-    n_connecting_edges = 2
+    n_connecting_edges = 1
     n_compounds = 20
 
     networks = build_n_random_mst_network(n_compounds=n_compounds,
-                                          sub_networks=n_sub_networks,
+                                          sub_networks=n_sub_networks, overlap=0,
                                           rand_seed=42)
     concatenator = MstConcatenate(genMapper(),
                                   genScorer(n_scores=n_compounds ** 2),

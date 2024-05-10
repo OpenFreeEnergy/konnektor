@@ -66,7 +66,7 @@ class MaxConcatenate(NetworkConcatenator):
             # Generate Full Bipartite Graph
             nodesA = ligandNetworkA.nodes
             nodesB = ligandNetworkB.nodes
-            pedges = itertools.product(nodesA, nodesB)
+            pedges = [(na, nb) for na in nodesA for nb in nodesB]
 
             bipartite_graph_mappings = _parallel_map_scoring(
                 possible_edges=pedges,

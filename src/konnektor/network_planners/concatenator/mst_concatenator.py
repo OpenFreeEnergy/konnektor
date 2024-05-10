@@ -5,8 +5,8 @@ from typing import Iterable
 from gufe import AtomMapper, LigandNetwork
 
 from ._abstract_network_concatenator import NetworkConcatenator
-from .max_concatenator import MaxConcatenate
 from .._networkx_implementations import MstNetworkGenerator
+from ..generators._parallel_mapping_pattern import _parallel_map_scoring
 
 log = logging.getLogger(__name__)
 
@@ -35,14 +35,10 @@ class MstConcatenate(NetworkConcatenator):
             number of processes that can be used for the network generation.
             (default: 1)
         """
-        if _initial_edge_lister is None:
-            _initial_edge_lister = MaxConcatenate(mapper=mapper, scorer=scorer,
-                                                  nprocesses=nprocesses)
-
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=MstNetworkGenerator(),
                          nprocesses=nprocesses,
-                         _initial_edge_lister=_initial_edge_lister)
+                         _initial_edge_lister=None)
         self.n_connecting_edges = n_connecting_edges
 
     def concatenate_networks(self, ligand_networks: Iterable[
@@ -65,15 +61,22 @@ class MstConcatenate(NetworkConcatenator):
         log.info("Number of edges in individual networks:\n " + str(
             sum([len(s.edges) for s in ligand_networks])) +
                  "/ " + str([len(s.edges) for s in ligand_networks]))
+
         selected_edges = []
         selected_nodes = []
         for ligandNetworkA, ligandNetworkB in itertools.combinations(
                 ligand_networks, 2):
             # Generate fully connected Bipartite Graph
             ligands = list(ligandNetworkA.nodes) + list(ligandNetworkB.nodes)
-            fully_connected_graph = self._initial_edge_lister(
-                [ligandNetworkA, ligandNetworkB])
-            bipartite_graph_mappings = list(fully_connected_graph.edges)
+            nodesA = ligandNetworkA.nodes
+            nodesB = ligandNetworkB.nodes
+            pedges = [(na, nb) for na in nodesA for nb in nodesB]
+
+            bipartite_graph_mappings = _parallel_map_scoring(
+                possible_edges=pedges,
+                scorer=self.scorer,
+                mapper=self.mapper, n_processes=self.nprocesses,
+                show_progress=self.progress)
 
             # Find MST subset for Bipartite
             edge_map = {
@@ -87,6 +90,7 @@ class MstConcatenate(NetworkConcatenator):
 
             selected_mappings = [edge_map[k] if (k in edge_map) else edge_map[
                 tuple(list(k)[::-1])] for k in mg.edges]
+
             log.info("Adding ConnectingEdges:  " + str(len(selected_mappings)))
 
             # Add network connecting edges
@@ -100,7 +104,6 @@ class MstConcatenate(NetworkConcatenator):
 
         concat_LigandNetwork = LigandNetwork(edges=selected_edges,
                                              nodes=set(selected_nodes))
-
         log.info("Total Concatenated Edges:  " + str(len(selected_edges)))
 
         return concat_LigandNetwork
