@@ -1,10 +1,10 @@
-import pytest
 import numpy as np
-from rdkit import Chem
-from rdkit.Chem import AllChem
-
+import pytest
 from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent, LigandNetwork
-from konnektor.utils.toy_data import genMapper, genScorer, build_random_dataset, build_random_mst_network, \
+from rdkit import Chem
+
+from konnektor.utils.toy_data import genMapper, genScorer, build_random_dataset, \
+    build_random_mst_network, \
     build_random_fully_connected_network, build_n_random_mst_network
 
 
@@ -66,7 +66,8 @@ def test_genScorer():
 
 def test_build_random_dataset():
     n_compounds = 30
-    compounds, mapper, scorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
+    compounds, mapper, scorer = build_random_dataset(n_compounds=n_compounds,
+                                                     rand_seed=42)
 
     assert len(compounds) == n_compounds
     assert all(isinstance(c, SmallMoleculeComponent) for c in compounds)
@@ -77,38 +78,46 @@ def test_build_random_dataset():
 
 def test_build_random_mst_network():
     n_compounds = 30
-    mst_network = build_random_mst_network(n_compounds=n_compounds, rand_seed=42)
+    mst_network = build_random_mst_network(n_compounds=n_compounds,
+                                           rand_seed=42)
 
     assert isinstance(mst_network, LigandNetwork)
     assert len(mst_network.nodes) == n_compounds
     assert len(mst_network.edges) == n_compounds - 1
 
-@pytest.mark.parametrize("overlap", [0, 1, 2, 3])
 
+@pytest.mark.parametrize("overlap", [0, 1, 2, 3])
 @pytest.mark.parametrize("n_sub_networks", [2, 3])
 def test_build_n_random_mst_network(n_sub_networks, overlap):
     n_compounds = 30
-    mst_networks = build_n_random_mst_network(n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=overlap, rand_seed=42)
+    mst_networks = build_n_random_mst_network(n_compounds=n_compounds,
+                                              sub_networks=n_sub_networks,
+                                              overlap=overlap, rand_seed=42)
 
     assert len(mst_networks) == n_sub_networks
-    assert all(isinstance(mst_network, LigandNetwork) for mst_network in mst_networks)
-    assert len(set([n for mst_network in mst_networks for n in mst_network.nodes])) == n_compounds
-    assert all(len(mst_network.edges) == len(mst_network.nodes)-1 for mst_network in mst_networks)
+    assert all(
+        isinstance(mst_network, LigandNetwork) for mst_network in mst_networks)
+    assert len(set([n for mst_network in mst_networks for n in
+                    mst_network.nodes])) == n_compounds
+    assert all(
+        len(mst_network.edges) == len(mst_network.nodes) - 1 for mst_network in
+        mst_networks)
 
     if overlap > 0:
         for i, net in enumerate(mst_networks):
             if i == 0:
-                assert len(net.nodes) == n_compounds//n_sub_networks
-            elif i == n_sub_networks -1:
-                assert len(net.nodes) ==  n_compounds//n_sub_networks + n_compounds%n_sub_networks + overlap
+                assert len(net.nodes) == n_compounds // n_sub_networks
+            elif i == n_sub_networks - 1:
+                assert len(
+                    net.nodes) == n_compounds // n_sub_networks + n_compounds % n_sub_networks + overlap
             else:
-                assert len(net.nodes) ==  n_compounds//n_sub_networks + overlap
-
+                assert len(net.nodes) == n_compounds // n_sub_networks + overlap
 
 
 def build_random_fully_connected_network():
     n_compounds = 30
-    mst_network = build_random_fully_connected_network(n_compounds=n_compounds, rand_seed=42)
+    mst_network = build_random_fully_connected_network(n_compounds=n_compounds,
+                                                       rand_seed=42)
 
     assert isinstance(mst_network, LigandNetwork)
     assert len(mst_network.nodes) == n_compounds
