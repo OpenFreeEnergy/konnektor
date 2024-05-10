@@ -12,4 +12,4 @@ def test_draw_ligand_network():
 def test_draw_network_widget():
     """smoke test, only checking if code runs"""
     network = build_random_mst_network(n_compounds=5)
-    widget = draw_network_widget(network, show_mappings=False, show_molecules=False)
+    widget = draw_network_widget(network, show_mappings=False, show_molecules=True)

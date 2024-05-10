@@ -25,7 +25,7 @@ def color_gradient(c1: tuple[float, float, float] = OFE_COLORS[1],
     c2 = np.array(c2)
     c3 = np.array(c3)
     mix = np.array(mix, ndmin=1)
-    print(mix)
+
     if (mix > 0.5):
         m = mix - 0.5
         c = (0.5 - m) * c2 + m * c3

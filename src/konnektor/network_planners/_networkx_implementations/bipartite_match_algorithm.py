@@ -7,7 +7,7 @@ from ._abstract_network_algorithm import _AbstractNetworkConcatenator
 log = logging.getLogger(__name__)
 
 
-class MatchingConcatenator(_AbstractNetworkConcatenator):
+class MatchingConcatenatAlgorithm(_AbstractNetworkConcatenator):
 
     def concatenate_networks(self, nodesA: list[int], nodesB: list[int],
                              edges: list[tuple[int, int]],

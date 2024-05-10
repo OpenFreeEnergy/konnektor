@@ -75,8 +75,7 @@ def _build_cytoscape(network: gufe.LigandNetwork, layout: str = "concentric",
         mixins = np.clip(
             connectivities / (sum(connectivities) / len(connectivities)),
             a_min=0, a_max=2) / 2
-        print(connectivities)
-        print(mixins)
+
         cs = list(map(lambda x: color_gradient(mix=x), mixins))
 
     g = nx.Graph()

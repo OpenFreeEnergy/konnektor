@@ -56,11 +56,14 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         '''
 
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=None)
+                         network_generator=None, n_processes=n_processes)
         self.clusterer = clusterer
 
         if hasattr(self.clusterer.cluster, "n_jobs"):
             self.clusterer.cluster.njobs = n_processes
+        if hasattr(self.clusterer.featurize, "n_jobs"):
+            self.clusterer.featurize.njobs = n_processes
+
 
         if not isinstance(sub_network_planners, list):
             sub_network_planners = [sub_network_planners]
@@ -102,10 +105,6 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         self.clusters = self.clusterer.cluster_compounds(components)
         log.info("Clusters: " + str(self.clusters))
 
-        if len(self.clusters) == 1 and -1 in self.clusters:
-            print(self.clusters.keys())
-            raise ValueError("Found only noise cluster nodes!")
-
         # Step 2:  Sub Network, based on clusters
         log.info("Build Sub-Networks")
         self.sub_networks = []
@@ -116,21 +115,32 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         else:
             progress = lambda x: x
 
-        for cID, mols in progress(self.clusters.items()):
-            if (cID >= 0):  # Noise cluster is not for subnetworks
-                if (len(mols) > 1):
-                    for network_planner in self.sub_network_planners:
-                        try:
-                            sub_network = network_planner.generate_ligand_network(
-                                mols)
-                            self.sub_networks.append(sub_network)
-                            break
-                        except Exception as err:
-                            print("ERR", "\n".join(err.args))
-                            continue
-                else:  # Need to generate the Empty Network here!
-                    sub_network = LigandNetwork(edges=set([]), nodes=mols)
-                    self.sub_networks.append(sub_network)
+        if len(self.clusters) == 1 and -1 in self.clusters:
+            for network_planner in self.sub_network_planners:
+                try:
+                    sub_network = network_planner.generate_ligand_network(
+                        self.clusters[-1])
+                    break
+                except Exception as err:
+                    print("ERR", "\n".join(err.args))
+                    continue
+            self.sub_networks.append(sub_network)
+        else:
+            for cID, mols in progress(self.clusters.items()):
+                if (cID >= 0):  # Noise cluster is not for subnetworks
+                    if (len(mols) > 1):
+                        for network_planner in self.sub_network_planners:
+                            try:
+                                sub_network = network_planner.generate_ligand_network(
+                                    mols)
+                                self.sub_networks.append(sub_network)
+                                break
+                            except Exception as err:
+                                print("ERR", "\n".join(err.args))
+                                continue
+                    else:  # Need to generate the Empty Network here!
+                        sub_network = LigandNetwork(edges=set([]), nodes=mols)
+                        self.sub_networks.append(sub_network)
 
         # step 3: Connect the Networks:
         log.info("Concatenate Networks")
