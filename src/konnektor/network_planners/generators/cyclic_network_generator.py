@@ -15,7 +15,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer,
                  node_present_in_cycles: int = 2,
                  cycle_sizes: Union[int, List[int]] = 3,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
         the cyclic ligand planner tries to build up a network in which each
@@ -36,7 +36,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
         cycle_sizes: Union[int, List[int]]
             the cycle size in the graph, that is used for designing the graph.
             When providing a list[int], a range of sizes is allowed.
-        nprocesses: int, optional
+        n_processes: int, optional
             number of processes that can be used for the network generation.
             (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
@@ -53,11 +53,11 @@ class CyclicNetworkGenerator(NetworkGenerator):
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
-                                                           n_processes=nprocesses)
+                                                           n_processes=n_processes)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=network_generator,
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          _initial_edge_lister=_initial_edge_lister)
 
     def generate_ligand_network(self, components: Iterable[

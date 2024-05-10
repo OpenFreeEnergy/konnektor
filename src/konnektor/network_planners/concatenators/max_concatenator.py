@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 
 
 class MaxConcatenator(NetworkConcatenator):
-    def __init__(self, mapper: AtomMapper, scorer, nprocesses: int = 1,
+    def __init__(self, mapper: AtomMapper, scorer, n_processes: int = 1,
                  show_progress: bool = False):
         """
         This concatenators is connnecting two Networks with all possible
@@ -27,7 +27,7 @@ class MaxConcatenator(NetworkConcatenator):
             score between [0,1].
         n_connecting_edges: int, optional
             number of connecting edges. (default: 3)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation.
             (default: 1)
         show_progress: bool
@@ -36,7 +36,7 @@ class MaxConcatenator(NetworkConcatenator):
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=None,
-                         nprocesses=nprocesses)
+                         n_processes=n_processes)
         self.progress = show_progress
 
     def concatenate_networks(self, ligand_networks: Iterable[
@@ -73,7 +73,7 @@ class MaxConcatenator(NetworkConcatenator):
             bipartite_graph_mappings = _parallel_map_scoring(
                 possible_edges=pedges,
                 scorer=self.scorer,
-                mapper=self.mapper, n_processes=self.nprocesses,
+                mapper=self.mapper, n_processes=self.n_processes,
                 show_progress=self.progress)
 
             # Add network connecting edges

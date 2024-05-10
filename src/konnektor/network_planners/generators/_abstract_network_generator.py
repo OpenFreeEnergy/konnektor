@@ -14,11 +14,11 @@ log = logging.getLogger(__name__)
 
 class NetworkGenerator(NetworkPlanner):
     progress: bool = False
-    nprocesses: int
+    n_processes: int
 
     def __init__(self, mapper: AtomMapper, scorer,
                  network_generator: _AbstractNetworkAlgorithm,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister=None):
         """This class is an implementation for the LigandNetworkPlanner interface.
         It defines the std. class for a Konnektor LigandNetworkPlanner
@@ -31,7 +31,7 @@ class NetworkGenerator(NetworkPlanner):
             lowest score edges
         scorer : AtomMappingScorer
             any callable which takes a AtomMapping and returns a float
-        nprocesses: int, optional
+        n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
@@ -43,7 +43,7 @@ class NetworkGenerator(NetworkPlanner):
 
         # Konnektor specific variables
         self.network_generator = network_generator
-        self.nprocesses = nprocesses
+        self.n_processes = n_processes
 
         self._initial_edge_lister = _initial_edge_lister
 
@@ -52,7 +52,7 @@ class NetworkGenerator(NetworkPlanner):
         # So parallelization is most important here.
         if self._initial_edge_lister is not None and hasattr(
                 self._initial_edge_lister, "nprocesses"):
-            self.nprocesses = nprocesses
+            self.n_processes = n_processes
 
     @abc.abstractmethod
     def generate_ligand_network(self, components: Iterable[

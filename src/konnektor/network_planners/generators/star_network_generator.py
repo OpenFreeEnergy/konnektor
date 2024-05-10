@@ -11,7 +11,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class StarNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
         The Star Ligand Network Planner or Radial Ligand Network Planner, set's one ligand into the center of a graph and connects all other ligands to it.
@@ -22,7 +22,7 @@ class StarNetworkGenerator(NetworkGenerator):
             the atom mapper is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        nprocesses: int, optional
+        n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
@@ -31,11 +31,11 @@ class StarNetworkGenerator(NetworkGenerator):
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
-                                                           n_processes=nprocesses)
+                                                           n_processes=n_processes)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=RadialNetworkAlgorithm(),
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          _initial_edge_lister=_initial_edge_lister)
 
     def generate_ligand_network(self, components: Iterable[Component],

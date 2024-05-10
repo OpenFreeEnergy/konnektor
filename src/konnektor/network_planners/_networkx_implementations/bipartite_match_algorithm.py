@@ -9,14 +9,21 @@ log = logging.getLogger(__name__)
 
 class MatchingConcatenator(_AbstractNetworkConcatenator):
 
-    def concatenate_networks(self, nodesA, nodesB,
-                             edges, weights) -> nx.Graph:
+    def concatenate_networks(self, nodesA: list[int], nodesB: list[int],
+                             edges: list[tuple[int, int]],
+                             weights: list[float]) -> nx.Graph:
         """
 
         Parameters
         ----------
-        ligand_networks
-        n_connecting_edges
+        nodesA: list[int],
+            nodes of network A
+        nodesB: list[int]
+            nodes of network B
+        edges: list[tuple[int, int]]
+            connecting edges between network A and B
+        weights: list[float]
+            weights for the edges
 
         Returns
         -------

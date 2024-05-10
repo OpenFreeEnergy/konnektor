@@ -12,7 +12,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer,
                  target_node_connectivity: int = 3,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
         the NNodeEdges Network planner, is building a graph, in which each node is connected by at least the target_node_connectivity.
@@ -27,7 +27,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
             any callable which takes a AtomMapping and returns a float
         target_node_connectivity: int
             the number of connecting edges per node.
-        nprocesses: int, optional
+        n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
@@ -37,13 +37,13 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
-                                                           n_processes=nprocesses)
+                                                           n_processes=n_processes)
 
         network_generator = NNodeEdgesNetworkAlgorithm(
             target_node_connectivity=target_node_connectivity)
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=network_generator,
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          _initial_edge_lister=_initial_edge_lister)
 
     @property

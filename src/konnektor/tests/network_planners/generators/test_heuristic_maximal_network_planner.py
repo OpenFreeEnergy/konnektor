@@ -19,7 +19,7 @@ def test_generate_maximal_network(with_progress,
 
     planner = HeuristicMaximalNetworkGenerator(
         mapper=genMapper, scorer=genScorer, n_samples=10,
-        progress=with_progress, nprocesses=n_process)
+        progress=with_progress, n_processes=n_process)
     network = planner.generate_ligand_network(components)
 
     assert len(network.nodes) == n_compounds

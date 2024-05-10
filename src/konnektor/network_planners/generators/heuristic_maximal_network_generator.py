@@ -15,7 +15,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer, n_samples: int = 100,
                  progress: bool = False,
-                 nprocesses: int = 1):
+                 n_processes: int = 1):
         """
         The Heuristic Maximal Network planner builds for given set of compounds a set of edges per node build graph under the assumption each component can be connected to another.
         The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
@@ -32,13 +32,13 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             number of random edges per node.
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
 
         """
         super().__init__(mapper=mapper, scorer=scorer,
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          network_generator=None,
                          _initial_edge_lister=self)
 
@@ -78,12 +78,12 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
 
         # todo: what to do if not connected?
 
-        if (self.nprocesses > 1):
+        if (self.n_processes > 1):
             mappings = _parallel_map_scoring(
                 possible_edges=sample_combinations,
                 scorer=self.scorer,
                 mapper=self.mapper,
-                n_processes=self.nprocesses,
+                n_processes=self.n_processes,
                 show_progress=self.progress)
         else:  # serial variant
             if self.progress is True:

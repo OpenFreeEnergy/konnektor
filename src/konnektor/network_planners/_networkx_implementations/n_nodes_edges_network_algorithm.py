@@ -13,7 +13,8 @@ class NNodeEdgesNetworkAlgorithm(_AbstractNetworkAlgorithm):
     def __init__(self, target_node_connectivity: int = 2):
         self.target_node_connectivity = target_node_connectivity
 
-    def generate_network(self, edges, weights) -> nx.Graph:
+    def generate_network(self, edges: list[tuple[int, int]],
+                         weights: list[float]) -> nx.Graph:
 
         w_edges = []
         nodes = []

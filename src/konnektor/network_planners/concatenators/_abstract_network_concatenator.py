@@ -14,11 +14,11 @@ log = logging.getLogger(__name__)
 
 class NetworkConcatenator(NetworkPlanner):
     progress: bool = False
-    nprocesses: int
+    n_processes: int
 
     def __init__(self, mapper: AtomMapper, scorer,
                  network_generator: _AbstractNetworkAlgorithm,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister=None):
         """Base Class for the the LigandNetworkConcatenator classes.
          It defines the std. class for a Konnektor LigandNetworkPlanner
@@ -31,7 +31,7 @@ class NetworkConcatenator(NetworkPlanner):
             lowest score edges
         scorer : AtomMappingScorer
             any callable which takes a AtomMapping and returns a float
-        nprocesses: int, optional
+        n_processes: int, optional
             number of processes that can be used for the network generation.
             (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
@@ -47,7 +47,7 @@ class NetworkConcatenator(NetworkPlanner):
 
         # Konnektor specific variables
         self.network_generator = network_generator
-        self.nprocesses = nprocesses
+        self.n_processes = n_processes
         self._initial_edge_lister = _initial_edge_lister
 
         # pass on the parallelization to the edge lister
@@ -55,7 +55,7 @@ class NetworkConcatenator(NetworkPlanner):
         # So parallelization is most important here.
         if self._initial_edge_lister is not None and hasattr(
                 self._initial_edge_lister, "nprocesses"):
-            self.nprocesses = nprocesses
+            self.n_processes = n_processes
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)

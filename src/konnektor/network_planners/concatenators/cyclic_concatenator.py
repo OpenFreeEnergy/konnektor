@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
                  n_connecting_cycles: int = 2,
-                 cycle_sizes: Union[int, list[int]] = 3, nprocesses: int = 1,
+                 cycle_sizes: Union[int, list[int]] = 3, n_processes: int = 1,
                  _initial_edge_lister: NetworkConcatenator = None):
         """
         This concatenators is connnecting two Networks with a kruskal like
@@ -34,17 +34,17 @@ class CyclicConcatenator(NetworkConcatenator):
         cycle_sizes: Union[int, list[int]], optional
             build cycles of given size. or allow a range of different size
             by passing a list[int](default:3)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation.
             (default: 1)
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaxConcatenator(mapper=mapper, scorer=scorer,
-                                                   nprocesses=nprocesses)
+                                                   n_processes=n_processes)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=MstNetworkAlgorithm(),
-                         nprocesses=nprocesses)
+                         n_processes=n_processes)
         self.n_connecting_edges = n_connecting_cycles
         self.cycle_sizes = cycle_sizes
 

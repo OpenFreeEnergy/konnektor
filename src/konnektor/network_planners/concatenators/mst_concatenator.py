@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 
 class MstConcatenator(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer, n_connecting_edges: int = 2,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister: NetworkConcatenator = None):
         """
         This concatenators is connnecting two Networks with a kruskal like
@@ -31,13 +31,13 @@ class MstConcatenator(NetworkConcatenator):
             between [0,1].
         n_connecting_edges: int, optional
             number of connecting edges. (default: 2)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation.
             (default: 1)
         """
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=MstNetworkAlgorithm(),
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          _initial_edge_lister=None)
         self.n_connecting_edges = n_connecting_edges
 
@@ -77,7 +77,7 @@ class MstConcatenator(NetworkConcatenator):
             bipartite_graph_mappings = _parallel_map_scoring(
                 possible_edges=pedges,
                 scorer=self.scorer,
-                mapper=self.mapper, n_processes=self.nprocesses,
+                mapper=self.mapper, n_processes=self.n_processes,
                 show_progress=self.progress)
 
             # Find MST subset for Bipartite

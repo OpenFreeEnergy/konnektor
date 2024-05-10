@@ -15,7 +15,8 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
     def __init__(self, metric_aggregation_method: Callable = None):
         self.metric_aggregation_method = metric_aggregation_method
 
-    def _central_lig_selection(self, edges, weights) -> int:
+    def _central_lig_selection(self, edges: list[tuple[int, int]],
+                               weights: list[float]) -> int:
         nodes = set([n for e in edges for n in e])
         edge_weights = list(zip(edges, weights))
 
@@ -36,7 +37,9 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
         opt_node = sorted_node_scores[0]
         return opt_node
 
-    def generate_network(self, edges, weights, central_node=None) -> nx.Graph:
+    def generate_network(self, edges: list[tuple[int, int]],
+                         weights: list[float],
+                         central_node: int = None) -> nx.Graph:
         """Generate a radial network with all ligands connected to a central node
 
         Also known as hub and spoke or star-map, this plans a Network where

@@ -22,7 +22,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         show_progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         """
-        super().__init__(mapper=mapper, scorer=scorer, nprocesses=n_processes,
+        super().__init__(mapper=mapper, scorer=scorer, n_processes=n_processes,
                          network_generator=None)
         self.progress = show_progress
 
@@ -51,7 +51,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             possible_edges=edges,
             scorer=self.scorer,
             mapper=self.mapper,
-            n_processes=self.nprocesses,
+            n_processes=self.n_processes,
             show_progress=self.progress)
 
         network = LigandNetwork(edges=mappings, nodes=nodes)

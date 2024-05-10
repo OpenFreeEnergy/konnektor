@@ -33,7 +33,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=None,
-                         nprocesses=n_processes,
+                         n_processes=n_processes,
                          _initial_edge_lister=self)
         self.progress = progress
 
@@ -64,13 +64,13 @@ class MaximalNetworkGenerator(NetworkGenerator):
         total = len(components) * (len(components) - 1) // 2
 
         # Parallel or not Parallel:
-        if (self.nprocesses > 1):
+        if (self.n_processes > 1):
             mappings = _parallel_map_scoring(
                 possible_edges=itertools.combinations(
                     components, 2),
                 scorer=self.scorer,
                 mapper=self.mapper,
-                n_processes=self.nprocesses,
+                n_processes=self.n_processes,
                 show_progress=self.progress)
         else:  # serial variant
             if self.progress is True:

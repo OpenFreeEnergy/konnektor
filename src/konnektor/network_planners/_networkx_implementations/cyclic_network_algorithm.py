@@ -34,8 +34,8 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
         self.orig_g = None
         self.cycle_metric = self._score_summation  # how to evaluate the cost of a cycle.
 
-    def generate_network(self, edges: List[Tuple[int, int]],
-                         weights: List[float]) -> Graph:
+    def generate_network(self, edges: list[tuple[int, int]],
+                         weights: list[float]) -> Graph:
         log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
 
@@ -359,13 +359,3 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
             d += e['weight']
 
         return d
-
-    def _score_averaging(self, c: List[int], g: Graph) -> float:
-        d = 0
-        for i in range(len(c)):  # Calculate the score of the cycle
-            n1 = c[i]
-            n2 = c[(i + 1) % len(c)]
-            e = g.get_edge_data(n1, n2)
-            d += e['weight']
-
-        return d / len(c)

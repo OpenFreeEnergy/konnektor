@@ -11,7 +11,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer, n_redundancy: int = 2,
-                 nprocesses: int = 1,
+                 n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """Plan a Network which connects all ligands n times with minimal cost.
         This planner uses n_redundancy times the MST algorithm on the full
@@ -27,7 +27,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             any callable which takes a AtomMapping and returns a float
         n_redundancy: int
             use MST n times to get a redundant set of edges.
-        nprocesses: int, optional
+        n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
@@ -38,11 +38,11 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
-                                                           n_processes=nprocesses)
+                                                           n_processes=n_processes)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=MstNetworkAlgorithm(),
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          _initial_edge_lister=_initial_edge_lister)
 
         self.n_redundancy = n_redundancy

@@ -78,7 +78,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         self.concatenator = concatenator(mapper=mapper,
                                          scorer=scorer) if inspect.isclass(
             concatenator) else concatenator
-        self.concatenator.nprocesses = n_processes
+        self.concatenator.n_processes = n_processes
         self.progress = progress
 
     def generate_ligand_network(self,
