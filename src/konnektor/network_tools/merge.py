@@ -1,7 +1,8 @@
 from gufe import LigandNetwork
 
-def merge_two_networks(network1:LigandNetwork,
-                    network2:LigandNetwork)->LigandNetwork:
+
+def merge_two_networks(network1: LigandNetwork,
+                       network2: LigandNetwork) -> LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
@@ -14,6 +15,7 @@ def merge_two_networks(network1:LigandNetwork,
         Network 1 for merging
     network2
         Network 1 for merging
+
     Returns
     -------
     LigandNetwork
@@ -21,7 +23,7 @@ def merge_two_networks(network1:LigandNetwork,
     """
     connecting_nodes = network1.nodes.intersection(network2.nodes)
 
-    if(len(connecting_nodes)==0):
+    if (len(connecting_nodes) == 0):
         raise ValueError("No shared Nodes between Networks")
 
     merged_nodes = network1.nodes.union(network2.nodes)
@@ -30,40 +32,44 @@ def merge_two_networks(network1:LigandNetwork,
 
     return merged_network
 
-def merge(networks:list[LigandNetwork])->LigandNetwork:
+
+def merge(networks: list[LigandNetwork]) -> LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
     least one node needs to be present in network1 and network2. If this is
     not the case, use the network concatenators.
 
+    Todo: find a mergable path in multiple sets of networks
+
     Parameters
     ----------
     networks: list[LigandNetwork]
         Networks for merging
+
     Returns
     -------
     LigandNetwork
         returns the merged network
     """
 
-    #merge_path
-    #Todo: find a mergeable path
+    # merge_path
+    # Todo: Implement find a mergeable path
 
-
-    #do merging
+    # do merging
     networkA = networks[0]
     merged_nodes = []
     merged_edges = []
     for networkB in networks[1:]:
-        connecting_nodes = networkA.nodes.intersection(networkB.nodes)
+        connecting_nodes = networkA.nodes.difference(networkB.nodes)
 
-        if(len(connecting_nodes)==0):
+        if len(connecting_nodes) >= len(networkB.nodes):
             raise ValueError("No shared Nodes between Networks")
 
         merged_nodes.extend(list(networkA.nodes.union(networkB.nodes)))
         merged_edges.extend(list(networkA.edges.union(networkB.edges)))
 
-    merged_network = LigandNetwork(edges=merged_edges, nodes=merged_nodes)
+    merged_network = LigandNetwork(edges=set(merged_edges),
+                                   nodes=set(merged_nodes))
 
     return merged_network
