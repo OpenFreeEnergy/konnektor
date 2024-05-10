@@ -8,7 +8,6 @@ from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerpri
 
 from gufe import Component
 
-from .auxilliary_featurizer import ChargeTransformer
 from ._abstract_clusterer import _AbstractClusterer
 
 log = logging.getLogger(__name__)
@@ -77,8 +76,8 @@ class ComponentsDiversityClustering(_AbstractClusterer):
             self._cluster_centers =  self.cluster.cluster_centers_
 
         # Compounds label
-        cluster_compounds = {}
+        cluster_components = {}
         for clusterID in np.unique(labels):
-            cluster_compounds[clusterID] = [components[i] for i,l in enumerate(labels) if (l == clusterID)]
+            cluster_components[clusterID] = [components[i] for i,l in enumerate(labels) if (l == clusterID)]
 
-        return cluster_compounds
+        return cluster_components
