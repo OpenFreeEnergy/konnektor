@@ -6,7 +6,7 @@ from gufe import LigandNetwork
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners.concatenators import MstConcatenator
 from konnektor.tests.network_planners.conf import (GenAtomMapper, genScorer,
-                                                   ligand_network_ab)
+                                                   ligand_network_ab, atom_mapping_basic_test_files)
 
 
 # more test here also for the params

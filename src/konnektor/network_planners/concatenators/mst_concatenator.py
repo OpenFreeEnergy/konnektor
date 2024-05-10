@@ -69,7 +69,7 @@ class MstConcatenator(NetworkConcatenator):
         for ligandNetworkA, ligandNetworkB in itertools.combinations(
                 ligand_networks, 2):
             # Generate fully connected Bipartite Graph
-            ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
+            ligands = list(ligandNetworkA.nodes | ligandNetworkB.nodes)
             nodesA = ligandNetworkA.nodes
             nodesB = ligandNetworkB.nodes
             pedges = [(na, nb) for na in nodesA for nb in nodesB]
