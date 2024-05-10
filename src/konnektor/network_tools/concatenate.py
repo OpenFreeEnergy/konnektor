@@ -1,7 +1,9 @@
 from typing import Iterable
+
 from gufe import LigandNetwork, Component
 
-from ..network_planners.concatenator._abstract_network_concatenator import NetworkConcatenator
+from ..network_planners.concatenator._abstract_network_concatenator import \
+    NetworkConcatenator
 
 
 def concatenate_networks(networks: Iterable[LigandNetwork],
