@@ -4,6 +4,7 @@
 from collections import defaultdict
 import itertools
 import gufe
+import openfe
 from rdkit import Chem
 from rdkit.Chem import rdMolHash
 from rdkit.Chem.Scaffolds import rdScaffoldNetwork
@@ -11,7 +12,7 @@ from rdkit.Chem.Scaffolds import rdScaffoldNetwork
 from ._abstract_clusterer import _AbstractClusterer
 
 
-class TwoDimensionalScaffoldCluster(_AbstractClusterer):
+class TwoDimensionalScaffoldClusterer(_AbstractClusterer):
     scaffold_looseness: int
 
     def __init__(self, scaffold_looseness: int = 9):
@@ -29,7 +30,10 @@ class TwoDimensionalScaffoldCluster(_AbstractClusterer):
         self.scaffold_looseness = scaffold_looseness
 
     @staticmethod
-    def normalise_molecules(mols: list[gufe.SmallMoleculeComponent]) -> dict:
+    def normalise_molecules(mols: list[gufe.SmallMoleculeComponent]) -> dict[gufe.SmallMoleculeComponent, Chem.Mol]:
+        # Convert SMC to a normalised (reduced & cleaned up) version in rdkit
+        # This is anonymous, so no bond orders, charges or elements
+        # This makes comparing scaffolds more suited to RBFEs
         def normalised_rep(mol):
             smi = rdMolHash.MolHash(Chem.RemoveHs(mol.to_rdkit()),
                                     rdMolHash.HashFunction.AnonymousGraph)
@@ -41,7 +45,8 @@ class TwoDimensionalScaffoldCluster(_AbstractClusterer):
         return mols2anonymous
 
     @staticmethod
-    def generate_scaffold_network(mols):
+    def generate_scaffold_network(mols: list[Chem.Mol]) -> rdScaffoldNetwork.ScaffoldNetwork:
+        # generates the scaffold network from the rdkit mol objects
         params = rdScaffoldNetwork.ScaffoldNetworkParams()
         params.includeScaffoldsWithAttachments = False
         params.flattenChirality = True
@@ -51,8 +56,11 @@ class TwoDimensionalScaffoldCluster(_AbstractClusterer):
         return net
 
     @staticmethod
-    def match_scaffolds_to_source(network, mols, hac_heuristic) -> dict:
-        # first match scaffolds in network back to normalised molecules
+    def match_scaffolds_to_source(network: rdScaffoldNetwork.ScaffoldNetwork,
+                                  mols: list[Chem.Mol],
+                                  hac_heuristic: int) -> dict[Chem.Mol, list[str]]:
+        # match scaffolds in network back to normalised input molecules
+        # i.e. for each molecule, which scaffolds can apply
 
         # will store for each molecule, potential scaffolds and their size
         mols2scaffolds = defaultdict(list)
@@ -79,11 +87,14 @@ class TwoDimensionalScaffoldCluster(_AbstractClusterer):
         return mols2candidates
 
     @staticmethod
-    def find_solution(mol_to_candidates):
+    def find_solution(mol_to_candidates: dict[Chem.Mol, list[str]]) -> list[tuple[str, int]]:
+        # returns the best scaffolds that cover all mols
+        # returns a list of (scaffold smiles, n heavy atoms)
+
         # reverse mapping of scaffolds onto the mols they cater for
         scaffold2mols = defaultdict(list)
         anon_mols = set()
-        for mol, scaffs in mol_to_candidates:
+        for mol, scaffs in mol_to_candidates.items():
             anon_mols.add(mol)
             for scaff in scaffs:
                 scaffold2mols[scaff].append(mol)
@@ -117,7 +128,11 @@ class TwoDimensionalScaffoldCluster(_AbstractClusterer):
                 return solution
 
     @staticmethod
-    def formulate_answer(solution, mols_to_norm) -> dict:
+    def formulate_answer(solution: list[tuple[str, int]],
+                         mols_to_norm: dict[gufe.SmallMoleculeComponent, Chem.Mol]
+                         ) -> dict[str, list[gufe.SmallMoleculeComponent]]:
+        # relate the solution scaffolds back to the input SMC
+
         # for each molecule, pick the largest scaffold that matches
         relationship = []
         for input_mol, anon_mol in mols_to_norm.items():
@@ -141,12 +156,12 @@ class TwoDimensionalScaffoldCluster(_AbstractClusterer):
         mols_to_norm = self.normalise_molecules(components)
 
         # then create a scaffold network from the normalised molecules
-        network = self.generate_scaffold_network(mols_to_norm.values())
+        network = self.generate_scaffold_network(list(mols_to_norm.values()))
 
         # reassign the scaffolds in the network back to the normalised reps
         mol_to_candidates = self.match_scaffolds_to_source(
             network,
-            mols_to_norm.values(),
+            list(mols_to_norm.values()),
             self.scaffold_looseness,
         )
 
