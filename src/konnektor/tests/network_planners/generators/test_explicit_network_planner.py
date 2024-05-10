@@ -2,11 +2,14 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import pytest
-"""
+from konnektor.network_planners.generators.explicit_network import ExplicitNetworkGenerator
 
-Not sure if this should be part of konnektor... would rather push it to OpenFE
+def test_explicit_network_planner():
 
-"""
+
+    planner = ExplicitNetworkGenerator()
+
+
 
 """
 def test_network_from_names(atom_mapping_basic_test_files):

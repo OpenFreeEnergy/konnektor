@@ -14,7 +14,7 @@ from ._abstract_network_generator import NetworkGenerator
 
 from .cyclic_network_planner import CyclicNetworkGenerator
 from .star_network_planner import StarNetworkGenerator
-from ..concatenators import MstConcatenate
+from ..concatenators import MstConcatenator
 from ...network_tools import append_node, concatenate_networks
 from ...network_tools.clustering.cluster_components import ComponentsDiversityClustering
 
@@ -26,7 +26,7 @@ log.setLevel(logging.INFO)
 class TwoDimensionalNetworkGenerator(NetworkGenerator):
     def __init__(self,
                  sub_network_planners: Iterable[NetworkGenerator] = (CyclicNetworkGenerator,),
-                 concatenator: MstConcatenate = MstConcatenate,
+                 concatenator: MstConcatenator = MstConcatenator,
                  clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
                      featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)),
                  mapper: AtomMapper = None, scorer = None,
@@ -40,7 +40,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
             This class is seperating the Components along the first dimension.
         sub_network_planners: Iterable[NetworkGenerator]
             The clusters, are then seperatley translated to sub networks by the sub_network_planners
-        concatenator: MstConcatenate
+        concatenator: MstConcatenator
             The concatenators is connecting the different sub networks.
         mapper: AtomMapper
             the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
@@ -175,7 +175,7 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
 
         super().__init__(clusterer=clusterer,
                          sub_network_planners=[StarNetworkGenerator],
-                         concatenator = MstConcatenate,
+                         concatenator = MstConcatenator,
                          mapper=mapper, scorer=scorer,
                          progress=progress,
                          nprocesses=nprocesses,

@@ -6,14 +6,14 @@ import numpy as np
 import networkx as nx
 
 from gufe import LigandNetwork
-from konnektor.network_planners.concatenators import MstConcatenate
+from konnektor.network_planners.concatenators import MstConcatenator
 from konnektor.tests.network_planners.conf import (GenAtomMapper, genScorer,
                                                    atom_mapping_basic_test_files, ligand_network_ab)
 
 
 #more test here also for the params
 def test_mst_network_concatenation(ligand_network_ab):
-    concatenator = MstConcatenate(mapper=GenAtomMapper(), scorer=genScorer)
+    concatenator = MstConcatenator(mapper=GenAtomMapper(), scorer=genScorer)
 
     ln_a, ln_b = ligand_network_ab
 

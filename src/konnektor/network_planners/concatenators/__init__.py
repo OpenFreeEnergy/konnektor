@@ -1,1 +1,1 @@
-from .mst_concatenator import MstConcatenate
+from .mst_concatenator import MstConcatenator
