@@ -1,13 +1,13 @@
 from typing import Iterable, Tuple
 
-from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
+from gufe import Component, LigandNetwork, AtomMapper
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
 class ExplicitNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+    def __init__(self, mapper: AtomMapper, scorer,
                  n_processes: int = 1, show_progress: bool = False, ):
         """
 
