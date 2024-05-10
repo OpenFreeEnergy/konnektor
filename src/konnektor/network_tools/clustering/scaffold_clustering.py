@@ -1,5 +1,7 @@
 """Clustering compounds based on scaffolds
 
+This clusterer attempts to cluster compounds based on their scaffolds.
+It is built on rdkit's rdScaffoldNetwork module.
 """
 from collections import defaultdict
 import itertools
