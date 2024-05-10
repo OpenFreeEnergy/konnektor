@@ -1,10 +1,11 @@
-
 from gufe import Component
 
-from konnektor.utils.toy_data import build_random_dataset
+from konnektor.network_tools.clustering.auxilliary_featurizer import \
+    ChargeTransformer
 from konnektor.network_tools.clustering.charge_clustering import ChargeClusterer
-from konnektor.network_tools.clustering.component_diversity_clustering import ComponentsDiversityClusterer
-from konnektor.network_tools.clustering.auxilliary_featurizer import ChargeTransformer
+from konnektor.network_tools.clustering.component_diversity_clustering import \
+    ComponentsDiversityClusterer
+from konnektor.utils.toy_data import build_random_dataset
 
 
 def test_charge_transformer():
@@ -14,12 +15,13 @@ def test_charge_transformer():
 
     feat = ChargeTransformer()
 
-    features= feat.fit_transform([c.to_rdkit() for c in compounds])
+    features = feat.fit_transform([c.to_rdkit() for c in compounds])
 
     assert features.shape[0] == n_compounds
     assert features.shape[1] == 1
 
     print(features.shape)
+
 
 def test_charge_clusterer():
     """ only a smoke test! checking that the code runs"""
@@ -36,6 +38,7 @@ def test_charge_clusterer():
     assert all(isinstance(k, int) for k in clusters.keys())
     assert all(isinstance(v, list) for v in clusters.values())
     assert all(isinstance(c, Component) for v in clusters.values() for c in v)
+
 
 def test_diversity_clusterer():
     """ only a smoke test! checking that the code runs"""
