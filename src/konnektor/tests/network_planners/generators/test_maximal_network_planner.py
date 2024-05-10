@@ -4,7 +4,7 @@
 import pytest
 
 from konnektor.network_planners import MaximalNetworkGenerator
-from konnektor.tests.network_planners.conf import (
+from konnektor.tests.network_planners.conf import (atom_mapping_basic_test_files,
     toluene_vs_others,
     genScorer,
     GenAtomMapper)
