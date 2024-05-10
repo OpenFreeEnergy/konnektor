@@ -52,11 +52,7 @@ def append_node(network: LigandNetwork,
     LigandNetwork
         returns the new network
     """
-
-    appended_network = concatenator.concatenate_networks([network,
-                                                          LigandNetwork(
-                                                              edges=[],
-                                                              nodes=
-                                                              [component])])
+    single_node_net = LigandNetwork(edges=[], nodes=[component])
+    appended_network = concatenator.concatenate_networks([network, single_node_net])
 
     return appended_network

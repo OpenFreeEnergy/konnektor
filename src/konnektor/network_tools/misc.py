@@ -8,7 +8,7 @@ from konnektor.network_tools.clustering._abstract_clusterer import \
 
 
 def delete_transformation(network: LigandNetwork,
-                          edge: Union[LigandAtomMapping, tuple[
+                          transformation: Union[LigandAtomMapping, tuple[
                               Component, Component]]) -> LigandNetwork:
     """
     Remove the desired edge from the network
@@ -16,17 +16,17 @@ def delete_transformation(network: LigandNetwork,
     Parameters
     ----------
     network: LigandNetwork
-    edge: :Union[LigandAtomMapping, tuple[Component, Component]]
+    transformation: :Union[LigandAtomMapping, tuple[Component, Component]]
 
     Returns
     -------
     LigandNetwork
         returns a copy of the ligand network without the removed edge.
     """
-    if (isinstance(edge, LigandAtomMapping)):
-        edge = (edge.componentA, edge.componentB)
+    if (isinstance(transformation, LigandAtomMapping)):
+        transformation = (transformation.componentA, transformation.componentB)
 
-    f = lambda m: len({m.componentA, m.componentB}.union(edge)) != 2
+    f = lambda m: len({m.componentA, m.componentB}.union(transformation)) != 2
     filtered_edges = list(filter(f, network.edges))
 
     return LigandNetwork(edges=filtered_edges, nodes=network.nodes)
