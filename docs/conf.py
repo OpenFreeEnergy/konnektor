@@ -54,7 +54,7 @@ html_static_path = ['_static']
 html_theme = 'ofe_sphinx_theme'
 autoclass_content = 'both'
 html_favicon = '_static/img/logo/konnektor_logo_style1.ico'
-html_logo = "_static/img/logo/konnektor_logo_style2.png"
+html_logo = "_static/img/logo/konnektor_logo_style2_borderless.png"
 html_theme_options = {
     "logo": {
         "text": "Konnektor Documentation",
