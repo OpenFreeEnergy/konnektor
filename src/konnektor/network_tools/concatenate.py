@@ -2,7 +2,7 @@ from typing import Iterable
 
 from gufe import LigandNetwork, Component
 
-from ..network_planners.concatenator._abstract_network_concatenator import \
+from ..network_planners.concatenators._abstract_network_concatenator import \
     NetworkConcatenator
 
 
@@ -36,7 +36,7 @@ def append_node(network: LigandNetwork,
                 component: Component,
                 concatenator: NetworkConcatenator) -> LigandNetwork:
     """
-    Add one node to the network, based on the provided concatenator algorithm.
+    Add one node to the network, based on the provided concatenators algorithm.
 
     Parameters
     ----------

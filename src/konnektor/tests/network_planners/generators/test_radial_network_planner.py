@@ -6,9 +6,9 @@ import pytest
 import konnektor
 from konnektor import network_planners
 
-from .conf import (atom_mapping_basic_test_files, toluene_vs_others,
-                   mol_from_smiles, genScorer,
-                   GenAtomMapper, BadMapper, ErrorMapper)
+from konnektor.tests.network_planners.conf import (atom_mapping_basic_test_files, toluene_vs_others,
+                                                   mol_from_smiles, genScorer,
+                                                   GenAtomMapper, BadMapper, ErrorMapper)
 
 from gufe import SmallMoleculeComponent
 

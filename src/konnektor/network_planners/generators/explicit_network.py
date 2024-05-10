@@ -8,7 +8,7 @@ from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
-class ExplicitNetworkGenerator(NetworkGenerator):
+class ExplicitNetworkGt puenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, progress: bool = False, ):
         """
 

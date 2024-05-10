@@ -10,11 +10,11 @@ from ..generators._parallel_mapping_pattern import _parallel_map_scoring
 log = logging.getLogger(__name__)
 
 
-class MaxConcatenate(NetworkConcatenator):
+class MaxConcatenator(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer, nprocesses: int = 1,
                  show_progress: bool = False):
         """
-        This concatenator is connnecting two Networks with all possible
+        This concatenators is connnecting two Networks with all possible
          mappings. This is usually most useful for initial edge listing.
 
         Parameters

@@ -1,7 +1,7 @@
 import pytest
 
 from konnektor.network_analysis import get_is_connected
-from konnektor.network_planners import MstConcatenate
+from konnektor.network_planners import MstConcatenator
 from konnektor.network_tools.concatenate import concatenate_networks, \
     append_node
 from konnektor.utils.toy_data import build_n_random_mst_network, \
@@ -17,9 +17,9 @@ def test_concatenate_mst_networks(n_sub_networks):
                                           sub_networks=n_sub_networks,
                                           overlap=0,
                                           rand_seed=42)
-    concatenator = MstConcatenate(genMapper(),
-                                  genScorer(n_scores=n_compounds ** 2),
-                                  n_connecting_edges=n_connecting_edges)
+    concatenator = MstConcatenator(genMapper(),
+                                   genScorer(n_scores=n_compounds ** 2),
+                                   n_connecting_edges=n_connecting_edges)
 
     new_network = concatenate_networks(networks, concatenator)
 
@@ -39,9 +39,9 @@ def test_append_node():
     network = build_random_mst_network(n_compounds=n_compounds - 1,
                                        rand_seed=42)
     compounds, _, _ = build_random_dataset(n_compounds=1, rand_seed=42)
-    concatenator = MstConcatenate(genMapper(),
-                                  genScorer(n_scores=n_compounds ** 2),
-                                  n_connecting_edges=n_connecting_edges)
+    concatenator = MstConcatenator(genMapper(),
+                                   genScorer(n_scores=n_compounds ** 2),
+                                   n_connecting_edges=n_connecting_edges)
 
     new_network = append_node(network, compounds[0], concatenator=concatenator)
 

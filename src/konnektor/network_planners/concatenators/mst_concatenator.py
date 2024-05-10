@@ -13,12 +13,12 @@ log = logging.getLogger(__name__)
 
 # Todo: check this algorithm again
 
-class MstConcatenate(NetworkConcatenator):
+class MstConcatenator(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer, n_connecting_edges: int = 3,
                  nprocesses: int = 1,
                  _initial_edge_lister: NetworkConcatenator = None):
         """
-        This concatenator is connnecting two Networks with a kruskal like
+        This concatenators is connnecting two Networks with a kruskal like
          approach up to the number of connecting edges.
 
         Parameters

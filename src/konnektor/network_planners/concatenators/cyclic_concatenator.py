@@ -4,7 +4,7 @@ from typing import Iterable
 from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 
 from ._abstract_network_concatenator import NetworkConcatenator
-from .max_concatenator import MaxConcatenate
+from .max_concatenator import MaxConcatenator
 from .._networkx_implementations import MstNetworkGenerator
 
 log = logging.getLogger(__name__)
@@ -12,13 +12,13 @@ log = logging.getLogger(__name__)
 
 # Todo: check this algorithm again
 
-class CyclicConcatenate(NetworkConcatenator):
+class CyclicConcatenator(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
                  n_connecting_cycles: int = 2,
                  cycle_sizes: Union[int, List[int]] = 3, nprocesses: int = 1,
                  _initial_edge_lister: NetworkConcatenator = None):
         """
-        This concatenator is connnecting two Networks with a kruskal like
+        This concatenators is connnecting two Networks with a kruskal like
         approach up to the number of connecting edges.
 
         Parameters
@@ -38,8 +38,8 @@ class CyclicConcatenate(NetworkConcatenator):
             (default: 1)
         """
         if _initial_edge_lister is None:
-            _initial_edge_lister = MaxConcatenate(mapper=mapper, scorer=scorer,
-                                                  nprocesses=nprocesses)
+            _initial_edge_lister = MaxConcatenator(mapper=mapper, scorer=scorer,
+                                                   nprocesses=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=MstNetworkGenerator(),

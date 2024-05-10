@@ -9,7 +9,7 @@ from .network_planners import (MaximalNetworkGenerator,
                                CyclicNetworkGenerator,
                                TwoDimensionalNetworkGenerator,
                                StarrySkyNetworkGenerator,
-                               MstConcatenate,
+                               MstConcatenator,
                                )
 from .network_tools import concatenate, merge, append_node, \
     delete_transformation, delete_component

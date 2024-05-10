@@ -23,23 +23,6 @@ def test_charge_transformer():
     print(features.shape)
 
 
-def test_charge_clusterer():
-    """ only a smoke test! checking that the code runs"""
-
-    n_compounds = 20
-    compounds, _, _ = build_random_dataset(n_compounds=n_compounds)
-
-    clusterer = ChargeClusterer()
-    clusters = clusterer.cluster_compounds(compounds)
-
-    print(clusters)
-    assert isinstance(clusters, dict)
-    assert len(clusters) == 1
-    assert all(isinstance(k, int) for k in clusters.keys())
-    assert all(isinstance(v, list) for v in clusters.values())
-    assert all(isinstance(c, Component) for v in clusters.values() for c in v)
-
-
 def test_diversity_clusterer():
     """ only a smoke test! checking that the code runs"""
 

@@ -5,9 +5,9 @@ import pytest
 
 from konnektor import network_planners
 from konnektor.network_planners import MaximalNetworkGenerator
-from .conf import (atom_mapping_basic_test_files, toluene_vs_others,
-                   mol_from_smiles, genScorer,
-                   GenAtomMapper, BadMapper, ErrorMapper)
+from konnektor.tests.network_planners.conf import (atom_mapping_basic_test_files, toluene_vs_others,
+                                                   mol_from_smiles, genScorer,
+                                                   GenAtomMapper, BadMapper, ErrorMapper)
 
 @pytest.mark.parametrize('n_process', [1, 2])
 @pytest.mark.parametrize('with_progress', [True, False])
