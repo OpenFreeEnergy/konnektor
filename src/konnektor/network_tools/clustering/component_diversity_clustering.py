@@ -80,8 +80,8 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         # Compounds label
         cluster_components = {}
         for clusterID in np.unique(labels):
-            cluster_components[int(clusterID)] = [components[i] for i, l in
-                                             enumerate(labels) if
-                                             (l == clusterID)]
+            cluster_components[int(clusterID)] = [components[i] for i, cid in
+                                                  enumerate(labels) if
+                                                  (cid == clusterID)]
 
         return cluster_components

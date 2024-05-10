@@ -35,7 +35,8 @@ def delete_transformation(network: LigandNetwork,
 def delete_component(network: LigandNetwork,
                      component: Component) -> LigandNetwork:
     """
-    Remove the desired component, which is a node of the graph, and its edges from the network.
+    Remove the desired component, which is a node of the graph, and its
+    edges from the network.
 
     Parameters
     ----------
@@ -46,10 +47,10 @@ def delete_component(network: LigandNetwork,
     Returns
     -------
     LigandNetwork
-        returns a copy of the ligand network without the removed component and edges containing the component.
+        returns a copy of the ligand network without the removed component
+         and edges containing the component.
     """
-    f = lambda n: n != component
-    filtered_nodes = list(filter(f, network.nodes))
+    filtered_nodes = list(filter(lambda n: n != component, network.nodes))
 
     f = lambda m: component not in (m.componentA, m.componentB)
     filtered_edges = list(filter(f, network.edges))

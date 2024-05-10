@@ -63,8 +63,8 @@ def merge(networks: list[LigandNetwork]) -> LigandNetwork:
     for networkB in networks[1:]:
         connecting_nodes = networkA.nodes.difference(networkB.nodes)
 
-        if  len(connecting_nodes) >= len(networkB.nodes):
-            raise ValueError("No shared Nodes between Networks" )
+        if len(connecting_nodes) >= len(networkB.nodes):
+            raise ValueError("No shared Nodes between Networks")
 
         merged_nodes.extend(list(networkA.nodes.union(networkB.nodes)))
         merged_edges.extend(list(networkA.edges.union(networkB.edges)))

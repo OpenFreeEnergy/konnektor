@@ -14,7 +14,8 @@ def test_concatenate_mst_networks(n_sub_networks):
     n_compounds = 20
 
     networks = build_n_random_mst_network(n_compounds=n_compounds,
-                                          sub_networks=n_sub_networks, overlap=0,
+                                          sub_networks=n_sub_networks,
+                                          overlap=0,
                                           rand_seed=42)
     concatenator = MstConcatenate(genMapper(),
                                   genScorer(n_scores=n_compounds ** 2),
@@ -45,6 +46,7 @@ def test_append_node():
     new_network = append_node(network, compounds[0], concatenator=concatenator)
 
     assert len(new_network.nodes) == n_compounds
+    # network edges + the network connecting edges
     assert len(new_network.edges) == len(
-        network.edges) + n_connecting_edges  # network edges + the network connecting edges
+        network.edges) + n_connecting_edges
     assert get_is_connected(new_network)
