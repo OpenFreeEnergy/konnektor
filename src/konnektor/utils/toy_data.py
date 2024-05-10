@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Tuple
 
 from rdkit import Chem
 from rdkit.Chem import AllChem
@@ -138,6 +138,48 @@ def build_random_mst_network(n_compounds=30, rand_seed=42, uni_score: bool = Fal
 
     ligand_network = planner(compounds)
     return ligand_network
+
+
+def build_two_random_mst_network(n_compounds=30, rand_seed=42, sub_networks: int =2, overlap:int =1, uni_score: bool = False) -> Tuple[LigandNetwork, LigandNetwork]:
+    """
+    This function returns a randomized toy mst graph.
+
+    Parameters
+    ----------
+    n_compounds:int
+        number of artificial compounds
+    rand_seed: int
+        random seed number
+    uni_score:
+    whether to use always the score of 1 for an atom mapping
+
+    Returns
+    -------
+    LigandNetwork
+        the toy mst network
+    """
+    from konnektor.utils.toy_data import build_random_dataset
+    compounds, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=rand_seed)
+
+    if uni_score:
+        genScorer.get_score = lambda compound: 1
+
+    from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
+    planner = MinimalSpanningTreeNetworkGenerator(mapper=genMapper, scorer=genScorer)
+
+    networks = []
+    step = n_compounds//sub_networks
+    for i in range(sub_networks):
+        if i == sub_networks-1:
+            sub_components = compounds[i * step - overlap:]
+        elif i>0:
+            sub_components = compounds[i * step - overlap:(i + 1) * step]
+        else:
+            sub_components = compounds[i*step:(i+1)*step]
+        networks.append(planner(sub_components))
+
+    return networks
+
 
 
 def build_random_fully_connected_network(n_compounds=30, rand_seed=42, uni_score: bool = False) -> LigandNetwork:

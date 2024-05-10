@@ -6,28 +6,28 @@ from gufe import LigandNetwork, LigandAtomMapping
 from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
 from scikit_mol.fingerprints import RDKitFingerprintTransformer
-from konnektor.network_tools.clustering._abstract_clusterer import _AbstractClusterer
 
+from .clustering._abstract_clusterer import _AbstractClusterer
 
 def delete_transformation(network: LigandNetwork,
-                          edge: Union[LigandAtomMapping, tuple[Component, Component]]) -> LigandNetwork:
+                          transformation: Union[LigandAtomMapping, tuple[Component, Component]]) -> LigandNetwork:
     """
     Remove the desired edge from the network
 
     Parameters
     ----------
     network: LigandNetwork
-    edge: :Union[LigandAtomMapping, tuple[Component, Component]]
+    transformation: :Union[LigandAtomMapping, tuple[Component, Component]]
 
     Returns
     -------
     LigandNetwork
         returns a copy of the ligand network without the removed edge.
     """
-    if (isinstance(edge, LigandAtomMapping)):
-        edge = (edge.componentA, edge.componentB)
+    if (isinstance(transformation, LigandAtomMapping)):
+        transformation = (transformation.componentA, transformation.componentB)
 
-    f = lambda m: len({m.componentA, m.componentB}.union(edge)) != 2
+    f = lambda m: len({m.componentA, m.componentB}.union(transformation)) != 2
     filtered_edges = list(filter(f, network.edges))
 
     return LigandNetwork(edges=filtered_edges, nodes=network.nodes)
@@ -54,6 +54,8 @@ def delete_component(network: LigandNetwork,
 
     f = lambda m: component not in (m.componentA, m.componentB)
     filtered_edges = list(filter(f, network.edges))
+
+    new_ligand_network =LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
 
     return LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
 
