@@ -1,3 +1,6 @@
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
+
 import numpy as np
 import pytest
 from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent, LigandNetwork

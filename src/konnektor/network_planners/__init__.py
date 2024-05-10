@@ -1,3 +1,6 @@
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
+
 # Network Generators
 from .generators.heuristic_maximal_network_generator import HeuristicMaximalNetworkGenerator
 from .generators.maximal_network_generator import MaximalNetworkGenerator
