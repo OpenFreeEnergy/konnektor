@@ -3,14 +3,13 @@ from typing import Iterable, Union
 from gufe import Component
 from gufe import LigandNetwork, LigandAtomMapping
 
-from sklearn.base import TransformerMixin, ClusterMixin
-from sklearn.cluster import KMeans
-from scikit_mol.fingerprints import RDKitFingerprintTransformer
-from konnektor.network_tools.clustering._abstract_clusterer import _AbstractClusterer
+from konnektor.network_tools.clustering._abstract_clusterer import \
+    _AbstractClusterer
 
 
 def delete_transformation(network: LigandNetwork,
-                          edge: Union[LigandAtomMapping, tuple[Component, Component]]) -> LigandNetwork:
+                          edge: Union[LigandAtomMapping, tuple[
+                              Component, Component]]) -> LigandNetwork:
     """
     Remove the desired edge from the network
 
@@ -59,7 +58,7 @@ def delete_component(network: LigandNetwork,
 
 
 def cluster_components(compounds: Iterable[Component],
-                       clusterer:_AbstractClusterer
+                       clusterer: _AbstractClusterer
                        ) -> dict[int, list[Component]]:
     """
     This is a helper function for using the clustering alsgorithms.

@@ -69,6 +69,7 @@ def merge(networks: list[LigandNetwork]) -> LigandNetwork:
         merged_nodes.extend(list(networkA.nodes.union(networkB.nodes)))
         merged_edges.extend(list(networkA.edges.union(networkB.edges)))
 
-    merged_network = LigandNetwork(edges=set(merged_edges), nodes=set(merged_nodes))
+    merged_network = LigandNetwork(edges=set(merged_edges),
+                                   nodes=set(merged_nodes))
 
     return merged_network
