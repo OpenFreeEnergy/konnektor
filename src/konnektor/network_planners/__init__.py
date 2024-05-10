@@ -17,4 +17,4 @@ from .generators.cyclic_network_planner import CyclicNetworkGenerator
 from .generators.two_dimensional_network_planners import TwoDimensionalNetworkGenerator
 
 # Network Concatenation
-from .concatenator import MstConcatenate
+from .concatenators import MstConcatenate

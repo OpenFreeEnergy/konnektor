@@ -9,8 +9,8 @@ import gufe
 from gufe import LigandNetwork
 
 from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
-from .conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
-                   GenAtomMapper, BadMapper, ErrorMapper)
+from konnektor.tests.network_planners.conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
+                                                   GenAtomMapper, BadMapper, ErrorMapper)
 
 def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
     ligands = [atom_mapping_basic_test_files['toluene'],

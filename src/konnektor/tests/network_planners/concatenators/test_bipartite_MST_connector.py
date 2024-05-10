@@ -6,7 +6,7 @@ import numpy as np
 import networkx as nx
 
 from gufe import LigandNetwork
-from konnektor.network_planners.concatenator import MstConcatenate
+from konnektor.network_planners.concatenators import MstConcatenate
 from konnektor.tests.network_planners.conf import (GenAtomMapper, genScorer,
                                                    atom_mapping_basic_test_files, ligand_network_ab)
 

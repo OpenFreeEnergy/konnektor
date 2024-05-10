@@ -14,7 +14,7 @@ from ._abstract_network_generator import NetworkGenerator
 
 from .cyclic_network_planner import CyclicNetworkGenerator
 from .star_network_planner import StarNetworkGenerator
-from ..concatenator import MstConcatenate
+from ..concatenators import MstConcatenate
 from ...network_tools import append_node, concatenate_networks
 from ...network_tools.clustering.cluster_components import ComponentsDiversityClustering
 
@@ -41,11 +41,11 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
         sub_network_planners: Iterable[NetworkGenerator]
             The clusters, are then seperatley translated to sub networks by the sub_network_planners
         concatenator: MstConcatenate
-            The concatenator is connecting the different sub networks.
+            The concatenators is connecting the different sub networks.
         mapper: AtomMapper
-            the atom mapper is required, to define the connection between two ligands, if only concatenator or ligandPlanner classes are passed
+            the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
         scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenator or ligandPlanner classes are passed
+            scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         nprocesses: int
@@ -163,9 +163,9 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
         clusterer: ComponentsDiversityClustering
             This class is seperating the Components along the first dimension.
         mapper: AtomMapper
-            the atom mapper is required, to define the connection between two ligands, if only concatenator or ligandPlanner classes are passed
+            the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
         scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenator or ligandPlanner classes are passed
+            scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         nprocesses: int

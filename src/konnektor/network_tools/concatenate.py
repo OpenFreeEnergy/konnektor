@@ -1,7 +1,7 @@
 from typing import Iterable
 from gufe import LigandNetwork, SmallMoleculeComponent
 
-from ..network_planners.concatenator.mst_concatenator import MstConcatenate
+from ..network_planners.concatenators.mst_concatenator import MstConcatenate
 
 
 def concatenate_networks(networks:Iterable[LigandNetwork],

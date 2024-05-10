@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 class MstConcatenate(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer, n_connecting_edges: int = 3, nprocesses: int = 1):
         """
-        This concatenator is connnecting two Networks with a kruskal like approach up to the number of connecting edges.
+        This concatenators is connnecting two Networks with a kruskal like approach up to the number of connecting edges.
 
         Parameters
         ----------

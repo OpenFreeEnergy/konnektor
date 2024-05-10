@@ -51,12 +51,12 @@ class NetworkGenerator(NetworkPlanner):
             self.nprocesses = nprocesses
 
     @abc.abstractmethod
-    def generate_ligand_network(self, compounds: Iterable[Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Plan a Network which connects all ligands following a given algorithm cost
 
         Parameters
         ----------
-        compounds : Iterable[Component]
+        components : Iterable[Component]
         the ligands to include in the Network
 
         Returns
