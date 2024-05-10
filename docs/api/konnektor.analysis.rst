@@ -2,7 +2,7 @@
 konnektor.network\_planner
 ================================
 
-.. automodule:: kartograf.atom_aligner
+.. automodule:: konnektor.network_planners
    :members:
    :undoc-members:
    :show-inheritance:
