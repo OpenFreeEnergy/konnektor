@@ -40,6 +40,8 @@ def merge(networks: list[LigandNetwork]) -> LigandNetwork:
     least one node needs to be present in network1 and network2. If this is
     not the case, use the network concatenators.
 
+    Todo: find a mergable path in multiple sets of networks
+
     Parameters
     ----------
     networks: list[LigandNetwork]
@@ -52,7 +54,7 @@ def merge(networks: list[LigandNetwork]) -> LigandNetwork:
     """
 
     # merge_path
-    # Todo: find a mergeable path
+    # Todo: Implement find a mergeable path
 
     # do merging
     networkA = networks[0]
@@ -67,6 +69,6 @@ def merge(networks: list[LigandNetwork]) -> LigandNetwork:
         merged_nodes.extend(list(networkA.nodes.union(networkB.nodes)))
         merged_edges.extend(list(networkA.edges.union(networkB.edges)))
 
-    merged_network = LigandNetwork(edges=merged_edges, nodes=merged_nodes)
+    merged_network = LigandNetwork(edges=set(merged_edges), nodes=set(merged_nodes))
 
     return merged_network

@@ -11,7 +11,7 @@ from .network_planners import (MaximalNetworkGenerator,
                                StarrySkyNetworkGenerator,
                                MstConcatenate,
                                )
-from .network_tools import concatenate, merge, append_node, delete_transformation, cluster_compound
+from .network_tools import concatenate, merge, append_node, delete_transformation, cluster_components
 
 from . import network_analysis
 from .visualization import draw_ligand_network

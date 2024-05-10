@@ -1,11 +1,11 @@
 from typing import Iterable
 from gufe import LigandNetwork, Component
 
-from ..network_planners.concatenator.mst_concatenator import MstConcatenate
+from ..network_planners.concatenator._abstract_network_concatenator import NetworkConcatenator
 
 
 def concatenate_networks(networks: Iterable[LigandNetwork],
-                         concatenator) -> LigandNetwork:
+                         concatenator: NetworkConcatenator) -> LigandNetwork:
     """
     Concatenate networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
@@ -16,6 +16,8 @@ def concatenate_networks(networks: Iterable[LigandNetwork],
     ----------
     networks: Iterable[LigandNetwork]
         Network 1 for merging
+    concatenator: NetworkConcatenator
+        A network planner, that concatenates networks.
 
     Returns
     -------
@@ -30,9 +32,9 @@ def concatenate_networks(networks: Iterable[LigandNetwork],
 
 def append_node(network: LigandNetwork,
                 component: Component,
-                concatenator: MstConcatenate) -> LigandNetwork:
+                concatenator: NetworkConcatenator) -> LigandNetwork:
     """
-    Add one node to the network,
+    Add one node to the network, based on the provided concatenator algorithm.
 
     Parameters
     ----------
@@ -40,6 +42,8 @@ def append_node(network: LigandNetwork,
         Network 1 for merging
     component: Component
         append node to network
+    concatenator: NetworkConcatenator
+        A network planner, that concatenates networks.
 
     Returns
     -------
