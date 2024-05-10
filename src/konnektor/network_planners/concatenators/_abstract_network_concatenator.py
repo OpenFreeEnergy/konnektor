@@ -3,10 +3,11 @@ import logging
 from typing import Iterable
 
 from gufe import AtomMapper
-from gufe import LigandNetwork, Component
+from gufe import LigandNetwork
 
-from .._networkx_implementations._abstract_network_generator import _AbstractNetworkGenerator
 from ..NetworkPlanner import NetworkPlanner
+from .._networkx_implementations._abstract_network_generator import \
+    _AbstractNetworkGenerator
 
 log = logging.getLogger(__name__)
 
@@ -19,8 +20,9 @@ class NetworkConcatenator(NetworkPlanner):
                  network_generator: _AbstractNetworkGenerator,
                  nprocesses: int = 1,
                  _initial_edge_lister=None):
-        """This class is an implementation for the LigandNetworkPlanner interface.
-        It defines the std. class for a Konnektor LigandNetworkPlanner
+        """This class is an implementation for the LigandNetworkPlanner
+        interface. It defines the std. class for a
+        Konnektor LigandNetworkPlanner
 
         Parameters
         ----------
@@ -31,10 +33,13 @@ class NetworkConcatenator(NetworkPlanner):
         scorer : AtomMappingScorer
             any callable which takes a AtomMapping and returns a float
         nprocesses: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            number of processes that can be used for the network generation.
+            (default: 1)
         _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
+            this LigandNetworkPlanner is used to give the initial set of edges.
+             For standard usage, the Maximal NetworPlanner is used.
+            However in large scale approaches, it might be interesting to use
+             the heuristicMaximalNetworkPlanner. (default: None)
 
         """
 
@@ -49,14 +54,16 @@ class NetworkConcatenator(NetworkPlanner):
         # pass on the parallelization to the edge lister
         # edge lister performs usually the most expensive task!
         # So parallelization is most important here.
-        if self._initial_edge_lister is not None and hasattr(self._initial_edge_lister, "nprocesses"):
+        if self._initial_edge_lister is not None and hasattr(
+                self._initial_edge_lister, "nprocesses"):
             self.nprocesses = nprocesses
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
     @abc.abstractmethod
-    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[
+        LigandNetwork]) -> LigandNetwork:
         """
 
         Parameters
