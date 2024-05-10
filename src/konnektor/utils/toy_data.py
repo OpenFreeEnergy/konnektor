@@ -140,7 +140,7 @@ def build_random_mst_network(n_compounds=30, rand_seed=42, uni_score: bool = Fal
     return ligand_network
 
 
-def build_two_random_mst_network(n_compounds=30, rand_seed=42, sub_networks: int =2, overlap:int =1, uni_score: bool = False) -> Tuple[LigandNetwork, LigandNetwork]:
+def build_n_random_mst_network(n_compounds=30, rand_seed=42, sub_networks: int =2, overlap:int =1, uni_score: bool = False) -> Tuple[LigandNetwork, LigandNetwork]:
     """
     This function returns a randomized toy mst graph.
 

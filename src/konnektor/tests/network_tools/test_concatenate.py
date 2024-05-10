@@ -4,7 +4,7 @@ import pytest
 from konnektor.network_tools.concatenate import concatenate_networks, append_node
 
 
-from konnektor.utils.toy_data import build_two_random_mst_network, build_random_mst_network, build_random_dataset, genScorer, genMapper
+from konnektor.utils.toy_data import build_n_random_mst_network, build_random_mst_network, build_random_dataset, genScorer, genMapper
 from konnektor.network_planners import MstConcatenate
 from konnektor.network_analysis import get_is_connected
 
@@ -14,7 +14,7 @@ def test_concatenate_mst_networks(n_sub_networks):
     n_connecting_edges = 2
     n_compounds = 20
 
-    networks = build_two_random_mst_network(n_compounds=n_compounds, sub_networks=n_sub_networks, rand_seed=42)
+    networks = build_n_random_mst_network(n_compounds=n_compounds, sub_networks=n_sub_networks, rand_seed=42)
     concatenator  = MstConcatenate(genMapper(), genScorer(n_scores=n_compounds**2), n_connecting_edges=n_connecting_edges)
 
     new_network = concatenate_networks(networks, concatenator)
