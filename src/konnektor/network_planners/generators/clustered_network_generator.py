@@ -1,38 +1,40 @@
 import functools
 import inspect
 import logging
-from tqdm import tqdm
 from typing import Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
-
 # Clustering
-from scikit_mol.fingerprints import RDKitFingerprintTransformer, MorganFingerprintTransformer
+from scikit_mol.fingerprints import RDKitFingerprintTransformer, \
+    MorganFingerprintTransformer
 from sklearn.cluster import HDBSCAN, KMeans
+from tqdm import tqdm
 
+from konnektor.network_tools.clustering.component_diversity_clustering import \
+    ComponentsDiversityClusterer
 from ._abstract_network_generator import NetworkGenerator
-
-from .cyclic_network_planner import CyclicNetworkGenerator
-from .star_network_planner import StarNetworkGenerator
+from .cyclic_network_generator import CyclicNetworkGenerator
+from .star_network_generator import StarNetworkGenerator
 from ..concatenators import MstConcatenator
 from ...network_tools import append_node, concatenate_networks
-from konnektor.network_tools.clustering.component_diversity_clustering import ComponentsDiversityClusterer
+from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 
 # Todo: go over this again.
-#Todo: Better Naming!
-class TwoDimensionalNetworkGenerator(NetworkGenerator):
+class ClusteredNetworkGenerator(NetworkGenerator):
     def __init__(self,
-                 sub_network_planners: Iterable[NetworkGenerator] = (CyclicNetworkGenerator,),
+                 sub_network_planners: Iterable[NetworkGenerator] = (
+                 CyclicNetworkGenerator,),
                  concatenator: MstConcatenator = MstConcatenator,
                  clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
-                     featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)),
-                 mapper: AtomMapper = None, scorer = None,
-                 nprocesses: int = 1, progress: bool = False
+                     featurize=RDKitFingerprintTransformer(),
+                     cluster=KMeans(n_clusters=3)),
+                 mapper: AtomMapper = None, scorer=None,
+                 n_processes: int = 1, progress: bool = False
                  ):
-        ''' Implements the general concept of multidimensional networks.
+        ''' Implements the general concept of nd-space clustered networks.
 
         Parameters
         ----------
@@ -48,7 +50,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
             scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
         '''
@@ -58,20 +60,25 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
         self.clusterer = clusterer
 
         if hasattr(self.clusterer.cluster, "n_jobs"):
-            self.clusterer.cluster.njobs = nprocesses
+            self.clusterer.cluster.njobs = n_processes
+
+        if not isinstance(sub_network_planners, list):
+            sub_network_planners = [sub_network_planners]
 
         self.sub_network_planners = []
         for sub_net_planner in sub_network_planners:
             if inspect.isclass(sub_net_planner):
-                sub_net_planner_obj = sub_net_planner(mapper=mapper, scorer=scorer)
+                sub_net_planner_obj = sub_net_planner(mapper=mapper,
+                                                      scorer=scorer)
             else:
                 sub_net_planner_obj = sub_net_planner
-            sub_net_planner_obj.nprocesses = nprocesses
+            sub_net_planner_obj.n_processes = n_processes
             self.sub_network_planners.append(sub_net_planner_obj)
 
-        self.concatenator = concatenator(mapper=mapper, scorer=scorer) if inspect.isclass(
+        self.concatenator = concatenator(mapper=mapper,
+                                         scorer=scorer) if inspect.isclass(
             concatenator) else concatenator
-        self.concatenator.nprocesses = nprocesses
+        self.concatenator.nprocesses = n_processes
         self.progress = progress
 
     def generate_ligand_network(self,
@@ -93,7 +100,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
         # Step 1: Seperate nodes by diversity
         log.info("Clustering")
         self.clusters = self.clusterer.cluster_compounds(components)
-        log.info("Clusters: "+str(self.clusters))
+        log.info("Clusters: " + str(self.clusters))
 
         if len(self.clusters) == 1 and -1 in self.clusters:
             print(self.clusters.keys())
@@ -103,7 +110,8 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
         log.info("Build Sub-Networks")
         self.sub_networks = []
         if self.progress is True:
-            progress = functools.partial(tqdm, total=len(self.clusters), delay=1.5,
+            progress = functools.partial(tqdm, total=len(self.clusters),
+                                         delay=1.5,
                                          desc="Build Cluster Networks")
         else:
             progress = lambda x: x
@@ -113,7 +121,8 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
                 if (len(mols) > 1):
                     for network_planner in self.sub_network_planners:
                         try:
-                            sub_network = network_planner.generate_ligand_network(mols)
+                            sub_network = network_planner.generate_ligand_network(
+                                mols)
                             self.sub_networks.append(sub_network)
                             break
                         except Exception as err:
@@ -129,29 +138,34 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
             concat_network = self.sub_networks[0]
         else:
             concat_network = concatenate_networks(networks=self.sub_networks,
-                                              concatenator=self.concatenator)
+                                                  concatenator=self.concatenator)
 
         # step 4: has the clustering a noise cluster
         if -1 in self.clusters:
             if self.progress is True:
-                progress = functools.partial(tqdm, total=len(self.clusters[-1]), delay=1.5,
+                progress = functools.partial(tqdm, total=len(self.clusters[-1]),
+                                             delay=1.5,
                                              desc="add Noise Mols")
             else:
                 progress = lambda x: x
 
             for mol in progress(self.clusters[-1]):
-                concat_network = append_node(network=concat_network, component=mol,
+                concat_network = append_node(network=concat_network,
+                                             component=mol,
                                              concatenator=self.concatenator)
 
         return concat_network
 
-class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
+
+class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
     def __init__(self,
-                 clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
-                     featurize=MorganFingerprintTransformer(), cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1/2048)),
-                 mapper: AtomMapper = None,
-                 scorer = None,
-                 nprocesses: int = 1, progress: bool = False
+                 mapper: AtomMapper,
+                 scorer,
+                 clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
+                     featurize=MorganFingerprintTransformer(),
+                     cluster=HDBSCAN(metric="jaccard", min_cluster_size=3,
+                                     alpha=1 / 2048)),
+                 n_processes: int = 1, progress: bool = False
                  ):
         '''  The StarrySkyNetworkGenerator is an advanced network algorithm,
         that clusters the provided ligands, based on the clusterer class.
@@ -160,23 +174,23 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
 
         Parameters
         ----------
-        clusterer: ComponentsDiversityClusterer
-            This class is seperating the Components along the first dimension.
         mapper: AtomMapper
             the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
         scorer: AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
+        clusterer: ComponentsDiversityClusterer
+            This class is seperating the Components along the first dimension.
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
         '''
 
         super().__init__(clusterer=clusterer,
                          sub_network_planners=[StarNetworkGenerator],
-                         concatenator = MstConcatenator,
+                         concatenator=MstConcatenator,
                          mapper=mapper, scorer=scorer,
                          progress=progress,
-                         nprocesses=nprocesses,
+                         n_processes=n_processes,
                          )

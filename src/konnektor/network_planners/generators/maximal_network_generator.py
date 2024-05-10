@@ -11,7 +11,8 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
 class MaximalNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer, progress: bool = False, nprocesses: int = 1):
+    def __init__(self, mapper: AtomMapper, scorer, progress: bool = False,
+                 nprocesses: int = 1):
         """
         The Maximal Network planner builds for given set of compounds a fully connected graph under the assumption each component can be connected to another.
         The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
@@ -36,7 +37,8 @@ class MaximalNetworkGenerator(NetworkGenerator):
                          _initial_edge_lister=self)
         self.progress = progress
 
-    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[
+        Component]) -> LigandNetwork:
         """Create a network with all possible proposed mappings.
 
         This will attempt to create (and optionally score) all possible mappings
@@ -79,11 +81,13 @@ class MaximalNetworkGenerator(NetworkGenerator):
 
             mapping_generator = itertools.chain.from_iterable(
                 self.mapper.suggest_mappings(molA, molB)
-                for molA, molB in progress(itertools.combinations(components, 2))
+                for molA, molB in
+                progress(itertools.combinations(components, 2))
             )
             if self.scorer:
-                mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
-                            for mapping in mapping_generator]
+                mappings = [
+                    mapping.with_annotations({'score': self.scorer(mapping)})
+                    for mapping in mapping_generator]
             else:
                 mappings = list(mapping_generator)
 

@@ -7,7 +7,7 @@ from .network_planners import (MaximalNetworkGenerator,
                                NNodeEdgesNetworkGenerator,
                                MinimalSpanningTreeNetworkGenerator,
                                CyclicNetworkGenerator,
-                               TwoDimensionalNetworkGenerator,
+                               ClusteredNetworkGenerator,
                                StarrySkyNetworkGenerator,
                                MstConcatenator,
                                )

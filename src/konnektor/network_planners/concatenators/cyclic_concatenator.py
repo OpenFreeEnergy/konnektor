@@ -1,11 +1,11 @@
 import logging
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 
 from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
-from .._networkx_implementations import MstNetworkGenerator
+from .._networkx_implementations import MstNetworkAlgorithm
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
                  n_connecting_cycles: int = 2,
-                 cycle_sizes: Union[int, List[int]] = 3, nprocesses: int = 1,
+                 cycle_sizes: Union[int, list[int]] = 3, nprocesses: int = 1,
                  _initial_edge_lister: NetworkConcatenator = None):
         """
         This concatenators is connnecting two Networks with a kruskal like
@@ -31,8 +31,9 @@ class CyclicConcatenator(NetworkConcatenator):
             score between [0,1].
         n_connecting_cycles: int, optional
             build at least n cycles between th networks. (default: 2)
-        cycle_sizes: Union[int, List[int]], optional
-            build cycles of given size. (default:3)
+        cycle_sizes: Union[int, list[int]], optional
+            build cycles of given size. or allow a range of different size
+            by passing a list[int](default:3)
         nprocesses: int
             number of processes that can be used for the network generation.
             (default: 1)
@@ -42,7 +43,7 @@ class CyclicConcatenator(NetworkConcatenator):
                                                    nprocesses=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=MstNetworkGenerator(),
+                         network_generator=MstNetworkAlgorithm(),
                          nprocesses=nprocesses)
         self.n_connecting_edges = n_connecting_cycles
         self.cycle_sizes = cycle_sizes
@@ -73,7 +74,7 @@ class CyclicConcatenator(NetworkConcatenator):
         for ligandNetworkA, ligandNetworkB in itertools.combinations(
                 ligand_networks, 2):
             # Generate fully connected Bipartite Graph
-            ligands = list(ligandNetworkA.nodes) + list(ligandNetworkB.nodes)
+            ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
             fully_connected_graph = self._initial_edge_lister(
                 [ligandNetworkA, ligandNetworkB])
             bipartite_graph_mappings = list(fully_connected_graph.edges)
@@ -91,6 +92,6 @@ class CyclicConcatenator(NetworkConcatenator):
         concat_LigandNetwork = LigandNetwork(edges=selected_edges,
                                              nodes=set(selected_nodes))
 
-        log.info("Total Concatenated Edges:  " + str(len(selected_edges)))
+        log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
         return concat_LigandNetwork

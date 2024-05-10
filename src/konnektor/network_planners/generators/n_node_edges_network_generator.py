@@ -1,10 +1,11 @@
 from typing import Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
-from konnektor.network_planners._networkx_implementations import NNodeEdgesNetworkGenerator
 
+from konnektor.network_planners._networkx_implementations import \
+    NNodeEdgesNetworkAlgorithm
 from ._abstract_network_generator import NetworkGenerator
-from .maximal_network_planner import MaximalNetworkGenerator
+from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class NNodeEdgesNetworkGenerator(NetworkGenerator):
@@ -34,9 +35,12 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
 
         """
         if _initial_edge_lister is None:
-            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)
+            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
+                                                           scorer=scorer,
+                                                           nprocesses=nprocesses)
 
-        network_generator = NNodeEdgesNetworkGenerator(target_node_connectivity=target_node_connectivity)
+        network_generator = NNodeEdgesNetworkAlgorithm(
+            target_node_connectivity=target_node_connectivity)
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=network_generator,
                          nprocesses=nprocesses,
@@ -58,12 +62,13 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
     def target_node_connectivity(self, target_node_connectivity: int):
         self.network_generator.target_node_connectivity = target_node_connectivity
 
-    def generate_ligand_network(self, compounds: Iterable[Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[
+        Component]) -> LigandNetwork:
         """Plan a Network which connects all ligands with at least n edges
 
         Parameters
         ----------
-        compounds : Iterable[Component]
+        components : Iterable[Component]
         the ligands to include in the Network
 
         Returns
@@ -73,15 +78,20 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         """
         # Build Full Graph
         initial_networks = self._initial_edge_lister.generate_ligand_network(
-            components=compounds)
+            components=components)
         mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
-        edge_map = {(compounds.index(m.componentA), compounds.index(m.componentB)): m for m in mappings}
+        edge_map = {
+            (components.index(m.componentA), components.index(m.componentB)): m
+            for m in mappings}
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations['score'] for k in edges]
 
-        sg = self.network_generator.generate_network(edges=edges, weights=weights)
+        sg = self.network_generator.generate_network(edges=edges,
+                                                     weights=weights)
 
-        selected_mappings = [edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in sg.edges]
-        return LigandNetwork(edges=selected_mappings, nodes=compounds)
+        selected_mappings = [
+            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
+            for k in sg.edges]
+        return LigandNetwork(edges=selected_mappings, nodes=components)

@@ -2,7 +2,7 @@ import logging
 
 import networkx as nx
 
-from ._abstract_network_generator import _AbstractNetworkConcatenator
+from ._abstract_network_algorithm import _AbstractNetworkConcatenator
 
 log = logging.getLogger(__name__)
 

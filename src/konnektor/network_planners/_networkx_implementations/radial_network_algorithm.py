@@ -7,10 +7,10 @@ import networkx as nx
 import numpy as np
 from gufe import SmallMoleculeComponent
 
-from ._abstract_network_generator import _AbstractNetworkGenerator
+from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 
-class RadialNetworkGenerator(_AbstractNetworkGenerator):
+class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
     def __init__(self, metric_aggregation_method: Callable = None):
         self.metric_aggregation_method = metric_aggregation_method
@@ -19,13 +19,18 @@ class RadialNetworkGenerator(_AbstractNetworkGenerator):
         nodes = set([n for e in edges for n in e])
         edge_weights = list(zip(edges, weights))
 
-        node_scores = {n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for n in nodes}
-        filtered_node_scores = dict(filter(lambda x: len(x[1]) != len(nodes), node_scores.items()))
+        node_scores = {n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for
+                       n in nodes}
+        filtered_node_scores = dict(
+            filter(lambda x: len(x[1]) != len(nodes), node_scores.items()))
 
-        if (len(filtered_node_scores) == 0):  # Todo: allow relaxed criterion here.
-            raise ValueError("Could not find a single node connecting all edges!")
+        if (
+                len(filtered_node_scores) == 0):  # Todo: allow relaxed criterion here.
+            raise ValueError(
+                "Could not find a single node connecting all edges!")
 
-        aggregated_scores = list(map(lambda x: (x[0], np.sum(x[1])), filtered_node_scores.items()))
+        aggregated_scores = list(
+            map(lambda x: (x[0], np.sum(x[1])), filtered_node_scores.items()))
         sorted_node_scores = list(sorted(aggregated_scores, key=lambda x: x[1]))
 
         opt_node = sorted_node_scores[0]
@@ -67,7 +72,8 @@ class RadialNetworkGenerator(_AbstractNetworkGenerator):
         """
 
         if (central_node is None):
-            central_node, avg_score = self._central_lig_selection(edges=edges, weights=weights)
+            central_node, avg_score = self._central_lig_selection(edges=edges,
+                                                                  weights=weights)
 
         wedges = []
         for edge, weight in zip(edges, weights):
@@ -79,6 +85,7 @@ class RadialNetworkGenerator(_AbstractNetworkGenerator):
 
         self.radial_graph = nx.Graph()
         [self.radial_graph.add_node(n) for n in nodes]
-        self.radial_graph.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], e[2]) for e in wedges])
+        self.radial_graph.add_weighted_edges_from(
+            ebunch_to_add=[(e[0], e[1], e[2]) for e in wedges])
 
         return self.radial_graph

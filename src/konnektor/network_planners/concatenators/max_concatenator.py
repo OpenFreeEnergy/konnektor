@@ -56,9 +56,11 @@ class MaxConcatenator(NetworkConcatenator):
 
         """
 
-        log.info("Number of edges in individual networks:\n " + str(
-            sum([len(s.edges) for s in ligand_networks])) +
-                 "/ " + str([len(s.edges) for s in ligand_networks]))
+        log.info(
+            f"Number of edges in individual networks:\n"
+            f"{sum([len(s.edges) for s in ligand_networks])}/"
+            f"{[len(s.edges) for s in ligand_networks]}")
+
         selected_edges = []
         selected_nodes = []
         for ligandNetworkA, ligandNetworkB in itertools.combinations(
@@ -86,6 +88,6 @@ class MaxConcatenator(NetworkConcatenator):
         concat_LigandNetwork = LigandNetwork(edges=selected_edges,
                                              nodes=set(selected_nodes))
 
-        log.info("Total Concatenated Edges:  " + str(len(selected_edges)))
+        log.info(f"Total Concatenated Edges: {len(selected_edges)} ")
 
         return concat_LigandNetwork

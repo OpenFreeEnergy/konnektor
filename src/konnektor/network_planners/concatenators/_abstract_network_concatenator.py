@@ -6,8 +6,8 @@ from gufe import AtomMapper
 from gufe import LigandNetwork
 
 from ..NetworkPlanner import NetworkPlanner
-from .._networkx_implementations._abstract_network_generator import \
-    _AbstractNetworkGenerator
+from .._networkx_implementations._abstract_network_algorithm import \
+    _AbstractNetworkAlgorithm
 
 log = logging.getLogger(__name__)
 
@@ -17,12 +17,11 @@ class NetworkConcatenator(NetworkPlanner):
     nprocesses: int
 
     def __init__(self, mapper: AtomMapper, scorer,
-                 network_generator: _AbstractNetworkGenerator,
+                 network_generator: _AbstractNetworkAlgorithm,
                  nprocesses: int = 1,
                  _initial_edge_lister=None):
-        """This class is an implementation for the LigandNetworkPlanner
-        interface. It defines the std. class for a
-        Konnektor LigandNetworkPlanner
+        """Base Class for the the LigandNetworkConcatenator classes.
+         It defines the std. class for a Konnektor LigandNetworkPlanner
 
         Parameters
         ----------

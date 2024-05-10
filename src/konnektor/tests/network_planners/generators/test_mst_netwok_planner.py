@@ -1,16 +1,17 @@
-
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
-import networkx as nx
-
 import gufe
+import networkx as nx
+import pytest
 from gufe import LigandNetwork
 
 from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
-from konnektor.tests.network_planners.conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
-                                                   GenAtomMapper, BadMapper, ErrorMapper)
+from konnektor.tests.network_planners.conf import (toluene_vs_others,
+                                                   atom_mapping_basic_test_files,
+                                                   mol_from_smiles, genScorer,
+                                                   GenAtomMapper, ErrorMapper)
+
 
 def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
     ligands = [atom_mapping_basic_test_files['toluene'],
@@ -18,7 +19,8 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
                ]
 
     mapper = GenAtomMapper()
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper,
+                                                  scorer=genScorer)
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
@@ -30,7 +32,8 @@ def minimal_spanning_network(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
 
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper,
+                                                  scorer=genScorer)
     network = planner.generate_ligand_network(components=others + [toluene])
 
     return network
@@ -40,7 +43,8 @@ def test_minimal_spanning_network(minimal_spanning_network, toluene_vs_others):
     tol, others = toluene_vs_others
     assert len(minimal_spanning_network.nodes) == len(others) + 1
     for edge in minimal_spanning_network.edges:
-        assert edge.componentA_to_componentB != {0: 0}  # lomap should find something
+        assert edge.componentA_to_componentB != {
+            0: 0}  # lomap should find something
 
 
 def test_minimal_spanning_network_connectedness(minimal_spanning_network):
@@ -71,7 +75,7 @@ def test_minimal_spanning_network_regression(minimal_spanning_network):
     ])
 
     assert len(edge_ids) == len(ref)
-    #assert edge_ids == ref #This should not be tested here! go to MST generator
+    # assert edge_ids == ref #This should not be tested here! go to MST generator
 
 
 @pytest.mark.skip
@@ -84,5 +88,5 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     with pytest.raises(RuntimeError, match="Unable to create edges"):
         planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper,
                                                       scorer=genScorer)
-        network = planner.generate_ligand_network(compounds=others + [toluene, nimrod])
-
+        network = planner.generate_ligand_network(
+            compounds=others + [toluene, nimrod])

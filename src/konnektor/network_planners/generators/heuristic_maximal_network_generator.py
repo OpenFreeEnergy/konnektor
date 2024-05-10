@@ -9,10 +9,12 @@ from tqdm.auto import tqdm
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
-#Todo: is graph connectivity ensured?
+
+# Todo: is graph connectivity ensured?
 
 class HeuristicMaximalNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer, n_samples: int = 100, progress: bool = False,
+    def __init__(self, mapper: AtomMapper, scorer, n_samples: int = 100,
+                 progress: bool = False,
                  nprocesses: int = 1):
         """
         The Heuristic Maximal Network planner builds for given set of compounds a set of edges per node build graph under the assumption each component can be connected to another.
@@ -43,7 +45,8 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         self.progress = progress
         self.n_samples = n_samples
 
-    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[
+        Component]) -> LigandNetwork:
         """Create a network with n randomly selected edges for possible proposed mappings.
 
         Parameters
@@ -64,8 +67,12 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         if len(components) > self.n_samples:
             sample_combinations = []
             for n in components:
-                sample_indices = np.random.choice(range(len(components)), size=self.n_samples, replace=False)
-                sample_combinations.extend([(n, components[i]) for i in sample_indices if n != components[i]])
+                sample_indices = np.random.choice(range(len(components)),
+                                                  size=self.n_samples,
+                                                  replace=False)
+                sample_combinations.extend(
+                    [(n, components[i]) for i in sample_indices if
+                     n != components[i]])
         else:
             sample_combinations = itertools.combinations(components, 2)
 
@@ -90,8 +97,9 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                 for molA, molB in progress(sample_combinations)
             )
             if self.scorer:
-                mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
-                            for mapping in mapping_generator]
+                mappings = [
+                    mapping.with_annotations({'score': self.scorer(mapping)})
+                    for mapping in mapping_generator]
             else:
                 mappings = list(mapping_generator)
 

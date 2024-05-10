@@ -3,7 +3,7 @@ import abc
 import networkx as nx
 
 
-class _AbstractNetworkGenerator(abc.ABC):
+class _AbstractNetworkAlgorithm(abc.ABC):
 
     def __int__(self):
         pass

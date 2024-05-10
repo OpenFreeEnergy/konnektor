@@ -1,6 +1,7 @@
-from ._abstract_network_generator import _AbstractNetworkGenerator, _AbstractNetworkConcatenator
-from .bipartite_match_connector import MatchingConcatenator
-from .cyclic_network_generator import CyclicNetworkGenerator
-from .mst_network_generator import MstNetworkGenerator
-from .n_nodes_edges_network_generator import NNodeEdgesNetworkGenerator
-from .radial_network_generator import RadialNetworkGenerator
+from ._abstract_network_algorithm import _AbstractNetworkAlgorithm, \
+    _AbstractNetworkConcatenator
+from .bipartite_match_algorithm import MatchingConcatenator
+from .cyclic_network_algorithm import CyclicNetworkAlgorithm
+from .mst_network_algorithm import MstNetworkAlgorithm
+from .n_nodes_edges_network_algorithm import NNodeEdgesNetworkAlgorithm
+from .radial_network_algorithm import RadialNetworkAlgorithm
