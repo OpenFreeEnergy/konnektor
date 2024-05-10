@@ -37,7 +37,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
-                                                           nprocesses=nprocesses)
+                                                           n_processes=nprocesses)
 
         network_generator = NNodeEdgesNetworkAlgorithm(
             target_node_connectivity=target_node_connectivity)

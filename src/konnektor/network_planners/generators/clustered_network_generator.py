@@ -164,7 +164,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
                  clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
                      featurize=MorganFingerprintTransformer(),
                      cluster=HDBSCAN(metric="jaccard", min_cluster_size=3,
-                                     alpha=1 / 2048)),
+                                     alpha=1/2048)),
                  n_processes: int = 1, progress: bool = False
                  ):
         '''  The StarrySkyNetworkGenerator is an advanced network algorithm,

@@ -23,7 +23,7 @@ def test_generate_maximal_network(toluene_vs_others, with_progress,
 
     planner = MaximalNetworkGenerator(
         mapper=mapper, scorer=scorer, progress=with_progress,
-        nprocesses=n_process)
+        n_processes=n_process)
     network = planner.generate_ligand_network(others + [toluene])
 
     assert len(network.nodes) == len(others) + 1

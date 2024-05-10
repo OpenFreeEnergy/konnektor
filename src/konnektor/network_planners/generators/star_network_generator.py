@@ -31,7 +31,7 @@ class StarNetworkGenerator(NetworkGenerator):
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
-                                                           nprocesses=nprocesses)
+                                                           n_processes=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=RadialNetworkAlgorithm(),

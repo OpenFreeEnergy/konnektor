@@ -12,7 +12,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer, progress: bool = False,
-                 nprocesses: int = 1):
+                 n_processes: int = 1):
         """
         The Maximal Network planner builds for given set of compounds a fully connected graph under the assumption each component can be connected to another.
         The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
@@ -27,13 +27,13 @@ class MaximalNetworkGenerator(NetworkGenerator):
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        nprocesses: int
+        n_processes: int
             number of processes that can be used for the network generation. (default: 1)
         """
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=None,
-                         nprocesses=nprocesses,
+                         nprocesses=n_processes,
                          _initial_edge_lister=self)
         self.progress = progress
 
