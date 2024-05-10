@@ -5,7 +5,6 @@ Guide to Konnektor
    :maxdepth: 2
    :caption: Applications:
 
-   guide/application_reindexing_problem
    guide/application_free_energies_system_representations
 
 
@@ -13,5 +12,5 @@ Guide to Konnektor
    :maxdepth: 2
    :caption: Algorithms:
 
-   guide/atom_mapping
+   guide/mst_network_planner
 

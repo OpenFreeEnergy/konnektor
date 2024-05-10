@@ -53,8 +53,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_static_path = ['_static']
 html_theme = 'ofe_sphinx_theme'
 autoclass_content = 'both'
-html_favicon = '_static/img/logo/konnektor_logo_style2.ico'
-html_logo = "_static/img/logo/konnektor_logo_style3.png"
+html_favicon = '_static/img/logo/konnektor_logo_style1.ico'
+html_logo = "_static/img/logo/konnektor_logo_style2.png"
 html_theme_options = {
     "logo": {
         "text": "Konnektor Documentation",
