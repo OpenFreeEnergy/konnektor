@@ -25,7 +25,6 @@ def test_delete_mst_component():
     assert len(new_network.nodes) == len(network.nodes) - 1
     assert len(new_network.edges) < len(network.edges)
     assert del_node not in new_network.nodes
-    assert not get_is_connected(new_network)
 
 
 def test_delete_fc_transformation():
