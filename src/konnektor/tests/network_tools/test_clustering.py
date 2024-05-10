@@ -3,7 +3,7 @@ from gufe import Component
 
 from konnektor.utils.toy_data import build_random_dataset
 from konnektor.network_tools.clustering.charge_clustering import ChargeClusterer
-from konnektor.network_tools.clustering.cluster_components import ComponentsDiversityClustering
+from konnektor.network_tools.clustering.component_diversity_clustering import ComponentsDiversityClusterer
 from konnektor.network_tools.clustering.auxilliary_featurizer import ChargeTransformer
 
 
@@ -43,7 +43,7 @@ def test_diversity_clusterer():
     n_compounds = 20
     compounds, _, _ = build_random_dataset(n_compounds=n_compounds)
 
-    clusterer = ComponentsDiversityClustering()
+    clusterer = ComponentsDiversityClusterer()
     clusters = clusterer.cluster_compounds(compounds)
 
     assert isinstance(clusters, dict)

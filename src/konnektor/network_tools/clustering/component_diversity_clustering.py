@@ -13,7 +13,7 @@ from ._abstract_clusterer import _AbstractClusterer
 log = logging.getLogger(__name__)
 log.setLevel(logging.WARNING)
 
-class ComponentsDiversityClustering(_AbstractClusterer):
+class ComponentsDiversityClusterer(_AbstractClusterer):
     def __init__(self, featurize:TransformerMixin = MorganFingerprintTransformer(),
                 cluster:ClusterMixin = KMeans(n_clusters=5, n_init="auto"),
                  n_processes:int = 1):

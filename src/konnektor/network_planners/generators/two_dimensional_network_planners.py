@@ -16,7 +16,7 @@ from .cyclic_network_planner import CyclicNetworkGenerator
 from .star_network_planner import StarNetworkGenerator
 from ..concatenator import MstConcatenate
 from ...network_tools import append_node, concatenate_networks
-from konnektor.network_tools.clustering.cluster_components import ComponentsDiversityClustering
+from konnektor.network_tools.clustering.component_diversity_clustering import ComponentsDiversityClusterer
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -27,7 +27,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
     def __init__(self,
                  sub_network_planners: Iterable[NetworkGenerator] = (CyclicNetworkGenerator,),
                  concatenator: MstConcatenate = MstConcatenate,
-                 clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
+                 clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
                      featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)),
                  mapper: AtomMapper = None, scorer = None,
                  nprocesses: int = 1, progress: bool = False
@@ -36,7 +36,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        clusterer: ComponentsDiversityClustering
+        clusterer: ComponentsDiversityClusterer
             This class is seperating the Components along the first dimension.
         sub_network_planners: Iterable[NetworkGenerator]
             The clusters, are then seperatley translated to sub networks by the sub_network_planners
@@ -147,7 +147,7 @@ class TwoDimensionalNetworkGenerator(NetworkGenerator):
 
 class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
     def __init__(self,
-                 clusterer: ComponentsDiversityClustering = ComponentsDiversityClustering(
+                 clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
                      featurize=MorganFingerprintTransformer(), cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1/2048)),
                  mapper: AtomMapper = None,
                  scorer = None,
@@ -160,7 +160,7 @@ class StarrySkyNetworkGenerator(TwoDimensionalNetworkGenerator):
 
         Parameters
         ----------
-        clusterer: ComponentsDiversityClustering
+        clusterer: ComponentsDiversityClusterer
             This class is seperating the Components along the first dimension.
         mapper: AtomMapper
             the atom mapper is required, to define the connection between two ligands, if only concatenator or ligandPlanner classes are passed
