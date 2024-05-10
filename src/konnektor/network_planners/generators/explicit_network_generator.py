@@ -1,15 +1,14 @@
-import functools
 from typing import Iterable, Tuple
 
 from gufe import Component, LigandNetwork, AtomMapper, AtomMappingScorer
-from tqdm.auto import tqdm
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
-class ExplicitNetworkGt puenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer, progress: bool = False, ):
+class ExplicitNetworkGenerator(NetworkGenerator):
+    def __init__(self, mapper: AtomMapper, scorer: AtomMappingScorer,
+                 n_processes: int = 1, show_progress: bool = False, ):
         """
 
         Parameters
@@ -18,12 +17,14 @@ class ExplicitNetworkGt puenerator(NetworkGenerator):
             the atom mapper is required, to define the connection between two ligands.
         scorer: AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        progress: bool, optional
+        n_processes: int
+            number of processes used to build the ligand network
+        show_progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         """
-        super().__init__(mapper=mapper, scorer=scorer,
+        super().__init__(mapper=mapper, scorer=scorer, nprocesses=n_processes,
                          network_generator=None)
-        self.progress = progress
+        self.progress = show_progress
 
     def generate_ligand_network(self,
                                 edges: Iterable[Tuple[Component, Component]],
@@ -46,27 +47,12 @@ class ExplicitNetworkGt puenerator(NetworkGenerator):
         """
         nodes = list(set([n for e in edges for n in e]))
 
-        if self.nprocesses > 1:  # go parallel
-            mappings = _parallel_map_scoring(
-                possible_edges=edges,
-                scorer=self.scorer,
-                mapper=self.mapper,
-                n_processes=self.nprocesses,
-                show_progress=self.progress)
-        else:  # sequential implementation
-            if self.progress:
-                # default is a tqdm progress bar
-                progress = functools.partial(tqdm, total=len(edges), delay=1.5)
-            else:
-                progress = lambda x: x
-
-            mappings = []
-            for compoundA, compoundB in progress(edges):
-                mappings = self.mapper.suggest_mappings(compoundA, compoundB)
-
-            if self.scorer:
-                mappings = [mapping.with_annotations({'score': self.scorer(mapping)})
-                            for mapping in mappings]
+        mappings = _parallel_map_scoring(
+            possible_edges=edges,
+            scorer=self.scorer,
+            mapper=self.mapper,
+            n_processes=self.nprocesses,
+            show_progress=self.progress)
 
         network = LigandNetwork(edges=mappings, nodes=nodes)
         return network

@@ -3,10 +3,10 @@
 
 import networkx as nx
 
-from ._abstract_network_generator import _AbstractNetworkGenerator
+from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 
-class MstNetworkGenerator(_AbstractNetworkGenerator):
+class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
     def generate_network(self, edges, weights, n_edges=None) -> nx.Graph:
         wedges = []

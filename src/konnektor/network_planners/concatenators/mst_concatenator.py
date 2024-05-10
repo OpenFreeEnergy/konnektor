@@ -5,7 +5,7 @@ from typing import Iterable
 from gufe import AtomMapper, LigandNetwork
 
 from ._abstract_network_concatenator import NetworkConcatenator
-from .._networkx_implementations import MstNetworkGenerator
+from .._networkx_implementations import MstNetworkAlgorithm
 from ..generators._parallel_mapping_pattern import _parallel_map_scoring
 
 log = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class MstConcatenator(NetworkConcatenator):
             (default: 1)
         """
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=MstNetworkGenerator(),
+                         network_generator=MstNetworkAlgorithm(),
                          nprocesses=nprocesses,
                          _initial_edge_lister=None)
         self.n_connecting_edges = n_connecting_edges

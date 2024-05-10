@@ -3,12 +3,12 @@
 
 import networkx as nx
 
-from ._abstract_network_generator import _AbstractNetworkGenerator
+from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 
 # Todo: check that the resulting graph is connnected.
 
-class NNodeEdgesNetworkGenerator(_AbstractNetworkGenerator):
+class NNodeEdgesNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
     def __init__(self, target_node_connectivity: int = 2):
         self.target_node_connectivity = target_node_connectivity
@@ -34,7 +34,8 @@ class NNodeEdgesNetworkGenerator(_AbstractNetworkGenerator):
                 if (edge not in final_edges): final_edges.append(edge)
                 node_con[e2] += 1
 
-            if (all(v == self.target_node_connectivity for v in node_con.values())):
+            if (
+            all(v == self.target_node_connectivity for v in node_con.values())):
                 break
 
         self.g = nx.Graph()

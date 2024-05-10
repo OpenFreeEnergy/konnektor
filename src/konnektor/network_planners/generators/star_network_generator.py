@@ -1,16 +1,18 @@
 from typing import Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
-from konnektor.network_planners._networkx_implementations import RadialNetworkGenerator
 
+from konnektor.network_planners._networkx_implementations import \
+    RadialNetworkAlgorithm
 from ._abstract_network_generator import NetworkGenerator
-from .maximal_network_planner import MaximalNetworkGenerator
+from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class StarNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer,
-                 nprocesses: int = 1, _initial_edge_lister: NetworkGenerator = None):
+                 nprocesses: int = 1,
+                 _initial_edge_lister: NetworkGenerator = None):
         """
         The Star Ligand Network Planner or Radial Ligand Network Planner, set's one ligand into the center of a graph and connects all other ligands to it.
 
@@ -27,10 +29,12 @@ class StarNetworkGenerator(NetworkGenerator):
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:
-            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)
+            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
+                                                           scorer=scorer,
+                                                           nprocesses=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=RadialNetworkGenerator(),
+                         network_generator=RadialNetworkAlgorithm(),
                          nprocesses=nprocesses,
                          _initial_edge_lister=_initial_edge_lister)
 
@@ -63,11 +67,13 @@ class StarNetworkGenerator(NetworkGenerator):
             mappings = initial_network.edges
 
             # Translate Mappings to graphable:
-            edge_map = {(components.index(m.componentA), components.index(m.componentB)): m for m in mappings}
+            edge_map = {(components.index(m.componentA),
+                         components.index(m.componentB)): m for m in mappings}
             edges = list(sorted(edge_map.keys()))
             weights = [edge_map[k].annotations['score'] for k in edges]
 
-            rg = self.network_generator.generate_network(edges=edges, weights=weights)
+            rg = self.network_generator.generate_network(edges=edges,
+                                                         weights=weights)
             selected_mappings = [edge_map[k] for k in rg.edges]
 
         else:  # Given central ligands: less effort. - Trivial Case
@@ -78,9 +84,10 @@ class StarNetworkGenerator(NetworkGenerator):
 
             mapping_generators = [self.mapper.suggest_mappings(
                 central_component, molA) for molA in components]
-            selected_mappings = [mapping.with_annotations({'score': scorer(mapping)})
-                                 for mapping_generator in mapping_generators for
-                                 mapping in mapping_generator]
+            selected_mappings = [
+                mapping.with_annotations({'score': scorer(mapping)})
+                for mapping_generator in mapping_generators for
+                mapping in mapping_generator]
 
         return LigandNetwork(edges=selected_mappings, nodes=components)
 

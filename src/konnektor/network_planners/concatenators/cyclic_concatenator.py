@@ -5,7 +5,7 @@ from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 
 from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
-from .._networkx_implementations import MstNetworkGenerator
+from .._networkx_implementations import MstNetworkAlgorithm
 
 log = logging.getLogger(__name__)
 
@@ -42,7 +42,7 @@ class CyclicConcatenator(NetworkConcatenator):
                                                    nprocesses=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=MstNetworkGenerator(),
+                         network_generator=MstNetworkAlgorithm(),
                          nprocesses=nprocesses)
         self.n_connecting_edges = n_connecting_cycles
         self.cycle_sizes = cycle_sizes

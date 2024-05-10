@@ -1,10 +1,11 @@
 from typing import Union, List, Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
-from konnektor.network_planners._networkx_implementations import CyclicNetworkGenerator as nx_CNG
 
+from konnektor.network_planners._networkx_implementations import \
+    CyclicNetworkAlgorithm as nx_CNG
 from ._abstract_network_generator import NetworkGenerator
-from .maximal_network_planner import MaximalNetworkGenerator
+from .maximal_network_generator import MaximalNetworkGenerator
 
 
 # Todo: check this algorithm again
@@ -12,8 +13,10 @@ from .maximal_network_planner import MaximalNetworkGenerator
 class CyclicNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer,
-                 node_present_in_cycles: int = 2, cycle_sizes: Union[int, List[int]] = 3,
-                 nprocesses: int = 1, _initial_edge_lister: NetworkGenerator = None):
+                 node_present_in_cycles: int = 2,
+                 cycle_sizes: Union[int, List[int]] = 3,
+                 nprocesses: int = 1,
+                 _initial_edge_lister: NetworkGenerator = None):
         """
         the cyclic ligand planner tries to build up a network in which each node is contained in n cycles of a given size or size range.
         In order to do so, and to be time efficient, the class uses greedy algorithms to solve the problem.
@@ -38,17 +41,21 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
         """
 
-        network_generator = nx_CNG(node_cycle_connectivity=node_present_in_cycles,
-                                                   sub_cycle_size_range=cycle_sizes)
+        network_generator = nx_CNG(
+            node_cycle_connectivity=node_present_in_cycles,
+            sub_cycle_size_range=cycle_sizes)
         if _initial_edge_lister is None:
-            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)
+            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
+                                                           scorer=scorer,
+                                                           nprocesses=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=network_generator,
                          nprocesses=nprocesses,
                          _initial_edge_lister=_initial_edge_lister)
 
-    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[
+        Component]) -> LigandNetwork:
         """
            generate a cyclic network for the given compounds.
 
@@ -71,12 +78,15 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
         # Translate Mappings to graphable:
         # print("prepare network")
-        edge_map = {(components.index(m.componentA), components.index(m.componentB)): m for m in mappings}
+        edge_map = {
+            (components.index(m.componentA), components.index(m.componentB)): m
+            for m in mappings}
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations['score'] for k in edges]
 
         # print("calculate Network")
-        cg = self.network_generator.generate_network(edges=edges, weights=weights)
+        cg = self.network_generator.generate_network(edges=edges,
+                                                     weights=weights)
 
         selected_mappings = [edge_map[k] for k in cg.edges]
         # print("Done")

@@ -1,16 +1,18 @@
-
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
-import networkx as nx
-
 import gufe
+import networkx as nx
+import pytest
 from gufe import LigandNetwork
 
-from konnektor.network_planners import RedundantMinimalSpanningTreeNetworkGenerator
-from konnektor.tests.network_planners.conf import (toluene_vs_others, atom_mapping_basic_test_files, mol_from_smiles, genScorer,
-                                                   GenAtomMapper, BadMapper, ErrorMapper)
+from konnektor.network_planners import \
+    RedundantMinimalSpanningTreeNetworkGenerator
+from konnektor.tests.network_planners.conf import (toluene_vs_others,
+                                                   atom_mapping_basic_test_files,
+                                                   mol_from_smiles, genScorer,
+                                                   GenAtomMapper, ErrorMapper)
+
 
 def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
     ligands = [atom_mapping_basic_test_files['toluene'],
@@ -31,7 +33,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
 def rminimal_spanning_network_redundancy(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
-    nred=3
+    nred = 3
     planner = RedundantMinimalSpanningTreeNetworkGenerator(mapper=mapper,
                                                            scorer=genScorer,
                                                            n_redundancy=nred)
@@ -40,15 +42,18 @@ def rminimal_spanning_network_redundancy(toluene_vs_others):
     return network, nred
 
 
-def test_minimal_spanning_network(rminimal_spanning_network_redundancy, toluene_vs_others):
+def test_minimal_spanning_network(rminimal_spanning_network_redundancy,
+                                  toluene_vs_others):
     tol, others = toluene_vs_others
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
     assert len(minimal_spanning_network.nodes) == len(others) + 1
     for edge in minimal_spanning_network.edges:
-        assert edge.componentA_to_componentB != {0: 0}  # lomap should find something
+        assert edge.componentA_to_componentB != {
+            0: 0}  # lomap should find something
 
 
-def test_minimal_spanning_network_connectedness(rminimal_spanning_network_redundancy):
+def test_minimal_spanning_network_connectedness(
+        rminimal_spanning_network_redundancy):
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
     found_pairs = set()
     for edge in minimal_spanning_network.edges:
@@ -61,7 +66,7 @@ def test_minimal_spanning_network_connectedness(rminimal_spanning_network_redund
 
 @pytest.mark.skip(reason="stochastically wrong and right")
 def test_minimal_spanning_network_regression(
-    rminimal_spanning_network_redundancy):
+        rminimal_spanning_network_redundancy):
     # this is stochastically failing and working.!
     nred = rminimal_spanning_network_redundancy[1]
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
@@ -81,10 +86,10 @@ def test_minimal_spanning_network_regression(
         ('2,6-dimethylnaphthalene', 'toluene'),
     ])
 
-    print(len(ref), nred, (len(ref)*nred)-nred, len(edge_ids))
-    assert len(edge_ids) == (len(ref)*nred)-nred
+    print(len(ref), nred, (len(ref) * nred) - nred, len(edge_ids))
+    assert len(edge_ids) == (len(ref) * nred) - nred
 
-    #assert edge_ids == ref #This should not be tested here! go to MST generator
+    # assert edge_ids == ref #This should not be tested here! go to MST generator
 
 
 @pytest.mark.skip
@@ -97,5 +102,5 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     with pytest.raises(RuntimeError, match="Unable to create edges"):
         planner = RedundantMinimalSpanningTreeNetworkGenerator(mapper=mapper,
                                                                scorer=genScorer)
-        network = planner.generate_ligand_network(components=others + [toluene, nimrod])
-
+        network = planner.generate_ligand_network(
+            components=others + [toluene, nimrod])

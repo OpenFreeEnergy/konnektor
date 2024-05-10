@@ -1,15 +1,17 @@
 from typing import Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
-from konnektor.network_planners._networkx_implementations import MstNetworkGenerator
 
+from konnektor.network_planners._networkx_implementations import \
+    MstNetworkAlgorithm
 from ._abstract_network_generator import NetworkGenerator
-from .maximal_network_planner import MaximalNetworkGenerator
+from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
-    def __init__(self, mapper: AtomMapper, scorer, n_redundancy: int = 2, nprocesses: int = 1,
+    def __init__(self, mapper: AtomMapper, scorer, n_redundancy: int = 2,
+                 nprocesses: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """Plan a Network which connects all ligands n times with minimal cost.
         This planner uses n_redundancy times the MST algorithm on the full
@@ -34,16 +36,19 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         """
         if _initial_edge_lister is None:
-            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper, scorer=scorer, nprocesses=nprocesses)
+            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
+                                                           scorer=scorer,
+                                                           nprocesses=nprocesses)
 
         super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=MstNetworkGenerator(),
+                         network_generator=MstNetworkAlgorithm(),
                          nprocesses=nprocesses,
                          _initial_edge_lister=_initial_edge_lister)
 
         self.n_redundancy = n_redundancy
 
-    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[
+        Component]) -> LigandNetwork:
         """
         generate a redundant mst network for the given compounds.
 
@@ -64,7 +69,9 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
-        edge_map = {(components.index(m.componentA), components.index(m.componentB)): m for m in mappings}
+        edge_map = {
+            (components.index(m.componentA), components.index(m.componentB)): m
+            for m in mappings}
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations['score'] for k in edges]
 
@@ -90,7 +97,8 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
             if not mg.connected:
                 nodes_index = {l: components.index(l) for l in components}
-                missing_nodes = [l for l in components if (nodes_index[l] in mg.nodes)]
+                missing_nodes = [l for l in components if
+                                 (nodes_index[l] in mg.nodes)]
                 raise RuntimeError("Unable to create edges for some nodes: "
                                    + str(list(missing_nodes)))
             # print("sel", len(mg.edges), mg.edges)
