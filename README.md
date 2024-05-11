@@ -1,8 +1,8 @@
 <p align="center">
     <picture align="center">
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/OpenFreeEnergy/konnektor/blob/36fc908f89777b8d67ce837a354adc699de6f405/.img/konnektor_logo_style5.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://github.com/OpenFreeEnergy/konnektor/blob/36fc908f89777b8d67ce837a354adc699de6f405/.img/konnektor_logo_style4.png">
-      <img alt="Konnektor`s fancy logo" src="https://github.com/OpenFreeEnergy/konnektor/blob/36fc908f89777b8d67ce837a354adc699de6f405/.img/konnektor_logo_style4.png" width=35% >
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/OpenFreeEnergy/konnektor/blob/2e52eadb32a4a2813bc81fc3d0499f7563c8b4e6/.img/konnektor_logo_5.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/OpenFreeEnergy/konnektor/blob/2e52eadb32a4a2813bc81fc3d0499f7563c8b4e6/.img/konnektor_logo_4.png">
+      <img alt="Konnektor`s fancy logo" src="https://github.com/OpenFreeEnergy/konnektor/blob/2e52eadb32a4a2813bc81fc3d0499f7563c8b4e6/.img/konnektor_logo_4.png" width=35% >
     </picture>
 </p>
 
