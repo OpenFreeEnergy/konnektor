@@ -27,6 +27,10 @@ From a thermodynamic perspective not all transformations are actually required t
 In fact you only need one conection per small molecules to the others in order to get the ranking, like for example in Star Networks or Minimal Spanning Tree (MST) Networks.
 However we found the very efficient networks to be sensitive to transformation failures, this can be solved with network building algorithms, that are slightly more redundant.
 
+Ontop of the described ligand network planners, Konnektor gives access to tools, that allow for example to concatenate networks or delete transformations of a network.
+Analysis of networks, like calculating graph scores, getting the connectivities of network nodes or calculating the network robustness are available too.
+Last we want to bring to your attention our Network visualization tools and the provided interactive network visualization widget for IPython like in Jupyter-Lab/Notebooks.
+
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
 
 
@@ -63,10 +67,10 @@ This is achieved by combining the Tools and Network Generator Algorithms, to bui
 
 ```python3
 # Here we generate some input data.
-from openfe_benchmarks import benzenes
+from konnektor.data import get_benzene_ligands
 
 compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
-                        benzenes.get_system().ligand_components))
+                        get_benzene_ligands()))
 
 # Pick your Favourite Network layout with favourite AtomMapper and Scorer
 from openfe.setup import KartografAtomMapper, lomap_scorers
@@ -81,7 +85,6 @@ network.name = "Cyclic Network"
 
 # Visualize the generated network
 from konnektor.visualization import draw_ligand_network
-
 fig = draw_ligand_network(network=network, title=network.name)
 
 fig.show()

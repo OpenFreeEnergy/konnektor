@@ -1,5 +1,6 @@
 from konnektor.network_analysis import get_is_connected
-from konnektor.network_tools.misc import delete_component, delete_transformation
+from konnektor.network_tools.network_handling.delete import delete_component, \
+    delete_transformation
 from konnektor.utils.toy_data import build_random_mst_network, \
     build_random_fully_connected_network
 

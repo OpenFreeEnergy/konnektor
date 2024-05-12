@@ -19,7 +19,7 @@ from ._abstract_network_generator import NetworkGenerator
 from .cyclic_network_generator import CyclicNetworkGenerator
 from .star_network_generator import StarNetworkGenerator
 from ..concatenators import MstConcatenator
-from ...network_tools import append_node, concatenate_networks
+from ...network_tools import append_component, concatenate_networks
 from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
 
 log = logging.getLogger()
@@ -163,9 +163,9 @@ class ClusteredNetworkGenerator(NetworkGenerator):
                 progress = lambda x: x
 
             for mol in progress(self.clusters[-1]):
-                concat_network = append_node(network=concat_network,
-                                             component=mol,
-                                             concatenator=self.concatenator)
+                concat_network = append_component(network=concat_network,
+                                                  component=mol,
+                                                  concatenator=self.concatenator)
 
         return concat_network
 
