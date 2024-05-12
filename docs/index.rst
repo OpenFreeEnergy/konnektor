@@ -1,23 +1,20 @@
 Welcome to Konnektors's documentation!
 =========================================
-Kartograf is a packgage for atom mappings focussing on 3D geometries.
-This package can for example be used to generate hybrid topology systems, where an atom mapping is required to determine the core region of the approach.
-But of course, there exist also other use cases for this package.
-The atom mapper takes two sets of coordinates of molecules as input.
-Optionally those sets of coordinates can be aligned onto each other, checkout
-the ``atom_aligner`` module functions
-of Kartograf that offer a shape alignment implementation and an MCS-skeleton alignment.
-The ``atom_mapper`` can be used to generate the 3D geometry-focused atom
-mapping, the algorithm is described in the related publication of Kartograf (see reference).
-Additionally, rule-based filter functions can be provided to demap atoms,
-that do not fulfill the desired criteria, see ``filters``.
-Several mapping scoring metrics are provided, that evaluate geometric
-properties of your mapping, from ``atom_mapping_scorer``, which might be
-useful for checking the quality of your mappings.
-Finally, there is a visualization function ``display_mappings_3d`` that can be
-used to check out the mappings with a Jupyter Notebook widget.
 
-You can find our Preprint on `Ries, B.; Alibay, I.; Swenson, D. W. H; Baumann, H. M.; Henry, M. M.; Eastwood, J. R. B.; Gowers, R. J. - Kartograf: An Accurate Geometry-Based Atom Mapper for Hybrid Topology Relative Free Energy Calculations, Chemrxiv (2023) <https://doi.org/10.26434/chemrxiv-2023-0n1pq>`_
+Konnektor is a package supporting you in planning your free calculations.
+It contains multiple algorithms and tools for network planning, that make setting up the calculation plans much easier.
+As an example imagen you are given a set of drug candidates that shall be ranked with relative binding free energies.
+In theory you could calculate all the possible network transformations, in order to get your ligand ranking (we call this a Maximal Network).
+However this leads to an explosion in time and compute cost, therefore we need more efficient ways on how to caluclate a drug candidate ranking.
+From a thermodynamic perspective not all transformations are actually required to retrieve a ranking.
+In fact you only need one conection per small molecules to the others in order to get the ranking, like for example in Star Networks or Minimal Spanning Tree (MST) Networks.
+However we found the very efficient networks to be sensitive to transformation failures, this can be solved with network building algorithms, that are slightly more redundant.
+
+Ontop of the described ligand network planners, Konnektor gives access to tools, that allow for example to concatenate networks or delete transformations of a network.
+Analysis of networks, like calculating graph scores, getting the connectivities of network nodes or calculating the network robustness are available too.
+Last we want to bring to your attention our Network visualization tools and the provided interactive network visualization widget for IPython like in Jupyter-Lab/Notebooks.
+
+Try our interactive demo: ![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)
 
 .. toctree::
    :maxdepth: 2

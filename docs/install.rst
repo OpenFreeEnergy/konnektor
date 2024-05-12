@@ -5,14 +5,13 @@ Installation
 User Setup
 =============
 
-Kartograf will be packaged with OpenFE but we need more time for that. :)
+Konnektor will be packaged with OpenFE, soon. :)
 
-Alternatively, you can install Kartograf also as a standalone package via pip
-or soon conda:
+Konnektor can be installed via the package following package managers:
 
-``pip install konnektor``
-
-
+```shell
+pip install konnnektor
+```
 
 Developer Setup
 ================
