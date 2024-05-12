@@ -10,7 +10,7 @@ from rdkit import Chem
 from rdkit.Chem import rdMolHash
 from rdkit.Chem.Scaffolds import rdScaffoldNetwork
 
-import gufe
+from gufe import Component
 
 from ._abstract_clusterer import _AbstractClusterer
 
@@ -18,7 +18,7 @@ from ._abstract_clusterer import _AbstractClusterer
 class ScaffoldClusterer(_AbstractClusterer):
     scaffold_looseness: int
     cid_scaffold: dict[int, str]
-    cid_components: dict[int, list[gufe.SmallMoleculeComponent]]
+    cid_components: dict[int, list[Component]]
 
     def __init__(self, scaffold_looseness: int = 9):
         """
@@ -35,7 +35,7 @@ class ScaffoldClusterer(_AbstractClusterer):
         self.scaffold_looseness = scaffold_looseness
 
     @staticmethod
-    def normalise_molecules(mols: list[gufe.SmallMoleculeComponent]) -> dict[gufe.SmallMoleculeComponent, Chem.Mol]:
+    def normalise_molecules(mols: list[Component]) -> dict[Component, Chem.Mol]:
         # Convert SMC to a normalised (reduced & cleaned up) version in rdkit
         # This is anonymous, so no bond orders, charges or elements
         # This makes comparing scaffolds more suited to RBFEs
@@ -134,8 +134,8 @@ class ScaffoldClusterer(_AbstractClusterer):
 
     @staticmethod
     def formulate_answer(solution: list[tuple[str, int]],
-                         mols_to_norm: dict[gufe.SmallMoleculeComponent, Chem.Mol]
-                         ) -> dict[str, list[gufe.SmallMoleculeComponent]]:
+                         mols_to_norm: dict[Component, Chem.Mol]
+                         ) -> dict[str, list[Component]]:
         # relate the solution scaffolds back to the input SMC
 
         # for each molecule, pick the largest scaffold that matches
@@ -156,7 +156,7 @@ class ScaffoldClusterer(_AbstractClusterer):
 
         return dict(final_answer)
 
-    def cluster_compounds(self, components: list[gufe.SmallMoleculeComponent]):
+    def cluster_compounds(self, components: list[Component]):
         # first normalise the molecules to a generic representation
         mols_to_norm = self.normalise_molecules(components)
 
