@@ -5,17 +5,20 @@ It is built on rdkit's rdScaffoldNetwork module.
 """
 from collections import defaultdict
 import itertools
-import gufe
-import openfe
+
 from rdkit import Chem
 from rdkit.Chem import rdMolHash
 from rdkit.Chem.Scaffolds import rdScaffoldNetwork
+
+import gufe
 
 from ._abstract_clusterer import _AbstractClusterer
 
 
 class ScaffoldClusterer(_AbstractClusterer):
     scaffold_looseness: int
+    cid_scaffold: dict[int, str]
+    cid_components: dict[int, list[gufe.SmallMoleculeComponent]]
 
     def __init__(self, scaffold_looseness: int = 9):
         """
@@ -171,5 +174,13 @@ class ScaffoldClusterer(_AbstractClusterer):
         # until we hit full coverage of molecules
         solution = self.find_solution(mol_to_candidates)
 
-        # finally, relate this solution back to the input set
-        return self.formulate_answer(solution, mols_to_norm)
+        # finally, relate this solution back to the input set and store res.
+        scaffold_components = self.formulate_answer(solution, mols_to_norm)
+        self.cid_scaffold = {}
+        self.cid_components = {}
+
+        for i, (scaff, components) in enumerate(scaffold_components.items()):
+            self.cid_scaffold[i] = scaff
+            self.cid_components[i] = components
+
+        return self.cid_components
