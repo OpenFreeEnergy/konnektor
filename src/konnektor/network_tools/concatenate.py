@@ -1,23 +1,29 @@
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
+
 from typing import Iterable
-from gufe import LigandNetwork, SmallMoleculeComponent
 
-from ..network_planners.concatenator.mst_concatenator import MstConcatenate
+from gufe import LigandNetwork, Component
+
+from ..network_planners.concatenators._abstract_network_concatenator import \
+    NetworkConcatenator
 
 
-def concatenate_networks(networks:Iterable[LigandNetwork],
-                         concatenator)->LigandNetwork:
+def concatenate_networks(networks: Iterable[LigandNetwork],
+                         concatenator: NetworkConcatenator) -> LigandNetwork:
     """
-    Merging networks, is similar to a union of a set of nodes and edgees,
+    Concatenate networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
     least one node needs to be present in network1 and network2. If this is
     not the case, use the network concatenators.
 
     Parameters
     ----------
-    network1: LigandNetwork
+    networks: Iterable[LigandNetwork]
         Network 1 for merging
-    network2
-        Network 1 for merging
+    concatenator: NetworkConcatenator
+        A network planner, that concatenates networks.
+
     Returns
     -------
     LigandNetwork
@@ -30,30 +36,27 @@ def concatenate_networks(networks:Iterable[LigandNetwork],
 
 
 def append_node(network: LigandNetwork,
-                compound: SmallMoleculeComponent,
-                concatenator: MstConcatenate)->LigandNetwork:
+                component: Component,
+                concatenator: NetworkConcatenator) -> LigandNetwork:
     """
-    Merging networks, is similar to a union of a set of nodes and edgees,
-    if they are all connected via at least one edge. This means, that  at
-    least one node needs to be present in network1 and network2. If this is
-    not the case, use the network concatenators.
+    Add one node to the network, based on the provided concatenators algorithm.
 
     Parameters
     ----------
-    network1: LigandNetwork
+    network: LigandNetwork
         Network 1 for merging
-    network2
-        Network 1 for merging
+    component: Component
+        append node to network
+    concatenator: NetworkConcatenator
+        A network planner, that concatenates networks.
+
     Returns
     -------
     LigandNetwork
         returns the new network
     """
-
+    single_node_net = LigandNetwork(edges=[], nodes=[component])
     appended_network = concatenator.concatenate_networks([network,
-                                                          LigandNetwork(
-                                                              edges=[],
-                                                              nodes=
-                                                                  [compound])])
+                                                          single_node_net])
 
     return appended_network

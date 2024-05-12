@@ -1,37 +1,80 @@
-from typing import Iterable
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from sklearn.base import TransformerMixin, ClusterMixin
-from sklearn.cluster import KMeans
-from scikit_mol.fingerprints import RDKitFingerprintTransformer
+from typing import Iterable, Union
 
-from gufe import LigandNetwork, LigandAtomMapping, SmallMoleculeComponent
+from gufe import Component
+from gufe import LigandNetwork, LigandAtomMapping
 
-from konnektor.network_tools.clustering.cluster_components import ComponentsDiversityClustering
+from konnektor.network_tools.clustering._abstract_clusterer import \
+    _AbstractClusterer
 
 
-def delete_transformation(network :LigandNetwork,
-                          edge :tuple[SmallMoleculeComponent, SmallMoleculeComponent])\
-        ->LigandNetwork:
-    if(isinstance(edge, LigandAtomMapping)):
-        edge = (edge.componentA, edge.componentB)
+def delete_transformation(network: LigandNetwork,
+                          transformation: Union[LigandAtomMapping, tuple[
+                              Component, Component]]) -> LigandNetwork:
+    """
+    Remove the desired edge from the network
 
-    f = lambda m: len({m.componentA, m.componentB}.union(edge)) != 2
-    filtered_edges = filter(f, network.edges)
+    Parameters
+    ----------
+    network: LigandNetwork
+    transformation: :Union[LigandAtomMapping, tuple[Component, Component]]
+
+    Returns
+    -------
+    LigandNetwork
+        returns a copy of the ligand network without the removed edge.
+    """
+    if (isinstance(transformation, LigandAtomMapping)):
+        transformation = (transformation.componentA, transformation.componentB)
+
+    f = lambda m: len({m.componentA, m.componentB}.union(transformation)) != 2
+    filtered_edges = list(filter(f, network.edges))
 
     return LigandNetwork(edges=filtered_edges, nodes=network.nodes)
 
 
-def cluster_compound(compounds: Iterable[SmallMoleculeComponent],
-                     featurize:TransformerMixin = RDKitFingerprintTransformer(),
-                    cluster:ClusterMixin = KMeans(n_clusters=5, n_init="auto")
-                     )->dict[int,
-list[SmallMoleculeComponent]]:
-    
-    clusterer = ComponentsDiversityClustering(featurize = featurize, cluster=cluster)
-    return clusterer.cluster_compounds(compounds)
+def delete_component(network: LigandNetwork,
+                     component: Component) -> LigandNetwork:
+    """
+    Remove the desired component, which is a node of the graph, and its
+    edges from the network.
+
+    Parameters
+    ----------
+    network: LigandNetwork
+    component: Component
+        component to be removed from the network, which is a node of the graph.
+
+    Returns
+    -------
+    LigandNetwork
+        returns a copy of the ligand network without the removed component
+         and edges containing the component.
+    """
+    filtered_nodes = list(filter(lambda n: n != component, network.nodes))
+
+    f = lambda m: component not in (m.componentA, m.componentB)
+    filtered_edges = list(filter(f, network.edges))
+
+    return LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
 
 
-def cyclize_around_compound(network:LigandNetwork,
-                        node:SmallMoleculeComponent)->LigandNetwork:
-    #TODO: Implement this
+def cyclize_around_component(network: LigandNetwork,
+                             node: Component) -> LigandNetwork:
+    """
+        TODO: Implement this
+        Not Implemented!
+
+    Parameters
+    ----------
+    network
+    node
+
+    Returns
+    -------
+
+    """
+    # TODO: Implement this
     raise NotImplementedError()

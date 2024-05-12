@@ -118,7 +118,6 @@ def toluene_vs_others(atom_mapping_basic_test_files):
     return toluene, others
 
 
-
 @pytest.fixture(scope='session')
 def ligand_network_ab(atom_mapping_basic_test_files):
         mappingsA = []

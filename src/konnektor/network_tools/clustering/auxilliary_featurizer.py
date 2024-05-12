@@ -1,9 +1,11 @@
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
+
 from typing import Union
 
 import numpy as np
 from rdkit import Chem
 from scikit_mol.fingerprints import FpsTransformer
-from sklearn.base import ClusterMixin
 
 
 class ChargeTransformer(FpsTransformer):
