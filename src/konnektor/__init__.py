@@ -12,7 +12,7 @@ from .network_planners import (MaximalNetworkGenerator,
                                MstConcatenator,
                                )
 
-from .network_tools import concatenate, merge, append_node, \
+from .network_tools import concatenate_networks, merge_networks, append_component, \
     delete_transformation
 from .network_tools import ChargeClusterer, ScaffoldClusterer, \
     ComponentsDiversityClusterer
