@@ -67,10 +67,10 @@ This is achieved by combining the Tools and Network Generator Algorithms, to bui
 
 ```python3
 # Here we generate some input data.
-from openfe_benchmarks import benzenes
+from konnektor.data import get_benzene_ligands
 
 compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
-                        benzenes.get_system().ligand_components))
+                        get_benzene_ligands()))
 
 # Pick your Favourite Network layout with favourite AtomMapper and Scorer
 from openfe.setup import KartografAtomMapper, lomap_scorers
@@ -85,7 +85,6 @@ network.name = "Cyclic Network"
 
 # Visualize the generated network
 from konnektor.visualization import draw_ligand_network
-
 fig = draw_ligand_network(network=network, title=network.name)
 
 fig.show()
