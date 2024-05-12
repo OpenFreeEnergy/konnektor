@@ -14,7 +14,7 @@ from rdkit.Chem.Scaffolds import rdScaffoldNetwork
 from ._abstract_clusterer import _AbstractClusterer
 
 
-class TwoDimensionalScaffoldClusterer(_AbstractClusterer):
+class ScaffoldClusterer(_AbstractClusterer):
     scaffold_looseness: int
 
     def __init__(self, scaffold_looseness: int = 9):
