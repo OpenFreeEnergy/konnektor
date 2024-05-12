@@ -10,6 +10,12 @@ konnektor.network\_tools.clustering
    :undoc-members:
    :show-inheritance:
 
+.. automodule:: konnektor.network_tools.clustering.scaffold_clustering
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
 .. automodule:: konnektor.network_tools.clustering.component_diversity_clustering
    :members:
    :undoc-members:
