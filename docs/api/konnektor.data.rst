@@ -1,8 +1,8 @@
 ================================
-konnektor.network\_analysis
+konnektor.data
 ================================
 
-.. automodule:: konnektor.network_analysis.network_analysis
+.. automodule:: konnektor.data
    :members:
    :undoc-members:
    :show-inheritance:

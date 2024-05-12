@@ -36,7 +36,7 @@ def merge_two_networks(network1: LigandNetwork,
     return merged_network
 
 
-def merge(networks: list[LigandNetwork]) -> LigandNetwork:
+def merge_networks(networks: list[LigandNetwork]) -> LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at

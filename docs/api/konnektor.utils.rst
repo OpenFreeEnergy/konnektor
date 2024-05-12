@@ -1,8 +1,8 @@
 ================================
-konnektor.network\_analysis
+konnektor.utils
 ================================
 
-.. automodule:: konnektor.network_analysis.network_analysis
+.. automodule:: konnektor.utils.toy_data
    :members:
    :undoc-members:
    :show-inheritance:
