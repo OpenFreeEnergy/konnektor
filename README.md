@@ -18,30 +18,45 @@ Konnektor: Tools for Networks in your FE Calculations
 
 [![Pip Install](https://img.shields.io/badge/pip%20install-konnektor-d9c4b1)](https://pypi.org/project/konnektor/)
 
-Konnektor is a package offering multiple ways on constructing free energy networks and modifying those.
-
-👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
-
-**WARNING: This repository is highly under development and more will be here soon!** 
-
-👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
-
-
+Konnektor is a package supporting you in planning your free calculations.
+It contains multiple algorithms and tools for network planning, that make setting up the calculation plans much easier.
+As an example imagen you are given a set of drug candidates that shall be ranked with relative binding free energies.
+In theory you could calculate all the possible network transformations, in order to get your ligand ranking (we call this a Maximal Network).
+However this leads to an explosion in time and compute cost, therefore we need more efficient ways on how to caluclate a drug candidate ranking.
+From a thermodynamic perspective not all transformations are actually required to retrieve a ranking. 
+In fact you only need one conection per small molecules to the others in order to get the ranking, like for example in Star Networks or Minimal Spanning Tree (MST) Networks.
+However we found the very efficient networks to be sensitive to transformation failures, this can be solved with network building algorithms, that are slightly more redundant.
 
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
 
-## Content
-### Implemented Simple Network Layouts
-Several Network layouts are implemented in Konnektor. Many of them bring 
-advantages and disadvantages, check below.
-![](.img/Network_Overview.png)
 
-### Tools for constructing more complex Networks
-we are implementing tools for more complex Network generation:
+👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
+
+**WARNING: Konnektor is under development and is in its beta phase!**
+
+This translates to the core features are implemented and we hope to only introduce minor changes to the repository form here, i.e. fixing bugs.
+
+
+👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
+
+## Content
+### Implemented Network Layouts
+Several Network layout generating algorithms are implemented in Konnektor, with different advantages and disadvantages.
+From an algorithmic perspective most of the algorithms are actually a reduction method of the Maximal Network. 
+To speed-up the Maximal Network Algorithm we implemented an parallelization scheme to it. Below you can find some of our layouts:
+
+![image](.img/network_layouts.png)
+
+### Tools for handling Networks
+Konnektor implements tools, that allow for example to merge (if a node is shared in the networks) or concatenate (if no node is shared) networks, 
+append single molecules (nodes) to a network or delete transformations/molecules from a network.
+
 ![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/5fbb253c-f0d3-41bf-bd92-f520b1363b6d)
 
 ### Enable More Complex Higher Order Networks
-Additionally we are working on Molecule diversity based Networks here with HIF2A, which also allows concatenating Networks:
+Another goal of Konnektor is to go beyond the standard network layout algorihtms and allow easy implementation of more complex network algorithms.
+This is achieved by combining the Tools and Network Generator Algorithms, to build up to more advanced workflows.
+
 ![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/c4ee0b63-7580-4825-b0cb-dc076e4cb9f4)
 
 ## Code Example
