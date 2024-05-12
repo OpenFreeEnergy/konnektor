@@ -1,13 +1,6 @@
-# This code is part of OpenFE and is licensed under the MIT license.
-# For details, see https://github.com/OpenFreeEnergy/konnektor
+from typing import Union
 
-from typing import Iterable, Union
-
-from gufe import Component
-from gufe import LigandNetwork, LigandAtomMapping
-
-from konnektor.network_tools.clustering._abstract_clusterer import \
-    _AbstractClusterer
+from gufe import LigandNetwork, LigandAtomMapping, Component
 
 
 def delete_transformation(network: LigandNetwork,
@@ -59,22 +52,3 @@ def delete_component(network: LigandNetwork,
     filtered_edges = list(filter(f, network.edges))
 
     return LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
-
-
-def cyclize_around_component(network: LigandNetwork,
-                             node: Component) -> LigandNetwork:
-    """
-        TODO: Implement this
-        Not Implemented!
-
-    Parameters
-    ----------
-    network
-    node
-
-    Returns
-    -------
-
-    """
-    # TODO: Implement this
-    raise NotImplementedError()

@@ -2,8 +2,8 @@ import pytest
 
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import MstConcatenator
-from konnektor.network_tools.concatenate import concatenate_networks, \
-    append_node
+from konnektor.network_tools.network_handling.concatenate import \
+    concatenate_networks, append_component
 from konnektor.utils.toy_data import build_n_random_mst_network, \
     build_random_mst_network, build_random_dataset, genScorer, genMapper
 
@@ -43,7 +43,8 @@ def test_append_node():
                                    genScorer(n_scores=n_compounds ** 2),
                                    n_connecting_edges=n_connecting_edges)
 
-    new_network = append_node(network, compounds[0], concatenator=concatenator)
+    new_network = append_component(network, compounds[0],
+                                   concatenator=concatenator)
 
     assert len(new_network.nodes) == n_compounds
     # network edges + the network connecting edges
