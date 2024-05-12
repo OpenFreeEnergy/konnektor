@@ -21,7 +21,7 @@ konnektor.network\_planners.generators
    :undoc-members:
    :show-inheritance:
 
-.. automodule:: konnektor.network_planners.generators.star_network_network_generator
+.. automodule:: konnektor.network_planners.generators.star_network_generator
    :members:
    :undoc-members:
    :show-inheritance:
