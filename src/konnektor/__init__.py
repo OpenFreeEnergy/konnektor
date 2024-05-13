@@ -12,8 +12,11 @@ from .network_planners import (MaximalNetworkGenerator,
                                MstConcatenator,
                                )
 
-from .network_tools import merge_networks, concatenate_networks, \
-    append_component, delete_component, delete_transformation
+from .network_tools import concatenate_networks, merge_networks, append_component, \
+    delete_transformation
+from .network_tools import ChargeClusterer, ScaffoldClusterer, \
+    ComponentsDiversityClusterer
 
 from . import network_analysis
+
 from .visualization import draw_ligand_network
