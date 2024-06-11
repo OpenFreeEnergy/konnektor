@@ -1,7 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Callable
+from typing import Callable, Iterable
 
 import networkx as nx
 import numpy as np
@@ -12,12 +12,15 @@ from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
-    def __init__(self, metric_aggregation_method: Callable = None):
+    def __init__(self, metric_aggregation_method: Callable = None, n_centers: int = 1):
         self.metric_aggregation_method = metric_aggregation_method
+        self.n_centers = n_centers
 
     def _central_lig_selection(self, edges: list[tuple[int, int]],
-                               weights: list[float]) -> int:
+                               weights: list[float]) -> Iterable[int]:
         nodes = set([n for e in edges for n in e])
+        # The initial "weights" are Scores, which need to be translated to weights.
+        weights = list(map(lambda x: 1-x, weights))
         edge_weights = list(zip(edges, weights))
 
         node_scores = {n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for
@@ -33,9 +36,8 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
         aggregated_scores = list(
             map(lambda x: (x[0], np.sum(x[1])), filtered_node_scores.items()))
         sorted_node_scores = list(sorted(aggregated_scores, key=lambda x: x[1]))
-
-        opt_node = sorted_node_scores[0]
-        return opt_node
+        opt_nodes = sorted_node_scores[:self.n_centers]
+        return opt_nodes
 
     def generate_network(self, edges: list[tuple[int, int]],
                          weights: list[float],
@@ -75,12 +77,16 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
         """
 
         if (central_node is None):
-            central_node, avg_score = self._central_lig_selection(edges=edges,
-                                                                  weights=weights)
+            central_nodes = self._central_lig_selection(edges=edges,
+                                                        weights=weights, )
+        elif isinstance(central_node, (SmallMoleculeComponent, str)):
+            central_nodes = [(central_node, 1)]
+        else:
+            raise ValueError("invalide central node type: "+str(type(central_node)))
 
         wedges = []
         for edge, weight in zip(edges, weights):
-            if (central_node in edge):
+            if any(central_node in edge for central_node, avg_score in central_nodes):
                 wedges.append([edge[0], edge[1], weight])
 
         # Todo: Warning if something was not connected to the central ligand?

@@ -12,7 +12,7 @@ from konnektor.tests.network_planners.conf import (
 
 
 @pytest.mark.parametrize('as_list', [False])
-def test_radial_network(atom_mapping_basic_test_files, toluene_vs_others,
+def test_star_network(atom_mapping_basic_test_files, toluene_vs_others,
                         as_list):
     toluene, others = toluene_vs_others
     central_ligand_name = 'toluene'
@@ -38,7 +38,7 @@ def test_radial_network(atom_mapping_basic_test_files, toluene_vs_others,
                for mapping in network.edges)
 
 
-def test_radial_network_with_scorer(toluene_vs_others):
+def test_star_network_with_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
 
     mapper = GenAtomMapper()
@@ -58,7 +58,7 @@ def test_radial_network_with_scorer(toluene_vs_others):
             edge.componentA_to_componentB)
 
 
-def test_radial_network_multiple_mappers_no_scorer(toluene_vs_others):
+def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
     # in this one, we should always take the bad mapper
     mapper = BadMapper()
@@ -73,7 +73,7 @@ def test_radial_network_multiple_mappers_no_scorer(toluene_vs_others):
         assert edge.componentA_to_componentB == {0: 0}
 
 
-def test_radial_network_failure(atom_mapping_basic_test_files):
+def test_star_network_failure(atom_mapping_basic_test_files):
     nigel = SmallMoleculeComponent(mol_from_smiles('N'))
 
     mapper = ErrorMapper()

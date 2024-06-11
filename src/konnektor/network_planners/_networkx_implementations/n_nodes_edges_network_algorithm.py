@@ -18,6 +18,8 @@ class NNodeEdgesNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
         w_edges = []
         nodes = []
+        # The initial "weights" are Scores, which need to be translated to weights.
+        weights = list(map(lambda x: 1-x, weights))
         for e, w in zip(edges, weights):
             w_edges.append((e[0], e[1], w))
             nodes.extend(e)

@@ -1,7 +1,8 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from konnektor.network_analysis import get_is_connected, get_node_number_cycles
+import numpy as np
+from konnektor.network_analysis import get_is_connected, get_node_number_cycles, get_graph_score
 from konnektor.network_planners import CyclicNetworkGenerator
 from konnektor.utils.toy_data import build_random_dataset
 
@@ -10,7 +11,7 @@ def test_cyclic_network_planner():
     n_compounds = 8
     ncycles = 2
     components, genMapper, genScorer = build_random_dataset(
-        n_compounds=n_compounds)
+        n_compounds=n_compounds, rand_seed=42)
 
     planner = CyclicNetworkGenerator(
         mapper=genMapper, scorer=genScorer, cycle_sizes=3,
@@ -24,3 +25,5 @@ def test_cyclic_network_planner():
     assert get_is_connected(network)
     nnode_cycles = get_node_number_cycles(network)
     assert all(v >= ncycles for k, v in nnode_cycles.items())
+
+    np.testing.assert_allclose(get_graph_score(network), 10.347529, rtol=0.01)

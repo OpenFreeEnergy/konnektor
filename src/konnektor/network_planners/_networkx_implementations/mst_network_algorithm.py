@@ -13,6 +13,8 @@ class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
                          weights: list[float], n_edges:int=None) -> nx.Graph:
         wedges = []
         nodes = []
+        # The initial "weights" are Scores, which need to be translated to weights.
+        weights = list(map(lambda x: 1-x, weights))
         for edge, weight in zip(edges, weights):
             wedges.append([edge[0], edge[1], weight])
             nodes.extend(list(edge))
