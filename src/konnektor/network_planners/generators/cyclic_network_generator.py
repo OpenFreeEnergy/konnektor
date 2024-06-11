@@ -66,16 +66,15 @@ class CyclicNetworkGenerator(NetworkGenerator):
         """
            generate a cyclic network for the given compounds.
 
+        Parameters
+        ----------
+        components : Iterable[Component]
+          the ligands to include in the LigandNetwork
 
-            Parameters
-            ----------
-            components: Iterable[Component]
-                the components to be used for the LigandNetwork
-
-            Returns
-            -------
-            LigandNetwork
-                a cyclic network.
+        Returns
+        -------
+        LigandNetwork
+            a complex network.
         """
 
         # Build Full Graph
