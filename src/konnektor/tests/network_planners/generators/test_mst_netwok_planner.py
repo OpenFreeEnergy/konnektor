@@ -3,6 +3,7 @@
 
 import gufe
 import networkx as nx
+import numpy as np
 import pytest
 from gufe import LigandNetwork
 
@@ -11,6 +12,7 @@ from konnektor.tests.network_planners.conf import (toluene_vs_others,
                                                    atom_mapping_basic_test_files,
                                                    mol_from_smiles, genScorer,
                                                    GenAtomMapper, ErrorMapper)
+from konnektor.network_analysis import get_graph_score
 
 
 def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
@@ -25,7 +27,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
 
     assert isinstance(network, LigandNetwork)
     assert list(network.edges)
-
+    np.testing.assert_allclose(get_graph_score(network), 0.066667, rtol=0.001)
 
 @pytest.fixture(scope='session')
 def minimal_spanning_network(toluene_vs_others):

@@ -8,6 +8,7 @@ from .generators.n_node_edges_network_generator import (
     NNodeEdgesNetworkGenerator)
 ## Starmap Like Networks
 from .generators.star_network_generator import StarNetworkGenerator, RadialLigandNetworkPlanner
+from .generators.twin_star_network_generator import TwinStarNetworkGenerator
 from .generators.clustered_network_generator import StarrySkyNetworkGenerator
 
 ## MST like Networks

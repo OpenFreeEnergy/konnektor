@@ -33,7 +33,8 @@ class MatchingConcatenatAlgorithm(_AbstractNetworkConcatenator):
         nx.Graph
             the resulting graph, containing both subgraphs.
         """
-
+        # The initial "weights" are Scores, which need to be translated to weights.
+        weights = list(map(lambda x: 1-x, weights))
         wedges_map = {(e[0], e[1]): w for e, w in zip(edges, weights)}
         wedges = [(e[0], e[1], w) for e, w in zip(edges, weights)]
 
