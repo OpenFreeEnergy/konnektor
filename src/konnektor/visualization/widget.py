@@ -25,11 +25,13 @@ def get_node_connectivities(cg: LigandNetwork) -> list[int]:
 
 # some code borrowed from pen:
 # https://iwatobipen.wordpress.com/2020/03/30/draw-scaffold-tree-as-network-with-molecular-image-rdkit-cytoscape/
-def mol2svg(mol: Chem.Mol) -> str:
+def mol2svg(mol: Chem.Mol, twoD=True) -> str:
     try:
         Chem.rdmolops.Kekulize(mol)
     except:
         pass
+    if twoD:
+        Chem.rdDepictor.Compute2DCoords(mol)
     drawer = rdMolDraw2D.MolDraw2DSVG(350, 300)
     rdMolDraw2D.PrepareAndDrawMolecule(drawer,
                                        mol)  # , legend=mol.GetProp("_Name"))
