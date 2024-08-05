@@ -68,7 +68,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             self.clusterer.featurize.njobs = n_processes
 
 
-        if not isinstance(sub_network_planners, list):
+        if not isinstance(sub_network_planners, (tuple, list)):
             sub_network_planners = [sub_network_planners]
 
         self.sub_network_planners = []
@@ -78,6 +78,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
                                                       scorer=scorer)
             else:
                 sub_net_planner_obj = sub_net_planner
+
             sub_net_planner_obj.n_processes = n_processes
             self.sub_network_planners.append(sub_net_planner_obj)
 
