@@ -181,18 +181,8 @@ def _build_cytoscape(network: gufe.LigandNetwork, layout: str = "concentric",
         }
     }
 
-    selected_style = {
-        'selector': ':selected',
-        'css': {
-            'background-color': 'red',
-            'line-color': 'red',
-            'target-arrow-color': 'red',
-            'source-arrow-color': 'red',
-            'text-outline-color': 'red'
-        }
-    }
-
     undirected = ipycytoscape.CytoscapeWidget(g, )
+    undirected.wheel_sensitivity = 0.2
     undirected.set_tooltip_source("name")
     undirected.set_style([node_style_ligand, node_style_mapping, edge_style])
     undirected.set_layout(name=layout, nodeSpacing=50, edgeLengthVal=50)
