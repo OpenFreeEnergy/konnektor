@@ -54,7 +54,7 @@ class NetworkGenerator(NetworkPlanner):
         # edge lister performs usually the most expensive task!
         # So parallelization is most important here.
         if self._initial_edge_lister is not None and hasattr(
-                self._initial_edge_lister, "nprocesses"):
+                self._initial_edge_lister, "n_processes"):
             self.n_processes = n_processes
 
     @abc.abstractmethod
