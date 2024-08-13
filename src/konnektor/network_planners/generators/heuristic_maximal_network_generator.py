@@ -63,7 +63,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             a heuristic max network.
         """
         components = list(components)
-        total = len(components) * (len(components) - 1) // 2
+        total = len(components) * self.n_samples
 
         # Parallel or not Parallel:
         # generate combinations to be searched.

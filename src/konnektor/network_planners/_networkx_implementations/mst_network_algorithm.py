@@ -19,7 +19,7 @@ class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
             wedges.append([edge[0], edge[1], weight])
             nodes.extend(list(edge))
 
-        if (n_edges is None):
+        if n_edges is None:
             n_edges = len(nodes) - 1  # max number of MST edges
 
         self.g = nx.Graph()

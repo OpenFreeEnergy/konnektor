@@ -214,21 +214,6 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
             else:
                 j += 1
 
-            """
-            Old and rusty :P
-            for i in iterator:
-                c = cycle_priority_queue[i]
-                if termination_criteria(cycle_connectivity_dict):  # efficiency break
-                    break
-                elif (any([cycle_connectivity_dict[n] < self.node_cycle_connectivity for n in c])):
-                    selected_cycles.append(c)
-                    for n in c:
-                        cycle_connectivity_dict[n] += 1
-
-
-                else:
-                    continue
-            """
         # print(cycle_connectivity_dict)
         self.cycle_connectivity_dict = cycle_connectivity_dict
         log.info("\tNumber  of required Cycles: " + str(len(selected_cycles)))
@@ -238,7 +223,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
     def generate_network_double_greedy(self, edges: List[Tuple[int, int]],
                                        weights: List[float],
-                                       edge_limitor=10) -> Graph:
+                                       edge_limitor=200) -> Graph:
         log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
 
@@ -262,17 +247,6 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
             if (len(min_node[e2]) < edge_limitor):
                 min_node[e2].append((e1, e2))
 
-        """
-        for target_node in nodes:
-            me = []
-            for k in kr_ew:
-                e = r_ew[k]
-                if edge_limitor <= len(me):
-                    break
-                elif target_node in e:
-                    me.append(e)
-            min_node[target_node] = me
-        """
         end_time_cycle_generation = datetime.now()
         duration_cycle_generation = end_time_cycle_generation - start_time_cycle_generation
         log.info("\tDuration: " + str(duration_cycle_generation))
@@ -280,6 +254,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
         start_time_cycle_selection = datetime.now()
         log.info("Cycle Selection init - " + str(start_time_cycle_selection))
+
         # build_cycles for each node:
         all_cycles_per_node = {}
         all_edge_collection = []

@@ -46,7 +46,43 @@ def get_graph_score(ligand_network: LigandNetwork) -> float:
     return score
 
 
-def get_number_of_graph_cycles(ligand_network: LigandNetwork, higher_bound: int = 4) -> int:
+def get_graph_cost(ligand_network: LigandNetwork) -> float:
+    """
+    Calculate the graph score based on summation of the edge weights.
+
+    Parameters
+    ----------
+    ligand_network: LigandNetwork
+        ligand network, that should return the graph score.
+
+    Returns
+    -------
+    float
+        sum of all edges the graph score
+    """
+    score = sum([1-float(e.annotations["score"]) for e in ligand_network.edges])
+    return score
+
+
+
+def get_graph_efficiency(ligand_network: LigandNetwork) -> float:
+    """
+    Calculate the graph score based on summation of the edge weights.
+
+    Parameters
+    ----------
+    ligand_network: LigandNetwork
+        ligand network, that should return the graph score.
+
+    Returns
+    -------
+    float
+        sum of all edges the graph score
+    """
+    score = sum([e.annotations["score"] for e in ligand_network.edges])/len(ligand_network.edges)
+    return score
+
+def get_number_of_graph_cycles(ligand_network: LigandNetwork, higher_bound: int = 3) -> int:
     """
     Calculate the graph cycles, upt to the upper bound.
 
@@ -169,17 +205,16 @@ def get_edge_failure_robustness(ligand_network: LigandNetwork,
     """
     edges = list(ligand_network.edges)
     npics = max(int(np.round(len(edges) * failure_rate)), 1)
-
+    #print(npics)
     connected = []
     rng = np.random.default_rng(seed=seed)
     for _ in range(nrepeats):
         nn = ligand_network
+        edges_to_del = [edges[e] for e in rng.choice(len(edges), npics, replace=False)]
+        nn = tools.delete_transformation(nn, edges_to_del)
+        connected.append(float(get_is_connected(nn)))
 
-        edges_to_del = rng.choice(len(edges), npics, replace=False)
-        for e in edges_to_del:
-            nn = tools.delete_transformation(nn, edges[e])
-
-        connected.append(get_is_connected(nn))
     # np.mean on list of bools give expected float answer
     r = np.mean(connected)
+    #print(connected, r)
     return r

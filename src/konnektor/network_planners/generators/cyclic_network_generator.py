@@ -51,6 +51,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
         network_generator = nx_CNG(
             node_cycle_connectivity=node_present_in_cycles,
             sub_cycle_size_range=cycle_sizes)
+        
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
                                                            scorer=scorer,
@@ -93,6 +94,9 @@ class CyclicNetworkGenerator(NetworkGenerator):
         # print("calculate Network")
         cg = self.network_generator.generate_network(edges=edges,
                                                      weights=weights)
+        
+        #cg = self.network_generator.generate_network_double_greedy(edges=edges, 
+        #                                                           weights=weights)
 
         selected_mappings = [edge_map[k] for k in cg.edges]
         # print("Done")
