@@ -25,13 +25,15 @@ def get_node_connectivities(cg: LigandNetwork) -> list[int]:
 
 # some code borrowed from pen:
 # https://iwatobipen.wordpress.com/2020/03/30/draw-scaffold-tree-as-network-with-molecular-image-rdkit-cytoscape/
-def mol2svg(mol: Chem.Mol, twoD=True) -> str:
+def mol2svg(mol: Chem.Mol, represent_molecules_twoD:bool=False) -> str:
     try:
         Chem.rdmolops.Kekulize(mol)
     except:
         pass
-    if twoD:
+        
+    if represent_molecules_twoD:
         Chem.rdDepictor.Compute2DCoords(mol)
+        
     drawer = rdMolDraw2D.MolDraw2DSVG(350, 300)
     rdMolDraw2D.PrepareAndDrawMolecule(drawer,
                                        mol)  # , legend=mol.GetProp("_Name"))
@@ -62,7 +64,7 @@ def map2svg(mapping: AtomMapping) -> str:
 
 def _build_cytoscape(network: gufe.LigandNetwork, layout: str = "concentric",
                      show_molecules: bool = True,
-                     show_mappings: bool = False) -> ipycytoscape.CytoscapeWidget:
+                     show_mappings: bool = False, represent_molecules_twoD:bool=False) -> ipycytoscape.CytoscapeWidget:
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in
                 network.edges}
@@ -85,7 +87,7 @@ def _build_cytoscape(network: gufe.LigandNetwork, layout: str = "concentric",
     g.add_nodes_from(
         (n.name,
          {'name': n.name, 'classes': 'ligand',
-          'img': mol2svg(n.to_rdkit()), 'col': c},
+          'img': mol2svg(n.to_rdkit(), represent_molecules_twoD=represent_molecules_twoD), 'col': c},
          )
         for n, c in zip(ligands, cs)
     )
@@ -203,7 +205,8 @@ def _build_cytoscape(network: gufe.LigandNetwork, layout: str = "concentric",
 
 def draw_network_widget(network: gufe.LigandNetwork, layout: str = "cose",
                         show_molecules: bool = True,
-                        show_mappings: bool = False) -> ipycytoscape.CytoscapeWidget:
+                        represent_molecules_twoD: bool = False,
+                        show_mappings: bool = False ) -> ipycytoscape.CytoscapeWidget:
     """For use in a jupyter noterbook, visualise a LigandNetwork
 
     Parameters
@@ -215,6 +218,8 @@ def draw_network_widget(network: gufe.LigandNetwork, layout: str = "cose",
       defaults to 'cose'
     show_molecule: bool, optional
       if to show molecule images on the representation, default True
+    represent_molecules_twoD: bool, optional
+      show the molecules in the nodes as 2D representations.
     show_mappings: bool, optional
       if to show mapping images on the representation, default False
     """
@@ -223,10 +228,12 @@ def draw_network_widget(network: gufe.LigandNetwork, layout: str = "cose",
                                               'concentric', 'cose'])
     def interactive_widget(network=network, layout=layout,
                            show_molecules=show_molecules,
-                           show_mappings=show_mappings):
+                           show_mappings=show_mappings, 
+                           represent_molecules_twoD=represent_molecules_twoD):
         v = _build_cytoscape(network=network, layout=layout,
                              show_molecules=show_molecules,
-                             show_mappings=show_mappings)
+                             show_mappings=show_mappings, 
+                             represent_molecules_twoD=represent_molecules_twoD)
         return v
 
     return interactive_widget(network=network, layout=layout,
