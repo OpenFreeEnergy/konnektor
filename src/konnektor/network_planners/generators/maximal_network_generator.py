@@ -17,11 +17,16 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer, progress: bool = False,
                  n_processes: int = 1):
         """
-        The Maximal Network planner builds for given set of compounds a fully connected graph under the assumption each component can be connected to another.
-        The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
+        The `MaximalNetworkGenerator` builds for given set of `Component`s a fully connected graph under the assumption each `Component` can be connected to another.
+        The `Transformation`s of this graph are realized as `AtomMapping`s of pairwise `Component`s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
 
-        This class is can be used as initial_edge_lister
+        Note: This approach is not very suitable for Free Energy calculations in application cases. However, this approach is very important, as all above approaches use this as an initial solution, they filter down to gain the desired design.
 
+
+        This class is recommended as initial_edge_lister for other approaches.
+        > **Note**: the `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`. 
+        > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
+        
         Parameters
         ----------
         mapper: AtomMapper

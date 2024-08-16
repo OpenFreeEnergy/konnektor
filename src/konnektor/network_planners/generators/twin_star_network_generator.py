@@ -17,7 +17,17 @@ class TwinStarNetworkGenerator(NetworkGenerator):
                  n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
-        The Twin Star Ligand Network Planner , set's n ligands ligand into the center of a graph and connects all other ligands to each center.
+        The Twin Star Network is an expansion to the Star Network. It can be described as multiple star networks, that are overlayed. 
+
+        The algorithm is first calculating all possible `Transformation`s for all `Component`s. 
+        Next the in average `n_centers` (default: 2) best performing `Component`s over all transfromation scores are selected and placed into the center of the network.
+        Finally all components are connected to the selected centers, resulting in $n_{Transformations} = n_{centers}*(n_{Componentes}-n_{centers})$
+
+        This approach has in the default version the doubled number of `Transformations` compared to the Star Network and therefore also has an increase graph cost.
+        However on the plus side, this approach builds a lot graph cycles, which could be used to estimate the uncertainty of FE calculations.
+        Another important aspect is that the node connectivity is centralized around the `n_centers`. This means, 
+        that the selection of the central ligands is very important, as they have a large impact on the `Transformations`.
+        The `n_centers` option allows you to change the Twin Star to a Triplet Star Network or more.
 
         Parameters
         ----------
@@ -43,7 +53,10 @@ class TwinStarNetworkGenerator(NetworkGenerator):
                          n_processes=n_processes,
                          _initial_edge_lister=_initial_edge_lister)
 
-        self.n_centers = n_centers
+        if isinstance(n_centers, int) and n_centers>1:
+            self.n_centers = n_centers
+        else:
+            raise ValueError("THe value for n_centers must be an integer > 1. got: "+str(n_centers))
 
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:

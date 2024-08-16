@@ -21,38 +21,45 @@ from .star_network_generator import StarNetworkGenerator
 from ..concatenators import MstConcatenator
 from ...network_tools import append_component, concatenate_networks
 from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
+from ..concatenators._abstract_network_concatenator import NetworkConcatenator
+
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 
-# Todo: go over this again.
 class ClusteredNetworkGenerator(NetworkGenerator):
     def __init__(self,
                  sub_network_planners: Iterable[NetworkGenerator] = (
                  CyclicNetworkGenerator,),
-                 concatenator: MstConcatenator = MstConcatenator,
+                 concatenator: NetworkConcatenator = MstConcatenator,
                  clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
                      featurize=RDKitFingerprintTransformer(),
                      cluster=KMeans(n_clusters=3)),
                  mapper: AtomMapper = None, scorer=None,
                  n_processes: int = 1, progress: bool = False
                  ):
-        ''' Implements the general concept of nd-space clustered networks.
+        ''' Implements the general concept of nd-space clustered networks and provides the logic.
 
+            The algorithm works as follows:
+            1. Cluster `Component`s with the `clusterer` obj.
+            2. Build sub-networks in the clusters using the `sub_network_planners`.
+            3. Concatenate all sub-networks using the `concatenator` in order to build the final network.
+
+                        
         Parameters
         ----------
         clusterer: ComponentsDiversityClusterer
-            This class is seperating the Components along the first dimension.
+            This class is seperating the `Component`s along the first dimension.
         sub_network_planners: Iterable[NetworkGenerator]
             The clusters, are then seperatley translated to sub networks by the sub_network_planners
-        concatenator: MstConcatenator
-            The concatenators is connecting the different sub networks.
+        concatenator: NetworkConcatenator
+            The `NetworkConcatenator` is connecting the different sub networks.
         mapper: AtomMapper
-            the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
+            the atom mapper is required, to define the connection between two ligands, if only `NetworkConcatenator` or  `NetworkGenerator` classes are passed
         scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
+            scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+            if True a progress bar will be displayed. (default: False)
         n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
@@ -182,20 +189,29 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
                  n_processes: int = 1, progress: bool = False
                  ):
         '''  The StarrySkyNetworkGenerator is an advanced network algorithm,
-        that clusters the provided ligands, based on the clusterer class.
-        Next the clusters are centered around one ligand into a Star map.
-        The star maps are connected with a MSTconcatenate.
+        that clusters the provided `Component`s and builds up a network from this.
+
+        The approach follows the following steps:
+        1. Component clustering:
+            1. Translate the Molecules into Morgan Fingerprints. (default)
+            2. Cluster the Morgan Fingerprints with HDBSCAN. (default)
+        2. Build Sub-Star Networks in each Cluster using the `StarNetworkGenerator`.
+        3. Concatenate the Sub-Star Networks to the final Starry  Sky Network, with 3 `Transformations` per cluster pair using the `MSTConcatenator`.
+
+        This approach allows in comparison to the Star Network, to build a network containing multiple centers imopoving the graph score. 
+        Still adding a limited amount of `Transformation`s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated. 
+        So the Starry Sky Network is a compromise betwen graph score optimization and number of `Transformations`.
 
         Parameters
         ----------
         mapper: AtomMapper
-            the atom mapper is required, to define the connection between two ligands, if only concatenators or ligandPlanner classes are passed
+            the atom mapper is required, to define the connection between two 'Component's
         scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1], if only concatenators or ligandPlanner classes are passed
+            scoring function evaluating an `AtomMapping`, and giving a score between [0,1]
         clusterer: ComponentsDiversityClusterer
-            This class is seperating the Components along the first dimension.
+            This class is seperating the `Component`s along the first dimension.
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+            if True a progress bar will be displayed. (default: False)
         n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 

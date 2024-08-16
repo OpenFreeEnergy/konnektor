@@ -17,7 +17,15 @@ class StarNetworkGenerator(NetworkGenerator):
                  n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
-        The Star Ligand Network Planner or Radial Ligand Network Planner, set's one ligand into the center of a graph and connects all other ligands to it.
+        The Star Network is one of the most edge efficient layouts, it basically places all `Transformations` around one central `Component`.
+        
+        The algorithm constructs in a first step all possilbe `Transformations`. 
+        Next it selects in the default variant the in average best transformation score performing `Component` as the central component.
+        Finally all Components are connected with a `Transformation` to the central `Component`
+ 
+        The Star Netwrok is most edge efficient, but not most graph score efficient, as it has to find a central `Component`, which usually is a compromise for all 'Component's.
+        From a robustness point of view, the Star Network, will immediatly be disconnected if one `Transformation` fails. 
+        However the loss of `Component`s is very limited, as only one ligand is lost per `Transformation` failure.
 
         Parameters
         ----------

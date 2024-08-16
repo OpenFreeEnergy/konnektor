@@ -17,14 +17,19 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
                  n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
-        The minimal spanning tree ligand network planner, builds an MST for a given set of ligands. The edges of the the graph,
-        are represented by an AtomMapping, which is scored by the AtomMappingScorer. The MST algorithm gives in theory the most efficient graph possible.
-        However, the MST is not very robust, in case of one failing edge.
+        The `MinimalSpanningTreeNetworkGenerator`, builds an minimal spanning tree (MST) network for a given set of `Component`s. The `Transformation`s of the Network,
+        are represented by an `AtomMapping`s, which are scored by a `AtomMappingScorer`. 
+        
+        For the MST algorithm the Kruskal Algorithm is used.
+
+        The MST algorithm gives the optimal graph score possible and the minimal required set of `Transformations`. 
+        This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing `Transformation`, the Network is immediatly disconnected. 
+        The disconnectivity will translate to a loss of `Component`s in the final FE Network. 
 
         Parameters
         ----------
         mapper : AtomMapper
-            the atom mapper is required, to define the connection between two ligands.
+            the `AtomMapper` is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         n_processes: int, optional

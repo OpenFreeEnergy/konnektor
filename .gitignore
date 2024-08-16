@@ -133,4 +133,4 @@ _version.py
 
 #IDE
 .idea
-.vscode/settings.json
+.vscode

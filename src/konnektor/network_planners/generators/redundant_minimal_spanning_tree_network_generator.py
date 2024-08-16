@@ -16,25 +16,28 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(self, mapper: AtomMapper, scorer, n_redundancy: int = 2,
                  n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
-        """Plan a Network which connects all ligands n times with minimal cost.
-        This planner uses n_redundancy times the MST algorithm on the full
-        graph, disallowing to use an already selected edge twice for the MST calculation.
+        """
+        The `RedundantMinimalSpanningTreeNetworkGenerator` is an approach, that tries to increase the robustness over `Transformation` failures in an MST like network.
+         
+        The algorithm executes the MST algorithm `n_redundancy` times, always removes already selected `Transformations` in each iteration, and finally builds the overlay of all the newtorks. 
+        This is constructing the Redundant MST Network. 
+        
+        In this way the number of edges is increased, but also the network is less vulnerable to `Transformation` failures.
 
         Parameters
         ----------
         mapper : AtomMapper
-            the AtomMappers to use to propose mappings.  At least 1 required,
+            the `AtomMapper`s to use to propose `AtomMapping`s.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+            any callable which takes a `AtomMapping` and returns a float
         n_redundancy: int
-            use MST n times to get a redundant set of edges.
+            use MST n times to get a redundant set of `Transformations`.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
+        _initial_edge_lister: NetworkGenerator, optional
+            this `NetworkGenerator` is used to give the initial set of edges. For standard usage, the `MaximalNetworkGenerator` is used. (default: MaximalNetworkPlanner)
 
 
         """

@@ -14,27 +14,29 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class NNodeEdgesNetworkGenerator(NetworkGenerator):
 
     def __init__(self, mapper: AtomMapper, scorer,
-                 target_node_connectivity: int = 3,
+                 target_component_connectivity: int = 3,
                  n_processes: int = 1,
                  _initial_edge_lister: NetworkGenerator = None):
         """
-        the NNodeEdges Network planner, is building a graph, in which each node is connected by at least the target_node_connectivity.
+        The N-Node Edges Network tries to add more redundancy to the MST Network and tries to improve the robustness.
+
+        The algorithm first build a MST Network. 
+        After this it will add best score performing `Transformations` in order to guarantee a 'Component' connectivity of `target_node_connectivity`.
+
 
         Parameters
         ----------
         mapper : AtomMapper
-            the AtomMappers to use to propose mappings.  At least 1 required,
-            but many can be given, in which case all will be tried to find the
-            lowest score edges
+            the `AtomMapper` to use to propose `AtomMapping`s.
         scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+            any callable which takes a `AtomMapping` and returns a float
         target_node_connectivity: int
-            the number of connecting edges per node.
+            the number of connecting `Transformations` per `Component`.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
+        _initial_edge_lister: LigandNetworNetworkGeneratorkPlanner, optional
+            this `NetworkGenerator` is used to give the initial set of `Transformation`s. 
+            For standard usage, the MaximalNetworGenerator is used, which will provide all possible `Transformation`s. (default: MaximalNetworkPlanner)
 
         """
         if _initial_edge_lister is None:
@@ -43,7 +45,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
                                                            n_processes=n_processes)
 
         network_generator = NNodeEdgesNetworkAlgorithm(
-            target_node_connectivity=target_node_connectivity)
+            target_node_connectivity=target_component_connectivity)
         super().__init__(mapper=mapper, scorer=scorer,
                          network_generator=network_generator,
                          n_processes=n_processes,
