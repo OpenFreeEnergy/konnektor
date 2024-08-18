@@ -17,14 +17,25 @@ authors=[
     {name="Richard J Gowers", email="richardjgowers@gmail.com"},
 ]
 dependencies = [
-  'numpy',
-  'networkx',
   'gufe',
+  'numpy',
   'rdkit',
+  'networkx',
   'scikit-mol',
   'scikit-learn',
   'ipycytoscape'
 ]
+
+[project.optional-dependencies]
+test = [
+  'pytest',
+  'pytest-cov[all]'
+]
+dev = [
+  'black',
+  'pre-commit'
+]
+
 description="Konnektor is a package for calculating networks."
 readme="README.md"
 requires-python = ">=3.9"
@@ -49,10 +60,9 @@ dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
 
 [tool.versioningit.vcs]
-method = "git" 
+method = "git"
 match = ["*"]
 default-tag = "0.0.0"
 
 [tool.versioningit.write]
 file = "src/konnektor/_version.py"
-
