@@ -8,14 +8,18 @@ from urllib import parse
 from rdkit import Chem
 from rdkit.Chem.Draw import rdMolDraw2D
 
-from ipywidgets import interact, fixed
-import ipycytoscape
+try:
+    from ipywidgets import interact, fixed
+    import ipycytoscape
+except ImportError:
+    pass  # Don't throw  error, will happen later
 
 import gufe
 from gufe import AtomMapping, LigandNetwork
 from gufe.visualization.mapping_visualization import draw_mapping
 
 from . import color_gradient
+from ..utils.optional_import import requires_package
 
 
 def get_node_connectivities(cg: LigandNetwork) -> list[int]:
@@ -60,6 +64,7 @@ def map2svg(mapping: AtomMapping) -> str:
     return impath
 
 
+@requires_package("ipycytoscape")
 def _build_cytoscape(
     network: gufe.LigandNetwork,
     layout: str = "concentric",
@@ -214,6 +219,7 @@ def _build_cytoscape(
     return undirected
 
 
+@requires_package("ipycytoscape")
 def draw_network_widget(
     network: gufe.LigandNetwork,
     layout: str = "cose",
