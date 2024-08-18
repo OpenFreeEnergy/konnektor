@@ -10,8 +10,13 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
 class ExplicitNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer,
-                 n_processes: int = 1, show_progress: bool = False, ):
+    def __init__(
+        self,
+        mapper: AtomMapper,
+        scorer,
+        n_processes: int = 1,
+        show_progress: bool = False,
+    ):
         """
 
         Parameters
@@ -25,13 +30,18 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         show_progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         """
-        super().__init__(mapper=mapper, scorer=scorer, n_processes=n_processes,
-                         network_generator=None)
+        super().__init__(
+            mapper=mapper,
+            scorer=scorer,
+            n_processes=n_processes,
+            network_generator=None,
+        )
         self.progress = show_progress
 
-    def generate_ligand_network(self,
-                                edges: Iterable[Tuple[Component, Component]],
-                                ) -> LigandNetwork:
+    def generate_ligand_network(
+        self,
+        edges: Iterable[Tuple[Component, Component]],
+    ) -> LigandNetwork:
         """
         Create a network with pre-defined edges.
 
@@ -55,7 +65,8 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             scorer=self.scorer,
             mapper=self.mapper,
             n_processes=self.n_processes,
-            show_progress=self.progress)
+            show_progress=self.progress,
+        )
 
         network = LigandNetwork(edges=mappings, nodes=nodes)
         return network

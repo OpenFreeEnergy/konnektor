@@ -5,22 +5,27 @@ from typing import Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
 
-from konnektor.network_planners._networkx_implementations import \
-    NNodeEdgesNetworkAlgorithm
+from konnektor.network_planners._networkx_implementations import (
+    NNodeEdgesNetworkAlgorithm,
+)
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class NNodeEdgesNetworkGenerator(NetworkGenerator):
 
-    def __init__(self, mapper: AtomMapper, scorer,
-                 target_component_connectivity: int = 3,
-                 n_processes: int = 1,
-                 _initial_edge_lister: NetworkGenerator = None):
+    def __init__(
+        self,
+        mapper: AtomMapper,
+        scorer,
+        target_component_connectivity: int = 3,
+        n_processes: int = 1,
+        _initial_edge_lister: NetworkGenerator = None,
+    ):
         """
         The N-Node Edges Network tries to add more redundancy to the MST Network and tries to improve the robustness.
 
-        The algorithm first build a MST Network. 
+        The algorithm first build a MST Network.
         After this it will add best score performing `Transformations` in order to guarantee a 'Component' connectivity of `target_node_connectivity`.
 
 
@@ -35,21 +40,25 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         _initial_edge_lister: LigandNetworNetworkGeneratorkPlanner, optional
-            this `NetworkGenerator` is used to give the initial set of `Transformation`s. 
+            this `NetworkGenerator` is used to give the initial set of `Transformation`s.
             For standard usage, the MaximalNetworGenerator is used, which will provide all possible `Transformation`s. (default: MaximalNetworkPlanner)
 
         """
         if _initial_edge_lister is None:
-            _initial_edge_lister = MaximalNetworkGenerator(mapper=mapper,
-                                                           scorer=scorer,
-                                                           n_processes=n_processes)
+            _initial_edge_lister = MaximalNetworkGenerator(
+                mapper=mapper, scorer=scorer, n_processes=n_processes
+            )
 
         network_generator = NNodeEdgesNetworkAlgorithm(
-            target_node_connectivity=target_component_connectivity)
-        super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=network_generator,
-                         n_processes=n_processes,
-                         _initial_edge_lister=_initial_edge_lister)
+            target_node_connectivity=target_component_connectivity
+        )
+        super().__init__(
+            mapper=mapper,
+            scorer=scorer,
+            network_generator=network_generator,
+            n_processes=n_processes,
+            _initial_edge_lister=_initial_edge_lister,
+        )
 
     @property
     def target_node_connectivity(self) -> int:
@@ -67,8 +76,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
     def target_node_connectivity(self, target_node_connectivity: int):
         self.network_generator.target_node_connectivity = target_node_connectivity
 
-    def generate_ligand_network(self, components: Iterable[
-        Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Plan a Network which connects all ligands with at least n edges
 
         Parameters
@@ -83,20 +91,22 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         """
         # Build Full Graph
         initial_networks = self._initial_edge_lister.generate_ligand_network(
-            components=components)
+            components=components
+        )
         mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
         edge_map = {
             (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings}
+            for m in mappings
+        }
         edges = list(sorted(edge_map.keys()))
-        weights = [edge_map[k].annotations['score'] for k in edges]
+        weights = [edge_map[k].annotations["score"] for k in edges]
 
-        sg = self.network_generator.generate_network(edges=edges,
-                                                     weights=weights)
+        sg = self.network_generator.generate_network(edges=edges, weights=weights)
 
         selected_mappings = [
             edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
-            for k in sg.edges]
+            for k in sg.edges
+        ]
         return LigandNetwork(edges=selected_mappings, nodes=components)

@@ -4,8 +4,9 @@
 from gufe import LigandNetwork
 
 
-def merge_two_networks(network1: LigandNetwork,
-                       network2: LigandNetwork) -> LigandNetwork:
+def merge_two_networks(
+    network1: LigandNetwork, network2: LigandNetwork
+) -> LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
@@ -26,7 +27,7 @@ def merge_two_networks(network1: LigandNetwork,
     """
     connecting_nodes = network1.nodes.intersection(network2.nodes)
 
-    if (len(connecting_nodes) == 0):
+    if len(connecting_nodes) == 0:
         raise ValueError("No shared Nodes between Networks")
 
     merged_nodes = network1.nodes.union(network2.nodes)
@@ -72,7 +73,6 @@ def merge_networks(networks: list[LigandNetwork]) -> LigandNetwork:
         merged_nodes.extend(list(networkA.nodes.union(networkB.nodes)))
         merged_edges.extend(list(networkA.edges.union(networkB.edges)))
 
-    merged_network = LigandNetwork(edges=set(merged_edges),
-                                   nodes=set(merged_nodes))
+    merged_network = LigandNetwork(edges=set(merged_edges), nodes=set(merged_nodes))
 
     return merged_network

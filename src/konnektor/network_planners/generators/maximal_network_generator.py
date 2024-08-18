@@ -14,8 +14,9 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 
 class MaximalNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer, progress: bool = False,
-                 n_processes: int = 1):
+    def __init__(
+        self, mapper: AtomMapper, scorer, progress: bool = False, n_processes: int = 1
+    ):
         """
         The `MaximalNetworkGenerator` builds for given set of `Component`s a fully connected graph under the assumption each `Component` can be connected to another.
         The `Transformation`s of this graph are realized as `AtomMapping`s of pairwise `Component`s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
@@ -24,9 +25,9 @@ class MaximalNetworkGenerator(NetworkGenerator):
 
 
         This class is recommended as initial_edge_lister for other approaches.
-        > **Note**: the `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`. 
+        > **Note**: the `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`.
         > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
-        
+
         Parameters
         ----------
         mapper: AtomMapper
@@ -39,14 +40,16 @@ class MaximalNetworkGenerator(NetworkGenerator):
             number of processes that can be used for the network generation. (default: 1)
         """
 
-        super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=None,
-                         n_processes=n_processes,
-                         _initial_edge_lister=self)
+        super().__init__(
+            mapper=mapper,
+            scorer=scorer,
+            network_generator=None,
+            n_processes=n_processes,
+            _initial_edge_lister=self,
+        )
         self.progress = progress
 
-    def generate_ligand_network(self, components: Iterable[
-        Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Create a network with all possible proposed mappings.
 
         This will attempt to create (and optionally score) all possible mappings
@@ -72,30 +75,31 @@ class MaximalNetworkGenerator(NetworkGenerator):
         total = len(components) * (len(components) - 1) // 2
 
         # Parallel or not Parallel:
-        if (self.n_processes > 1):
+        if self.n_processes > 1:
             mappings = _parallel_map_scoring(
-                possible_edges=itertools.combinations(
-                    components, 2),
+                possible_edges=itertools.combinations(components, 2),
                 scorer=self.scorer,
                 mapper=self.mapper,
                 n_processes=self.n_processes,
-                show_progress=self.progress)
+                show_progress=self.progress,
+            )
         else:  # serial variant
             if self.progress is True:
-                progress = functools.partial(tqdm, total=total, delay=1.5,
-                                             desc="Mapping")
+                progress = functools.partial(
+                    tqdm, total=total, delay=1.5, desc="Mapping"
+                )
             else:
                 progress = lambda x: x
 
             mapping_generator = itertools.chain.from_iterable(
                 self.mapper.suggest_mappings(molA, molB)
-                for molA, molB in
-                progress(itertools.combinations(components, 2))
+                for molA, molB in progress(itertools.combinations(components, 2))
             )
             if self.scorer:
                 mappings = [
-                    mapping.with_annotations({'score': self.scorer(mapping)})
-                    for mapping in mapping_generator]
+                    mapping.with_annotations({"score": self.scorer(mapping)})
+                    for mapping in mapping_generator
+                ]
             else:
                 mappings = list(mapping_generator)
 

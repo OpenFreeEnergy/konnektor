@@ -3,8 +3,7 @@
 
 import numpy as np
 
-rgb2hex = lambda r, g, b: '#%02x%02x%02x' % (
-    int(r * 256), int(g * 256), int(b * 256))
+rgb2hex = lambda r, g, b: "#%02x%02x%02x" % (int(r * 256), int(g * 256), int(b * 256))
 
 OFE_COLORS = (
     (49 / 256, 57 / 256, 77 / 256),  # Badass Blue
@@ -17,16 +16,19 @@ OFE_COLORS = (
 )
 
 
-def color_gradient(c1: tuple[float, float, float] = OFE_COLORS[1],
-                   c2: tuple[float, float, float] = OFE_COLORS[2],
-                   c3: tuple[float, float, float] = OFE_COLORS[1],
-                   mix: float = 0, hex: bool = True):
+def color_gradient(
+    c1: tuple[float, float, float] = OFE_COLORS[1],
+    c2: tuple[float, float, float] = OFE_COLORS[2],
+    c3: tuple[float, float, float] = OFE_COLORS[1],
+    mix: float = 0,
+    hex: bool = True,
+):
     c1 = np.array(c1)
     c2 = np.array(c2)
     c3 = np.array(c3)
     mix = np.array(mix, ndmin=1)
 
-    if (mix > 0.5):
+    if mix > 0.5:
         m = mix - 0.5
         c = (0.5 - m) * c2 + m * c3
     else:

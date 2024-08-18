@@ -17,7 +17,6 @@ authors=[
     {name="Richard J Gowers", email="richardjgowers@gmail.com"},
 ]
 dependencies = [
-  'scipy',
   'numpy',
   'networkx',
   'gufe',
@@ -56,3 +55,4 @@ default-tag = "0.0.0"
 
 [tool.versioningit.write]
 file = "src/konnektor/_version.py"
+

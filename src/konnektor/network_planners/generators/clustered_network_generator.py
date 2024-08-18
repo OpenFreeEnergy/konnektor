@@ -7,14 +7,18 @@ import logging
 from typing import Iterable
 
 from gufe import Component, LigandNetwork, AtomMapper
+
 # Clustering
-from scikit_mol.fingerprints import RDKitFingerprintTransformer, \
-    MorganFingerprintTransformer
+from scikit_mol.fingerprints import (
+    RDKitFingerprintTransformer,
+    MorganFingerprintTransformer,
+)
 from sklearn.cluster import HDBSCAN, KMeans
 from tqdm import tqdm
 
-from konnektor.network_tools.clustering.component_diversity_clustering import \
-    ComponentsDiversityClusterer
+from konnektor.network_tools.clustering.component_diversity_clustering import (
+    ComponentsDiversityClusterer,
+)
 from ._abstract_network_generator import NetworkGenerator
 from .cyclic_network_generator import CyclicNetworkGenerator
 from .star_network_generator import StarNetworkGenerator
@@ -27,25 +31,28 @@ from ..concatenators._abstract_network_concatenator import NetworkConcatenator
 log = logging.getLogger()
 log.setLevel(logging.INFO)
 
+
 class ClusteredNetworkGenerator(NetworkGenerator):
-    def __init__(self,
-                 sub_network_planners: Iterable[NetworkGenerator] = (
-                 CyclicNetworkGenerator,),
-                 concatenator: NetworkConcatenator = MstConcatenator,
-                 clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
-                     featurize=RDKitFingerprintTransformer(),
-                     cluster=KMeans(n_clusters=3)),
-                 mapper: AtomMapper = None, scorer=None,
-                 n_processes: int = 1, progress: bool = False
-                 ):
-        ''' Implements the general concept of nd-space clustered networks and provides the logic.
+    def __init__(
+        self,
+        sub_network_planners: Iterable[NetworkGenerator] = (CyclicNetworkGenerator,),
+        concatenator: NetworkConcatenator = MstConcatenator,
+        clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
+            featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
+        ),
+        mapper: AtomMapper = None,
+        scorer=None,
+        n_processes: int = 1,
+        progress: bool = False,
+    ):
+        """Implements the general concept of nd-space clustered networks and provides the logic.
 
             The algorithm works as follows:
             1. Cluster `Component`s with the `clusterer` obj.
             2. Build sub-networks in the clusters using the `sub_network_planners`.
             3. Concatenate all sub-networks using the `concatenator` in order to build the final network.
 
-                        
+
         Parameters
         ----------
         clusterer: ComponentsDiversityClusterer
@@ -63,10 +70,14 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
-        '''
+        """
 
-        super().__init__(mapper=mapper, scorer=scorer,
-                         network_generator=None, n_processes=n_processes)
+        super().__init__(
+            mapper=mapper,
+            scorer=scorer,
+            network_generator=None,
+            n_processes=n_processes,
+        )
         self.clusterer = clusterer
 
         if hasattr(self.clusterer.cluster, "n_jobs"):
@@ -74,30 +85,28 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if hasattr(self.clusterer.featurize, "n_jobs"):
             self.clusterer.featurize.njobs = n_processes
 
-
         if not isinstance(sub_network_planners, (tuple, list)):
             sub_network_planners = [sub_network_planners]
 
         self.sub_network_planners = []
         for sub_net_planner in sub_network_planners:
             if inspect.isclass(sub_net_planner):
-                sub_net_planner_obj = sub_net_planner(mapper=mapper,
-                                                      scorer=scorer)
+                sub_net_planner_obj = sub_net_planner(mapper=mapper, scorer=scorer)
             else:
                 sub_net_planner_obj = sub_net_planner
 
             sub_net_planner_obj.n_processes = n_processes
             self.sub_network_planners.append(sub_net_planner_obj)
 
-        self.concatenator = concatenator(mapper=mapper,
-                                         scorer=scorer) if inspect.isclass(
-            concatenator) else concatenator
+        self.concatenator = (
+            concatenator(mapper=mapper, scorer=scorer)
+            if inspect.isclass(concatenator)
+            else concatenator
+        )
         self.concatenator.n_processes = n_processes
         self.progress = progress
 
-    def generate_ligand_network(self,
-                                components: Iterable[Component]
-                                ) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Create a network with n randomly selected edges for possible proposed mappings.
 
         Parameters
@@ -120,9 +129,9 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         log.info("Build Sub-Networks")
         self.sub_networks = []
         if self.progress is True:
-            progress = functools.partial(tqdm, total=len(self.clusters),
-                                         delay=1.5,
-                                         desc="Build Cluster Networks")
+            progress = functools.partial(
+                tqdm, total=len(self.clusters), delay=1.5, desc="Build Cluster Networks"
+            )
         else:
             progress = lambda x: x
 
@@ -130,7 +139,8 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             for network_planner in self.sub_network_planners:
                 try:
                     sub_network = network_planner.generate_ligand_network(
-                        self.clusters[-1])
+                        self.clusters[-1]
+                    )
                     break
                 except Exception as err:
                     print("ERR", "\n".join(err.args))
@@ -138,12 +148,13 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             self.sub_networks.append(sub_network)
         else:
             for cID, mols in progress(self.clusters.items()):
-                if (cID >= 0):  # Noise cluster is not for subnetworks
-                    if (len(mols) > 1):
+                if cID >= 0:  # Noise cluster is not for subnetworks
+                    if len(mols) > 1:
                         for network_planner in self.sub_network_planners:
                             try:
                                 sub_network = network_planner.generate_ligand_network(
-                                    mols)
+                                    mols
+                                )
                                 self.sub_networks.append(sub_network)
                                 break
                             except Exception as err:
@@ -158,37 +169,42 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if len(self.sub_networks) == 1:
             concat_network = self.sub_networks[0]
         else:
-            concat_network = concatenate_networks(networks=self.sub_networks,
-                                                  concatenator=self.concatenator)
+            concat_network = concatenate_networks(
+                networks=self.sub_networks, concatenator=self.concatenator
+            )
 
         # step 4: has the clustering a noise cluster
         if -1 in self.clusters:
             if self.progress is True:
-                progress = functools.partial(tqdm, total=len(self.clusters[-1]),
-                                             delay=1.5,
-                                             desc="add Noise Mols")
+                progress = functools.partial(
+                    tqdm, total=len(self.clusters[-1]), delay=1.5, desc="add Noise Mols"
+                )
             else:
                 progress = lambda x: x
 
             for mol in progress(self.clusters[-1]):
-                concat_network = append_component(network=concat_network,
-                                                  component=mol,
-                                                  concatenator=self.concatenator)
+                concat_network = append_component(
+                    network=concat_network,
+                    component=mol,
+                    concatenator=self.concatenator,
+                )
 
         return concat_network
 
 
 class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
-    def __init__(self,
-                 mapper: AtomMapper,
-                 scorer,
-                 clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
-                     featurize=MorganFingerprintTransformer(),
-                     cluster=HDBSCAN(metric="jaccard", min_cluster_size=3,
-                                     alpha=1/2048)),
-                 n_processes: int = 1, progress: bool = False
-                 ):
-        '''  The StarrySkyNetworkGenerator is an advanced network algorithm,
+    def __init__(
+        self,
+        mapper: AtomMapper,
+        scorer,
+        clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
+            featurize=MorganFingerprintTransformer(),
+            cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1 / 2048),
+        ),
+        n_processes: int = 1,
+        progress: bool = False,
+    ):
+        """The StarrySkyNetworkGenerator is an advanced network algorithm,
         that clusters the provided `Component`s and builds up a network from this.
 
         The approach follows the following steps:
@@ -198,8 +214,8 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         2. Build Sub-Star Networks in each Cluster using the `StarNetworkGenerator`.
         3. Concatenate the Sub-Star Networks to the final Starry  Sky Network, with 3 `Transformations` per cluster pair using the `MSTConcatenator`.
 
-        This approach allows in comparison to the Star Network, to build a network containing multiple centers imopoving the graph score. 
-        Still adding a limited amount of `Transformation`s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated. 
+        This approach allows in comparison to the Star Network, to build a network containing multiple centers imopoving the graph score.
+        Still adding a limited amount of `Transformation`s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated.
         So the Starry Sky Network is a compromise betwen graph score optimization and number of `Transformations`.
 
         Parameters
@@ -215,12 +231,14 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         n_processes: int
             number of processes that can be used for the network generation. (default: 1)
 
-        '''
+        """
 
-        super().__init__(clusterer=clusterer,
-                         sub_network_planners=[StarNetworkGenerator],
-                         concatenator=MstConcatenator,
-                         mapper=mapper, scorer=scorer,
-                         progress=progress,
-                         n_processes=n_processes,
-                         )
+        super().__init__(
+            clusterer=clusterer,
+            sub_network_planners=[StarNetworkGenerator],
+            concatenator=MstConcatenator,
+            mapper=mapper,
+            scorer=scorer,
+            progress=progress,
+            n_processes=n_processes,
+        )

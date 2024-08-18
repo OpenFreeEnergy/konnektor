@@ -60,9 +60,8 @@ def get_graph_cost(ligand_network: LigandNetwork) -> float:
     float
         sum of all edges the graph score
     """
-    score = sum([1-float(e.annotations["score"]) for e in ligand_network.edges])
+    score = sum([1 - float(e.annotations["score"]) for e in ligand_network.edges])
     return score
-
 
 
 def get_graph_efficiency(ligand_network: LigandNetwork) -> float:
@@ -79,10 +78,15 @@ def get_graph_efficiency(ligand_network: LigandNetwork) -> float:
     float
         sum of all edges the graph score
     """
-    score = sum([e.annotations["score"] for e in ligand_network.edges])/len(ligand_network.edges)
+    score = sum([e.annotations["score"] for e in ligand_network.edges]) / len(
+        ligand_network.edges
+    )
     return score
 
-def get_number_of_graph_cycles(ligand_network: LigandNetwork, higher_bound: int = 3) -> int:
+
+def get_number_of_graph_cycles(
+    ligand_network: LigandNetwork, higher_bound: int = 3
+) -> int:
     """
     Calculate the graph cycles, upt to the upper bound.
 
@@ -98,11 +102,15 @@ def get_number_of_graph_cycles(ligand_network: LigandNetwork, higher_bound: int 
         number of counted cycles.
     """
     graph = nx.DiGraph(ligand_network.graph).to_undirected()
-    raw_cycles = [str(sorted(c)) for c in nx.simple_cycles(graph, length_bound=higher_bound)]
+    raw_cycles = [
+        str(sorted(c)) for c in nx.simple_cycles(graph, length_bound=higher_bound)
+    ]
     return len(raw_cycles)
 
 
-def get_node_connectivities(ligand_network: LigandNetwork, normalize: bool = False) -> dict[SmallMoleculeComponent, Union[float, int]]:
+def get_node_connectivities(
+    ligand_network: LigandNetwork, normalize: bool = False
+) -> dict[SmallMoleculeComponent, Union[float, int]]:
     """
     Calculate the connectivities for all nodes in the graph.
 
@@ -117,12 +125,19 @@ def get_node_connectivities(ligand_network: LigandNetwork, normalize: bool = Fal
     """
     if normalize:
         n_edges = ligand_network.graph.number_of_edges()
-        return {n: sum([n in e for e in ligand_network.edges]) / n_edges for n in ligand_network.nodes}
+        return {
+            n: sum([n in e for e in ligand_network.edges]) / n_edges
+            for n in ligand_network.nodes
+        }
     else:
-        return {n: sum([n in e for e in ligand_network.edges]) for n in ligand_network.nodes}
+        return {
+            n: sum([n in e for e in ligand_network.edges]) for n in ligand_network.nodes
+        }
 
 
-def get_node_scores(ligand_network: LigandNetwork, normalize:bool = True) -> dict[SmallMoleculeComponent, float]:
+def get_node_scores(
+    ligand_network: LigandNetwork, normalize: bool = True
+) -> dict[SmallMoleculeComponent, float]:
     """
     Calculate the score of a node, as the sum of the edge scores.
     Parameters
@@ -138,15 +153,21 @@ def get_node_scores(ligand_network: LigandNetwork, normalize:bool = True) -> dic
     """
     if normalize:
         n_edges = ligand_network.graph.number_of_edges()
-        return {n: sum([e.annotations["score"] for e in ligand_network.edges if n in e]) / n_edges for n
-                in ligand_network.nodes}
+        return {
+            n: sum([e.annotations["score"] for e in ligand_network.edges if n in e])
+            / n_edges
+            for n in ligand_network.nodes
+        }
     else:
-        return {n: sum([e.annotations["score"] for e in ligand_network.edges if n in e]) for n
-                in ligand_network.nodes}
+        return {
+            n: sum([e.annotations["score"] for e in ligand_network.edges if n in e])
+            for n in ligand_network.nodes
+        }
 
 
-def get_node_number_cycles(ligand_network: LigandNetwork, higher_bound: int = 4) -> dict[int,
-int]:
+def get_node_number_cycles(
+    ligand_network: LigandNetwork, higher_bound: int = 4
+) -> dict[int, int]:
     """
     Get for each node the number of cycles, the node is contained in.
 
@@ -164,21 +185,28 @@ int]:
     graph = nx.DiGraph(ligand_network.graph).to_undirected()
     # Todo: check if there is a possibility in nx to omit cycles going back over already chosen nodes (1-2-3-2-1)
     # Todo: if possible remove the corresponding code
-    raw_cycles = [n for c in nx.simple_cycles(graph, length_bound=higher_bound) for n in c if len(set(c)) == len(c)]
+    raw_cycles = [
+        n
+        for c in nx.simple_cycles(graph, length_bound=higher_bound)
+        for n in c
+        if len(set(c)) == len(c)
+    ]
     uni, cou = np.unique(raw_cycles, return_counts=True)
 
-    #Add 0 nodes
-    res =  dict(zip(uni, cou))
+    # Add 0 nodes
+    res = dict(zip(uni, cou))
     for n in graph.nodes:
         if n not in res:
             res[n] = 0
     return res
 
 
-def get_edge_failure_robustness(ligand_network: LigandNetwork,
-                                failure_rate: float = 0.05,
-                                nrepeats: int = 100,
-                                seed: Optional[int]=None) -> float:
+def get_edge_failure_robustness(
+    ligand_network: LigandNetwork,
+    failure_rate: float = 0.05,
+    nrepeats: int = 100,
+    seed: Optional[int] = None,
+) -> float:
     """
     Estimate the robustness of a LigandNetwork, by removing n edges,
     corresponding to the percentage given by the failure_rate.
@@ -205,7 +233,7 @@ def get_edge_failure_robustness(ligand_network: LigandNetwork,
     """
     edges = list(ligand_network.edges)
     npics = max(int(np.round(len(edges) * failure_rate)), 1)
-    #print(npics)
+    # print(npics)
     connected = []
     rng = np.random.default_rng(seed=seed)
     for _ in range(nrepeats):
@@ -216,5 +244,5 @@ def get_edge_failure_robustness(ligand_network: LigandNetwork,
 
     # np.mean on list of bools give expected float answer
     r = np.mean(connected)
-    #print(connected, r)
+    # print(connected, r)
     return r
