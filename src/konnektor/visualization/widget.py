@@ -25,15 +25,15 @@ def get_node_connectivities(cg: LigandNetwork) -> list[int]:
 
 # some code borrowed from pen:
 # https://iwatobipen.wordpress.com/2020/03/30/draw-scaffold-tree-as-network-with-molecular-image-rdkit-cytoscape/
-def mol2svg(mol: Chem.Mol, represent_molecules_twoD:bool=False) -> str:
+def mol2svg(mol: Chem.Mol, represent_molecules_twoD: bool = False) -> str:
     try:
         Chem.rdmolops.Kekulize(mol)
     except:
         pass
-        
+
     if represent_molecules_twoD:
         Chem.rdDepictor.Compute2DCoords(mol)
-        
+
     drawer = rdMolDraw2D.MolDraw2DSVG(350, 300)
     rdMolDraw2D.PrepareAndDrawMolecule(drawer, mol)  # , legend=mol.GetProp("_Name"))
     drawer.SetColour((184 / 256, 87 / 256, 65 / 256))  # Transparent white background
@@ -68,7 +68,7 @@ def _build_cytoscape(
     network: gufe.LigandNetwork,
     layout: str = "concentric",
     show_molecules: bool = True,
-    represent_molecules_twoD: bool = False,
+    represent_molecules_2D: bool = False,
     show_mappings: bool = False,
 ) -> ipycytoscape.CytoscapeWidget:
     ligands = list(network.nodes)
@@ -100,7 +100,9 @@ def _build_cytoscape(
             {
                 "name": n.name,
                 "classes": "ligand",
-                "img": mol2svg(n.to_rdkit(),  represent_molecules_twoD=represent_molecules_twoD),
+                "img": mol2svg(
+                    n.to_rdkit(), represent_molecules_twoD=represent_molecules_2D
+                ),
                 "col": c,
             },
         )
@@ -223,7 +225,7 @@ def draw_network_widget(
     network: gufe.LigandNetwork,
     layout: str = "cose",
     show_molecules: bool = True,
-    represent_molecules_twoD: bool = False
+    represent_molecules_twoD: bool = False,
     show_mappings: bool = False,
 ) -> ipycytoscape.CytoscapeWidget:
     """For use in a jupyter noterbook, visualise a LigandNetwork
@@ -251,14 +253,14 @@ def draw_network_widget(
         network=network,
         layout=layout,
         show_molecules=show_molecules,
-        represent_molecules_twoD=represent_molecules_twoD,
+        represent_molecules_2D=represent_molecules_twoD,
         show_mappings=show_mappings,
     ):
         v = _build_cytoscape(
             network=network,
             layout=layout,
             show_molecules=show_molecules,
-            represent_molecules_twoD=represent_molecules_twoD,
+            represent_molecules_2D=represent_molecules_2D,
             show_mappings=show_mappings,
         )
         return v
