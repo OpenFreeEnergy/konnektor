@@ -9,8 +9,7 @@ from scikit_mol.fingerprints import FpsTransformer
 
 
 class ChargeTransformer(FpsTransformer):
-    def __init__(self, parallel: Union[bool, int] = False
-                 ):
+    def __init__(self, parallel: Union[bool, int] = False):
         """Calculates the RDKit FormalCharge and provides it as single field vector.
 
         Parameters

@@ -6,15 +6,15 @@ import itertools
 from gufe import LigandNetwork
 
 from konnektor.network_analysis import get_is_connected
-from konnektor.network_planners.generators.explicit_network_generator import \
-    ExplicitNetworkGenerator
+from konnektor.network_planners.generators.explicit_network_generator import (
+    ExplicitNetworkGenerator,
+)
 from konnektor.utils.toy_data import build_random_dataset
 
 
 def test_explicit_network_planner():
     n_compounds = 20
-    components, genMapper, genScorer = build_random_dataset(
-        n_compounds=n_compounds)
+    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
 
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 

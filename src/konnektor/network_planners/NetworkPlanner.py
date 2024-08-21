@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 # Todo: move to gufe Network planner
 
+
 class NetworkPlanner(abc.ABC):
 
     def __init__(self, mapper: AtomMapper, scorer):
