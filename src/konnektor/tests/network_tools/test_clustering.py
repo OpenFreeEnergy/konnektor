@@ -1,16 +1,16 @@
 from gufe import Component
 
-from konnektor.network_tools.clustering.auxilliary_featurizer import \
-    ChargeTransformer
+from konnektor.network_tools.clustering.auxilliary_featurizer import ChargeTransformer
 from konnektor.network_tools.clustering.charge_clustering import ChargeClusterer
 from konnektor.network_tools.clustering.scaffold_clustering import ScaffoldClusterer
-from konnektor.network_tools.clustering.component_diversity_clustering import \
-    ComponentsDiversityClusterer
+from konnektor.network_tools.clustering.component_diversity_clustering import (
+    ComponentsDiversityClusterer,
+)
 from konnektor.utils.toy_data import build_random_dataset
 
 
 def test_charge_transformer():
-    """ only a smoke test! checking that the code runs"""
+    """only a smoke test! checking that the code runs"""
     n_compounds = 20
     compounds, _, _ = build_random_dataset(n_compounds=n_compounds)
 
@@ -25,7 +25,7 @@ def test_charge_transformer():
 
 
 def test_diversity_clusterer():
-    """ only a smoke test! checking that the code runs"""
+    """only a smoke test! checking that the code runs"""
 
     n_compounds = 20
     compounds, _, _ = build_random_dataset(n_compounds=n_compounds)
@@ -40,7 +40,7 @@ def test_diversity_clusterer():
 
 
 def test_charge_clusterer():
-    """ only a smoke test! checking that the code runs"""
+    """only a smoke test! checking that the code runs"""
 
     n_compounds = 20
     compounds, _, _ = build_random_dataset(n_compounds=n_compounds)
@@ -55,7 +55,7 @@ def test_charge_clusterer():
 
 
 def test_scaffold_clusterer():
-    """ only a smoke test! checking that the code runs"""
+    """only a smoke test! checking that the code runs"""
 
     n_compounds = 20
     compounds, _, _ = build_random_dataset(n_compounds=n_compounds)

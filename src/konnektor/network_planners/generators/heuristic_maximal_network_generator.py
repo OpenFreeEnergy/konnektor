@@ -15,15 +15,26 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 # Todo: is graph connectivity ensured?
 
-class HeuristicMaximalNetworkGenerator(NetworkGenerator):
-    def __init__(self, mapper: AtomMapper, scorer, n_samples: int = 100,
-                 progress: bool = False,
-                 n_processes: int = 1):
-        """
-        The Heuristic Maximal Network planner builds for given set of compounds a set of edges per node build graph under the assumption each component can be connected to another.
-        The edges of this graph are realized as atom mappings of pairwise components. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
 
-        This class is can be used as initial_edge_lister
+class HeuristicMaximalNetworkGenerator(NetworkGenerator):
+    def __init__(
+        self,
+        mapper: AtomMapper,
+        scorer,
+        n_samples: int = 100,
+        progress: bool = False,
+        n_processes: int = 1,
+    ):
+        """
+        The `HeuristicMaximalNetworkGenerator` builds for given set of `Component`s a set of `n_samples` `Transformation`s per `Component` build network under the assumption each `Component` can be connected to another.
+        The `Transformations` of this network are realized as `AtomMapping`s of pairwise `Component`s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
+
+        This class is can be used as initial_edge_lister, if there is a large set of `Component`s (check network connectivity!)
+
+        This class is recommended as initial_edge_lister for other approaches.
+        > **Note**: the `HeuristicMaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`.
+        > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
+
 
         Parameters
         ----------
@@ -40,16 +51,18 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
 
 
         """
-        super().__init__(mapper=mapper, scorer=scorer,
-                         n_processes=n_processes,
-                         network_generator=None,
-                         _initial_edge_lister=self)
+        super().__init__(
+            mapper=mapper,
+            scorer=scorer,
+            n_processes=n_processes,
+            network_generator=None,
+            _initial_edge_lister=self,
+        )
 
         self.progress = progress
         self.n_samples = n_samples
 
-    def generate_ligand_network(self, components: Iterable[
-        Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Create a network with n randomly selected edges for possible proposed mappings.
 
         Parameters
@@ -63,35 +76,37 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             a heuristic max network.
         """
         components = list(components)
-        total = len(components) * (len(components) - 1) // 2
+        total = len(components) * self.n_samples
 
         # Parallel or not Parallel:
         # generate combinations to be searched.
         if len(components) > self.n_samples:
             sample_combinations = []
             for n in components:
-                sample_indices = np.random.choice(range(len(components)),
-                                                  size=self.n_samples,
-                                                  replace=False)
+                sample_indices = np.random.choice(
+                    range(len(components)), size=self.n_samples, replace=False
+                )
                 sample_combinations.extend(
-                    [(n, components[i]) for i in sample_indices if
-                     n != components[i]])
+                    [(n, components[i]) for i in sample_indices if n != components[i]]
+                )
         else:
             sample_combinations = itertools.combinations(components, 2)
 
         # todo: what to do if not connected?
 
-        if (self.n_processes > 1):
+        if self.n_processes > 1:
             mappings = _parallel_map_scoring(
                 possible_edges=sample_combinations,
                 scorer=self.scorer,
                 mapper=self.mapper,
                 n_processes=self.n_processes,
-                show_progress=self.progress)
+                show_progress=self.progress,
+            )
         else:  # serial variant
             if self.progress is True:
-                progress = functools.partial(tqdm, total=total, delay=1.5,
-                                             desc="Mapping")
+                progress = functools.partial(
+                    tqdm, total=total, delay=1.5, desc="Mapping"
+                )
             else:
                 progress = lambda x: x
 
@@ -101,8 +116,9 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             )
             if self.scorer:
                 mappings = [
-                    mapping.with_annotations({'score': self.scorer(mapping)})
-                    for mapping in mapping_generator]
+                    mapping.with_annotations({"score": self.scorer(mapping)})
+                    for mapping in mapping_generator
+                ]
             else:
                 mappings = list(mapping_generator)
 

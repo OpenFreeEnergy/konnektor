@@ -9,8 +9,9 @@ from gufe import AtomMapper
 from gufe import LigandNetwork
 
 from ..NetworkPlanner import NetworkPlanner
-from .._networkx_implementations._abstract_network_algorithm import \
-    _AbstractNetworkAlgorithm
+from .._networkx_implementations._abstract_network_algorithm import (
+    _AbstractNetworkAlgorithm,
+)
 
 log = logging.getLogger(__name__)
 
@@ -19,10 +20,14 @@ class NetworkConcatenator(NetworkPlanner):
     progress: bool = False
     n_processes: int
 
-    def __init__(self, mapper: AtomMapper, scorer,
-                 network_generator: _AbstractNetworkAlgorithm,
-                 n_processes: int = 1,
-                 _initial_edge_lister=None):
+    def __init__(
+        self,
+        mapper: AtomMapper,
+        scorer,
+        network_generator: _AbstractNetworkAlgorithm,
+        n_processes: int = 1,
+        _initial_edge_lister=None,
+    ):
         """Base Class for the the LigandNetworkConcatenator classes.
          It defines the std. class for a Konnektor LigandNetworkPlanner
 
@@ -57,15 +62,17 @@ class NetworkConcatenator(NetworkPlanner):
         # edge lister performs usually the most expensive task!
         # So parallelization is most important here.
         if self._initial_edge_lister is not None and hasattr(
-                self._initial_edge_lister, "nprocesses"):
+            self._initial_edge_lister, "nprocesses"
+        ):
             self.n_processes = n_processes
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
     @abc.abstractmethod
-    def concatenate_networks(self, ligand_networks: Iterable[
-        LigandNetwork]) -> LigandNetwork:
+    def concatenate_networks(
+        self, ligand_networks: Iterable[LigandNetwork]
+    ) -> LigandNetwork:
         """
 
         Parameters

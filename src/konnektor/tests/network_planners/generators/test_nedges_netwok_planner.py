@@ -9,18 +9,20 @@ from konnektor.network_planners import NNodeEdgesNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     atom_mapping_basic_test_files,
     genScorer,
-    GenAtomMapper)
+    GenAtomMapper,
+)
 
 
 def test_nedges_network_mappers(atom_mapping_basic_test_files):
-    ligands = [atom_mapping_basic_test_files['toluene'],
-               atom_mapping_basic_test_files['2-naftanol'],
-               ]
+    ligands = [
+        atom_mapping_basic_test_files["toluene"],
+        atom_mapping_basic_test_files["2-naftanol"],
+    ]
 
     mapper = GenAtomMapper()
-    planner = NNodeEdgesNetworkGenerator(mapper=mapper,
-                                         scorer=genScorer,
-                                         target_node_connectivity=2)
+    planner = NNodeEdgesNetworkGenerator(
+        mapper=mapper, scorer=genScorer, target_component_connectivity=2
+    )
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)

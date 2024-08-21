@@ -10,7 +10,7 @@ from tqdm.auto import tqdm
 
 
 def thread_mapping(args) -> list[AtomMapping]:
-    '''
+    """
     Helper function working as thread for parallel execution.
 
     Parameters
@@ -23,27 +23,31 @@ def thread_mapping(args) -> list[AtomMapping]:
     list[AtomMapping]:
         return a list of scored atom mappings
 
-    '''
+    """
     jobID, compound_pairs, mapper, scorer = args
-    mapping_generator = [next(mapper.suggest_mappings(
-        compound_pair[0], compound_pair[1])) for
-        compound_pair in compound_pairs]
+    mapping_generator = [
+        next(mapper.suggest_mappings(compound_pair[0], compound_pair[1]))
+        for compound_pair in compound_pairs
+    ]
 
     if scorer:
-        mappings = [mapping.with_annotations(
-            {'score': scorer(mapping)})
-            for mapping in mapping_generator]
+        mappings = [
+            mapping.with_annotations({"score": scorer(mapping)})
+            for mapping in mapping_generator
+        ]
     else:
         mappings = list(mapping_generator)
 
     return mappings
 
 
-def _parallel_map_scoring(possible_edges: list[tuple[SmallMoleculeComponent,
-SmallMoleculeComponent]],
-                          scorer: callable, mapper: AtomMapper,
-                          n_processes: int,
-                          show_progress: bool = True) -> list[AtomMapping]:
+def _parallel_map_scoring(
+    possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
+    scorer: callable,
+    mapper: AtomMapper,
+    n_processes: int,
+    show_progress: bool = True,
+) -> list[AtomMapping]:
     """
     This helper function parallelize mapping and scoring of a given list of
     molecule pairs.
@@ -68,8 +72,7 @@ SmallMoleculeComponent]],
     """
     if show_progress is True and n_processes > 1:
         n_batches = 10 * n_processes
-        progress = functools.partial(tqdm, total=n_batches, delay=1.5,
-                                     desc="Mapping")
+        progress = functools.partial(tqdm, total=n_batches, delay=1.5, desc="Mapping")
     else:
         progress = lambda x: x
 
@@ -82,11 +85,15 @@ SmallMoleculeComponent]],
 
     # Prepare parallel execution.
     # suboptimal implementation, but itertools.batch is python 3.12,
-    batches = (possible_edges[i:i + n_batches] for i in
-               range(0, len(possible_edges), n_batches))
+    batches = (
+        possible_edges[i : i + n_batches]
+        for i in range(0, len(possible_edges), n_batches)
+    )
 
-    jobs = [(job_id, combination, mapper, scorer) for job_id,
-    combination in enumerate(batches)]
+    jobs = [
+        (job_id, combination, mapper, scorer)
+        for job_id, combination in enumerate(batches)
+    ]
 
     # Execute parallelism
     mappings = []

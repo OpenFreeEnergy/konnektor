@@ -8,8 +8,9 @@ from typing import Iterable
 from gufe import AtomMapper
 from gufe import LigandNetwork, Component
 
-from konnektor.network_planners._networkx_implementations import \
-    _AbstractNetworkAlgorithm
+from konnektor.network_planners._networkx_implementations import (
+    _AbstractNetworkAlgorithm,
+)
 from ..NetworkPlanner import NetworkPlanner
 
 log = logging.getLogger(__name__)
@@ -19,10 +20,14 @@ class NetworkGenerator(NetworkPlanner):
     progress: bool = False
     n_processes: int
 
-    def __init__(self, mapper: AtomMapper, scorer,
-                 network_generator: _AbstractNetworkAlgorithm,
-                 n_processes: int = 1,
-                 _initial_edge_lister=None):
+    def __init__(
+        self,
+        mapper: AtomMapper,
+        scorer,
+        network_generator: _AbstractNetworkAlgorithm,
+        n_processes: int = 1,
+        _initial_edge_lister=None,
+    ):
         """This class is an implementation for the LigandNetworkPlanner interface.
         It defines the std. class for a Konnektor LigandNetworkPlanner
 
@@ -54,12 +59,12 @@ class NetworkGenerator(NetworkPlanner):
         # edge lister performs usually the most expensive task!
         # So parallelization is most important here.
         if self._initial_edge_lister is not None and hasattr(
-                self._initial_edge_lister, "nprocesses"):
+            self._initial_edge_lister, "n_processes"
+        ):
             self.n_processes = n_processes
 
     @abc.abstractmethod
-    def generate_ligand_network(self, components: Iterable[
-        Component]) -> LigandNetwork:
+    def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Plan a Network which connects all ligands following a given algorithm cost
 
         Parameters

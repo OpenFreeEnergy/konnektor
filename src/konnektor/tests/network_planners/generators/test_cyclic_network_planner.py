@@ -2,7 +2,11 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import numpy as np
-from konnektor.network_analysis import get_is_connected, get_node_number_cycles, get_graph_score
+from konnektor.network_analysis import (
+    get_is_connected,
+    get_node_number_cycles,
+    get_graph_score,
+)
 from konnektor.network_planners import CyclicNetworkGenerator
 from konnektor.utils.toy_data import build_random_dataset
 
@@ -11,11 +15,15 @@ def test_cyclic_network_planner():
     n_compounds = 8
     ncycles = 2
     components, genMapper, genScorer = build_random_dataset(
-        n_compounds=n_compounds, rand_seed=42)
+        n_compounds=n_compounds, rand_seed=42
+    )
 
     planner = CyclicNetworkGenerator(
-        mapper=genMapper, scorer=genScorer, cycle_sizes=3,
-        node_present_in_cycles=ncycles)
+        mapper=genMapper,
+        scorer=genScorer,
+        cycle_sizes=3,
+        node_present_in_cycles=ncycles,
+    )
     network = planner.generate_ligand_network(components)
 
     assert len(network.nodes) == n_compounds

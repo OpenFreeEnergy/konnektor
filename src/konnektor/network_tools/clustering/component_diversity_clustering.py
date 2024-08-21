@@ -17,10 +17,12 @@ log.setLevel(logging.WARNING)
 
 
 class ComponentsDiversityClusterer(_AbstractClusterer):
-    def __init__(self,
-                 featurize: TransformerMixin = MorganFingerprintTransformer(),
-                 cluster: ClusterMixin = KMeans(n_clusters=5, n_init="auto"),
-                 n_processes: int = 1):
+    def __init__(
+        self,
+        featurize: TransformerMixin = MorganFingerprintTransformer(),
+        cluster: ClusterMixin = KMeans(n_clusters=5, n_init="auto"),
+        n_processes: int = 1,
+    ):
         """
         This class can be use to seperate components by different features, like charge or morgan fingerprints.
 
@@ -52,8 +54,9 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         else:
             return self._cluster_centers
 
-    def cluster_compounds(self, components: list[Component]) -> dict[
-        int, list[Component]]:
+    def cluster_compounds(
+        self, components: list[Component]
+    ) -> dict[int, list[Component]]:
         """
             The method featurizes and clusters the molecules according to the features.
 
@@ -71,7 +74,8 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         """
         # Build Pipeline
         self.pipe = Pipeline(
-            [('mol_transformer', self.featurize), ('Cluster', self.cluster)])
+            [("mol_transformer", self.featurize), ("Cluster", self.cluster)]
+        )
         self.pipe.fit([c.to_rdkit() for c in components])
 
         # Retrieve Results
@@ -83,8 +87,8 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         # Compounds label
         cluster_components = {}
         for clusterID in np.unique(labels):
-            cluster_components[int(clusterID)] = [components[i] for i, cid in
-                                                  enumerate(labels) if
-                                                  (cid == clusterID)]
+            cluster_components[int(clusterID)] = [
+                components[i] for i, cid in enumerate(labels) if (cid == clusterID)
+            ]
 
         return cluster_components

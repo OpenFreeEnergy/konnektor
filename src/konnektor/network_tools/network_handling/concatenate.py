@@ -5,12 +5,14 @@ from typing import Iterable
 
 from gufe import LigandNetwork, Component
 
-from konnektor.network_planners.concatenators._abstract_network_concatenator import \
-    NetworkConcatenator
+from konnektor.network_planners.concatenators._abstract_network_concatenator import (
+    NetworkConcatenator,
+)
 
 
-def concatenate_networks(networks: Iterable[LigandNetwork],
-                         concatenator: NetworkConcatenator) -> LigandNetwork:
+def concatenate_networks(
+    networks: Iterable[LigandNetwork], concatenator: NetworkConcatenator
+) -> LigandNetwork:
     """
     Concatenate networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
@@ -35,9 +37,9 @@ def concatenate_networks(networks: Iterable[LigandNetwork],
     return concat_network
 
 
-def append_component(network: LigandNetwork,
-                     component: Component,
-                     concatenator: NetworkConcatenator) -> LigandNetwork:
+def append_component(
+    network: LigandNetwork, component: Component, concatenator: NetworkConcatenator
+) -> LigandNetwork:
     """
     Add one node to the network, based on the provided concatenators algorithm.
 
@@ -56,7 +58,6 @@ def append_component(network: LigandNetwork,
         returns the new network
     """
     single_node_net = LigandNetwork(edges=[], nodes=[component])
-    appended_network = concatenator.concatenate_networks([network,
-                                                          single_node_net])
+    appended_network = concatenator.concatenate_networks([network, single_node_net])
 
     return appended_network
