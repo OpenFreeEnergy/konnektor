@@ -28,7 +28,7 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     return ligand_network.is_connected()
 
 
-def get_graph_score(ligand_network: LigandNetwork) -> float:
+def get_network_score(ligand_network: LigandNetwork) -> float:
     """
     Calculate the graph score based on summation of the edge weights.
 
@@ -46,7 +46,7 @@ def get_graph_score(ligand_network: LigandNetwork) -> float:
     return score
 
 
-def get_graph_cost(ligand_network: LigandNetwork) -> float:
+def get_network_cost(ligand_network: LigandNetwork) -> float:
     """
     Calculate the graph score based on summation of the edge weights.
 
@@ -64,7 +64,7 @@ def get_graph_cost(ligand_network: LigandNetwork) -> float:
     return score
 
 
-def get_graph_efficiency(ligand_network: LigandNetwork) -> float:
+def get_network_efficiency(ligand_network: LigandNetwork) -> float:
     """
     Calculate the graph score based on summation of the edge weights.
 
@@ -84,7 +84,7 @@ def get_graph_efficiency(ligand_network: LigandNetwork) -> float:
     return score
 
 
-def get_number_of_graph_cycles(
+def get_number_of_network_cycles(
     ligand_network: LigandNetwork, higher_bound: int = 3
 ) -> int:
     """
@@ -108,7 +108,7 @@ def get_number_of_graph_cycles(
     return len(raw_cycles)
 
 
-def get_node_connectivities(
+def get_component_connectivities(
     ligand_network: LigandNetwork, normalize: bool = False
 ) -> dict[SmallMoleculeComponent, Union[float, int]]:
     """
@@ -135,7 +135,7 @@ def get_node_connectivities(
         }
 
 
-def get_node_scores(
+def get_component_scores(
     ligand_network: LigandNetwork, normalize: bool = True
 ) -> dict[SmallMoleculeComponent, float]:
     """
@@ -165,7 +165,7 @@ def get_node_scores(
         }
 
 
-def get_node_number_cycles(
+def get_component_number_cycles(
     ligand_network: LigandNetwork, higher_bound: int = 4
 ) -> dict[int, int]:
     """
@@ -201,7 +201,7 @@ def get_node_number_cycles(
     return res
 
 
-def get_edge_failure_robustness(
+def get_transformation_failure_robustness(
     ligand_network: LigandNetwork,
     failure_rate: float = 0.05,
     nrepeats: int = 100,
