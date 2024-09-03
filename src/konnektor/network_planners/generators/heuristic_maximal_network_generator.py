@@ -56,6 +56,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             scorer=scorer,
             n_processes=n_processes,
             network_generator=None,
+            progress=progress,
             _initial_edge_lister=self,
         )
 

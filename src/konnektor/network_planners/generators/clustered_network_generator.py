@@ -76,6 +76,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             mapper=mapper,
             scorer=scorer,
             network_generator=None,
+            progress=progress,
             n_processes=n_processes,
         )
         self.clusterer = clusterer

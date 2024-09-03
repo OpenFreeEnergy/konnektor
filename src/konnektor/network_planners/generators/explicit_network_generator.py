@@ -15,7 +15,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         mapper: AtomMapper,
         scorer,
         n_processes: int = 1,
-        show_progress: bool = False,
+        progress: bool = False,
     ):
         """
 
@@ -27,16 +27,16 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         n_processes: int
             number of processes used to build the ligand network
-        show_progress: bool, optional
+        progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         """
         super().__init__(
             mapper=mapper,
             scorer=scorer,
             n_processes=n_processes,
+            progress=progress,
             network_generator=None,
         )
-        self.progress = show_progress
 
     def generate_ligand_network(
         self,

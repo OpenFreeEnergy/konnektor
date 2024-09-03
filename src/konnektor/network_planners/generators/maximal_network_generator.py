@@ -45,9 +45,9 @@ class MaximalNetworkGenerator(NetworkGenerator):
             scorer=scorer,
             network_generator=None,
             n_processes=n_processes,
+            progress=progress,
             _initial_edge_lister=self,
         )
-        self.progress = progress
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Create a network with all possible proposed mappings.

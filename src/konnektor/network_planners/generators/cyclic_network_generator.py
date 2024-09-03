@@ -16,7 +16,6 @@ from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class CyclicNetworkGenerator(NetworkGenerator):
-
     def __init__(
         self,
         mapper: AtomMapper,
@@ -24,6 +23,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
         node_present_in_cycles: int = 2,
         cycle_sizes: Union[int, List[int]] = 3,
         n_processes: int = 1,
+        progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
@@ -78,6 +78,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
             scorer=scorer,
             network_generator=network_generator,
             n_processes=n_processes,
+            progress=progress,
             _initial_edge_lister=_initial_edge_lister,
         )
 

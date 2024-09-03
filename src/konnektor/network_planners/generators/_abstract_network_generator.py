@@ -26,6 +26,7 @@ class NetworkGenerator(NetworkPlanner):
         scorer,
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
+        progress: bool = False,
         _initial_edge_lister=None,
     ):
         """This class is an implementation for the LigandNetworkPlanner interface.
@@ -41,6 +42,8 @@ class NetworkGenerator(NetworkPlanner):
             any callable which takes a AtomMapping and returns a float
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
+        progress: bool, optional
+            if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
@@ -62,6 +65,26 @@ class NetworkGenerator(NetworkPlanner):
             self._initial_edge_lister, "n_processes"
         ):
             self.n_processes = n_processes
+        if self._initial_edge_lister is not None and hasattr(
+            self._initial_edge_lister, "progress"
+        ):
+            self._initial_edge_lister.progress = progress
+        self._progress = progress
+
+    @property
+    def progress(self) -> bool:
+        """
+        shows a progress bar if True
+        """
+        return self._progress
+
+    @progress.setter
+    def progress(self, progress: bool):
+        self._progress = progress
+        if self._initial_edge_lister is not None and hasattr(
+            self._initial_edge_lister, "progress"
+        ):
+            self._initial_edge_lister.progress = progress
 
     @abc.abstractmethod
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:

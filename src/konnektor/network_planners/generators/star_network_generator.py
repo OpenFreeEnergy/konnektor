@@ -11,12 +11,12 @@ from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class StarNetworkGenerator(NetworkGenerator):
-
     def __init__(
         self,
         mapper: AtomMapper,
         scorer,
         n_processes: int = 1,
+        progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
@@ -38,6 +38,8 @@ class StarNetworkGenerator(NetworkGenerator):
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
+        progress: bool, optional
+            if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
@@ -52,6 +54,7 @@ class StarNetworkGenerator(NetworkGenerator):
             scorer=scorer,
             network_generator=RadialNetworkAlgorithm(),
             n_processes=n_processes,
+            progress=progress,
             _initial_edge_lister=_initial_edge_lister,
         )
 

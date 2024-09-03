@@ -11,13 +11,13 @@ from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class TwinStarNetworkGenerator(NetworkGenerator):
-
     def __init__(
         self,
         mapper: AtomMapper,
         scorer,
         n_centers: int = 2,
         n_processes: int = 1,
+        progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
@@ -43,6 +43,8 @@ class TwinStarNetworkGenerator(NetworkGenerator):
             the number of centers in the network. (default: 2)
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
+        progress: bool, optional
+            if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
@@ -57,6 +59,7 @@ class TwinStarNetworkGenerator(NetworkGenerator):
             scorer=scorer,
             network_generator=RadialNetworkAlgorithm(n_centers=n_centers),
             n_processes=n_processes,
+            progress=progress,
             _initial_edge_lister=_initial_edge_lister,
         )
 

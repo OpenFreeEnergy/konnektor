@@ -11,13 +11,13 @@ from .maximal_network_generator import MaximalNetworkGenerator
 
 
 class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
-
     def __init__(
         self,
         mapper: AtomMapper,
         scorer,
         n_redundancy: int = 2,
         n_processes: int = 1,
+        progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
@@ -40,6 +40,8 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             use MST n times to get a redundant set of `Transformations`.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
+        progress: bool, optional
+            if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkGenerator, optional
             this `NetworkGenerator` is used to give the initial set of edges. For standard usage, the `MaximalNetworkGenerator` is used. (default: MaximalNetworkPlanner)
 
@@ -55,6 +57,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
+            progress=progress,
             _initial_edge_lister=_initial_edge_lister,
         )
 
