@@ -87,7 +87,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        components : list of SmallMoleculeComponent
+        components : list of Components
           the small molecules to place into the network
         mapper: AtomMapper
           the atom mapper to use to construct edges
@@ -119,7 +119,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
     def generate_network_from_names(
         self,
-        ligands: list[Component],
+        components: list[Component],
         names: list[tuple[str, str]],
     ) -> LigandNetwork:
         """
@@ -127,7 +127,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        ligands : list of SmallMoleculeComponent
+        components : list of Components
           the small molecules to place into the network
         mapper: AtomMapper
           the atom mapper to use to construct edges
@@ -148,10 +148,10 @@ class ExplicitNetworkGenerator(NetworkGenerator):
           if multiple molecules have the same name (this would otherwise be
           problematic)
         """
-        nm2comp = {l.name: l for l in enumerate(ligands)}
+        nm2comp = {l.name: l for l in components}
 
-        if len(nm2comp) < len(ligands):
-            dupes = Counter((l.name for l in ligands))
+        if len(nm2comp) < len(components):
+            dupes = Counter((l.name for l in components))
             dupe_names = [k for k, v in dupes.items() if v > 1]
             raise ValueError(f"Duplicate names: {dupe_names}")
 
@@ -165,7 +165,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                     for nm in itertools.chain.from_iterable(names)
                     if nm not in nm2comp
                 ]
-                available = [ligand.name for ligand in ligands]
+                available = [ligand.name for ligand in components]
                 raise KeyError(
                     f"Invalid name(s) requested {badnames}.  " f"Available: {available}"
                 )
