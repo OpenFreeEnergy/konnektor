@@ -1,7 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import Component, LigandNetwork, AtomMapper
 
@@ -13,7 +13,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class TwinStarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         n_centers: int = 2,
         n_processes: int = 1,
@@ -35,7 +35,7 @@ class TwinStarNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mapper :  Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
@@ -51,11 +51,11 @@ class TwinStarNetworkGenerator(NetworkGenerator):
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
-                mapper=mapper, scorer=scorer, n_processes=n_processes
+                mappers=mappers, scorer=scorer, n_processes=n_processes
             )
 
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=RadialNetworkAlgorithm(n_centers=n_centers),
             n_processes=n_processes,

@@ -49,11 +49,11 @@ class CyclicConcatenator(NetworkConcatenator):
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaxConcatenator(
-                mapper=mapper, scorer=scorer, n_processes=n_processes
+                mappers=mapper, scorer=scorer, n_processes=n_processes
             )
 
         super().__init__(
-            mapper=mapper,
+            mappers=mapper,
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,

@@ -3,7 +3,7 @@
 
 import itertools
 import logging
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import AtomMapper, LigandNetwork
 
@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 class MaxConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         n_processes: int = 1,
         show_progress: bool = False,
@@ -43,7 +43,7 @@ class MaxConcatenator(NetworkConcatenator):
         """
 
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=None,
             n_processes=n_processes,
@@ -87,7 +87,7 @@ class MaxConcatenator(NetworkConcatenator):
             bipartite_graph_mappings = _parallel_map_scoring(
                 possible_edges=pedges,
                 scorer=self.scorer,
-                mapper=self.mapper,
+                mappers=self.mappers,
                 n_processes=self.n_processes,
                 show_progress=self.progress,
             )

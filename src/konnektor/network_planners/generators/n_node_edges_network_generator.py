@@ -1,7 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import Component, LigandNetwork, AtomMapper
 
@@ -15,7 +15,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class NNodeEdgesNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         target_component_connectivity: int = 3,
         n_processes: int = 1,
@@ -48,14 +48,14 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
-                mapper=mapper, scorer=scorer, n_processes=n_processes
+                mappers=mappers, scorer=scorer, n_processes=n_processes
             )
 
         network_generator = NNodeEdgesNetworkAlgorithm(
             target_node_connectivity=target_component_connectivity
         )
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=network_generator,
             n_processes=n_processes,

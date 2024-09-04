@@ -3,7 +3,7 @@
 
 import functools
 import itertools
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import AtomMapper
 from gufe import LigandNetwork, Component
@@ -15,7 +15,11 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 
 class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
-        self, mapper: AtomMapper, scorer, progress: bool = False, n_processes: int = 1
+        self,
+        mappers: Union[AtomMapper, list[AtomMapper]],
+        scorer,
+        progress: bool = False,
+        n_processes: int = 1,
     ):
         """
         The `MaximalNetworkGenerator` builds for given set of `Component`s a fully connected graph under the assumption each `Component` can be connected to another.
@@ -30,7 +34,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper: AtomMapper
+        mappers: Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two ligands.
         scorer: AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
@@ -41,7 +45,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         """
 
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=None,
             n_processes=n_processes,
@@ -79,7 +83,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
             mappings = _parallel_map_scoring(
                 possible_edges=itertools.combinations(components, 2),
                 scorer=self.scorer,
-                mapper=self.mapper,
+                mappers=self.mappers,
                 n_processes=self.n_processes,
                 show_progress=self.progress,
             )
@@ -91,17 +95,48 @@ class MaximalNetworkGenerator(NetworkGenerator):
             else:
                 progress = lambda x: x
 
-            mapping_generator = itertools.chain.from_iterable(
-                self.mapper.suggest_mappings(molA, molB)
-                for molA, molB in progress(itertools.combinations(components, 2))
-            )
-            if self.scorer:
-                mappings = [
-                    mapping.with_annotations({"score": self.scorer(mapping)})
-                    for mapping in mapping_generator
-                ]
-            else:
-                mappings = list(mapping_generator)
+            mappings = []
+            for component_pair in progress(itertools.combinations(components, 2)):
+                best_score = 0.0
+                best_mapping = None
+                molA = component_pair[0]
+                molB = component_pair[1]
 
-        network = LigandNetwork(mappings, nodes=components)
+                for mapper in self.mappers:
+                    try:
+                        mapping_generator = mapper.suggest_mappings(molA, molB)
+                    except:
+                        continue
+
+                    if self.scorer:
+                        tmp_mappings = [
+                            mapping.with_annotations({"score": self.scorer(mapping)})
+                            for mapping in mapping_generator
+                        ]
+
+                        if len(tmp_mappings) > 0:
+                            tmp_best_mapping = min(
+                                tmp_mappings, key=lambda m: m.annotations["score"]
+                            )
+
+                            if (
+                                tmp_best_mapping.annotations["score"] < best_score
+                                or best_mapping is None
+                            ):
+                                best_score = tmp_best_mapping.annotations["score"]
+                                best_mapping = tmp_best_mapping
+                    else:
+                        try:
+                            best_mapping = next(mapping_generator)
+                        except:
+                            print("warning")
+                            continue
+
+                if best_mapping is not None:
+                    mappings.append(best_mapping)
+
+        if len(mappings) == 0:
+            raise RuntimeError("Could not generate any mapping!")
+
+        network = LigandNetwork(edges=mappings, nodes=components)
         return network

@@ -22,7 +22,7 @@ def test_starry_sky_network_planner():
     clusterer = ComponentsDiversityClusterer(cluster=KMeans(n_clusters=3))
 
     planner = StarrySkyNetworkGenerator(
-        mapper=genMapper, scorer=genScorer, clusterer=clusterer
+        mappers=genMapper, scorer=genScorer, clusterer=clusterer
     )
 
     ligand_network = planner(components)

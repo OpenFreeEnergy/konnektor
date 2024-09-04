@@ -3,7 +3,7 @@
 
 import functools
 import itertools
-from typing import Iterable
+from typing import Iterable, Union
 
 import numpy as np
 from gufe import Component, LigandNetwork, AtomMapper
@@ -19,7 +19,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         n_samples: int = 100,
         progress: bool = False,
@@ -52,7 +52,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
 
         """
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             n_processes=n_processes,
             network_generator=None,
@@ -99,7 +99,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             mappings = _parallel_map_scoring(
                 possible_edges=sample_combinations,
                 scorer=self.scorer,
-                mapper=self.mapper,
+                mappers=self.mappers,
                 n_processes=self.n_processes,
                 show_progress=self.progress,
             )
@@ -111,17 +111,43 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             else:
                 progress = lambda x: x
 
-            mapping_generator = itertools.chain.from_iterable(
-                self.mapper.suggest_mappings(molA, molB)
-                for molA, molB in progress(sample_combinations)
-            )
-            if self.scorer:
-                mappings = [
-                    mapping.with_annotations({"score": self.scorer(mapping)})
-                    for mapping in mapping_generator
-                ]
-            else:
-                mappings = list(mapping_generator)
+            mappings = []
+            for component_pair in progress(sample_combinations):
+                best_score = 0.0
+                best_mapping = None
+                molA = component_pair[0]
+                molB = component_pair[1]
+
+                for mapper in self.mappers:
+                    mapping_generator = mapper.suggest_mappings(molA, molB)
+
+                    if self.scorer:
+                        tmp_mappings = [
+                            mapping.with_annotations({"score": self.scorer(mapping)})
+                            for mapping in mapping_generator
+                        ]
+
+                        if len(tmp_mappings) > 0:
+                            tmp_best_mapping = min(
+                                tmp_mappings, key=lambda m: m.annotations["score"]
+                            )
+
+                            if (
+                                tmp_best_mapping.annotations["score"] < best_score
+                                or best_mapping is None
+                            ):
+                                best_score = tmp_best_mapping.annotations["score"]
+                                best_mapping = tmp_best_mapping
+                    else:
+                        try:
+                            best_mapping = next(mapping_generator)
+                        except:
+                            continue
+                if best_mapping is not None:
+                    mappings.append(best_mapping)
+
+        if len(mappings) == 0:
+            raise RuntimeError("Could not generate any mapping!")
 
         network = LigandNetwork(mappings, nodes=components)
         return network

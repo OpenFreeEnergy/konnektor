@@ -4,7 +4,7 @@
 import functools
 import inspect
 import logging
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import Component, LigandNetwork, AtomMapper
 
@@ -40,7 +40,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
             featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
         ),
-        mapper: AtomMapper = None,
+        mappers: Union[AtomMapper, list[AtomMapper]] = None,
         scorer=None,
         n_processes: int = 1,
         progress: bool = False,
@@ -61,7 +61,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             The clusters, are then seperatley translated to sub networks by the sub_network_planners
         concatenator: NetworkConcatenator
             The `NetworkConcatenator` is connecting the different sub networks.
-        mapper: AtomMapper
+        mapper:  Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two ligands, if only `NetworkConcatenator` or  `NetworkGenerator` classes are passed
         scorer: AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
@@ -73,7 +73,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         """
 
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=None,
             progress=progress,
@@ -92,7 +92,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         self.sub_network_planners = []
         for sub_net_planner in sub_network_planners:
             if inspect.isclass(sub_net_planner):
-                sub_net_planner_obj = sub_net_planner(mapper=mapper, scorer=scorer)
+                sub_net_planner_obj = sub_net_planner(mappers=mappers, scorer=scorer)
             else:
                 sub_net_planner_obj = sub_net_planner
 
@@ -100,7 +100,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             self.sub_network_planners.append(sub_net_planner_obj)
 
         self.concatenator = (
-            concatenator(mapper=mapper, scorer=scorer)
+            concatenator(mappers=mappers, scorer=scorer)
             if inspect.isclass(concatenator)
             else concatenator
         )
@@ -156,6 +156,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
                                 sub_network = network_planner.generate_ligand_network(
                                     mols
                                 )
+
                                 self.sub_networks.append(sub_network)
                                 break
                             except Exception as err:
@@ -196,7 +197,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
 class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
             featurize=MorganFingerprintTransformer(),
@@ -221,7 +222,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
 
         Parameters
         ----------
-        mapper: AtomMapper
+        mapper:  Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two 'Component's
         scorer: AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1]
@@ -238,7 +239,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
             clusterer=clusterer,
             sub_network_planners=[StarNetworkGenerator],
             concatenator=MstConcatenator,
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             progress=progress,
             n_processes=n_processes,

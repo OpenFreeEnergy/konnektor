@@ -18,7 +18,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class CyclicNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         node_present_in_cycles: int = 2,
         cycle_sizes: Union[int, List[int]] = 3,
@@ -44,7 +44,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : Union[AtomMapper, list[AtomMapper]]
             the AtomMappers to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
@@ -70,11 +70,11 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
-                mapper=mapper, scorer=scorer, n_processes=n_processes
+                mappers=mappers, scorer=scorer, n_processes=n_processes
             )
 
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=network_generator,
             n_processes=n_processes,

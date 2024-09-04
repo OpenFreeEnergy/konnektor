@@ -1,7 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import LigandNetwork, Component, AtomMapper
 
@@ -13,7 +13,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
         n_processes: int = 1,
         progress: bool = False,
@@ -31,7 +31,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mapper :  Union[AtomMapper, list[AtomMapper]]
             the `AtomMapper` is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
@@ -45,11 +45,11 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
-                mapper=mapper, scorer=scorer, n_processes=n_processes
+                mappers=mappers, scorer=scorer, n_processes=n_processes
             )
 
         super().__init__(
-            mapper=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,

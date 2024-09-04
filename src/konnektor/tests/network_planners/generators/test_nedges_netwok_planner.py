@@ -21,7 +21,7 @@ def test_nedges_network_mappers(atom_mapping_basic_test_files):
 
     mapper = GenAtomMapper()
     planner = NNodeEdgesNetworkGenerator(
-        mapper=mapper, scorer=genScorer, target_component_connectivity=2
+        mappers=mapper, scorer=genScorer, target_component_connectivity=2
     )
     network = planner.generate_ligand_network(components=ligands)
 

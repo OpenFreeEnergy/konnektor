@@ -19,7 +19,7 @@ def test_cyclic_network_planner():
     )
 
     planner = CyclicNetworkGenerator(
-        mapper=genMapper,
+        mappers=genMapper,
         scorer=genScorer,
         cycle_sizes=3,
         node_present_in_cycles=ncycles,

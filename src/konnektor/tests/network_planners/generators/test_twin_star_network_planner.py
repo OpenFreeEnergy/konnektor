@@ -16,7 +16,7 @@ def test_twin_star_network_planner():
         n_compounds=n_compounds, rand_seed=42
     )
 
-    planner = TwinStarNetworkGenerator(mapper=genMapper, scorer=genScorer)
+    planner = TwinStarNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     # Testing
     ligand_network = planner(components)

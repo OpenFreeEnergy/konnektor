@@ -25,7 +25,7 @@ def test_generate_maximal_network(
     scorer = genScorer if with_scorer else None
 
     planner = MaximalNetworkGenerator(
-        mapper=mapper, scorer=scorer, progress=with_progress, n_processes=n_process
+        mappers=mapper, scorer=scorer, progress=with_progress, n_processes=n_process
     )
     network = planner.generate_ligand_network(others + [toluene])
 

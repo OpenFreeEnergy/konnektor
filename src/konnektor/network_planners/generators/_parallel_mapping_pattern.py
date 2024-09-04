@@ -2,6 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
+import logging
 import multiprocessing as mult
 
 from gufe import AtomMapper, AtomMapping
@@ -24,19 +25,45 @@ def thread_mapping(args) -> list[AtomMapping]:
         return a list of scored atom mappings
 
     """
-    jobID, compound_pairs, mapper, scorer = args
-    mapping_generator = [
-        next(mapper.suggest_mappings(compound_pair[0], compound_pair[1]))
-        for compound_pair in compound_pairs
-    ]
+    jobID, compound_pairs, mappers, scorer = args
 
-    if scorer:
-        mappings = [
-            mapping.with_annotations({"score": scorer(mapping)})
-            for mapping in mapping_generator
-        ]
-    else:
-        mappings = list(mapping_generator)
+    mappings = []
+    for component_pair in compound_pairs:
+        best_score = 0.0
+        best_mapping = None
+        molA = component_pair[0]
+        molB = component_pair[1]
+
+        for mapper in mappers:
+            mapping_generator = mapper.suggest_mappings(molA, molB)
+
+            if scorer:
+                try:
+                    tmp_mappings = [
+                        mapping.with_annotations({"score": scorer(mapping)})
+                        for mapping in mapping_generator
+                    ]
+                except:
+                    continue
+                if len(tmp_mappings) > 0:
+                    tmp_best_mapping = min(
+                        tmp_mappings, key=lambda m: m.annotations["score"]
+                    )
+
+                    if (
+                        tmp_best_mapping.annotations["score"] < best_score
+                        or best_mapping is None
+                    ):
+                        best_score = tmp_best_mapping.annotations["score"]
+                        best_mapping = tmp_best_mapping
+
+            else:
+                try:
+                    best_mapping = next(mapping_generator)
+                except:
+                    continue
+        if best_mapping is not None:
+            mappings.append(best_mapping)
 
     return mappings
 
@@ -44,7 +71,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 def _parallel_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
     scorer: callable,
-    mapper: AtomMapper,
+    mappers: list[AtomMapper],
     n_processes: int,
     show_progress: bool = True,
 ) -> list[AtomMapping]:
@@ -91,7 +118,7 @@ def _parallel_map_scoring(
     )
 
     jobs = [
-        (job_id, combination, mapper, scorer)
+        (job_id, combination, mappers, scorer)
         for job_id, combination in enumerate(batches)
     ]
 

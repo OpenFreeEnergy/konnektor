@@ -16,7 +16,7 @@ def test_generate_maximal_network(with_progress, with_scorer, n_process):
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
 
     planner = HeuristicMaximalNetworkGenerator(
-        mapper=genMapper,
+        mappers=genMapper,
         scorer=genScorer,
         n_samples=10,
         progress=with_progress,

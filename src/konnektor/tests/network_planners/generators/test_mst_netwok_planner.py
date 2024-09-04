@@ -26,7 +26,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
     ]
 
     mapper = GenAtomMapper()
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
@@ -39,7 +39,7 @@ def minimal_spanning_network(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
 
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
     network = planner.generate_ligand_network(components=others + [toluene])
 
     return network
@@ -85,13 +85,12 @@ def test_minimal_spanning_network_regression(minimal_spanning_network):
     # assert edge_ids == ref #This should not be tested here! go to MST generator
 
 
-@pytest.mark.skip
 def test_minimal_spanning_network_unreachable(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
     mapper = ErrorMapper()
 
-    with pytest.raises(RuntimeError, match="Unable to create edges"):
-        planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
-        network = planner.generate_ligand_network(compounds=others + [toluene, nimrod])
+    with pytest.raises(RuntimeError, match="Could not generate any mapping"):
+        planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+        network = planner.generate_ligand_network(components=others + [toluene, nimrod])
