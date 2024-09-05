@@ -34,15 +34,6 @@ Last we want to bring to your attention our Network visualization tools and the 
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
 
 
-👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
-
-**WARNING: Konnektor is under development and is in its beta phase!**
-
-This translates to the core features are implemented and we hope to only introduce minor changes to the repository form here, i.e. fixing bugs.
-
-
-👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷👷
-
 ## Content
 ### Implemented Network Layouts
 Several Network layout generating algorithms are implemented in Konnektor, with different advantages and disadvantages.
