@@ -3,6 +3,7 @@
 This clusterer attempts to cluster compounds based on their scaffolds.
 It is built on rdkit's rdScaffoldNetwork module.
 """
+
 from collections import defaultdict
 import itertools
 
@@ -40,8 +41,9 @@ class ScaffoldClusterer(_AbstractClusterer):
         # This is anonymous, so no bond orders, charges or elements
         # This makes comparing scaffolds more suited to RBFEs
         def normalised_rep(mol):
-            smi = rdMolHash.MolHash(Chem.RemoveHs(mol.to_rdkit()),
-                                    rdMolHash.HashFunction.AnonymousGraph)
+            smi = rdMolHash.MolHash(
+                Chem.RemoveHs(mol.to_rdkit()), rdMolHash.HashFunction.AnonymousGraph
+            )
             return Chem.MolFromSmiles(smi)
 
         # returns mapping of molecules to their normalised rep
@@ -50,7 +52,9 @@ class ScaffoldClusterer(_AbstractClusterer):
         return mols2anonymous
 
     @staticmethod
-    def generate_scaffold_network(mols: list[Chem.Mol]) -> rdScaffoldNetwork.ScaffoldNetwork:
+    def generate_scaffold_network(
+        mols: list[Chem.Mol],
+    ) -> rdScaffoldNetwork.ScaffoldNetwork:
         # generates the scaffold network from the rdkit mol objects
         params = rdScaffoldNetwork.ScaffoldNetworkParams()
         params.includeScaffoldsWithAttachments = False
@@ -61,9 +65,11 @@ class ScaffoldClusterer(_AbstractClusterer):
         return net
 
     @staticmethod
-    def match_scaffolds_to_source(network: rdScaffoldNetwork.ScaffoldNetwork,
-                                  mols: list[Chem.Mol],
-                                  hac_heuristic: int) -> dict[Chem.Mol, list[str]]:
+    def match_scaffolds_to_source(
+        network: rdScaffoldNetwork.ScaffoldNetwork,
+        mols: list[Chem.Mol],
+        hac_heuristic: int,
+    ) -> dict[Chem.Mol, list[str]]:
         # match scaffolds in network back to normalised input molecules
         # i.e. for each molecule, which scaffolds can apply
 
@@ -86,13 +92,16 @@ class ScaffoldClusterer(_AbstractClusterer):
             # for each molecule, a size ordered list of scaffolds that they could be assigned to
             mols2candidates[m] = sorted(
                 [s for s in scaffs if (largest_scaff[1] - s[1]) <= hac_heuristic],
-                key=lambda x: x[1], reverse=True
+                key=lambda x: x[1],
+                reverse=True,
             )
 
         return mols2candidates
 
     @staticmethod
-    def find_solution(mol_to_candidates: dict[Chem.Mol, list[str]]) -> list[tuple[str, int]]:
+    def find_solution(
+        mol_to_candidates: dict[Chem.Mol, list[str]]
+    ) -> list[tuple[str, int]]:
         # returns the best scaffolds that cover all mols
         # returns a list of (scaffold smiles, n heavy atoms)
 
@@ -113,7 +122,9 @@ class ScaffoldClusterer(_AbstractClusterer):
 
             return covered_mols == set(all_mols)
 
-        candidate_scaffolds = set(itertools.chain.from_iterable(mol_to_candidates.values()))
+        candidate_scaffolds = set(
+            itertools.chain.from_iterable(mol_to_candidates.values())
+        )
         # try one scaffold to see if it catches all molecules
         # then try all combinations of two scaffolds to see if we cover
         # etc until we find a solution
@@ -133,9 +144,9 @@ class ScaffoldClusterer(_AbstractClusterer):
                 return solution
 
     @staticmethod
-    def formulate_answer(solution: list[tuple[str, int]],
-                         mols_to_norm: dict[Component, Chem.Mol]
-                         ) -> dict[str, list[Component]]:
+    def formulate_answer(
+        solution: list[tuple[str, int]], mols_to_norm: dict[Component, Chem.Mol]
+    ) -> dict[str, list[Component]]:
         # relate the solution scaffolds back to the input SMC
 
         # for each molecule, pick the largest scaffold that matches

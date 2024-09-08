@@ -12,9 +12,10 @@ class _AbstractNetworkAlgorithm(abc.ABC):
         return self.generate_network(*args, **kwargs)
 
     @abc.abstractmethod
-    def generate_network(self, edges: list[tuple[int, int]],
-                         weights: list[float]) -> nx.Graph:
-        raise  NotImplementedError()
+    def generate_network(
+        self, edges: list[tuple[int, int]], weights: list[float]
+    ) -> nx.Graph:
+        raise NotImplementedError()
 
 
 class _AbstractNetworkConcatenator(abc.ABC):
@@ -23,7 +24,11 @@ class _AbstractNetworkConcatenator(abc.ABC):
         return self.concatenate_networks(*args, **kwargs)
 
     @abc.abstractmethod
-    def concatenate_networks(self, nodesA: list[int], nodesB: list[int],
-                             edges: list[tuple[int, int]],
-                             weights: list[float]) -> nx.Graph:
-        raise  NotImplementedError()
+    def concatenate_networks(
+        self,
+        nodesA: list[int],
+        nodesB: list[int],
+        edges: list[tuple[int, int]],
+        weights: list[float],
+    ) -> nx.Graph:
+        raise NotImplementedError()
