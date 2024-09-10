@@ -11,7 +11,7 @@ from ...network_planners.generators._parallel_mapping_pattern import (
 def test_thread_mapping():
     components, mapper, scorer = build_random_dataset(n_compounds=20)
     component_pairs = list(itertools.combinations(components, 2))
-    args = (1, component_pairs, mapper, scorer)
+    args = (1, component_pairs, [mapper], scorer)
     mappings = thread_mapping(args)
 
     assert len(mappings) == len(component_pairs)
@@ -27,7 +27,7 @@ def test_parallel_map_scoring(with_progress, n_process):
     mappings = _parallel_map_scoring(
         possible_edges=component_pairs,
         scorer=scorer,
-        mapper=mapper,
+        mappers=[mapper],
         n_processes=n_process,
         show_progress=with_progress,
     )
