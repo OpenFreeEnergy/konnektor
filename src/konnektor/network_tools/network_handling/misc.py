@@ -5,8 +5,7 @@ from gufe import Component
 from gufe import LigandNetwork
 
 
-def cyclize_around_component(network: LigandNetwork,
-                             node: Component) -> LigandNetwork:
+def cyclize_around_component(network: LigandNetwork, node: Component) -> LigandNetwork:
     """
         TODO: Implement this
         Not Implemented!

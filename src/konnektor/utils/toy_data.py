@@ -12,7 +12,7 @@ from rdkit import Chem
 class genMapper(AtomMapper):
     def __init__(self):
         """
-            Build a generic Mapper, that only has use for dummy mappings. Generates empty mappings
+        Build a generic Mapper, that only has use for dummy mappings. Generates empty mappings
         """
         pass
 
@@ -101,20 +101,22 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
 
     # generate random Molecules
     np.random.seed(rand_seed)
-    smiles = ["".join(
-        np.random.choice(["C", "O", "N", "S"], replace=True, size=(i % 30) + 1))
-              for i in
-              range(1, int(n_compounds) + 1)]
+    smiles = [
+        "".join(np.random.choice(["C", "O", "N", "S"], replace=True, size=(i % 30) + 1))
+        for i in range(1, int(n_compounds) + 1)
+    ]
     mols = [Chem.AddHs(Chem.MolFromSmiles(s)) for s in smiles]
     [Chem.rdDistGeom.EmbedMolecule(m) for m in mols]
-    compounds = [SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in
-                 enumerate(mols)]
+    compounds = [
+        SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)
+    ]
 
     return compounds, gen_mapper, gen_scorer
 
 
-def build_random_mst_network(n_compounds=30, rand_seed=42,
-                             uni_score: bool = False) -> LigandNetwork:
+def build_random_mst_network(
+    n_compounds=30, rand_seed=42, uni_score: bool = False
+) -> LigandNetwork:
     """
     This function returns a randomized toy mst graph.
 
@@ -133,23 +135,27 @@ def build_random_mst_network(n_compounds=30, rand_seed=42,
         the toy mst network
     """
     compounds, genMapper, genScorer = build_random_dataset(
-        n_compounds=n_compounds, rand_seed=rand_seed)
+        n_compounds=n_compounds, rand_seed=rand_seed
+    )
 
     if uni_score:
         genScorer.get_score = lambda compound: 1
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=genMapper,
-                                                  scorer=genScorer)
+
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network
 
 
-def build_n_random_mst_network(n_compounds=30, rand_seed=42,
-                               sub_networks: int = 2, overlap: int = 1,
-                               uni_score: bool = False) -> Tuple[
-    LigandNetwork, LigandNetwork]:
+def build_n_random_mst_network(
+    n_compounds=30,
+    rand_seed=42,
+    sub_networks: int = 2,
+    overlap: int = 1,
+    uni_score: bool = False,
+) -> Tuple[LigandNetwork, LigandNetwork]:
     """
     This function returns a randomized toy mst graph.
 
@@ -168,31 +174,33 @@ def build_n_random_mst_network(n_compounds=30, rand_seed=42,
         the toy mst network
     """
     compounds, genMapper, genScorer = build_random_dataset(
-        n_compounds=n_compounds, rand_seed=rand_seed)
+        n_compounds=n_compounds, rand_seed=rand_seed
+    )
 
     if uni_score:
         genScorer.get_score = lambda compound: 1
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=genMapper,
-                                                  scorer=genScorer)
+
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     networks = []
     step = n_compounds // sub_networks
     for i in range(sub_networks):
         if i == sub_networks - 1:
-            sub_components = compounds[i * step - overlap:]
+            sub_components = compounds[i * step - overlap :]
         elif i > 0:
-            sub_components = compounds[i * step - overlap:(i + 1) * step]
+            sub_components = compounds[i * step - overlap : (i + 1) * step]
         else:
-            sub_components = compounds[i * step:(i + 1) * step]
+            sub_components = compounds[i * step : (i + 1) * step]
         networks.append(planner(sub_components))
 
     return networks
 
 
-def build_random_fully_connected_network(n_compounds=30, rand_seed=42,
-                                         uni_score: bool = False) -> LigandNetwork:
+def build_random_fully_connected_network(
+    n_compounds=30, rand_seed=42, uni_score: bool = False
+) -> LigandNetwork:
     """
     This function returns a randomized toy fully connected graph.
 
@@ -211,13 +219,15 @@ def build_random_fully_connected_network(n_compounds=30, rand_seed=42,
         the toy fully connected network
     """
     compounds, genMapper, genScorer = build_random_dataset(
-        n_compounds=n_compounds, rand_seed=rand_seed)
+        n_compounds=n_compounds, rand_seed=rand_seed
+    )
 
     if uni_score:
         genScorer.get_score = lambda compound: 1
 
     from konnektor.network_planners import MaximalNetworkGenerator
-    planner = MaximalNetworkGenerator(mapper=genMapper, scorer=genScorer)
+
+    planner = MaximalNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network

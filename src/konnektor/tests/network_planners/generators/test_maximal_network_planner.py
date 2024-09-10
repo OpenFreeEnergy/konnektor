@@ -4,17 +4,20 @@
 import pytest
 
 from konnektor.network_planners import MaximalNetworkGenerator
-from konnektor.tests.network_planners.conf import (atom_mapping_basic_test_files,
+from konnektor.tests.network_planners.conf import (
+    atom_mapping_basic_test_files,
     toluene_vs_others,
     genScorer,
-    GenAtomMapper)
+    GenAtomMapper,
+)
 
 
-@pytest.mark.parametrize('n_process', [1, 2])
-@pytest.mark.parametrize('with_progress', [True, False])
-@pytest.mark.parametrize('with_scorer', [True, False])
-def test_generate_maximal_network(toluene_vs_others, with_progress,
-                                  with_scorer, n_process):
+@pytest.mark.parametrize("n_process", [1, 2])
+@pytest.mark.parametrize("with_progress", [True, False])
+@pytest.mark.parametrize("with_scorer", [True, False])
+def test_generate_maximal_network(
+    toluene_vs_others, with_progress, with_scorer, n_process
+):
     toluene, others = toluene_vs_others
 
     mapper = GenAtomMapper()
@@ -22,8 +25,8 @@ def test_generate_maximal_network(toluene_vs_others, with_progress,
     scorer = genScorer if with_scorer else None
 
     planner = MaximalNetworkGenerator(
-        mapper=mapper, scorer=scorer, progress=with_progress,
-        n_processes=n_process)
+        mappers=mapper, scorer=scorer, progress=with_progress, n_processes=n_process
+    )
     network = planner.generate_ligand_network(others + [toluene])
 
     assert len(network.nodes) == len(others) + 1
@@ -33,8 +36,8 @@ def test_generate_maximal_network(toluene_vs_others, with_progress,
 
     if scorer:
         for edge in network.edges:
-            score = edge.annotations['score']
+            score = edge.annotations["score"]
             assert score == 1.0 / len(edge.componentA_to_componentB)
     else:
         for edge in network.edges:
-            assert 'score' not in edge.annotations
+            assert "score" not in edge.annotations

@@ -24,7 +24,7 @@ But of course you can use any `NetworkGenerator` from Konnektor in exactly the s
         # Plan the Network
         from konnektor.network_planners import CyclicNetworkGenerator
 
-        networker = CyclicNetworkGenerator(mapper=mapper,
+        networker = CyclicNetworkGenerator(mappers=mapper,
                                            scorer=scorer,
                                            n_processes=1)
 
@@ -53,4 +53,3 @@ As alternative, Konnektor offers an interactive IPython widget, that allows you 
 This yields the following visualization:
 
 .. image:: ../_static/img/cyclic_graph_ipy_widget.png
-

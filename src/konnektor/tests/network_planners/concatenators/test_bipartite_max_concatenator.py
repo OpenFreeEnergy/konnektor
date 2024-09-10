@@ -3,15 +3,18 @@
 
 from gufe import LigandNetwork
 
-from konnektor.network_planners.concatenators.max_concatenator import \
-    MaxConcatenator
-from konnektor.tests.network_planners.conf import (GenAtomMapper, genScorer, atom_mapping_basic_test_files,
-                                                   ligand_network_ab)
+from konnektor.network_planners.concatenators.max_concatenator import MaxConcatenator
+from konnektor.tests.network_planners.conf import (
+    GenAtomMapper,
+    genScorer,
+    atom_mapping_basic_test_files,
+    ligand_network_ab,
+)
 
 
 # more test here also for the params
 def test_max_network_concatenation(ligand_network_ab):
-    concatenator = MaxConcatenator(mapper=GenAtomMapper(), scorer=genScorer)
+    concatenator = MaxConcatenator(mappers=GenAtomMapper(), scorer=genScorer)
 
     ln_a, ln_b = ligand_network_ab
     nA = len(ln_a.nodes)

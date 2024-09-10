@@ -3,7 +3,7 @@
 
 import abc
 import logging
-from typing import Iterable
+from typing import Iterable, Union
 
 from gufe import AtomMapper
 from gufe import LigandNetwork, Component
@@ -13,9 +13,9 @@ log = logging.getLogger(__name__)
 
 # Todo: move to gufe Network planner
 
-class NetworkPlanner(abc.ABC):
 
-    def __init__(self, mapper: AtomMapper, scorer):
+class NetworkPlanner(abc.ABC):
+    def __init__(self, mappers: Union[AtomMapper, list[AtomMapper]], scorer):
         """This class is an implementation for the LigandNetworkPlanner interface.
         It defines the std. class for a Konnektor LigandNetworkPlanner
 
@@ -30,11 +30,33 @@ class NetworkPlanner(abc.ABC):
         """
 
         # generic Network_Planner attribs
-        self.mapper = mapper
+        if isinstance(mappers, AtomMapper):
+            self._mappers = [mappers]
+        elif isinstance(mappers, Iterable) and all(
+            isinstance(m, AtomMapper) for m in mappers
+        ):
+            self._mappers = mappers
+        elif mappers is None:
+            self._mappers = None
+        else:
+            raise ValueError("Atom mappers are not the required type!")
         self.scorer = scorer
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.generate_ligand_network(*args, **kwargs)
+
+    @property
+    def mappers(self) -> list[AtomMapper]:
+        return self._mappers
+
+    @mappers.setter
+    def mappers(self, mappers: Union[AtomMapper, list[AtomMapper]]):
+        if mappers is AtomMapper:
+            self._mappers = [mappers]
+        elif isinstance(mappers, Iterable) and all(
+            isinstance(m, AtomMapper) for m in mappers
+        ):
+            self._mappers = mappers
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """Plan a Network which connects all ligands following a given algorithm cost

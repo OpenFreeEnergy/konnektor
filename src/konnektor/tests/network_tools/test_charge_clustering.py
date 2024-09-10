@@ -9,6 +9,7 @@ from konnektor.network_tools.clustering import charge_clustering
 @pytest.fixture
 def formal_charge_mols():
     """Four simple molecules with +1, 0, 0, -1 formal charge"""
+
     def smiles_to_mol(smi):
         m = Chem.MolFromSmiles(smi)
         m = Chem.AddHs(m)
@@ -17,10 +18,10 @@ def formal_charge_mols():
         return m
 
     smiles = [
-        '[NH3+]CCC(=O)O',
-        '[NH2]CCC(=O)O',
-        '[NH3+]CCC(=O)[O-]',
-        '[NH2]CCC(=O)[O-]',
+        "[NH3+]CCC(=O)O",
+        "[NH2]CCC(=O)O",
+        "[NH3+]CCC(=O)[O-]",
+        "[NH2]CCC(=O)[O-]",
     ]
 
     mols = [smiles_to_mol(s) for s in smiles]
