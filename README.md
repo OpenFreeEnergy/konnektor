@@ -23,7 +23,7 @@ It contains multiple algorithms and tools for network planning, that make settin
 As an example imagen you are given a set of drug candidates that shall be ranked with relative binding free energies.
 In theory you could calculate all the possible network transformations, in order to get your ligand ranking (we call this a Maximal Network).
 However this leads to an explosion in time and compute cost, therefore we need more efficient ways on how to caluclate a drug candidate ranking.
-From a thermodynamic perspective not all transformations are actually required to retrieve a ranking. 
+From a thermodynamic perspective not all transformations are actually required to retrieve a ranking.
 In fact you only need one conection per small molecules to the others in order to get the ranking, like for example in Star Networks or Minimal Spanning Tree (MST) Networks.
 However we found the very efficient networks to be sensitive to transformation failures, this can be solved with network building algorithms, that are slightly more redundant.
 
@@ -46,13 +46,13 @@ This translates to the core features are implemented and we hope to only introdu
 ## Content
 ### Implemented Network Layouts
 Several Network layout generating algorithms are implemented in Konnektor, with different advantages and disadvantages.
-From an algorithmic perspective most of the algorithms are actually a reduction method of the Maximal Network. 
+From an algorithmic perspective most of the algorithms are actually a reduction method of the Maximal Network.
 To speed-up the Maximal Network Algorithm we implemented an parallelization scheme to it. Below you can find some of our layouts:
 
 ![image](.img/network_layouts.png)
 
 ### Tools for handling Networks
-Konnektor implements tools, that allow for example to merge (if a node is shared in the networks) or concatenate (if no node is shared) networks, 
+Konnektor implements tools, that allow for example to merge (if a node is shared in the networks) or concatenate (if no node is shared) networks,
 append single molecules (nodes) to a network or delete transformations/molecules from a network.
 
 ![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/5fbb253c-f0d3-41bf-bd92-f520b1363b6d)
@@ -76,7 +76,7 @@ compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig
 from openfe.setup import KartografAtomMapper, lomap_scorers
 from konnektor.network_planners import CyclicNetworkGenerator
 
-networker = CyclicNetworkGenerator(mapper=KartografAtomMapper(),
+networker = CyclicNetworkGenerator(mappers=KartografAtomMapper(),
                                    scorer=lomap_scorers.default_lomap_score)
 
 # Generate Network

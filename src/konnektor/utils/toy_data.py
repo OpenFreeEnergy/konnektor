@@ -143,7 +143,7 @@ def build_random_mst_network(
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=genMapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network
@@ -182,7 +182,7 @@ def build_n_random_mst_network(
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=genMapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     networks = []
     step = n_compounds // sub_networks
@@ -227,7 +227,7 @@ def build_random_fully_connected_network(
 
     from konnektor.network_planners import MaximalNetworkGenerator
 
-    planner = MaximalNetworkGenerator(mapper=genMapper, scorer=genScorer)
+    planner = MaximalNetworkGenerator(mappers=genMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network

@@ -15,7 +15,7 @@ from konnektor.tests.network_planners.conf import (
 
 # more test here also for the params
 def test_mst_network_concatenation(ligand_network_ab):
-    concatenator = MstConcatenator(mapper=GenAtomMapper(), scorer=genScorer)
+    concatenator = MstConcatenator(mappers=GenAtomMapper(), scorer=genScorer)
 
     ln_a, ln_b = ligand_network_ab
     nA = len(ln_a.nodes)

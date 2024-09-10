@@ -16,7 +16,7 @@ from konnektor.tests.network_planners.conf import (
 )
 
 
-@pytest.mark.parametrize("as_list", [False])
+@pytest.mark.parametrize("as_list", [False, True])
 def test_star_network(atom_mapping_basic_test_files, toluene_vs_others, as_list):
     toluene, others = toluene_vs_others
     central_ligand_name = "toluene"
@@ -26,7 +26,7 @@ def test_star_network(atom_mapping_basic_test_files, toluene_vs_others, as_list)
         mapper = [mapper]
 
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(
-        mapper=mapper, scorer=None
+        mappers=mapper, scorer=None
     )
     network = planner.generate_ligand_network(
         components=others, central_component=toluene
@@ -51,7 +51,7 @@ def test_star_network_with_scorer(toluene_vs_others):
     mapper = GenAtomMapper()
     scorer = genScorer
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(
-        mapper=mapper, scorer=scorer
+        mappers=mapper, scorer=scorer
     )
     network = planner.generate_ligand_network(
         components=others, central_component=toluene
@@ -70,7 +70,7 @@ def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
     # in this one, we should always take the bad mapper
     mapper = BadMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(
-        mapper=mapper, scorer=None
+        mappers=mapper, scorer=None
     )
     network = planner.generate_ligand_network(
         components=others, central_component=toluene
@@ -87,7 +87,7 @@ def test_star_network_failure(atom_mapping_basic_test_files):
 
     mapper = ErrorMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(
-        mapper=mapper, scorer=None
+        mappers=mapper, scorer=None
     )
 
     with pytest.raises(ValueError, match="No mapping found for"):

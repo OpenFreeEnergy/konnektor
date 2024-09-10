@@ -27,6 +27,7 @@ from .generators.redundant_minimal_spanning_tree_network_generator import (
 ## Other
 from .generators.cyclic_network_generator import CyclicNetworkGenerator
 from .generators.clustered_network_generator import ClusteredNetworkGenerator
+from .generators.explicit_network_generator import ExplicitNetworkGenerator
 
 # Network Concatenation
 from .concatenators import MstConcatenator

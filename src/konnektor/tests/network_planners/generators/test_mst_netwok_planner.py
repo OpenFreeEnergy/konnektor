@@ -16,7 +16,7 @@ from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
     ErrorMapper,
 )
-from konnektor.network_analysis import get_graph_score
+from konnektor.network_analysis import get_network_score
 
 
 def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
@@ -26,12 +26,12 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
     ]
 
     mapper = GenAtomMapper()
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
     assert list(network.edges)
-    np.testing.assert_allclose(get_graph_score(network), 0.066667, rtol=0.001)
+    np.testing.assert_allclose(get_network_score(network), 0.066667, rtol=0.001)
 
 
 @pytest.fixture(scope="session")
@@ -39,7 +39,7 @@ def minimal_spanning_network(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
 
-    planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
     network = planner.generate_ligand_network(components=others + [toluene])
 
     return network
@@ -85,13 +85,12 @@ def test_minimal_spanning_network_regression(minimal_spanning_network):
     # assert edge_ids == ref #This should not be tested here! go to MST generator
 
 
-@pytest.mark.skip
 def test_minimal_spanning_network_unreachable(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
     mapper = ErrorMapper()
 
-    with pytest.raises(RuntimeError, match="Unable to create edges"):
-        planner = MinimalSpanningTreeNetworkGenerator(mapper=mapper, scorer=genScorer)
-        network = planner.generate_ligand_network(compounds=others + [toluene, nimrod])
+    with pytest.raises(RuntimeError, match="Could not generate any mapping"):
+        planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+        network = planner.generate_ligand_network(components=others + [toluene, nimrod])

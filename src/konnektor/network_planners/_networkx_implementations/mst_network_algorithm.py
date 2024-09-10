@@ -8,7 +8,6 @@ from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 
 class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
-
     def generate_network(
         self, edges: list[tuple[int, int]], weights: list[float], n_edges: int = None
     ) -> nx.Graph:
@@ -40,4 +39,5 @@ class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
         mg.add_nodes_from(nodes)
         mg.add_weighted_edges_from(ebunch_to_add=mse)
         mg.connected = nx.is_connected(mg)
+
         return mg

@@ -4,7 +4,7 @@
 import numpy as np
 from gufe import LigandNetwork
 from sklearn.cluster import KMeans
-from konnektor.network_analysis import get_is_connected, get_graph_score
+from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.network_planners.generators.clustered_network_generator import (
     StarrySkyNetworkGenerator,
 )
@@ -22,7 +22,7 @@ def test_starry_sky_network_planner():
     clusterer = ComponentsDiversityClusterer(cluster=KMeans(n_clusters=3))
 
     planner = StarrySkyNetworkGenerator(
-        mapper=genMapper, scorer=genScorer, clusterer=clusterer
+        mappers=genMapper, scorer=genScorer, clusterer=clusterer
     )
 
     ligand_network = planner(components)
@@ -38,4 +38,4 @@ def test_starry_sky_network_planner():
     )
     assert get_is_connected(ligand_network)
 
-    np.testing.assert_allclose(get_graph_score(ligand_network), 24.607684, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(ligand_network), 24.607684, rtol=0.01)
