@@ -51,18 +51,6 @@ def test_delete_mst_component():
     assert len(new_network.nodes) == len(network.nodes) - 1
     assert len(new_network.edges) < len(network.edges)
     assert del_node not in new_network.nodes
-    assert get_is_connected(new_network)
-
-
-def test_delete_mst_component():
-    network = build_random_mst_network(n_compounds=30)
-    del_node = list(network.nodes)[0]
-
-    new_network = delete_component(network=network, component=del_node)
-
-    assert len(new_network.nodes) == len(network.nodes) - 1
-    assert len(new_network.edges) < len(network.edges)
-    assert del_node not in new_network.nodes
 
 
 def test_delete_fc_transformation():
@@ -77,7 +65,7 @@ def test_delete_fc_transformation():
     assert get_is_connected(new_network)
 
 
-def test_delete_mst_transformation():
+def test_delete_connected_mst_transformation():
     network = build_random_mst_network(n_compounds=10)
     del_edge = list(network.edges)[0]
 
