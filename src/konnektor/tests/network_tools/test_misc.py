@@ -24,7 +24,15 @@ def test_delete_fc_component():
 
 def test_delete_connected_mst_component():
     network = build_random_mst_network(n_compounds=10)
-    del_node = list(network.nodes)[7]
+    # get an connecting edges
+    edges = [(e.componentA, e.componentB) for e in list(network.edges)]
+    n_count = {n: sum(1 if n in e else 0 for e in edges) for n in list(network.nodes)}
+    del_node = None
+
+    for n, c in n_count.items():
+        if c > 1:
+            del_node = n
+            break
 
     with pytest.raises(
         RuntimeError, match="Resulting network is not connected anymore!"
