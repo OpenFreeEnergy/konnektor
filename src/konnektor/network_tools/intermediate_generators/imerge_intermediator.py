@@ -12,11 +12,12 @@ except:
 
 from gufe import SmallMoleculeComponent
 
+from ._abstract_intermediator import Intermediator
 from ...utils.optional_import import requires_package
 
 
 @requires_package("rgroupinterm")
-class RG_Intermediator:
+class ImergeIntermediator(Intermediator):
     def __init__(
         self,
         enumerate_kekule: bool = False,
@@ -51,7 +52,7 @@ class RG_Intermediator:
 
         Returns
         -------
-        SmallMoleculeComponent
+        Iterator[SmallMoleculeComponent]
             returns the small molecule intermediate between molA and molB.
 
         """
@@ -80,8 +81,9 @@ class RG_Intermediator:
         rd_mol_intermediate = pruned_df["Intermediate"].values[0]
         rd_mol_intermediate = Chem.AddHs(rd_mol_intermediate)
         Chem.AllChem.EmbedMolecule(rd_mol_intermediate)
-
-        return SmallMoleculeComponent.from_rdkit(
+        new_intermediate = SmallMoleculeComponent.from_rdkit(
             rdkit=rd_mol_intermediate,
             name=molA.name + "_" + molB.name + "_intermediate",
         )
+
+        yield new_intermediate
