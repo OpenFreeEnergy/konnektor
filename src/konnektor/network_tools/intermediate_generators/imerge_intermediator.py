@@ -60,11 +60,13 @@ class ImergeIntermediator(Intermediator):
         rdmolA = Chem.MolFromSmiles(Chem.MolToSmiles(molA.to_rdkit()))
         rdmolB = Chem.MolFromSmiles(Chem.MolToSmiles(molB.to_rdkit()))
 
+        #  get rgroups
         generator = rgroupenumeration.EnumRGroups(
             self.enumerate_kekule, self.permutate, self.insert_small
         )
         df_interm, _ = generator.generate_intermediates([rdmolA, rdmolB])
 
+        # prune groups to get intermediates
         pruner = pruners.BasePruner(
             [
                 pruners.TanimotoScorer(
@@ -78,12 +80,15 @@ class ImergeIntermediator(Intermediator):
         df_interm["Parent_2"] = rdmolB
         df_interm["Pair"] = 0
         pruned_df = pruner(df_interm)
+
+        # intermediate generation
         rd_mol_intermediate = pruned_df["Intermediate"].values[0]
         rd_mol_intermediate = Chem.AddHs(rd_mol_intermediate)
         Chem.AllChem.EmbedMolecule(rd_mol_intermediate)
-        new_intermediate = SmallMoleculeComponent.from_rdkit(
+
+        mol_intermediate = SmallMoleculeComponent.from_rdkit(
             rdkit=rd_mol_intermediate,
             name=molA.name + "_" + molB.name + "_intermediate",
         )
 
-        yield new_intermediate
+        yield mol_intermediate

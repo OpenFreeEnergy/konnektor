@@ -11,7 +11,7 @@ class Intermediator(GufeTokenizable):
         return self.generate_intermediate(*args, **kwargs)
 
     @classmethod
-    def defaults(cls):
+    def _defaults(cls):
         sig = inspect.signature(cls.__init__)
 
         defaults = {
@@ -23,8 +23,8 @@ class Intermediator(GufeTokenizable):
         return defaults
 
     @classmethod
-    def from_dict(cls, dct: dict):
-        init_args = cls.defaults()
+    def _from_dict(cls, dct: dict):
+        init_args = cls._defaults()
         additional_vas = {}
 
         for key, value in dct.items():
@@ -35,9 +35,10 @@ class Intermediator(GufeTokenizable):
 
         new_obj = cls(**init_args)
         [setattr(new_obj, key, value) for key, value in additional_vas.items()]
+
         return new_obj
 
-    def to_dict(self, include_defaults=True) -> dict:
+    def _to_dict(self, include_defaults=True) -> dict:
         self_dict = {k: v for k, v in vars(self).items() if not k.startswith("_")}
 
         if include_defaults:

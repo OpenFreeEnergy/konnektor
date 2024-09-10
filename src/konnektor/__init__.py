@@ -1,6 +1,10 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
+# basic gufe types:
+from gufe import Component, SmallMoleculeComponent, ProteinComponent
+
+# Konnektor content
 from .network_planners import (
     MaximalNetworkGenerator,
     HeuristicMaximalNetworkGenerator,
