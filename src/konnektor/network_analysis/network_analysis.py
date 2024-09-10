@@ -239,7 +239,7 @@ def get_transformation_failure_robustness(
     for _ in range(nrepeats):
         nn = ligand_network
         edges_to_del = [edges[e] for e in rng.choice(len(edges), npics, replace=False)]
-        nn = tools.delete_transformation(nn, edges_to_del)
+        nn = tools.delete_transformation(nn, edges_to_del, must_stay_connected=False)
         connected.append(float(get_is_connected(nn)))
 
     # np.mean on list of bools give expected float answer
