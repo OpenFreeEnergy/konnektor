@@ -1,6 +1,7 @@
 from typing import Union
 
 from gufe import LigandNetwork, LigandAtomMapping, Component
+from ...network_analysis import get_is_connected
 
 
 def delete_transformation(
@@ -8,6 +9,7 @@ def delete_transformation(
     transformation: Union[
         LigandAtomMapping, tuple[Component, Component], list[LigandAtomMapping]
     ],
+    must_stay_connected: bool = True,
 ) -> LigandNetwork:
     """
     Remove the desired edge from the network
@@ -16,6 +18,8 @@ def delete_transformation(
     ----------
     network: LigandNetwork
     transformation: :Union[LigandAtomMapping, tuple[Component, Component], list[LigandAtomMapping]]
+    must_stay_connected: bool
+        ensure, that the resulting Network is still connected.
 
     Returns
     -------
@@ -34,11 +38,18 @@ def delete_transformation(
     )
     filtered_edges = list(filter(f, network.edges))
 
-    return LigandNetwork(edges=filtered_edges, nodes=network.nodes)
+    new_network = LigandNetwork(edges=filtered_edges, nodes=network.nodes)
+
+    if must_stay_connected and not get_is_connected(new_network):
+        raise RuntimeError("Resulting network is not connected anymore!")
+
+    return new_network
 
 
 def delete_component(
-    network: LigandNetwork, component: Union[Component, list[Component]]
+    network: LigandNetwork,
+    component: Union[Component, list[Component]],
+    must_stay_connected: bool = True,
 ) -> LigandNetwork:
     """
     Remove the desired component, which is a node of the graph, and its
@@ -49,6 +60,8 @@ def delete_component(
     network: LigandNetwork
     component:Union[Component, list[Component]]
         component to be removed from the network, which is a node of the graph.
+    must_stay_connected: bool
+        ensure, that the resulting Network is still connected.
 
     Returns
     -------
@@ -66,4 +79,8 @@ def delete_component(
     f = lambda m: any(c not in (m.componentA, m.componentB) for c in components)
     filtered_edges = list(filter(f, network.edges))
 
-    return LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
+    new_network = LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
+    if must_stay_connected and not get_is_connected(new_network):
+        raise RuntimeError("Resulting network is not connected anymore!")
+
+    return new_network

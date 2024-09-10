@@ -1,3 +1,4 @@
+import pytest
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_tools.network_handling.delete import (
     delete_component,
@@ -14,6 +15,30 @@ def test_delete_fc_component():
     del_node = list(network.nodes)[0]
 
     new_network = delete_component(network=network, component=del_node)
+
+    assert len(new_network.nodes) == len(network.nodes) - 1
+    assert len(new_network.edges) < len(network.edges)
+    assert del_node not in new_network.nodes
+    assert get_is_connected(new_network)
+
+
+def test_delete_connected_mst_component():
+    network = build_random_mst_network(n_compounds=10)
+    del_node = list(network.nodes)[7]
+
+    with pytest.raises(
+        RuntimeError, match="Resulting network is not connected anymore!"
+    ):
+        new_network = delete_component(network=network, component=del_node)
+
+
+def test_delete_mst_component():
+    network = build_random_mst_network(n_compounds=10)
+    del_node = list(network.nodes)[0]
+
+    new_network = delete_component(
+        network=network, component=del_node, must_stay_connected=False
+    )
 
     assert len(new_network.nodes) == len(network.nodes) - 1
     assert len(new_network.edges) < len(network.edges)
@@ -48,7 +73,19 @@ def test_delete_mst_transformation():
     network = build_random_mst_network(n_compounds=10)
     del_edge = list(network.edges)[0]
 
-    new_network = delete_transformation(network=network, transformation=del_edge)
+    with pytest.raises(
+        RuntimeError, match="Resulting network is not connected anymore!"
+    ):
+        new_network = delete_transformation(network=network, transformation=del_edge)
+
+
+def test_delete_mst_transformation():
+    network = build_random_mst_network(n_compounds=10)
+    del_edge = list(network.edges)[0]
+
+    new_network = delete_transformation(
+        network=network, transformation=del_edge, must_stay_connected=False
+    )
 
     assert len(new_network.nodes) == len(network.nodes)
     assert len(new_network.edges) == len(network.edges) - 1
