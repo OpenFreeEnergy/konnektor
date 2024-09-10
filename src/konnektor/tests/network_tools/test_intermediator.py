@@ -29,7 +29,7 @@ def example_mols():
     return molA, molB
 
 
-@pytest.importorskip("rgroupinterm")
+@pytest.importorskip("ImergeIntermediator")
 def test_imerge_imediator_gen_intermediate(example_mols):
     molA, molB = example_mols
 
