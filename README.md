@@ -33,6 +33,8 @@ Last we want to bring to your attention our Network visualization tools and the 
 
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
 
+For more information checkout our pre-print: [Konnektor: A framework for using graph theory to plan networks for free energy calculations](https://chemrxiv.org/engage/chemrxiv/article-details/66d9b574cec5d6c1423643e4)
+
 
 ## Content
 ### Implemented Network Layouts
@@ -40,19 +42,19 @@ Several Network layout generating algorithms are implemented in Konnektor, with 
 From an algorithmic perspective most of the algorithms are actually a reduction method of the Maximal Network.
 To speed-up the Maximal Network Algorithm we implemented an parallelization scheme to it. Below you can find some of our layouts:
 
-![image](.img/network_layouts.png)
+![image](docs/_static/img/network_layouts.png)
 
 ### Tools for handling Networks
 Konnektor implements tools, that allow for example to merge (if a node is shared in the networks) or concatenate (if no node is shared) networks,
 append single molecules (nodes) to a network or delete transformations/molecules from a network.
 
-![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/5fbb253c-f0d3-41bf-bd92-f520b1363b6d)
+![image](docs/_static/img/network_operations_small.png)
 
 ### Enable More Complex Higher Order Networks
 Another goal of Konnektor is to go beyond the standard network layout algorihtms and allow easy implementation of more complex network algorithms.
 This is achieved by combining the Tools and Network Generator Algorithms, to build up to more advanced workflows.
 
-![image](https://github.com/OpenFreeEnergy/konnektor/assets/12428005/c4ee0b63-7580-4825-b0cb-dc076e4cb9f4)
+![image](docs/_static/img/advanced_networking.png)
 
 ## Code Example
 
