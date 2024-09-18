@@ -22,6 +22,6 @@ def test_get_hif2a():
 
 def test_get_hif2a():
     compounds = get_charged_ligands()
-    
+
     assert len(compounds) == 44
     assert all(isinstance(c, SmallMoleculeComponent) for c in compounds)

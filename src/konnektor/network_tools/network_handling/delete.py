@@ -43,6 +43,9 @@ def delete_transformation(
     if must_stay_connected and not get_is_connected(new_network):
         raise RuntimeError("Resulting network is not connected anymore!")
 
+    return new_network
+
+
 def delete_component(
     network: LigandNetwork,
     component: Union[Component, list[Component]],
