@@ -10,7 +10,7 @@ Konnektor will be packaged with OpenFE, soon. :)
 Konnektor can be installed via the package following package managers:
 
 ```shell
-pip install konnnektor
+mamba -c -conda-forge install konnektor
 ```
 
 Developer Setup

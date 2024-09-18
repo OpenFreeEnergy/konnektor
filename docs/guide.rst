@@ -5,7 +5,7 @@ Guide to Konnektor
    :maxdepth: 2
    :caption: Applications:
 
-   guide/application_reindexing_problem
+   guide/application_network_planning_fe_calculations
 
 
 .. toctree::
