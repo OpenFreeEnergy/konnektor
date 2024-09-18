@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
-import logging
 import multiprocessing as mult
 
 from gufe import AtomMapper, AtomMapping
@@ -25,6 +24,13 @@ def thread_mapping(args) -> list[AtomMapping]:
         return a list of scored atom mappings
 
     """
+    import functools
+    import multiprocessing as mult
+
+    from gufe import AtomMapper, AtomMapping
+    from gufe import SmallMoleculeComponent
+    from tqdm.auto import tqdm
+
     jobID, compound_pairs, mappers, scorer = args
 
     mappings = []
