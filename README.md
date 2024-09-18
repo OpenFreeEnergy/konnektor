@@ -40,7 +40,7 @@ Several Network layout generating algorithms are implemented in Konnektor, with 
 From an algorithmic perspective most of the algorithms are actually a reduction method of the Maximal Network.
 To speed-up the Maximal Network Algorithm we implemented an parallelization scheme to it. Below you can find some of our layouts:
 
-![image](.img/network_layouts.png)
+![image](docs/_static/img/network_layouts.png)
 
 ### Tools for handling Networks
 Konnektor implements tools, that allow for example to merge (if a node is shared in the networks) or concatenate (if no node is shared) networks,
