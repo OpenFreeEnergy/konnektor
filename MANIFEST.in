@@ -1,0 +1,3 @@
+include src/konnektor/tests/data/*.sdf
+include src/konnektor/tests/data/*.mol2
+include src/konnektor/data/*.sdf
