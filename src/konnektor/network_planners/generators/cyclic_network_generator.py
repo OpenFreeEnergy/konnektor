@@ -38,8 +38,8 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
         The number of cylces, around each `Component` can be defined by `component_present_in_cycles` and allowed cylce size can be tweaked with `cycle_sizes`. For `cycle_sizes` either an integer for providing an expected cycle size (e.g. `3`) or a range of allowed cycle sizes (e.g. `[3,4]`).
 
-        This layout has a well distributed connectivity between all `Component`\s which increases the robustness very well, but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased not enforced.
-        The large number of cycles might be very useful for statical analysis.  Nevertheless, the network has an increased amount of `Transformation`\s
+        This layout has a well distributed connectivity between all `Component` s which increases the robustness very well, but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased not enforced.
+        The large number of cycles might be very useful for statical analysis.  Nevertheless, the network has an increased amount of `Transformation` s
 
 
         Parameters

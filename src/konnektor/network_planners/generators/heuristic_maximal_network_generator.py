@@ -26,10 +26,10 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         n_processes: int = 1,
     ):
         """
-        The `HeuristicMaximalNetworkGenerator` builds for given set of `Component`\s a set of `n_samples` `Transformation`\s per `Component` build network under the assumption each `Component` can be connected to another.
-        The `Transformations` of this network are realized as `AtomMapping`\s of pairwise `Component`\s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
+        The `HeuristicMaximalNetworkGenerator` builds for given set of `Component` s a set of `n_samples` `Transformation` s per `Component` build network under the assumption each `Component` can be connected to another.
+        The `Transformations` of this network are realized as `AtomMapping` s of pairwise `Component` s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
 
-        This class is can be used as initial_edge_lister, if there is a large set of `Component`\s (check network connectivity!)
+        This class is can be used as initial_edge_lister, if there is a large set of `Component` s (check network connectivity!)
 
         This class is recommended as initial_edge_lister for other approaches.
         > **Note**: the `HeuristicMaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`.
