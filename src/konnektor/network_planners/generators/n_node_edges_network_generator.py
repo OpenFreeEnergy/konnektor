@@ -32,7 +32,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         mapper : AtomMapper
-            the `AtomMapper` to use to propose `AtomMapping`s.
+            the `AtomMapper` to use to propose `AtomMapping`\s.
         scorer : AtomMappingScorer
             any callable which takes a `AtomMapping` and returns a float
         target_node_connectivity: int
@@ -42,8 +42,8 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: LigandNetworNetworkGeneratorkPlanner, optional
-            this `NetworkGenerator` is used to give the initial set of `Transformation`s.
-            For standard usage, the MaximalNetworGenerator is used, which will provide all possible `Transformation`s. (default: MaximalNetworkPlanner)
+            this `NetworkGenerator` is used to give the initial set of `Transformation`\s.
+            For standard usage, the MaximalNetworGenerator is used, which will provide all possible `Transformation`\s. (default: MaximalNetworkPlanner)
 
         """
         if _initial_edge_lister is None:

@@ -30,7 +30,7 @@ class StarNetworkGenerator(NetworkGenerator):
 
         The Star Netwrok is most edge efficient, but not most graph score efficient, as it has to find a central `Component`, which usually is a compromise for all 'Component's.
         From a robustness point of view, the Star Network, will immediatly be disconnected if one `Transformation` fails.
-        However the loss of `Component`s is very limited, as only one ligand is lost per `Transformation` failure.
+        However the loss of `Component`\s is very limited, as only one ligand is lost per `Transformation` failure.
 
         Parameters
         ----------

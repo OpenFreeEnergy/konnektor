@@ -31,7 +31,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         mappers :  Union[AtomMapper, list[AtomMapper]]
-            the `AtomMapper`s to use to propose `AtomMapping`s.  At least 1 required,
+            the `AtomMapper`\s to use to propose `AtomMapping`\s.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer

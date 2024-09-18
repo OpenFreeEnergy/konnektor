@@ -45,10 +45,11 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         n_processes: int = 1,
         progress: bool = False,
     ):
-        """Implements the general concept of nd-space clustered networks and provides the logic.
+        """
+        Implements the general concept of nd-space clustered networks and provides the logic.
 
             The algorithm works as follows:
-            1. Cluster `Component`s with the `clusterer` obj.
+            1. Cluster `Component`\s with the `clusterer` obj.
             2. Build sub-networks in the clusters using the `sub_network_planners`.
             3. Concatenate all sub-networks using the `concatenator` in order to build the final network.
 
@@ -56,7 +57,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         clusterer: ComponentsDiversityClusterer
-            This class is seperating the `Component`s along the first dimension.
+            This class is seperating the `Component`\s along the first dimension.
         sub_network_planners: Iterable[NetworkGenerator]
             The clusters, are then seperatley translated to sub networks by the sub_network_planners
         concatenator: NetworkConcatenator
@@ -108,7 +109,8 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         self.progress = progress
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Create a network with n randomly selected edges for possible proposed mappings.
+        """
+        Create a network with n randomly selected edges for possible proposed mappings.
 
         Parameters
         ----------
@@ -119,6 +121,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         -------
         LigandNetwork
             a complex network.
+
         """
 
         # Step 1: Seperate nodes by diversity
@@ -206,18 +209,19 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         n_processes: int = 1,
         progress: bool = False,
     ):
-        """The StarrySkyNetworkGenerator is an advanced network algorithm,
-        that clusters the provided `Component`s and builds up a network from this.
+        """
+        The StarrySkyNetworkGenerator is an advanced network algorithm,
+        that clusters the provided `Component`\s and builds up a network from this.
 
         The approach follows the following steps:
         1. Component clustering:
-            1. Translate the Molecules into Morgan Fingerprints. (default)
-            2. Cluster the Morgan Fingerprints with HDBSCAN. (default)
+        a. Translate the Molecules into Morgan Fingerprints. (default)
+        b. Cluster the Morgan Fingerprints with HDBSCAN. (default)
         2. Build Sub-Star Networks in each Cluster using the `StarNetworkGenerator`.
         3. Concatenate the Sub-Star Networks to the final Starry  Sky Network, with 3 `Transformations` per cluster pair using the `MSTConcatenator`.
 
         This approach allows in comparison to the Star Network, to build a network containing multiple centers imopoving the graph score.
-        Still adding a limited amount of `Transformation`s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated.
+        Still adding a limited amount of `Transformation`\s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated.
         So the Starry Sky Network is a compromise betwen graph score optimization and number of `Transformations`.
 
         Parameters
@@ -227,7 +231,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         scorer: AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1]
         clusterer: ComponentsDiversityClusterer
-            This class is seperating the `Component`s along the first dimension.
+            This class is seperating the `Component`\s along the first dimension.
         progress: bool, optional
             if True a progress bar will be displayed. (default: False)
         n_processes: int

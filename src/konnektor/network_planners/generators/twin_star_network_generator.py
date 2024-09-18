@@ -23,8 +23,8 @@ class TwinStarNetworkGenerator(NetworkGenerator):
         """
         The Twin Star Network is an expansion to the Star Network. It can be described as multiple star networks, that are overlayed.
 
-        The algorithm is first calculating all possible `Transformation`s for all `Component`s.
-        Next the in average `n_centers` (default: 2) best performing `Component`s over all transfromation scores are selected and placed into the center of the network.
+        The algorithm is first calculating all possible `Transformation`\s for all `Component`\s.
+        Next the in average `n_centers` (default: 2) best performing `Component`\s over all transfromation scores are selected and placed into the center of the network.
         Finally all components are connected to the selected centers, resulting in $n_{Transformations} = n_{centers}*(n_{Componentes}-n_{centers})$
 
         This approach has in the default version the doubled number of `Transformations` compared to the Star Network and therefore also has an increase graph cost.
