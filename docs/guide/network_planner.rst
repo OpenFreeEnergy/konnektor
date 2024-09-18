@@ -43,6 +43,8 @@ this more abstract, as an `ComponentMapping` is describing any relation between 
 A network planning algorithm `NetworkPlanner` can now use these scores along with graph
 construction algorithms to identify the best calculation paths.
 
+Checkout the network tools to see what you can additionally do with networks.
+
 Network Generators
 __________________
 Network Generators are planners that construct networks from a set of
@@ -72,13 +74,3 @@ non-overlapping networks to create a connected network.
 Currently, there are two Network Concatenators in Konnektor: the Maximal
 Concatenator, which yields all possible edges, and the Minimal Spanning
 Tree Concatenator, which utilizes the best-performing edge scores.
-
-
-Network Tools
-______________
-
-* Basic Operations
-
-* Analysis
-
-* Visualizations
