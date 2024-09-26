@@ -88,10 +88,10 @@ fig.show()
 ## Installation
 
 ### Latest release
-Konnektor can be installed via the package following package managers:
+Konnektor can be installed from conda-forge:
 
 ```shell
-pip install konnnektor
+mamba install -c conda-forge konnnektor
 ```
 
 ### Developement version
