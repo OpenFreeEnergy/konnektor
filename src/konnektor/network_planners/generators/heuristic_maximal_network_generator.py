@@ -141,6 +141,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                     else:
                         try:
                             best_mapping = next(mapping_generator)
+                            break
                         except:
                             continue
                 if best_mapping is not None:
