@@ -58,8 +58,8 @@ class CyclicNetworkGenerator(NetworkGenerator):
         n_processes: int, optional
             number of processes that can be used for the network generation.
             (default: 1)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges.
+        _initial_edge_lister: NetworkPlanner, optional
+            this NetworkPlanner is used to give the initial set of edges.
             For standard usage, the Maximal NetworPlanner is used. (default: MaximalNetworkPlanner)
         """
 

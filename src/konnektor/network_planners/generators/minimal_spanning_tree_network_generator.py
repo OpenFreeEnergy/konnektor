@@ -39,8 +39,8 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
+        _initial_edge_lister: NetworkPlanner, optional
+            this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:

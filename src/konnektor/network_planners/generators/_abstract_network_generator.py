@@ -29,8 +29,8 @@ class NetworkGenerator(NetworkPlanner):
         progress: bool = False,
         _initial_edge_lister=None,
     ):
-        """This class is an implementation for the LigandNetworkPlanner interface.
-        It defines the std. class for a Konnektor LigandNetworkPlanner
+        """This class is an implementation for the NetworkPlanner interface.
+        It defines the std. class for a Konnektor NetworkPlanner
 
         Parameters
         ----------
@@ -44,8 +44,8 @@ class NetworkGenerator(NetworkPlanner):
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
+        _initial_edge_lister: NetworkPlanner, optional
+            this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
 
         """
