@@ -40,7 +40,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
             featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
         ),
-        mappers: Union[AtomMapper, list[AtomMapper]] = None,
+        mappers: Union[AtomMapper, list[AtomMapper]] = None,  # include None in this union?
         scorer=None,
         n_processes: int = 1,
         progress: bool = False,
@@ -51,19 +51,19 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             The algorithm works as follows:
             1. Cluster `Component` s with the `clusterer` obj.
             2. Build sub-networks in the clusters using the `sub_network_planners`.
-            3. Concatenate all sub-networks using the `concatenator` in order to build the final network.
+            3. Concatenate all sub-networks using the `concatenator` to build the final network.
 
 
         Parameters
         ----------
-        clusterer: ComponentsDiversityClusterer
-            This class is seperating the `Component` s along the first dimension.
         sub_network_planners: Iterable[NetworkGenerator]
-            The clusters, are then seperatley translated to sub networks by the sub_network_planners
+            NetworkGenerator(s) used to translate clusters to sub-networks.
         concatenator: NetworkConcatenator
-            The `NetworkConcatenator` is connecting the different sub networks.
-        mapper:  Union[AtomMapper, list[AtomMapper]]
-            the atom mapper is required, to define the connection between two ligands, if only `NetworkConcatenator` or  `NetworkGenerator` classes are passed
+            A `NetworkConcatenator` used to connect sub-networks.
+        clusterer: ComponentsDiversityClusterer
+            Separates the `Component` s along the first dimension.
+        mappers:  Union[AtomMapper, list[AtomMapper]]
+            Defines the connection between two ligands if `NetworkConcatenator`s or  `NetworkGenerator`s are provided. Otherwise, (?) (default:None)
         scorer: AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional

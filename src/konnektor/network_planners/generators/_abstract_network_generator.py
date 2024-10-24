@@ -39,14 +39,14 @@ class NetworkGenerator(NetworkPlanner):
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+            Any callable which takes a AtomMapping and returns a float
         network_generator:
         n_processes: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            Number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+            If `True`, displays a progress bar. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
-            this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
+            The NetworkPlanner to use to create the initial set of edges. For standard usage, the MaximalNetworkPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
 
         """
@@ -94,7 +94,7 @@ class NetworkGenerator(NetworkPlanner):
         Parameters
         ----------
         components : Iterable[Component]
-        the ligands to include in the Network
+            the ligands to include in the Network
 
         Returns
         -------
