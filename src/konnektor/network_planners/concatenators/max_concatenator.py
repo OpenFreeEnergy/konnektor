@@ -24,7 +24,7 @@ class MaxConcatenator(NetworkConcatenator):
         show_progress: bool = False,
     ):
         """
-        This concatenator connnects two Networks with all possible
+        A NetworkConcatenator that connects two Networks with all possible
         mappings. This is usually most useful for initial edge listing.
 
         Parameters
@@ -58,7 +58,7 @@ class MaxConcatenator(NetworkConcatenator):
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
-            an iterable of ligand networks, that shall be connected.
+            An iterable of LigandNetworks to connect.
 
         Returns
         -------

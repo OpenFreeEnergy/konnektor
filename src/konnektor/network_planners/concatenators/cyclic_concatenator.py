@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
+        # TODO: should this be "mappers" for API consistency, or is it only one mapper by design?
         mapper: AtomMapper,
         scorer: AtomMappingScorer,
         n_connecting_cycles: int = 2,

@@ -33,7 +33,7 @@ class NetworkConcatenator(NetworkPlanner):
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : AtomMapper
             the AtomMappers to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
