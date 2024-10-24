@@ -29,17 +29,18 @@ class NetworkGenerator(NetworkPlanner):
         progress: bool = False,
         _initial_edge_lister=None,
     ):
-        """This class is an implementation for the NetworkPlanner interface.
-        It defines the std. class for a Konnektor NetworkPlanner
+        """This class is an implementation for the NetworkGenerator interface.
+        It defines the std. class for a Konnektor NetworkGenerator.
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : AtomMapper
             the AtomMappers to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer
             any callable which takes a AtomMapping and returns a float
+        network_generator:
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
@@ -49,7 +50,7 @@ class NetworkGenerator(NetworkPlanner):
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
 
         """
-        # generic Network_Planner attribsd
+        # generic NetworkPlanner attribs
         super().__init__(mappers=mappers, scorer=scorer)
 
         # Konnektor specific variables
