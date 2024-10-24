@@ -24,19 +24,17 @@ class MaxConcatenator(NetworkConcatenator):
         show_progress: bool = False,
     ):
         """
-        This concatenators is connnecting two Networks with all possible
-         mappings. This is usually most useful for initial edge listing.
+        This concatenator connnects two Networks with all possible
+        mappings. This is usually most useful for initial edge listing.
 
         Parameters
         ----------
-        mapper: AtomMapper
-            the atom mapper is required, to define the connection
-             between two ligands.
+        mappers: AtomMapper
+            the atom mapper is required to define the connection
+            between two ligands.
         scorer: AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a
             score between [0,1].
-        n_connecting_edges: int, optional
-            number of connecting edges. (default: 3)
         n_processes: int
             number of processes that can be used for the network generation.
             (default: 1)
