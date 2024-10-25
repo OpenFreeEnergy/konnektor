@@ -22,13 +22,15 @@ class StarNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The Star Network is one of the most edge efficient layouts, it basically places all `Transformations` around one central `Component`.
+        The Star Network is one of the most edge efficient layouts, it basically places
+        all `Transformations` around one central `Component`.
 
-        The algorithm constructs in a first step all possilbe `Transformations`.
+        The algorithm constructs in a first step all possible `Transformations`.
         Next it selects in the default variant the in average best transformation score performing `Component` as the central component.
         Finally all Components are connected with a `Transformation` to the central `Component`
 
-        The Star Netwrok is most edge efficient, but not most graph score efficient, as it has to find a central `Component`, which usually is a compromise for all 'Component's.
+        The Star Netwrok is most edge efficient, but not most graph score efficient, as it has to find a
+        central `Component`, which usually is a compromise for all 'Component's.
         From a robustness point of view, the Star Network, will immediatly be disconnected if one `Transformation` fails.
         However the loss of `Component` s is very limited, as only one ligand is lost per `Transformation` failure.
 
@@ -44,7 +46,8 @@ class StarNetworkGenerator(NetworkGenerator):
             if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
             this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
+            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner..
+            (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(

@@ -22,14 +22,17 @@ class MaximalNetworkGenerator(NetworkGenerator):
         n_processes: int = 1,
     ):
         """
-        The `MaximalNetworkGenerator` builds for given set of `Component` s a fully connected graph under the assumption each `Component` can be connected to another.
-        The `Transformation` s of this graph are realized as `AtomMapping` s of pairwise `Component` s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
+        The `MaximalNetworkGenerator` builds a fully connected graph for given set of `Component` s.
+        It assumes each `Component` can be connected to every other `Component`.
+        The `Transformation` s of this graph are realized as `AtomMapping` s of pairwise `Component` s.
+        If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
 
-        Note: This approach is not very suitable for Free Energy calculations in application cases. However, this approach is very important, as all above approaches use this as an initial solution, they filter down to gain the desired design.
+        Note: This approach is not very suitable for Free Energy calculations in application cases.
+        However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
+        then remove edges to achieve the desired design.
 
-
-        This class is recommended as initial_edge_lister for other approaches.
-        > **Note**: the `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`.
+        This class is recommended as an `initial_edge_lister` for other approaches.
+        > **Note**: the `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with `n_processes`.
         > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
 
         Parameters
@@ -58,7 +61,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
 
         This will attempt to create (and optionally score) all possible mappings
         (up to $N(N-1)/2$ for each mapper given). There may be fewer actual
-        mappings that this because, when a mapper cannot return a mapping for a
+        mappings than this, because when a mapper cannot return a mapping for a
         given pair, there is simply no suggested mapping for that pair.
         This network is typically used as the starting point for other network
         generators (which then optimize based on the scores) or to debug atom

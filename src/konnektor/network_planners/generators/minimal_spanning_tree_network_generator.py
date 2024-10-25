@@ -20,13 +20,14 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The `MinimalSpanningTreeNetworkGenerator`, builds an minimal spanning tree (MST) network for a given set of `Component` s. The `Transformation` s of the Network,
-        are represented by an `AtomMapping` s, which are scored by a `AtomMappingScorer`.
+        The `MinimalSpanningTreeNetworkGenerator`, builds an minimal spanning tree (MST) network for a given set of `Component` s.\
+        The `Transformation` s of the Network are represented by an `AtomMapping` s, which are scored by a `AtomMappingScorer`.
 
-        For the MST algorithm the Kruskal Algorithm is used.
+        For the MST algorithm, the Kruskal Algorithm is used.
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of `Transformations`.
-        This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing `Transformation`, the Network is immediatly disconnected.
+        This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
+        `Transformation`, the Network is immediatly disconnected.
         The disconnectivity will translate to a loss of `Component` s in the final FE Network.
 
         Parameters
@@ -41,7 +42,8 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
             this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
+            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.
+            (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(

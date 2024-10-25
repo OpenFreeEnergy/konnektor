@@ -25,8 +25,8 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         """
         The N-Node Edges Network tries to add more redundancy to the MST Network and tries to improve the robustness.
 
-        The algorithm first build a MST Network.
-        After this it will add best score performing `Transformations` in order to guarantee a 'Component' connectivity of `target_node_connectivity`.
+        The algorithm first build a MST Network. Then it will add best score performing `Transformations`
+        to guarantee a 'Component' connectivity of `target_node_connectivity`.
 
 
         Parameters

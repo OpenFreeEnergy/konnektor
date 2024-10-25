@@ -21,16 +21,20 @@ class TwinStarNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The Twin Star Network is an expansion to the Star Network. It can be described as multiple star networks, that are overlayed.
+        The Twin Star Network is an expansion to the Star Network. It can be described as multiple star networks that are overlayed.
 
-        The algorithm is first calculating all possible `Transformation` s for all `Component` s.
-        Next the in average `n_centers` (default: 2) best performing `Component` s over all transfromation scores are selected and placed into the center of the network.
-        Finally all components are connected to the selected centers, resulting in $n_{Transformations} = n_{centers}*(n_{Componentes}-n_{centers})$
+        The algorithm first calculates all possible `Transformation` s for all `Component` s.
+        Next, the in average `n_centers` (default: 2) best performing `Component` s over all
+        transfromation scores are selected and placed into the center of the network.
+        Finally all components are connected to the selected centers, resulting
+        in $n_{Transformations} = n_{centers}*(n_{Componentes}-n_{centers})$
 
-        This approach has in the default version the doubled number of `Transformations` compared to the Star Network and therefore also has an increase graph cost.
-        However on the plus side, this approach builds a lot graph cycles, which could be used to estimate the uncertainty of FE calculations.
-        Another important aspect is that the node connectivity is centralized around the `n_centers`. This means,
-        that the selection of the central ligands is very important, as they have a large impact on the `Transformations`.
+        This approach has, in the default version, double the number of `Transformations`
+        compared to the Star Network, and therefore also an increased graph cost.
+        On the plus side, this approach builds many graph cycles, which could be used to estimate the uncertainty of FE calculations.
+        Another important aspect is that the node connectivity is centralized around the `n_centers`
+        This means that the selection of the central ligands is very important, as they have a large
+        impact on the `Transformations`.
         The `n_centers` option allows you to change the Twin Star to a Triplet Star Network or more.
 
         Parameters
@@ -47,7 +51,8 @@ class TwinStarNetworkGenerator(NetworkGenerator):
             if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
             this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.. (default: MaximalNetworkPlanner)
+            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner..
+            (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(

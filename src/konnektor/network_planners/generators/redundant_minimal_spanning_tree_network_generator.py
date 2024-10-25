@@ -21,12 +21,14 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The `RedundantMinimalSpanningTreeNetworkGenerator` is an approach, that tries to increase the robustness over `Transformation` failures in an MST like network.
+        The `RedundantMinimalSpanningTreeNetworkGenerator` is an approach that tries to increase
+        robustness to `Transformation` failures in an MST-like network.
 
-        The algorithm executes the MST algorithm `n_redundancy` times, always removes already selected `Transformations` in each iteration, and finally builds the overlay of all the newtorks.
-        This is constructing the Redundant MST Network.
+        This algorithm executes the MST algorithm `n_redundancy` times, always removing
+        already-selected`Transformations` in each iteration, and finally builds the overlay of all the newtorks.
+        This is constructs the Redundant MST Network.
 
-        In this way the number of edges is increased, but also the network is less vulnerable to `Transformation` failures.
+        In this way, the number of edges is increased, but the network is also less vulnerable to `Transformation` failures.
 
         Parameters
         ----------
