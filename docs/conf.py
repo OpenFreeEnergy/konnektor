@@ -35,6 +35,7 @@ extensions = [
     'sphinx.ext.napoleon',
     "nbsphinx",
     "nbsphinx_link",
+    "sphinx.ext.autosectionlabel",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -83,6 +84,17 @@ html_theme_options = {
 html_css_files = [
     "css/custom.css",
 ]
+
+# Extensions for the myst parser
+myst_enable_extensions = [
+    "dollarmath",
+    "colon_fence",
+    "smartquotes",
+    "replacements",
+    "deflist",
+    "attrs_inline",
+]
+myst_heading_anchors = 3
 
 
 example_notebooks_path = Path("ExampleNotebooks")
