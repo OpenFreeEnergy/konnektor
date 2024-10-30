@@ -1,12 +1,7 @@
-# .readthedocs.yaml
-# Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
-
-# Required
 version: 2
 
 build:
-  os: ubuntu-20.04
+  os: "ubuntu-20.04"
   tools:
     python: "mambaforge-4.10"
 
@@ -15,10 +10,17 @@ sphinx:
    fail_on_warning: true
 
 conda:
+<<<<<<< HEAD:.readthedocs.yaml
   environment: environment.yml
 
 python:
   # Install our python package before building the docs so setuptools-scm generates the version for RTD to find.
+=======
+  environment: docs/environment.yaml
+
+python:
+  # Install our python package before building the docs
+>>>>>>> aed3c76 (port over env file from elsewhere and merge):readthedocs.yaml
   install:
     - method: pip
       path: .
