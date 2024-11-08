@@ -20,7 +20,7 @@ class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
         # TODO: should this be "mappers" for API consistency, or is it only one mapper by design?
-        mapper: AtomMapper,
+        mappers: Union[AtomMapper, Iterable[AtomMapper]],
         scorer: AtomMappingScorer,
         n_connecting_cycles: int = 2,
         cycle_sizes: Union[int, list[int]] = 3,
@@ -33,12 +33,12 @@ class CyclicConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        mapper: AtomMapper
-            the atom mapper is required, to define the connection
-            between two ligands.
+        mappers: AtomMapper
+            The AtomMapper(s) to use to propose mappings.  At least 1 required,
+            but many can be given, in which case all will be tried to find the
+            lowest score edges
         scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a
-            score between [0,1].
+            Any callable which takes a AtomMapping and returns a float between [0,1]
         n_connecting_cycles: int, optional
             build at least n cycles between th networks. (default: 2)
         cycle_sizes: Union[int, list[int]], optional
@@ -50,11 +50,11 @@ class CyclicConcatenator(NetworkConcatenator):
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaxConcatenator(
-                mappers=mapper, scorer=scorer, n_processes=n_processes
+                mappers=mappers, scorer=scorer, n_processes=n_processes
             )
 
         super().__init__(
-            mappers=mapper,
+            mappers=mappers,
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
