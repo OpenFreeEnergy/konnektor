@@ -25,7 +25,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         robustness to `Transformation` failures in an MST-like network.
 
         This algorithm executes the MST algorithm `n_redundancy` times, always removing
-        already-selected`Transformations` in each iteration, and finally builds the overlay of all the newtorks.
+        already-selected `Transformations` in each iteration, and finally builds the overlay of all the networks.
         This is constructs the Redundant MST Network.
 
         In this way, the number of edges is increased, but the network is also less vulnerable to `Transformation` failures.

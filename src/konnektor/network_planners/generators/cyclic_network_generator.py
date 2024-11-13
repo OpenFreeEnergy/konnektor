@@ -41,7 +41,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
         and the allowed cycle size can be tweaked with `cycle_sizes`.
 
         This layout has well-distributed connectivity between all `Component` s, which increases the robustness very well,
-        but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased not enforced.
+        but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased and not enforced.
         The large number of cycles might be very useful for statistical analysis.  Nevertheless, the network has an increased amount of `Transformation`s.
 
 
