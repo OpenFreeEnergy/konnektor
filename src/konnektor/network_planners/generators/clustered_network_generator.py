@@ -35,12 +35,12 @@ log.setLevel(logging.INFO)
 class ClusteredNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper], None],
         sub_network_planners: Iterable[NetworkGenerator] = (CyclicNetworkGenerator,),
         concatenator: NetworkConcatenator = MstConcatenator,
         clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
             featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
         ),
+        mappers: Union[AtomMapper, list[AtomMapper]] = None,  # include None in this union?
         scorer=None,
         n_processes: int = 1,
         progress: bool = False,
@@ -63,7 +63,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         clusterer: ComponentsDiversityClusterer
             Separates the `Component` s along the first dimension.
         mappers:  Union[AtomMapper, list[AtomMapper]]
-            Defines the connection between two ligands if `NetworkConcatenator`s or  `NetworkGenerator`s are provided.
+            Defines the connection between two ligands if `NetworkConcatenator`s or  `NetworkGenerator`s are provided. Otherwise, (?) (default:None)
         scorer: AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional
