@@ -14,16 +14,19 @@ from gufe import LigandAtomMapping, AtomMapper, AtomMapping
 from konnektor.utils.toy_data import build_random_dataset
 
 
-class CounterTestMapper(AtomMapper):
-    def __init__(self):
+class DummyMapper(AtomMapper):
+    def __init__(self, id:int):
         """
         Build a generic Mapper, that only has use for dummy mappings.
         Generates mappings that increment by 1 for testing order-dependent behavior.
+
+        id : use to identify an instance of this class in testing
         """
-        pass
+        self.id = id
 
     def suggest_mappings(self, molA, molB) -> AtomMapping:
-        yield LigandAtomMapping(molA, molB, {0:1})
+        for i in range(3):
+            yield LigandAtomMapping(molA, molB, {int(self.id):i})
 
     @classmethod
     def _defaults(cls):
@@ -69,17 +72,21 @@ def test_generate_maximal_network(
         for edge in network.edges:
             assert "score" not in edge.annotations
 
-def test_generate_maximal_network_missing_scorer():
-    """If no scorer is provided, the last mapper tried should be used."""
+def test_generate_maximal_network_missing_scorer(toluene_vs_others):
+    """If no scorer is provided, the first mapping of the last mapper should be used."""
 
-    components, empty_mapper, _ = build_random_dataset(n_compounds=2)
-    counter_mapper = CounterTestMapper()
+    toluene, others = toluene_vs_others
+    components = others+[toluene]
+
+    id_a = 0
+    id_b = 1
     planner = MaximalNetworkGenerator(
-        mappers= [empty_mapper, counter_mapper],
+        mappers= [DummyMapper(id=id_a), DummyMapper(id=id_b)],
         scorer=None,
         progress=False,
         n_processes=1,
     )
+
     network = planner.generate_ligand_network(components)
-    assert [e for e in network.edges][-1].componentA_to_componentB == {0:1}
-    [(e.componentA.name, e.componentB.name) for e in network.edges]
+
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges)*[{id_b:0}]
