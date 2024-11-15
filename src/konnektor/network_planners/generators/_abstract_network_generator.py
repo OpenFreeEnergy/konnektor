@@ -24,6 +24,7 @@ class NetworkGenerator(NetworkPlanner):
         self,
         mappers: Union[AtomMapper, list[AtomMapper]],
         scorer,
+        ## TODO: rename this to network_algorithm?
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
         progress: bool = False,
@@ -40,7 +41,7 @@ class NetworkGenerator(NetworkPlanner):
             lowest score edges
         scorer : AtomMappingScorer
             Any callable which takes a AtomMapping and returns a float
-        network_generator:
+        network_generator: the network algorithm to use
         n_processes: int, optional
             Number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
