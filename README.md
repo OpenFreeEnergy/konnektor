@@ -31,9 +31,12 @@ Ontop of the described ligand network planners, Konnektor gives access to tools,
 Analysis of networks, like calculating graph scores, getting the connectivities of network nodes or calculating the network robustness are available too.
 Last we want to bring to your attention our Network visualization tools and the provided interactive network visualization widget for IPython like in Jupyter-Lab/Notebooks.
 
+Check out our article on Konnektor in the Journal of Chemical Information and Modeling: [𝐊𝐨𝐧𝐧𝐞𝐤𝐭𝐨𝐫: 𝐀 𝐅𝐫𝐚𝐦𝐞𝐰𝐨𝐫𝐤 𝐟𝐨𝐫 𝐔𝐬𝐢𝐧𝐠 𝐆𝐫𝐚𝐩𝐡 𝐓𝐡𝐞𝐨𝐫𝐲 𝐭𝐨 𝐏𝐥𝐚𝐧 𝐍𝐞𝐭𝐰𝐨𝐫𝐤𝐬 𝐟𝐨𝐫 𝐅𝐫𝐞𝐞 𝐄𝐧𝐞𝐫𝐠𝐲 𝐂𝐚𝐥𝐜𝐮𝐥𝐚𝐭𝐢𝐨𝐧𝐬 - Benjamin Ries*, Richard J. Gowers, Hannah M. Baumann, David W. H. Swenson,  Michael M. Henry, James R. B. Eastwood, Irfan Alibay, and David Mobley](https://pubs.acs.org/doi/10.1021/acs.jcim.4c01710).
+
+You can find our pre-print on [ChemRxiv](https://chemrxiv.org/engage/chemrxiv/article-details/66d9b574cec5d6c1423643e4).
+
 Try our interactive demo: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x)
 
-For more information checkout our pre-print: [Konnektor: A framework for using graph theory to plan networks for free energy calculations](https://chemrxiv.org/engage/chemrxiv/article-details/66d9b574cec5d6c1423643e4)
 
 
 ## Content
