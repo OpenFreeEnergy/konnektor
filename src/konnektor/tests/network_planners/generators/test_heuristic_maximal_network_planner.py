@@ -38,7 +38,9 @@ def test_generate_maximal_network(with_progress, n_process):
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_generate_maximal_network_missing_scorer(with_progress, n_process):
-    """If a scorer isn't provided, the first mapping from the last mapper should be used."""
+    """If no scorer is provided, the first mapping of the last mapper should be used.
+       Note: this test isn't great because BadMapper only returns one mapping
+    """
     n_compounds = 4
     components, _, _ = build_random_dataset(n_compounds=n_compounds)
 
