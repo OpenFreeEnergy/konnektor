@@ -30,11 +30,11 @@ class MaximalNetworkGenerator(NetworkGenerator):
         ... note::
         This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
         However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
-        then remove edges to achieve the desired design.
+        then remove edges to achieve the desired design. 
 
         This class is recommended as an `initial_edge_lister` for other approaches.
-        > **Note**: the `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with `n_processes`.
-        > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
+        The `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with `n_processes`.
+        All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
 
         Parameters
         ----------
