@@ -3,7 +3,7 @@
 
 import functools
 import multiprocessing as mult
-from typing import Callable,
+from typing import Callable
 
 from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
