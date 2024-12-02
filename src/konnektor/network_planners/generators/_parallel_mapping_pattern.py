@@ -3,7 +3,6 @@
 
 import functools
 import multiprocessing as mult
-from typing import Callable,
 
 from gufe import AtomMapper, AtomMapping
 from gufe import SmallMoleculeComponent
@@ -71,7 +70,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 
 def _parallel_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
-    scorer: Callable[[AtomMapping], float],
+    scorer: callable,
     mappers: list[AtomMapper],
     n_processes: int,
     show_progress: bool = True,
