@@ -27,8 +27,8 @@ class MaximalNetworkGenerator(NetworkGenerator):
         The `Transformation` s of this graph are realized as `AtomMapping` s of pairwise `Component` s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
 
-        Note: This approach is not recommended for Free Energy calculations in application cases, as it is
-	very computationally expensive.
+        ... note::
+        This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
         However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
         then remove edges to achieve the desired design.
 
