@@ -30,7 +30,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         ... note::
         This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
         However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
-        then remove edges to achieve the desired design. 
+        then remove edges to achieve the desired design.
 
         This class is recommended as an `initial_edge_lister` for other approaches.
         The `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with `n_processes`.
@@ -38,13 +38,13 @@ class MaximalNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mappers: Union[AtomMapper, list[AtomMapper]]
+        mappers : Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two ligands.
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        progress: bool, optional
+        progress : bool, optional
             if true a progress bar will be displayed. (default: False)
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation. (default: 1)
         """
 
@@ -67,7 +67,6 @@ class MaximalNetworkGenerator(NetworkGenerator):
         This network is typically used as the starting point for other network
         generators (which then optimize based on the scores) or to debug atom
         mappers (to see which mappings the mapper fails to generate).
-
 
         Parameters
         ----------

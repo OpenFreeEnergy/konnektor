@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 class NetworkPlanner(abc.ABC):
     def __init__(self, mappers: Union[AtomMapper, list[AtomMapper]], scorer):
         """This class is an implementation for the NetworkPlanner interface.
-        It defines the std. class for a Konnektor NetworkPlanner
+        It defines the std. class for a Konnektor NetworkPlanner.
 
         Parameters
         ----------
@@ -59,7 +59,7 @@ class NetworkPlanner(abc.ABC):
             self._mappers = mappers
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+        """Plan a Network which connects all ligands following a given algorithm cost.
 
         Parameters
         ----------

@@ -21,9 +21,9 @@ def concatenate_networks(
 
     Parameters
     ----------
-    networks: Iterable[LigandNetwork]
+    networks : Iterable[LigandNetwork]
         Network 1 for merging
-    concatenator: NetworkConcatenator
+    concatenator : NetworkConcatenator
         A network planner, that concatenates networks.
 
     Returns
@@ -45,11 +45,11 @@ def append_component(
 
     Parameters
     ----------
-    network: LigandNetwork
+    network : LigandNetwork
         Network 1 for merging
-    component: Component
+    component : Component
         append node to network
-    concatenator: NetworkConcatenator
+    concatenator : NetworkConcatenator
         A network planner, that concatenates networks.
 
     Returns

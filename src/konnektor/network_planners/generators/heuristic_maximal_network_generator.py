@@ -35,21 +35,18 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         > **Note**: the `HeuristicMaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`.
         > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
 
-
         Parameters
         ----------
-        mapper: AtomMapper
+        mapper : AtomMapper
             the atom mapper is required, to define the connection between two ligands.
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        n_samples: int
+        n_samples : int
             number of random edges per node.
-        progress: bool, optional
+        progress : bool, optional
             if true a progress bar will be displayed. (default: False)
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation. (default: 1)
-
-
         """
         super().__init__(
             mappers=mappers,

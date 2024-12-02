@@ -29,16 +29,16 @@ class MaxConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        mappers: AtomMapper
+        mappers : AtomMapper
             the atom mapper is required to define the connection
             between two ligands.
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a
             score between [0,1].
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation.
             (default: 1)
-        show_progress: bool
+        show_progress : bool
             show progress bar
         """
 
@@ -54,10 +54,9 @@ class MaxConcatenator(NetworkConcatenator):
         self, ligand_networks: Iterable[LigandNetwork]
     ) -> LigandNetwork:
         """
-
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks : Iterable[LigandNetwork]
             An iterable of LigandNetworks to connect.
 
         Returns
@@ -65,7 +64,6 @@ class MaxConcatenator(NetworkConcatenator):
         LigandNetwork
             returns a concatenated LigandNetwork object, containing all
              networks and all possible edges, connecting them.
-
         """
 
         log.info(

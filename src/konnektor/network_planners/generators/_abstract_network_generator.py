@@ -41,15 +41,14 @@ class NetworkGenerator(NetworkPlanner):
             lowest score edges
         scorer : AtomMappingScorer
             Any callable which takes a AtomMapping and returns a float
-        network_generator: the network algorithm to use
-        n_processes: int, optional
+        network_generator : the network algorithm to use
+        n_processes : int, optional
             Number of processes that can be used for the network generation. (default: 1)
-        progress: bool, optional
+        progress : bool, optional
             If `True`, displays a progress bar. (default: False)
-        _initial_edge_lister: NetworkPlanner, optional
+        _initial_edge_lister : NetworkPlanner, optional
             The NetworkPlanner to use to create the initial set of edges. For standard usage, the MaximalNetworkPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
-
         """
         # generic NetworkPlanner attribs
         super().__init__(mappers=mappers, scorer=scorer)
@@ -75,9 +74,7 @@ class NetworkGenerator(NetworkPlanner):
 
     @property
     def progress(self) -> bool:
-        """
-        shows a progress bar if True
-        """
+        """Shows a progress bar if True."""
         return self._progress
 
     @progress.setter
@@ -90,7 +87,7 @@ class NetworkGenerator(NetworkPlanner):
 
     @abc.abstractmethod
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+        """Plan a Network which connects all ligands following a given algorithm cost.
 
         Parameters
         ----------

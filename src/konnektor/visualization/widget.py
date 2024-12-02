@@ -23,7 +23,7 @@ from ..utils.optional_import import requires_package
 
 
 def get_node_connectivities(cg: LigandNetwork) -> list[int]:
-    """The connectivity of each node"""
+    """The connectivity of each node."""
     return [sum([n in e for e in cg.edges]) for n in cg.nodes]
 
 
@@ -234,20 +234,20 @@ def draw_network_widget(
     represent_molecules_twoD: bool = False,
     show_mappings: bool = False,
 ) -> ipycytoscape.CytoscapeWidget:
-    """For use in a jupyter noterbook, visualise a LigandNetwork
+    """For use in a jupyter noterbook, visualise a LigandNetwork.
 
     Parameters
     ----------
-    network: gufe.LigandNetwork
+    network : gufe.LigandNetwork
       the network to visualise
     layout : str, optional
       how to initially layout the nodes, can be one of X/Y/Z
       defaults to 'cose'
-    show_molecule: bool, optional
+    show_molecule : bool, optional
       if to show molecule images on the representation, default True
-    represent_molecules_twoD: bool, optional
+    represent_molecules_twoD : bool, optional
       show the molecules in the nodes as 2D representations.
-    show_mappings: bool, optional
+    show_mappings : bool, optional
       if to show mapping images on the representation, default False
     """
 

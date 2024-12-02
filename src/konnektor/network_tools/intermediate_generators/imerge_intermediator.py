@@ -25,15 +25,14 @@ class ImergeIntermediator(Intermediator):
         insert_small: bool = False,
     ):
         """
-
         Parameters
         ----------
-        enumerate_kekule: bool, optional
+        enumerate_kekule : bool, optional
             (default: False)
-        permutate: bool, optional
+        permutate : bool, optional
             (default: False)
-        insert_small: bool, optional
-            (default: False)
+        insert_small : bool, optional
+            (default: False).
         """
         self.enumerate_kekule = enumerate_kekule
         self.permutate = permutate
@@ -47,14 +46,13 @@ class ImergeIntermediator(Intermediator):
 
         Parameters
         ----------
-        molA: SmallMoleculeComponent
-        molB: SmallMoleculeComponent
+        molA : SmallMoleculeComponent
+        molB : SmallMoleculeComponent
 
         Returns
         -------
         Iterator[SmallMoleculeComponent]
             returns the small molecule intermediate between molA and molB.
-
         """
 
         rdmolA = Chem.MolFromSmiles(Chem.MolToSmiles(molA.to_rdkit()))

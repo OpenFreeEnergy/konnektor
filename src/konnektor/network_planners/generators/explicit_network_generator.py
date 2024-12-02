@@ -21,17 +21,16 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         progress: bool = False,
     ):
         """
-
         Parameters
         ----------
-        mapper: AtomMapper
+        mapper : AtomMapper
             Defines the connection between two ligands.
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        n_processes: int
+        n_processes : int
             number of processes to use to build the ligand network
-        progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+        progress : bool, optional
+            if true a progress bar will be displayed. (default: False).
         """
         super().__init__(
             mappers=mappers,
@@ -52,7 +51,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        edges: Iterable[Tuple[Component,Component]]
+        edges : Iterable[Tuple[Component,Component]]
             planned edges, that will be connected with mappings and scores.
             Each Tuple in this case represent one edge.
 
@@ -89,7 +88,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         ----------
         components : list of Components
           the small molecules to place into the network
-        mapper: AtomMapper
+        mapper : AtomMapper
           the atom mapper to use to construct edges
         indices : list of tuples of indices
           the edges to form where the values refer to names of the small molecules,
@@ -129,7 +128,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         ----------
         components : list of Components
           the small molecules to place into the network
-        mapper: AtomMapper
+        mapper : AtomMapper
           the atom mapper to use to construct edges
         names : list of tuples of names
           the edges to form where the values refer to names of the small molecules,
@@ -167,7 +166,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                 ]
                 available = [ligand.name for ligand in components]
                 raise KeyError(
-                    f"Invalid name(s) requested {badnames}.  " f"Available: {available}"
+                    f"Invalid name(s) requested {badnames}.  "  f"Available: {available}"
                 )
 
         return self.generate_ligand_network(edges=edges)

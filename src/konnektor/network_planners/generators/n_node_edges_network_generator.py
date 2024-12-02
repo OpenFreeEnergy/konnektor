@@ -28,23 +28,21 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         The algorithm first build a MST Network. Then it will add best score performing `Transformations`
         to guarantee a 'Component' connectivity of `target_node_connectivity`.
 
-
         Parameters
         ----------
         mapper : AtomMapper
             the `AtomMapper` to use to propose `AtomMapping` s.
         scorer : AtomMappingScorer
             any callable which takes a `AtomMapping` and returns a float
-        target_node_connectivity: int
+        target_node_connectivity : int
             the number of connecting `Transformations` per `Component`.
-        n_processes: int, optional
+        n_processes : int, optional
             number of processes that can be used for the network generation. (default: 1)
-        progress: bool, optional
+        progress : bool, optional
             if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: LigandNetworNetworkGeneratorkPlanner, optional
+        _initial_edge_lister : LigandNetworNetworkGeneratorkPlanner, optional
             this `NetworkGenerator` is used to give the initial set of `Transformation` s.
             For standard usage, the MaximalNetworGenerator is used, which will provide all possible `Transformation` s. (default: MaximalNetworkPlanner)
-
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
@@ -66,7 +64,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
     @property
     def target_node_connectivity(self) -> int:
         """
-        this property defines how many edges should be created per node.
+        This property defines how many edges should be created per node.
 
         Returns
         -------
@@ -80,7 +78,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         self.network_generator.target_node_connectivity = target_node_connectivity
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands with at least n edges
+        """Plan a Network which connects all ligands with at least n edges.
 
         Parameters
         ----------

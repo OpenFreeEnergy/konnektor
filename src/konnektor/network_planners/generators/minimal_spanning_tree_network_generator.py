@@ -32,15 +32,15 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper :  Union[AtomMapper, list[AtomMapper]]
+        mapper : Union[AtomMapper, list[AtomMapper]]
             the `AtomMapper` is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        n_processes: int, optional
+        n_processes : int, optional
             number of processes that can be used for the network generation. (default: 1)
-        progress: bool, optional
+        progress : bool, optional
             if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: NetworkPlanner, optional
+        _initial_edge_lister : NetworkPlanner, optional
             this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.
             (default: MaximalNetworkPlanner)
@@ -65,14 +65,13 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        components: Iterable[Component]
+        components : Iterable[Component]
         the components to be used for the LigandNetwork
 
         Returns
         -------
         LigandNetwork
             a ligand network following the MST rules.
-
         """
 
         initial_network = self._initial_edge_lister.generate_ligand_network(

@@ -32,15 +32,15 @@ class MstConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        mapper: AtomMapper
+        mapper : AtomMapper
             the atom mapper is required, to define the connection between
             two ligands.
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score
             between [0,1].
-        n_connecting_edges: int, optional
+        n_connecting_edges : int, optional
             maximum number of connecting edges. (default: 2)
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation.
             (default: 1)
         """
@@ -61,14 +61,13 @@ class MstConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks : Iterable[LigandNetwork]
             an iterable of ligand networks, that shall be connected.
 
         Returns
         -------
         LigandNetwork
             returns a concatenated LigandNetwork object, containing all networks.
-
         """
 
         log.info(

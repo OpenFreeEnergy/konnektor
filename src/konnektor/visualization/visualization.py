@@ -10,7 +10,7 @@ from . import color_gradient, OFE_COLORS
 
 
 def get_node_connectivities(cg: nx.Graph) -> list[int]:
-    """The connectivity of each node"""
+    """The connectivity of each node."""
     return [sum([n in e for e in cg.edges]) for n in cg.nodes]
 
 
@@ -22,21 +22,21 @@ def draw_ligand_network(
     edge_width: int = 3,
     fontsize: int = 18,
 ) -> plt.Figure:
-    """visualize a LigandNetwork as matplotlib plot, indicating the graph topology.
+    """Visualize a LigandNetwork as matplotlib plot, indicating the graph topology.
 
     Parameters
     ----------
-    network: LigandNetwork
+    network : LigandNetwork
         The network to be visualized
-    title: str, optional
+    title : str, optional
         plot title
-    ax: plt.Axes, optional
+    ax : plt.Axes, optional
         don't build new figure, if axes given, but add img to axes
-    node_size: int, optional
+    node_size : int, optional
         size of the node visualization. (default 2050)
-    edge_width: int, optional
+    edge_width : int, optional
         widht of drawn edges. (default 3)
-    fontsize: int, optional
+    fontsize : int, optional
         fontsize of labels. (default 18)
 
     Returns

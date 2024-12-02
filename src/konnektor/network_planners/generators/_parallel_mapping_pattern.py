@@ -23,7 +23,6 @@ def thread_mapping(args) -> list[AtomMapping]:
     -------
     list[AtomMapping]:
         return a list of scored atom mappings
-
     """
 
     jobID, compound_pairs, mappers, scorer = args
@@ -82,15 +81,15 @@ def _parallel_map_scoring(
 
     Parameters
     ----------
-    possible_edges: tuple[SmallMoleculeComponent, SmallMoleculeComponent]
+    possible_edges : tuple[SmallMoleculeComponent, SmallMoleculeComponent]
         two  molecules to be mapped.
-    scorer: callable
+    scorer : callable
         scoring the mappings
-    mapper: AtomMapper
+    mapper : AtomMapper
         atom mapper for the mappings
-    n_processes: int
+    n_processes : int
         number of processes for parallelization
-    show_progress: bool
+    show_progress : bool
         show a tqdm progressbar.
 
     Returns

@@ -18,7 +18,7 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
+    ligand_network : LigandNetwork
 
     Returns
     -------
@@ -34,7 +34,7 @@ def get_network_score(ligand_network: LigandNetwork) -> float:
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
+    ligand_network : LigandNetwork
         ligand network, that should return the graph score.
 
     Returns
@@ -52,7 +52,7 @@ def get_network_cost(ligand_network: LigandNetwork) -> float:
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
+    ligand_network : LigandNetwork
         ligand network, that should return the graph score.
 
     Returns
@@ -70,7 +70,7 @@ def get_network_efficiency(ligand_network: LigandNetwork) -> float:
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
+    ligand_network : LigandNetwork
         ligand network, that should return the graph score.
 
     Returns
@@ -92,8 +92,8 @@ def get_number_of_network_cycles(
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
-    higher_bound: int
+    ligand_network : LigandNetwork
+    higher_bound : int
         largest number of nodes in cycle.
 
     Returns
@@ -116,7 +116,7 @@ def get_component_connectivities(
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
+    ligand_network : LigandNetwork
 
     Returns
     -------
@@ -140,11 +140,11 @@ def get_component_scores(
 ) -> dict[SmallMoleculeComponent, float]:
     """
     Calculate the score of a node, as the sum of the edge scores.
+
     Parameters
     ----------
-    ligand_network: LigandNetwork
-    normalize: bool, optional
-
+    ligand_network : LigandNetwork
+    normalize : bool, optional
 
     Returns
     -------
@@ -173,8 +173,8 @@ def get_component_number_cycles(
 
     Parameters
     ----------
-    ligand_network: LigandNetwork
-    higher_bound:int, optional
+    ligand_network : LigandNetwork
+    higher_bound : int, optional
         largest number of nodes contained in one searched cycle.
 
     Returns
@@ -213,15 +213,14 @@ def get_transformation_failure_robustness(
     This process is randomly repeated nrepeat times.
     The result is the average of the repeats, between 0 (was always disconnected) and 1 (never was disconnected).
 
-
     Parameters
     ----------
-    ligand_network: LigandNetwork
-    failure_rate: float, optional
+    ligand_network : LigandNetwork
+    failure_rate : float, optional
        failure rate of edges, default 0.05 i.e. 5%
-    nrepeats: int, optional
+    nrepeats : int, optional
        how often shall the process be sampled.
-    seed: int, optional
+    seed : int, optional
        seed the random process, useful for replicating results or testing
 
     Returns

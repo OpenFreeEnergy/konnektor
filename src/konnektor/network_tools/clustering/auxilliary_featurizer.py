@@ -14,9 +14,8 @@ class ChargeTransformer(FpsTransformer):
 
         Parameters
         ----------
-        parallel: Union[bool, int], optional
-        Whether to parallelize the calculations, default: False
-
+        parallel : Union[bool, int], optional
+        Whether to parallelize the calculations, default : False
         """
         super().__init__(parallel=parallel)
         self.nBits = 1

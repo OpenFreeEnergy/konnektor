@@ -28,15 +28,14 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
 
         Parameters
         ----------
-        featurize: TransformerMixin, optional
+        featurize : TransformerMixin, optional
             A scikit-learn and scikit-mol compatible featurizer, takes a rdkit mol and transforms to an np.array[number].
             As default the morgan fingerprints are used.
-        cluster: ClusterMixin
+        cluster : ClusterMixin
             a scikit-learn compatible clustering algorithm.
             as default a  KMeans(n_clusters=5, n_init="auto") is used.
-        parallel: int, optional
+        parallel : int, optional
             tries to push the parallelization triggers of featurize and cluster
-
         """
         self._cluster_centers = None
         self.featurize = featurize
@@ -60,12 +59,10 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         """
             The method featurizes and clusters the molecules according to the features.
 
-
         Parameters
         ----------
-        components:list[Component]
+        components : list[Component]
             the list of components, that should be seperated into different categories.
-
 
         Returns
         -------

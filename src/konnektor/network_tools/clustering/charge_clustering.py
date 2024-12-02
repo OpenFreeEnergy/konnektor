@@ -9,7 +9,7 @@ from ._abstract_clusterer import _AbstractClusterer
 
 
 class ChargeClusterer(_AbstractClusterer):
-    """Clusters molecules based on their formal charges"""
+    """Clusters molecules based on their formal charges."""
 
     def __init__(self):
         pass
@@ -17,7 +17,7 @@ class ChargeClusterer(_AbstractClusterer):
     def cluster_compounds(
         self, components: list[gufe.SmallMoleculeComponent]
     ) -> dict[int, list[gufe.SmallMoleculeComponent]]:
-        """Cluster compounds according to formal charge
+        """Cluster compounds according to formal charge.
 
         Returns a dict which has keys of all present formal charge states,
         mapping to lists of the corresponding molecules

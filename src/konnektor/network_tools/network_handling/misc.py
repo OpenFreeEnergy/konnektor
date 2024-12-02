@@ -17,7 +17,6 @@ def cyclize_around_component(network: LigandNetwork, node: Component) -> LigandN
 
     Returns
     -------
-
     """
     # TODO: Implement this
     raise NotImplementedError()

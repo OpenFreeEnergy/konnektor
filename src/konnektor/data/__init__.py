@@ -15,13 +15,12 @@ charged_ligands_path = f"{root_path}/charged_ligands.sdf"
 
 def get_benzene_ligands() -> list[SmallMoleculeComponent]:
     """
-    get the benzene test dataset parsed as SmallMoleculeComponents.
+    Get the benzene test dataset parsed as SmallMoleculeComponents.
 
     Returns
     -------
     list[SmallMoleculeComponent]
         a list of the benzene compounds.
-
     """
     return [
         SmallMoleculeComponent.from_rdkit(rdm)
@@ -31,13 +30,12 @@ def get_benzene_ligands() -> list[SmallMoleculeComponent]:
 
 def get_hif2a_ligands() -> list[SmallMoleculeComponent]:
     """
-    get the benzene test dataset parsed as SmallMoleculeComponents.
+    Get the benzene test dataset parsed as SmallMoleculeComponents.
 
     Returns
     -------
     list[SmallMoleculeComponent]
         a list of the benzene compounds.
-
     """
     return [
         SmallMoleculeComponent.from_rdkit(rdm)
@@ -47,13 +45,12 @@ def get_hif2a_ligands() -> list[SmallMoleculeComponent]:
 
 def get_charged_ligands() -> list[SmallMoleculeComponent]:
     """
-    get the benzene test dataset parsed as SmallMoleculeComponents.
+    Get the benzene test dataset parsed as SmallMoleculeComponents.
 
     Returns
     -------
     list[SmallMoleculeComponent]
         a list of the benzene compounds.
-
     """
     return [
         SmallMoleculeComponent.from_rdkit(rdm)

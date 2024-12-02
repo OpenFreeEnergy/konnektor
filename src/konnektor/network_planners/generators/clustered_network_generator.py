@@ -53,24 +53,22 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             2. Build sub-networks in the clusters using the `sub_network_planners`.
             3. Concatenate all sub-networks using the `concatenator` to build the final network.
 
-
         Parameters
         ----------
-        sub_network_planners: Iterable[NetworkGenerator]
+        sub_network_planners : Iterable[NetworkGenerator]
             NetworkGenerator(s) used to translate clusters to sub-networks.
-        concatenator: NetworkConcatenator
+        concatenator : NetworkConcatenator
             A `NetworkConcatenator` used to connect sub-networks.
-        clusterer: ComponentsDiversityClusterer
+        clusterer : ComponentsDiversityClusterer
             Separates the `Component` s along the first dimension.
-        mappers:  Union[AtomMapper, list[AtomMapper]]
+        mappers : Union[AtomMapper, list[AtomMapper]]
             Defines the connection between two ligands if `NetworkConcatenator`s or  `NetworkGenerator`s are provided. Otherwise, (?) (default:None)
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
-        progress: bool, optional
+        progress : bool, optional
             if True a progress bar will be displayed. (default: False)
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation. (default: 1)
-
         """
 
         super().__init__(
@@ -121,7 +119,6 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         -------
         LigandNetwork
             a complex network.
-
         """
 
         # Step 1: Seperate nodes by diversity
@@ -226,17 +223,16 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
 
         Parameters
         ----------
-        mapper:  Union[AtomMapper, list[AtomMapper]]
+        mapper : Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two 'Component's
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1]
-        clusterer: ComponentsDiversityClusterer
+        clusterer : ComponentsDiversityClusterer
             This class is seperating the `Component` s along the first dimension.
-        progress: bool, optional
+        progress : bool, optional
             if True a progress bar will be displayed. (default: False)
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation. (default: 1)
-
         """
 
         super().__init__(

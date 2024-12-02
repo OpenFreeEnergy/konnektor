@@ -48,7 +48,7 @@ def atom_mapping_basic_test_files():
 class DummyAtomMapper(AtomMapper):
     @classmethod
     def _from_dict(cls, d: dict):
-        """Deserialize from dict representation"""
+        """Deserialize from dict representation."""
         if any(k not in cls._defaults() for k in d):
             keys = list(filter(lambda k: k in cls._defaults(), d.keys()))
             raise ValueError(f"I don't know about all the keys here: {keys}")

@@ -15,7 +15,7 @@ def merge_two_networks(
 
     Parameters
     ----------
-    network1: LigandNetwork
+    network1 : LigandNetwork
         Network 1 for merging
     network2
         Network 1 for merging
@@ -48,7 +48,7 @@ def merge_networks(networks: list[LigandNetwork]) -> LigandNetwork:
 
     Parameters
     ----------
-    networks: list[LigandNetwork]
+    networks : list[LigandNetwork]
         Networks for merging
 
     Returns

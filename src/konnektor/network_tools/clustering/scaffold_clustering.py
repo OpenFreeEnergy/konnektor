@@ -1,4 +1,4 @@
-"""Clustering compounds based on scaffolds
+"""Clustering compounds based on scaffolds.
 
 This clusterer attempts to cluster compounds based on their scaffolds.
 It is built on rdkit's rdScaffoldNetwork module.
@@ -31,7 +31,7 @@ class ScaffoldClusterer(_AbstractClusterer):
           this value decides how many heavy atoms from the *largest* scaffold
           other scaffolds may be permitted.
           a too high value may result in inappropriately generic scaffolds being
-          used, while too low will result in too many scaffolds being identified
+          used, while too low will result in too many scaffolds being identified.
         """
         self.scaffold_looseness = scaffold_looseness
 
@@ -114,7 +114,7 @@ class ScaffoldClusterer(_AbstractClusterer):
                 scaffold2mols[scaff].append(mol)
 
         def scaffold_coverage(scaffolds, scaff2mol, all_mols) -> bool:
-            """Does this combination of scaffolds cover all ligands"""
+            """Does this combination of scaffolds cover all ligands."""
             covered_mols = set()
 
             for scaff in scaffolds:

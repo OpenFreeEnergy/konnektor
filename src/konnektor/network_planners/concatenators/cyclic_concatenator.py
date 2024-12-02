@@ -32,18 +32,18 @@ class CyclicConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        mappers: AtomMapper
+        mappers : AtomMapper
             The AtomMapper(s) to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
-        scorer: AtomMappingScorer
+        scorer : AtomMappingScorer
             Any callable which takes a AtomMapping and returns a float between [0,1]
-        n_connecting_cycles: int, optional
+        n_connecting_cycles : int, optional
             build at least n cycles between th networks. (default: 2)
-        cycle_sizes: Union[int, list[int]], optional
+        cycle_sizes : Union[int, list[int]], optional
             build cycles of given size. or allow a range of different size
             by passing a list[int](default:3)
-        n_processes: int
+        n_processes : int
             number of processes that can be used for the network generation.
             (default: 1)
         """
@@ -65,20 +65,18 @@ class CyclicConcatenator(NetworkConcatenator):
         self, ligand_networks: Iterable[LigandNetwork]
     ) -> LigandNetwork:
         """
-
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks : Iterable[LigandNetwork]
             an iterable of ligand networks, that shall be connected.
-        n_connecting_edges: int
-            number of edges, to connect the networks
+        n_connecting_edges : int
+            number of edges, to connect the networks.
 
         Returns
         -------
         LigandNetwork
             returns a concatenated LigandNetwork object,
             containing all networks.
-
         """
         raise NotImplementedError()
         # Todo: implement.

@@ -12,13 +12,13 @@ def delete_transformation(
     must_stay_connected: bool = True,
 ) -> LigandNetwork:
     """
-    Remove the desired edge from the network
+    Remove the desired edge from the network.
 
     Parameters
     ----------
-    network: LigandNetwork
-    transformation: :Union[LigandAtomMapping, tuple[Component, Component], list[LigandAtomMapping]]
-    must_stay_connected: bool
+    network : LigandNetwork
+    transformation : :Union[LigandAtomMapping, tuple[Component, Component], list[LigandAtomMapping]]
+    must_stay_connected : bool
         ensure, that the resulting Network is still connected.
 
     Returns
@@ -57,10 +57,10 @@ def delete_component(
 
     Parameters
     ----------
-    network: LigandNetwork
-    component:Union[Component, list[Component]]
+    network : LigandNetwork
+    component : Union[Component, list[Component]]
         component to be removed from the network, which is a node of the graph.
-    must_stay_connected: bool
+    must_stay_connected : bool
         ensure, that the resulting Network is still connected.
 
     Returns

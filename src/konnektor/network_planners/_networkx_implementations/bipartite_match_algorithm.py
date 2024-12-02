@@ -20,17 +20,16 @@ class MatchingConcatenatAlgorithm(_AbstractNetworkConcatenator):
         weights: list[float],
     ) -> nx.Graph:
         """
-
         Parameters
         ----------
-        nodesA: list[int],
+        nodesA : list[int],
             nodes of network A
-        nodesB: list[int]
+        nodesB : list[int]
             nodes of network B
-        edges: list[tuple[int, int]]
+        edges : list[tuple[int, int]]
             connecting edges between network A and B
-        weights: list[float]
-            weights for the edges
+        weights : list[float]
+            weights for the edges.
 
         Returns
         -------

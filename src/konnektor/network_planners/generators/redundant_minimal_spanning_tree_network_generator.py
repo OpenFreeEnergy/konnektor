@@ -32,22 +32,20 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mappers :  Union[AtomMapper, list[AtomMapper]]
+        mappers : Union[AtomMapper, list[AtomMapper]]
             the `AtomMapper` s to use to propose `AtomMapping` s.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer
             any callable which takes a `AtomMapping` and returns a float
-        n_redundancy: int
+        n_redundancy : int
             use MST n times to get a redundant set of `Transformations`.
-        n_processes: int, optional
+        n_processes : int, optional
             number of processes that can be used for the network generation. (default: 1)
-        progress: bool, optional
+        progress : bool, optional
             if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: NetworkGenerator, optional
+        _initial_edge_lister : NetworkGenerator, optional
             this `NetworkGenerator` is used to give the initial set of edges. For standard usage, the `MaximalNetworkGenerator` is used. (default: MaximalNetworkPlanner)
-
-
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
@@ -67,12 +65,11 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """
-        generate a redundant mst network for the given compounds.
-
+        Generate a redundant mst network for the given compounds.
 
         Parameters
         ----------
-        components: Iterable[Component]
+        components : Iterable[Component]
             the components to be used for the LigandNetwork
 
         Returns

@@ -11,9 +11,7 @@ from rdkit import Chem
 
 class genMapper(AtomMapper):
     def __init__(self):
-        """
-        Build a generic Mapper, that only has use for dummy mappings. Generates empty mappings
-        """
+        """Build a generic Mapper, that only has use for dummy mappings. Generates empty mappings."""
         pass
 
     def suggest_mappings(self, molA, molB) -> AtomMapping:
@@ -42,9 +40,9 @@ class genScorer:  # (AtomMappingScorer):
 
         Parameters
         ----------
-        n_scores: int
+        n_scores : int
             number of scores to build
-        rand_seed: int
+        rand_seed : int
             random number seed for the random scores.
         """
         np.random.seed(rand_seed)
@@ -61,18 +59,17 @@ class genScorer:  # (AtomMappingScorer):
 
     def get_score(self, mapping: AtomMapping) -> float:
         """
-        return the score, at position self.i
+        Return the score, at position self.i.
 
         Parameters
         ----------
-        mapping: AtomMapping
+        mapping : AtomMapping
             the score will not be depending on the mapping! this mimicks only classical scorer use.
 
         Returns
         -------
         float
             score to be returned.
-
         """
         v = self.vals[self.i]
         self.i = (self.i + 1) % self.n_scores
@@ -86,9 +83,9 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
 
     Parameters
     ----------
-    n_compounds: int
+    n_compounds : int
         number of artificial molecules to build
-    rand_seed: int
+    rand_seed : int
         random number seed.
 
     Returns
@@ -122,9 +119,9 @@ def build_random_mst_network(
 
     Parameters
     ----------
-    n_compounds:int
+    n_compounds : int
         number of artificial compounds
-    rand_seed: int
+    rand_seed : int
         random seed number
     uni_score:
     whether to use always the score of 1 for an atom mapping
@@ -161,9 +158,9 @@ def build_n_random_mst_network(
 
     Parameters
     ----------
-    n_compounds:int
+    n_compounds : int
         number of artificial compounds
-    rand_seed: int
+    rand_seed : int
         random seed number
     uni_score:
     whether to use always the score of 1 for an atom mapping
@@ -206,9 +203,9 @@ def build_random_fully_connected_network(
 
     Parameters
     ----------
-    n_compounds:int
+    n_compounds : int
         number of artificial compounds
-    rand_seed: int
+    rand_seed : int
         random seed number
     uni_score:
         whether to use always the score of 1 for an atom mapping

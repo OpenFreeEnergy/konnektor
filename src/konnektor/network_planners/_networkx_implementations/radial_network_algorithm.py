@@ -47,7 +47,7 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
         weights: list[float],
         central_node: int = None,
     ) -> nx.Graph:
-        """Generate a radial network with all ligands connected to a central node
+        """Generate a radial network with all ligands connected to a central node.
 
         Also known as hub and spoke or star-map, this plans a Network where
         all ligands are connected via a central ligand.
@@ -65,12 +65,6 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
           assign scores to potential mappings, higher scores indicate worse
           mappings.
 
-        Raises
-        ------
-        ValueError
-          if no mapping between the central ligand and any other ligand can be
-          found
-
         Returns
         -------
         network : Network
@@ -79,6 +73,12 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
           mappers.
           If no scorer is supplied, the first mapping provided by the iterable
           of mappers will be used.
+
+        Raises
+        ------
+        ValueError
+          if no mapping between the central ligand and any other ligand can be
+          found
         """
 
         if central_node is None:

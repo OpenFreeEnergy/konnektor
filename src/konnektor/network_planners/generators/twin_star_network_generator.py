@@ -39,17 +39,17 @@ class TwinStarNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper :  Union[AtomMapper, list[AtomMapper]]
+        mapper : Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
-        n_centers: int, optional
+        n_centers : int, optional
             the number of centers in the network. (default: 2)
-        n_processes: int, optional
+        n_processes : int, optional
             number of processes that can be used for the network generation. (default: 1)
-        progress: bool, optional
+        progress : bool, optional
             if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: NetworkPlanner, optional
+        _initial_edge_lister : NetworkPlanner, optional
             this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner..
             (default: MaximalNetworkPlanner)
@@ -77,11 +77,11 @@ class TwinStarNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """
-        generate a twin star map network for the given compounds.
+        Generate a twin star map network for the given compounds.
 
         Parameters
         ----------
-        components: Iterable[Component]
+        components : Iterable[Component]
             the components to be used for the LigandNetwork
 
         Returns

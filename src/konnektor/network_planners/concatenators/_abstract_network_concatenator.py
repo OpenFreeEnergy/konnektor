@@ -39,15 +39,14 @@ class NetworkConcatenator(NetworkPlanner):
             lowest score edges
         scorer : AtomMappingScorer
             any callable which takes a AtomMapping and returns a float
-        n_processes: int, optional
+        n_processes : int, optional
             number of processes that can be used for the network generation.
             (default: 1)
-        _initial_edge_lister: LigandNetworkPlanner, optional
+        _initial_edge_lister : LigandNetworkPlanner, optional
             this LigandNetworkPlanner is used to give the initial set of edges.
              For standard usage, the Maximal NetworPlanner is used.
             However in large scale approaches, it might be interesting to use
              the heuristicMaximalNetworkPlanner. (default: None)
-
         """
 
         # generic Network_Planner attribsd
@@ -74,15 +73,13 @@ class NetworkConcatenator(NetworkPlanner):
         self, ligand_networks: Iterable[LigandNetwork]
     ) -> LigandNetwork:
         """
-
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks : Iterable[LigandNetwork]
             an iterable of ligand networks, that shall be connected.
 
         Returns
         -------
         LigandNetwork
             returns a concatenated LigandNetwork object, containing all networks.
-
         """

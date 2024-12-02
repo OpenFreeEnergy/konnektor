@@ -44,7 +44,6 @@ class CyclicNetworkGenerator(NetworkGenerator):
         but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased and not enforced.
         The large number of cycles might be very useful for statistical analysis.  Nevertheless, the network has an increased amount of `Transformation`s.
 
-
         Parameters
         ----------
         mappers : Union[AtomMapper, list[AtomMapper]]
@@ -53,17 +52,17 @@ class CyclicNetworkGenerator(NetworkGenerator):
             lowest score edges.
         scorer : AtomMappingScorer
             Any callable which takes a AtomMapping and returns a float.
-        node_present_in_cycles: int
+        node_present_in_cycles : int
             The number of cycles the node should be present in.
-        cycle_sizes: Union[int, List[int]]
+        cycle_sizes : Union[int, List[int]]
             The cycle size to be used for designing the graph.
             When providing a list[int], a range of sizes is allowed (e.g. `[3,4]`). (default: 3)
-        n_processes: int, optional
+        n_processes : int, optional
             Number of processes that can be used for the network generation.
             (default: 1)
-        progress: bool, optional
+        progress : bool, optional
             If `True`, displays a progress bar. (default: False)
-        _initial_edge_lister: NetworkPlanner, optional
+        _initial_edge_lister : NetworkPlanner, optional
             The NetworkPlanner used to give the initial set of edges.
             For standard usage, the MaximalNetworkPlanner is used. (default: MaximalNetworkPlanner)
         """
@@ -89,7 +88,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """
-           generate a cyclic network for the given compounds.
+           Generate a cyclic network for the given compounds.
 
         Parameters
         ----------
