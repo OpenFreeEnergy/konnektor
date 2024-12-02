@@ -3,9 +3,9 @@
 
 import abc
 import logging
-from typing import Iterable, Union
+from typing import Callable, Iterable, Union
 
-from gufe import AtomMapper
+from gufe import AtomMapper, AtomMapping
 from gufe import LigandNetwork, Component
 
 from konnektor.network_planners._networkx_implementations import (
@@ -23,7 +23,7 @@ class NetworkGenerator(NetworkPlanner):
     def __init__(
         self,
         mappers: Union[AtomMapper, list[AtomMapper]],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
         progress: bool = False,
