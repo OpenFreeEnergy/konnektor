@@ -12,6 +12,9 @@ dependencies:
   - coverage
   - mypy
   - nbval
+  - openff-units==0.2.0
+  - openff-models>=0.0.5
+  - openff-toolkit>=0.13.0
   #Typing
   - typing-extensions
   # Sci
