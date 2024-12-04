@@ -3,9 +3,9 @@
 
 import abc
 import logging
-from typing import Iterable, Union
+from typing import Callable, Iterable, Union
 
-from gufe import AtomMapper
+from gufe import AtomMapper, AtomMapping
 from gufe import LigandNetwork, Component
 
 from konnektor.network_planners._networkx_implementations import (
@@ -23,33 +23,35 @@ class NetworkGenerator(NetworkPlanner):
     def __init__(
         self,
         mappers: Union[AtomMapper, list[AtomMapper]],
-        scorer,
-        network_generator: _AbstractNetworkAlgorithm,
+        scorer: Callable[[AtomMapping], float],
+        network_generator: _AbstractNetworkAlgorithm,  ## TODO: rename this to network_algorithm?
+
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister=None,
     ):
-        """This class is an implementation for the LigandNetworkPlanner interface.
-        It defines the std. class for a Konnektor LigandNetworkPlanner
+        """This class is an implementation for the NetworkGenerator interface.
+        It defines the std. class for a Konnektor NetworkGenerator.
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : AtomMapper
             the AtomMappers to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+            Any callable which takes a AtomMapping and returns a float
+        network_generator: the network algorithm to use
         n_processes: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            Number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
+            If `True`, displays a progress bar. (default: False)
+        _initial_edge_lister: NetworkPlanner, optional
+            The NetworkPlanner to use to create the initial set of edges. For standard usage, the MaximalNetworkPlanner is used.
             However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
 
         """
-        # generic Network_Planner attribsd
+        # generic NetworkPlanner attribs
         super().__init__(mappers=mappers, scorer=scorer)
 
         # Konnektor specific variables
@@ -93,7 +95,7 @@ class NetworkGenerator(NetworkPlanner):
         Parameters
         ----------
         components : Iterable[Component]
-        the ligands to include in the Network
+            the ligands to include in the Network
 
         Returns
         -------

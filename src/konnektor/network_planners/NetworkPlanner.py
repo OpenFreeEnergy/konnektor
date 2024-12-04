@@ -16,8 +16,8 @@ log = logging.getLogger(__name__)
 
 class NetworkPlanner(abc.ABC):
     def __init__(self, mappers: Union[AtomMapper, list[AtomMapper]], scorer):
-        """This class is an implementation for the LigandNetworkPlanner interface.
-        It defines the std. class for a Konnektor LigandNetworkPlanner
+        """This class is an implementation for the NetworkPlanner interface.
+        It defines the std. class for a Konnektor NetworkPlanner
 
         Parameters
         ----------

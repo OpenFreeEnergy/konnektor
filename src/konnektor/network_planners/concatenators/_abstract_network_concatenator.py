@@ -28,12 +28,12 @@ class NetworkConcatenator(NetworkPlanner):
         n_processes: int = 1,
         _initial_edge_lister=None,
     ):
-        """Base Class for the the LigandNetworkConcatenator classes.
-         It defines the std. class for a Konnektor LigandNetworkPlanner
+        """Base Class for the NetworkConcatenator classes.
+         It defines the std. class for a Konnektor NetworkConcatenator.
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : AtomMapper
             the AtomMappers to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges

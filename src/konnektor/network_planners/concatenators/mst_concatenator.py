@@ -27,8 +27,8 @@ class MstConcatenator(NetworkConcatenator):
         _initial_edge_lister: NetworkConcatenator = None,
     ):
         """
-        This concatenators is connnecting two Networks with a kruskal like
-         approach up to the number of connecting edges.
+        A NetworkConcatenator that connects two Networks with a Kruskal-like
+        approach, up to the number of connecting edges.
 
         Parameters
         ----------
@@ -39,7 +39,7 @@ class MstConcatenator(NetworkConcatenator):
             scoring function evaluating an atom mapping, and giving a score
             between [0,1].
         n_connecting_edges: int, optional
-            number of connecting edges. (default: 2)
+            maximum number of connecting edges. (default: 2)
         n_processes: int
             number of processes that can be used for the network generation.
             (default: 1)
@@ -49,7 +49,7 @@ class MstConcatenator(NetworkConcatenator):
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
-            _initial_edge_lister=None,
+            _initial_edge_lister=None,  ## TODO: should this be _initial_edge_lister?
         )
         self.n_connecting_edges = n_connecting_edges
 
@@ -57,7 +57,7 @@ class MstConcatenator(NetworkConcatenator):
         self, ligand_networks: Iterable[LigandNetwork]
     ) -> LigandNetwork:
         """
-        concatenate the giving networks.
+        Concatenate the given networks.
 
         Parameters
         ----------
