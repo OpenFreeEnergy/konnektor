@@ -1,11 +1,15 @@
 name: "CI"
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
   push:
     branches:
       - main
+  schedule:
+    # Run a cron job once daily
+    - cron: "0 0 * * *"
 
 concurrency:
   group: "${{ github.workflow }}-${{ github.ref }}"
@@ -24,19 +28,19 @@ jobs:
       matrix:
         os: ['ubuntu',]
         python-version:
-          - "3.9"
           - "3.10"
           - "3.11"
+          - "3.12"
         include:
           - os: 'macos'
-            python-version: "3.11"
+            python-version: "3.12"
 
     steps:
       - uses: actions/checkout@v4
       - name: Get current date
         id: date
         run: echo "date=$(date +%Y-%m-%d)" >> "${GITHUB_OUTPUT}"
-      - uses: mamba-org/setup-micromamba@v1
+      - uses: mamba-org/setup-micromamba@v2
         with:
           environment-file: environment.yml
           environment-name: konnektor
@@ -70,7 +74,7 @@ jobs:
 
       - name: codecov
         if: ${{ github.repository == 'OpenFreeEnergy/konnektor' && github.event != 'schedule'}}
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml
