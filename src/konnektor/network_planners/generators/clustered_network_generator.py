@@ -63,7 +63,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         clusterer: ComponentsDiversityClusterer
             Separates the `Component` s along the first dimension.
         mappers:  Union[AtomMapper, list[AtomMapper]]
-            Defines the connection between two ligands if `NetworkConcatenator`s or  `NetworkGenerator`s are provided. Otherwise, (?) (default:None)
+            Defines the connection between two ligands if `NetworkConcatenator` s or  `NetworkGenerator` s are provided. Otherwise, (?) (default:None)
         scorer: AtomMappingScorer
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional
