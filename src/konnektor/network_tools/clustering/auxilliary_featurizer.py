@@ -19,16 +19,7 @@ class ChargeTransformer(FpsTransformer):
 
         """
         super().__init__(parallel=parallel)
-        self.nBits = 1
-
-    @property
-    def fpSize(self):
-        return self.nBits
-
-    # Scikit-Learn expects to be able to set fpSize directly on object via .set_params(), so this updates nBits used by the abstract class
-    @fpSize.setter
-    def fpSize(self, fpSize):
-        self.nBits = fpSize
+        self.fpSize = 1
 
     def _mol2fp(self, mol):
         pass
