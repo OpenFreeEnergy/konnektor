@@ -68,4 +68,4 @@ default-tag = "0.0.0"
 file = "src/konnektor/_version.py"
 
 [tool.pytest.ini_options]
-addopts = "--ignore=dev --cov=konnektor"
+addopts = "--ignore=dev"

@@ -64,7 +64,7 @@ jobs:
           micromamba list
       - name: "Run tests"
         run: |
-          pytest -n auto -v --cov-report=xml
+          pytest -n auto -v --cov=konnektor --cov-report=xml
       - name: "Test Notebooks"
         run: |
           # another dep I don't want to include in the env
