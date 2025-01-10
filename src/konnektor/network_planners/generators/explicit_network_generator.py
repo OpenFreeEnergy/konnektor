@@ -25,11 +25,11 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         mapper: AtomMapper
-            the atom mapper is required, to define the connection between two ligands.
+            Defines the connection between two ligands.
         scorer: AtomMappingScorer
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         n_processes: int
-            number of processes used to build the ligand network
+            number of processes to use to build the ligand network
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         """
@@ -48,7 +48,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         """
         Create a network with pre-defined edges.
 
-        This class is can be used as initial_edge_lister
+        This can be used as initial_edge_lister
 
         Parameters
         ----------

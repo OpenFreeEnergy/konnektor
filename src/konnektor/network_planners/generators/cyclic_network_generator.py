@@ -27,40 +27,45 @@ class CyclicNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The `CyclicNetworkGenerator` is generating a network based on many network cycles. T
-        his is of interest for analyzing the uncertainty of FE Estimates along the thermodynamic cycles and possibly correct the estimates with cycle closure analysis.
+        A `NetworkGenerator` that generates a network based on many network cycles.
+        This is of interest for analyzing the uncertainty of FE Estimates along thermodynamic
+        cycles and possibly for correcting the estimates with cycle closure analysis.
 
         The greedy algorithm builds the network up from a nodewise perspective.
-        For each node, the algorithm generates all cycles of size `cycle_sizes` and assigns a score to each cylce as the sum of all sub-scores.
-        Next it selects the `node_present_in_cyces` best score perfoming and node diversity increasing (see below) cycles per node.
+        For each node, the algorithm generates all cycles of size `cycle_sizes` and assigns a score to each cycle as the sum of all sub-scores.
+        Next, it selects the `node_present_in_cycles` best score performing and node diversity increasing (see below) cycles per node.
         The set of selected `Transformations` constructs the graph.
-        The node diversity criterion is an addition, which biases to spread the cycles on the graph eaqually between all `Components`
+        The node diversity criterion is an addition which biases to spread the cycles on the graph equally between all `Components`.
 
-        The number of cylces, around each `Component` can be defined by `component_present_in_cycles` and allowed cylce size can be tweaked with `cycle_sizes`. For `cycle_sizes` either an integer for providing an expected cycle size (e.g. `3`) or a range of allowed cycle sizes (e.g. `[3,4]`).
+        The number of cycles around each `Component` can be defined by `component_present_in_cycles`
+        and the allowed cycle size can be tweaked with `cycle_sizes`.
 
-        This layout has a well distributed connectivity between all `Component` s which increases the robustness very well, but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased not enforced.
-        The large number of cycles might be very useful for statical analysis.  Nevertheless, the network has an increased amount of `Transformation` s
+        This layout has well-distributed connectivity between all `Component` s, which increases the robustness very well,
+        but still allows for a better graph score then the Twin Star Network, as the connectivity distribution is biased and not enforced.
+        The large number of cycles might be very useful for statistical analysis.  Nevertheless, the network has an increased amount of `Transformation` s.
 
 
         Parameters
         ----------
         mappers : Union[AtomMapper, list[AtomMapper]]
-            the AtomMappers to use to propose mappings.  At least 1 required,
+            AtomMapper(s) to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
-            lowest score edges
+            lowest score edges.
         scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+            Any callable which takes a AtomMapping and returns a float.
         node_present_in_cycles: int
-            the number of cycles, the node should be present in.
+            The number of cycles the node should be present in.
         cycle_sizes: Union[int, List[int]]
-            the cycle size in the graph, that is used for designing the graph.
+            The cycle size to be used for designing the graph.
             When providing a list[int], a range of sizes is allowed (e.g. `[3,4]`). (default: 3)
         n_processes: int, optional
-            number of processes that can be used for the network generation.
+            Number of processes that can be used for the network generation.
             (default: 1)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges.
-            For standard usage, the Maximal NetworPlanner is used. (default: MaximalNetworkPlanner)
+        progress: bool, optional
+            If `True`, displays a progress bar. (default: False)
+        _initial_edge_lister: NetworkPlanner, optional
+            The NetworkPlanner used to give the initial set of edges.
+            For standard usage, the MaximalNetworkPlanner is used. (default: MaximalNetworkPlanner)
         """
 
         network_generator = nx_CNG(

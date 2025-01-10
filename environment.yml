@@ -27,6 +27,7 @@ dependencies:
   # docs
   - myst-parser
   - pydata-sphinx-theme
+  - tqdm
 
   - pip:
     - dill
