@@ -12,6 +12,7 @@ dependencies:
   - coverage
   - mypy
   - nbval
+  - ruff
   #Typing
   - gufe
   - typing-extensions
@@ -28,6 +29,7 @@ dependencies:
   - myst-parser
   - pydata-sphinx-theme
   - tqdm
+  - ruff
 
   - pip:
     - dill
