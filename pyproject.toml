@@ -69,3 +69,4 @@ file = "src/konnektor/_version.py"
 
 [tool.ruff]
 line-length=100
+extend-exclude = ["*.ipynb"]  # until we have a reason to include nb formatting
