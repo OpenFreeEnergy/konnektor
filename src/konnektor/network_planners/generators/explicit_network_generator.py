@@ -167,7 +167,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                 ]
                 available = [ligand.name for ligand in components]
                 raise KeyError(
-                    f"Invalid name(s) requested {badnames}.  " f"Available: {available}"
+                    f"Invalid name(s) requested {badnames}.  Available: {available}"
                 )
 
         return self.generate_ligand_network(edges=edges)

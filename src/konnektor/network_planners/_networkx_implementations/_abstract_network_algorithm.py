@@ -7,7 +7,6 @@ import networkx as nx
 
 
 class _AbstractNetworkAlgorithm(abc.ABC):
-
     def __call__(self, *args, **kwargs):
         return self.generate_network(*args, **kwargs)
 
@@ -19,7 +18,6 @@ class _AbstractNetworkAlgorithm(abc.ABC):
 
 
 class _AbstractNetworkConcatenator(abc.ABC):
-
     def __call__(self, *args, **kwargs):
         return self.concatenate_networks(*args, **kwargs)
 

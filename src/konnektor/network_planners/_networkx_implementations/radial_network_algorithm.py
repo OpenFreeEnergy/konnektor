@@ -11,7 +11,6 @@ from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 
 class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
-
     def __init__(self, metric_aggregation_method: Callable = None, n_centers: int = 1):
         self.metric_aggregation_method = metric_aggregation_method
         self.n_centers = n_centers

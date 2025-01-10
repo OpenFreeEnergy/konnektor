@@ -10,10 +10,11 @@ from konnektor.tests.network_planners.conf import (
     genScorer,
     GenAtomMapper,
     BadMapper,
-    SuperBadMapper
+    SuperBadMapper,
 )
 from gufe import LigandAtomMapping, AtomMapper, AtomMapping
 from konnektor.utils.toy_data import build_random_dataset
+
 
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
@@ -45,18 +46,19 @@ def test_generate_maximal_network(
         for edge in network.edges:
             assert "score" not in edge.annotations
 
+
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, with_progress):
     """If no scorer is provided, the first mapping of the last mapper should be used.
-       Note: this test isn't great because BadMapper only returns one mapping
+    Note: this test isn't great because BadMapper only returns one mapping
     """
 
     toluene, others = toluene_vs_others
-    components = others+[toluene]
+    components = others + [toluene]
 
     planner = MaximalNetworkGenerator(
-        mappers= [SuperBadMapper(), GenAtomMapper(), BadMapper()],
+        mappers=[SuperBadMapper(), GenAtomMapper(), BadMapper()],
         scorer=None,
         progress=with_progress,
         n_processes=n_process,

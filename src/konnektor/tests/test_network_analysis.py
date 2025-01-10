@@ -23,7 +23,6 @@ from konnektor.utils.toy_data import (
 
 #   Graph Topology related functionalities - Connectivity
 def test_get_is_connected():
-
     # Check for connected.
     g = build_random_mst_network()
     assert get_is_connected(g)

@@ -100,7 +100,7 @@ class ScaffoldClusterer(_AbstractClusterer):
 
     @staticmethod
     def find_solution(
-        mol_to_candidates: dict[Chem.Mol, list[str]]
+        mol_to_candidates: dict[Chem.Mol, list[str]],
     ) -> list[tuple[str, int]]:
         # returns the best scaffolds that cover all mols
         # returns a list of (scaffold smiles, n heavy atoms)

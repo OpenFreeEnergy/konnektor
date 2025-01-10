@@ -10,14 +10,12 @@ from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 
 class NNodeEdgesNetworkAlgorithm(_AbstractNetworkAlgorithm):
-
     def __init__(self, target_node_connectivity: int = 2):
         self.target_node_connectivity = target_node_connectivity
 
     def generate_network(
         self, edges: list[tuple[int, int]], weights: list[float]
     ) -> nx.Graph:
-
         w_edges = []
         nodes = []
         # The initial "weights" are Scores, which need to be translated to weights.

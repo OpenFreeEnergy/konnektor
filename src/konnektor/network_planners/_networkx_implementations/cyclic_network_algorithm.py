@@ -16,7 +16,6 @@ log.setLevel(logging.WARNING)
 
 
 class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
-
     def __init__(
         self, node_cycle_connectivity: int = 2, sub_cycle_size_range: Iterable[int] = 3
     ):
