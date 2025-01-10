@@ -19,9 +19,7 @@ from konnektor.utils.toy_data import build_random_dataset
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 @pytest.mark.parametrize("with_scorer", [True, False])
-def test_generate_maximal_network(
-    toluene_vs_others, with_progress, with_scorer, n_process
-):
+def test_generate_maximal_network(toluene_vs_others, with_progress, with_scorer, n_process):
     toluene, others = toluene_vs_others
 
     mapper = GenAtomMapper()
@@ -66,4 +64,4 @@ def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, w
 
     network = planner.generate_ligand_network(components)
 
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges)*[{0:0}]
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]

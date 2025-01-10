@@ -66,3 +66,6 @@ default-tag = "0.0.0"
 
 [tool.versioningit.write]
 file = "src/konnektor/_version.py"
+
+[tool.ruff]
+line-length=100

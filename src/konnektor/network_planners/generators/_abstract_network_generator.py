@@ -66,9 +66,7 @@ class NetworkGenerator(NetworkPlanner):
             self._initial_edge_lister, "n_processes"
         ):
             self.n_processes = n_processes
-        if self._initial_edge_lister is not None and hasattr(
-            self._initial_edge_lister, "progress"
-        ):
+        if self._initial_edge_lister is not None and hasattr(self._initial_edge_lister, "progress"):
             self._initial_edge_lister._progress = progress
         self._progress = progress
 
@@ -82,9 +80,7 @@ class NetworkGenerator(NetworkPlanner):
     @progress.setter
     def progress(self, progress: bool):
         self._progress = progress
-        if self._initial_edge_lister is not None and hasattr(
-            self._initial_edge_lister, "progress"
-        ):
+        if self._initial_edge_lister is not None and hasattr(self._initial_edge_lister, "progress"):
             self._initial_edge_lister._progress = progress
 
     @abc.abstractmethod

@@ -16,9 +16,7 @@ log.setLevel(logging.WARNING)
 
 
 class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
-    def __init__(
-        self, node_cycle_connectivity: int = 2, sub_cycle_size_range: Iterable[int] = 3
-    ):
+    def __init__(self, node_cycle_connectivity: int = 2, sub_cycle_size_range: Iterable[int] = 3):
         self.node_cycle_connectivity = node_cycle_connectivity
 
         if isinstance(sub_cycle_size_range, int):
@@ -36,13 +34,9 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
             raise ValueError("a cycle has a minimal size of 3.")
 
         self.orig_g = None
-        self.cycle_metric = (
-            self._score_summation
-        )  # how to evaluate the cost of a cycle.
+        self.cycle_metric = self._score_summation  # how to evaluate the cost of a cycle.
 
-    def generate_network(
-        self, edges: list[tuple[int, int]], weights: list[float]
-    ) -> Graph:
+    def generate_network(self, edges: list[tuple[int, int]], weights: list[float]) -> Graph:
         log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
 
@@ -91,9 +85,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
     Cycle building
     """
 
-    def _translate_input(
-        self, edges: List[Tuple[int, int]], weights: List[float]
-    ) -> Graph:
+    def _translate_input(self, edges: List[Tuple[int, int]], weights: List[float]) -> Graph:
         log.info("\tTranslate input to Networkx Graph")
 
         # build Edges:
@@ -140,9 +132,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
         # Build Paths
         log.info("\tGenerate all paths up to size " + str(self.max_sub_cycle_size))
-        raw_cycles = [
-            c for c in nx.simple_cycles(graph, length_bound=self.max_sub_cycle_size)
-        ]
+        raw_cycles = [c for c in nx.simple_cycles(graph, length_bound=self.max_sub_cycle_size)]
         log.info("\tFound  " + str(len(raw_cycles)) + " cycles")
 
         # Filter cycle sizes:
@@ -192,12 +182,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
             # MST like iteration
             c = cycle_priority_queue[i]
             if (
-                any(
-                    [
-                        cycle_connectivity_dict[n] < self.node_cycle_connectivity
-                        for n in c
-                    ]
-                )
+                any([cycle_connectivity_dict[n] < self.node_cycle_connectivity for n in c])
                 and c not in selected_cycles
             ):
                 # print("select cycle:", c)
@@ -206,14 +191,10 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
                     cycle_connectivity_dict[n] += 1
 
                 # Be efficient, remove already counted cycles
-                cyclic_paths_scored = list(
-                    filter(lambda x: x[0] != c, cyclic_paths_scored)
-                )
+                cyclic_paths_scored = list(filter(lambda x: x[0] != c, cyclic_paths_scored))
 
                 # update cycle score - punish by note appearance:
-                resort_f = lambda x: x[1] * max(
-                    [cycle_connectivity_dict[i] for i in x[0]]
-                )
+                resort_f = lambda x: x[1] * max([cycle_connectivity_dict[i] for i in x[0]])
                 cycle_priority_queue = list(
                     map(lambda x: x[0], sorted(cyclic_paths_scored, key=resort_f))
                 )
@@ -263,9 +244,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
                 min_node[e2].append((e1, e2))
 
         end_time_cycle_generation = datetime.now()
-        duration_cycle_generation = (
-            end_time_cycle_generation - start_time_cycle_generation
-        )
+        duration_cycle_generation = end_time_cycle_generation - start_time_cycle_generation
         log.info("\tDuration: " + str(duration_cycle_generation))
         log.info("Priority Queue Gen complete\n")
 
@@ -288,16 +267,10 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
                 all_node_collection.extend(list(start_edge))
 
                 adding_node = lambda e: len(cycle_nodes.intersection(set(e))) == 1
-                use_edge = (
-                    lambda e: not e in cycle_edges
-                    and adding_node(e)
-                    and not_target_node(e)
-                )
+                use_edge = lambda e: not e in cycle_edges and adding_node(e) and not_target_node(e)
 
                 successor_node = (
-                    prioqueue[i][1]
-                    if (target_node == prioqueue[i][0])
-                    else prioqueue[i][0]
+                    prioqueue[i][1] if (target_node == prioqueue[i][0]) else prioqueue[i][0]
                 )
                 for j in range(self.max_sub_cycle_size - 2):
                     tmp_prio_queue = min_node[successor_node]
@@ -312,18 +285,14 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
                     cycle_nodes = cycle_nodes.union(min_e)
                     all_edge_collection.append(tuple(min_e))
-                    successor_node = (
-                        min_e[1] if (successor_node == min_e[0]) else min_e[0]
-                    )
+                    successor_node = min_e[1] if (successor_node == min_e[0]) else min_e[0]
 
                 if len(cycle_edges) == self.max_sub_cycle_size - 1:
                     cycle_edges.append(tuple(sorted([successor_node, target_node])))
                     node_cycles.append(cycle_edges)
             all_cycles_per_node[target_node] = node_cycles
 
-        self.all_cycles = set(
-            [tuple(c) for cs in all_cycles_per_node.values() for c in cs]
-        )
+        self.all_cycles = set([tuple(c) for cs in all_cycles_per_node.values() for c in cs])
 
         all_edges = set([e for c in self.all_cycles for e in c])
         end_time_cycle_selection = datetime.now()

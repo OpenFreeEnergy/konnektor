@@ -23,19 +23,13 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
         weights = list(map(lambda x: 1 - x, weights))
         edge_weights = list(zip(edges, weights))
 
-        node_scores = {
-            n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for n in nodes
-        }
-        filtered_node_scores = dict(
-            filter(lambda x: len(x[1]) != len(nodes), node_scores.items())
-        )
+        node_scores = {n: [e_s[1] for e_s in edge_weights if (n in e_s[0])] for n in nodes}
+        filtered_node_scores = dict(filter(lambda x: len(x[1]) != len(nodes), node_scores.items()))
 
         if len(filtered_node_scores) == 0:  # Todo: allow relaxed criterion here.
             raise ValueError("Could not find a single node connecting all edges!")
 
-        aggregated_scores = list(
-            map(lambda x: (x[0], np.sum(x[1])), filtered_node_scores.items())
-        )
+        aggregated_scores = list(map(lambda x: (x[0], np.sum(x[1])), filtered_node_scores.items()))
         sorted_node_scores = list(sorted(aggregated_scores, key=lambda x: x[1]))
         opt_nodes = sorted_node_scores[: self.n_centers]
         return opt_nodes

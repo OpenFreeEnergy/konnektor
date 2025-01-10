@@ -92,15 +92,12 @@ class TwinStarNetworkGenerator(NetworkGenerator):
         components = list(components)
 
         # Full Graph Construction
-        initial_network = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations["score"] for k in edges]

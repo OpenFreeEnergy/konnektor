@@ -62,5 +62,4 @@ def test_generate_maximal_network_missing_scorer(with_progress, n_process):
     assert len(network.edges) > n_compounds
     assert get_is_connected(network)
 
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges)*[{0:0}]
-
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]

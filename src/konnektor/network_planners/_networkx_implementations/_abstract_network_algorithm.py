@@ -11,9 +11,7 @@ class _AbstractNetworkAlgorithm(abc.ABC):
         return self.generate_network(*args, **kwargs)
 
     @abc.abstractmethod
-    def generate_network(
-        self, edges: list[tuple[int, int]], weights: list[float]
-    ) -> nx.Graph:
+    def generate_network(self, edges: list[tuple[int, int]], weights: list[float]) -> nx.Graph:
         raise NotImplementedError()
 
 

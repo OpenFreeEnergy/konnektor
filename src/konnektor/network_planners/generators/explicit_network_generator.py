@@ -111,8 +111,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                 edges.append((components[i], components[j]))
             except IndexError:
                 raise IndexError(
-                    f"Invalid ligand id, requested {i} {j} "
-                    f"with {len(components)} available"
+                    f"Invalid ligand id, requested {i} {j} with {len(components)} available"
                 )
 
         return self.generate_ligand_network(edges=edges)
@@ -160,14 +159,8 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             try:
                 edges.append((nm2comp[nameA], nm2comp[nameB]))
             except KeyError:
-                badnames = [
-                    nm
-                    for nm in itertools.chain.from_iterable(names)
-                    if nm not in nm2comp
-                ]
+                badnames = [nm for nm in itertools.chain.from_iterable(names) if nm not in nm2comp]
                 available = [ligand.name for ligand in components]
-                raise KeyError(
-                    f"Invalid name(s) requested {badnames}.  Available: {available}"
-                )
+                raise KeyError(f"Invalid name(s) requested {badnames}.  Available: {available}")
 
         return self.generate_ligand_network(edges=edges)

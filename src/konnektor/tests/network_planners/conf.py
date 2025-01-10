@@ -121,11 +121,7 @@ def genScorer(mapping):
 @pytest.fixture(scope="session")
 def toluene_vs_others(atom_mapping_basic_test_files):
     central_ligand_name = "toluene"
-    others = [
-        v
-        for (k, v) in atom_mapping_basic_test_files.items()
-        if k != central_ligand_name
-    ]
+    others = [v for (k, v) in atom_mapping_basic_test_files.items() if k != central_ligand_name]
     toluene = atom_mapping_basic_test_files[central_ligand_name]
     return toluene, others
 

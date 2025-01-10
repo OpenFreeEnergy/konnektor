@@ -35,9 +35,7 @@ def test_explicit_network_planner_with_indices():
     unique_indices = set([i for e in indices for i in e])
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
-    ligand_network = planner.generate_network_from_indices(
-        components=components, indices=indices
-    )
+    ligand_network = planner.generate_network_from_indices(components=components, indices=indices)
 
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == len(unique_indices)
@@ -54,9 +52,7 @@ def test_explicit_network_planner_with_names():
 
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
-    ligand_network = planner.generate_network_from_names(
-        components=components, names=names
-    )
+    ligand_network = planner.generate_network_from_names(components=components, names=names)
 
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == len(unique_names)

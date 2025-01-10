@@ -122,9 +122,7 @@ class ScaffoldClusterer(_AbstractClusterer):
 
             return covered_mols == set(all_mols)
 
-        candidate_scaffolds = set(
-            itertools.chain.from_iterable(mol_to_candidates.values())
-        )
+        candidate_scaffolds = set(itertools.chain.from_iterable(mol_to_candidates.values()))
         # try one scaffold to see if it catches all molecules
         # then try all combinations of two scaffolds to see if we cover
         # etc until we find a solution

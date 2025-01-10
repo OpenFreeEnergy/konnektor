@@ -13,9 +13,7 @@ class NNodeEdgesNetworkAlgorithm(_AbstractNetworkAlgorithm):
     def __init__(self, target_node_connectivity: int = 2):
         self.target_node_connectivity = target_node_connectivity
 
-    def generate_network(
-        self, edges: list[tuple[int, int]], weights: list[float]
-    ) -> nx.Graph:
+    def generate_network(self, edges: list[tuple[int, int]], weights: list[float]) -> nx.Graph:
         w_edges = []
         nodes = []
         # The initial "weights" are Scores, which need to be translated to weights.
@@ -27,9 +25,8 @@ class NNodeEdgesNetworkAlgorithm(_AbstractNetworkAlgorithm):
         # Build initial MST:
         self.g = nx.Graph()
         self.g.add_weighted_edges_from(ebunch_to_add=w_edges)
-        min_edges = nx.minimum_spanning_edges(self.g, weight='weight')
-        mse = [(e1, e2, edge_data['weight']) for i, (e1, e2, edge_data) in
-               enumerate(min_edges)]
+        min_edges = nx.minimum_spanning_edges(self.g, weight="weight")
+        mse = [(e1, e2, edge_data["weight"]) for i, (e1, e2, edge_data) in enumerate(min_edges)]
 
         # Select Additional Edges
         final_edges = mse
