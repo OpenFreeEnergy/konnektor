@@ -5,15 +5,11 @@ import pytest
 
 from konnektor.network_planners import MaximalNetworkGenerator
 from konnektor.tests.network_planners.conf import (
-    atom_mapping_basic_test_files,
-    toluene_vs_others,
     genScorer,
     GenAtomMapper,
     BadMapper,
     SuperBadMapper,
 )
-from gufe import LigandAtomMapping, AtomMapper, AtomMapping
-from konnektor.utils.toy_data import build_random_dataset
 
 
 @pytest.mark.parametrize("n_process", [1, 2])

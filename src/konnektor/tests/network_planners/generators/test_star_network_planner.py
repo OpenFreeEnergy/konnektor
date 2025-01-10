@@ -6,8 +6,6 @@ from gufe import SmallMoleculeComponent
 
 import konnektor
 from konnektor.tests.network_planners.conf import (
-    atom_mapping_basic_test_files,
-    toluene_vs_others,
     mol_from_smiles,
     genScorer,
     GenAtomMapper,

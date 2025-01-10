@@ -4,12 +4,9 @@
 import importlib
 import inspect
 import pytest
-from importlib import resources
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
-import konnektor
-from konnektor import network_planners
 
 from gufe import AtomMapper
 from gufe import SmallMoleculeComponent, LigandAtomMapping

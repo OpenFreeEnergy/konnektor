@@ -1,7 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
 from gufe import SmallMoleculeComponent
 from konnektor.data import get_benzene_ligands, get_hif2a_ligands, get_charged_ligands
 

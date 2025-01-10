@@ -6,7 +6,6 @@ import networkx as nx
 import numpy as np
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
-from konnektor.tests.data.conf import nine_mols_edges
 
 
 def test_radial_network_generation_find_center(nine_mols_edges):
