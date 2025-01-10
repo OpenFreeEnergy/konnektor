@@ -30,7 +30,7 @@ dependencies = [
   'numpy',
   'rdkit',
   'networkx',
-  'scikit-mol',
+  'scikit-mol<0.4.3',
   'scikit-learn',
   'ipycytoscape',
 ]
