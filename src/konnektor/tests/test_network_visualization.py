@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 from konnektor.utils.toy_data import build_random_mst_network
-
 from konnektor.visualization import draw_ligand_network, draw_network_widget
 
 

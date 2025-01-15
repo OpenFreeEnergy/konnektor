@@ -1,16 +1,16 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Union, List, Iterable
+from typing import Iterable, List, Union
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import (
     CyclicNetworkAlgorithm as nx_CNG,
 )
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
-
 
 # Todo: check this algorithm again
 

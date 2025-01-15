@@ -1,12 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import numpy as np
 import networkx as nx
+import numpy as np
+from gufe import LigandNetwork
 from matplotlib import pyplot as plt
 
-from gufe import LigandNetwork
-from . import color_gradient, OFE_COLORS
+from . import OFE_COLORS, color_gradient
 
 
 def get_node_connectivities(cg: nx.Graph) -> list[int]:

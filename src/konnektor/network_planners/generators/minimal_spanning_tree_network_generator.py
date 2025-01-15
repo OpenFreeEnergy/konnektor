@@ -3,9 +3,10 @@
 
 from typing import Iterable, Union
 
-from gufe import LigandNetwork, Component, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 

@@ -1,16 +1,16 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from tqdm import tqdm
 import functools
 import itertools
 import logging
 from typing import Iterable, Union
 
 from gufe import AtomMapper, LigandNetwork
+from tqdm import tqdm
 
-from ._abstract_network_concatenator import NetworkConcatenator
 from ..generators._parallel_mapping_pattern import _parallel_map_scoring
+from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
 
