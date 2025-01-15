@@ -3,10 +3,9 @@
 
 import functools
 import multiprocessing as mult
-from typing import Callable
+from collections.abc import Callable
 
-from gufe import AtomMapper, AtomMapping
-from gufe import SmallMoleculeComponent
+from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent
 from tqdm.auto import tqdm
 
 
@@ -26,7 +25,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 
     """
 
-    jobID, compound_pairs, mappers, scorer = args
+    jobID, compound_pairs, mappers, scorer = args  # noqa
 
     mappings = []
     for component_pair in compound_pairs:
@@ -47,14 +46,9 @@ def thread_mapping(args) -> list[AtomMapping]:
                 except:
                     continue
                 if len(tmp_mappings) > 0:
-                    tmp_best_mapping = min(
-                        tmp_mappings, key=lambda m: m.annotations["score"]
-                    )
+                    tmp_best_mapping = min(tmp_mappings, key=lambda m: m.annotations["score"])
 
-                    if (
-                        tmp_best_mapping.annotations["score"] < best_score
-                        or best_mapping is None
-                    ):
+                    if tmp_best_mapping.annotations["score"] < best_score or best_mapping is None:
                         best_score = tmp_best_mapping.annotations["score"]
                         best_mapping = tmp_best_mapping
 
@@ -106,22 +100,16 @@ def _parallel_map_scoring(
 
     possible_edges = list(possible_edges)
     n_batches = 10 * n_processes
-    total = len(possible_edges)
+    # total = len(possible_edges)
 
-    # size of each batch +fetch division rest
-    batch_num = (total // n_batches) + 1
+    # # size of each batch +fetch division rest
+    # batch_num = (total // n_batches) + 1
 
     # Prepare parallel execution.
     # suboptimal implementation, but itertools.batch is python 3.12,
-    batches = (
-        possible_edges[i : i + n_batches]
-        for i in range(0, len(possible_edges), n_batches)
-    )
+    batches = (possible_edges[i : i + n_batches] for i in range(0, len(possible_edges), n_batches))
 
-    jobs = [
-        (job_id, combination, mappers, scorer)
-        for job_id, combination in enumerate(batches)
-    ]
+    jobs = [(job_id, combination, mappers, scorer) for job_id, combination in enumerate(batches)]
 
     # Execute parallelism
     mappings = []

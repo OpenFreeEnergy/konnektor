@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable
+from collections.abc import Iterable
 
-from gufe import LigandNetwork, Component
+from gufe import Component, LigandNetwork
 
 from konnektor.network_planners.concatenators._abstract_network_concatenator import (
     NetworkConcatenator,

@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
 import networkx as nx
 import numpy as np
+import pytest
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 from konnektor.tests.data.conf import nine_mols_edges

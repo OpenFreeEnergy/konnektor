@@ -3,10 +3,9 @@
 
 import functools
 import itertools
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import AtomMapper
-from gufe import LigandNetwork, Component
+from gufe import AtomMapper, Component, LigandNetwork
 from tqdm.auto import tqdm
 
 from ._abstract_network_generator import NetworkGenerator
@@ -16,7 +15,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         progress: bool = False,
         n_processes: int = 1,
@@ -30,7 +29,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         ... note::
         This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
         However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
-        then remove edges to achieve the desired design. 
+        then remove edges to achieve the desired design.
 
         This class is recommended as an `initial_edge_lister` for other approaches.
         The `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with `n_processes`.
@@ -93,9 +92,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
             )
         else:  # serial variant
             if self.progress is True:
-                progress = functools.partial(
-                    tqdm, total=total, delay=1.5, desc="Mapping"
-                )
+                progress = functools.partial(tqdm, total=total, delay=1.5, desc="Mapping")
             else:
                 progress = lambda x: x
 

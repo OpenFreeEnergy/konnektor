@@ -7,8 +7,8 @@ from gufe import LigandNetwork
 from konnektor.network_planners.concatenators.max_concatenator import MaxConcatenator
 from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
-    genScorer,
     atom_mapping_basic_test_files,
+    genScorer,
     ligand_network_ab,
 )
 
@@ -16,9 +16,7 @@ from konnektor.tests.network_planners.conf import (
 # more test here also for the params
 @pytest.mark.parametrize("n_process", [1, 2])
 def test_max_network_concatenation(ligand_network_ab, n_process):
-    concatenator = MaxConcatenator(
-        mappers=GenAtomMapper(), scorer=genScorer, n_processes=n_process
-    )
+    concatenator = MaxConcatenator(mappers=GenAtomMapper(), scorer=genScorer, n_processes=n_process)
 
     ln_a, ln_b = ligand_network_ab
     nA = len(ln_a.nodes)

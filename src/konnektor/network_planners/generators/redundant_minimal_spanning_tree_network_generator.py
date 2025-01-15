@@ -1,11 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -13,7 +14,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_redundancy: int = 2,
         n_processes: int = 1,
@@ -81,15 +82,12 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             a redundant MST network.
         """
 
-        initial_network = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
@@ -101,23 +99,21 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             edges = list(edge_weight.keys())
 
             # filter for already selected edges
-            filter_sEdges = lambda x: (
-                x not in selected_edges and x[::-1] not in selected_edges
-            )
+            filter_sEdges = lambda x: (x not in selected_edges and x[::-1] not in selected_edges)
             edges = list(filter(filter_sEdges, edges))
             # print("Edges", len(edges), edges)
 
             weights = [edge_weight[e] for e in edges]
             edge_weight = dict(list(zip(edges, weights)))
             # print("dEdges", len(edge_weight))
-            ns = set([n for e in edges for n in e])
+            # ns = set([n for e in edges for n in e])
             # print("nodes", len(ns), ns)
 
             mg = self.network_generator.generate_network(edges, weights)
 
             if not mg.connected:
-                nodes_index = {l: components.index(l) for l in components}
-                missing_nodes = [l for l in components if (nodes_index[l] in mg.nodes)]
+                nodes_index = {c: components.index(c) for c in components}
+                missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
                 raise RuntimeError(
                     "Unable to create edges for some nodes: " + str(list(missing_nodes))
                 )
