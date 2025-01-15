@@ -66,8 +66,7 @@ def test_minimal_spanning_network_regression(minimal_spanning_network):
     # issue #244, this was previously giving non-reproducible (yet valid)
     # networks when scores were tied.
     edge_ids = sorted(
-        (edge.componentA.name, edge.componentB.name)
-        for edge in minimal_spanning_network.edges
+        (edge.componentA.name, edge.componentB.name) for edge in minimal_spanning_network.edges
     )
     ref = sorted(
         [

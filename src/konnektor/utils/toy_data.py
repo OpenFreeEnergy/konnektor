@@ -107,9 +107,7 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
     ]
     mols = [Chem.AddHs(Chem.MolFromSmiles(s)) for s in smiles]
     [Chem.rdDistGeom.EmbedMolecule(m) for m in mols]
-    compounds = [
-        SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)
-    ]
+    compounds = [SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)]
 
     return compounds, gen_mapper, gen_scorer
 

@@ -53,9 +53,7 @@ class MstConcatenator(NetworkConcatenator):
         )
         self.n_connecting_edges = n_connecting_edges
 
-    def concatenate_networks(
-        self, ligand_networks: Iterable[LigandNetwork]
-    ) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
         Concatenate the given networks.
 
@@ -79,9 +77,7 @@ class MstConcatenator(NetworkConcatenator):
 
         selected_edges = []
         selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(
-            ligand_networks, 2
-        ):
+        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
             # Generate fully connected Bipartite Graph
             ligands = list(ligandNetworkA.nodes | ligandNetworkB.nodes)
             nodesA = ligandNetworkA.nodes
@@ -109,8 +105,7 @@ class MstConcatenator(NetworkConcatenator):
             )
 
             selected_mappings = [
-                edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
-                for k in mg.edges
+                edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
             ]
 
             log.info(f"Adding ConnectingEdges: {len(selected_mappings)}")
@@ -124,9 +119,7 @@ class MstConcatenator(NetworkConcatenator):
             selected_edges.extend(network.edges)
             selected_nodes.extend(network.nodes)
 
-        concat_LigandNetwork = LigandNetwork(
-            edges=selected_edges, nodes=set(selected_nodes)
-        )
+        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
         log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
         return concat_LigandNetwork

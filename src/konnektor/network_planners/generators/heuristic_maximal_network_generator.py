@@ -105,9 +105,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             )
         else:  # serial variant
             if self.progress is True:
-                progress = functools.partial(
-                    tqdm, total=total, delay=1.5, desc="Mapping"
-                )
+                progress = functools.partial(tqdm, total=total, delay=1.5, desc="Mapping")
             else:
                 progress = lambda x: x
 

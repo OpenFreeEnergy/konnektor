@@ -53,9 +53,7 @@ def draw_ligand_network(
     g = nx.Graph()
     for n in ligands:
         g.add_node(n.name)
-    g.add_weighted_edges_from(
-        ebunch_to_add=[(e[0], e[1], w) for e, w in zip(edges, weights)]
-    )
+    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e, w in zip(edges, weights)])
 
     pos = nx.spring_layout(g, weight=1)
 

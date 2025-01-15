@@ -25,7 +25,6 @@ class NetworkGenerator(NetworkPlanner):
         mappers: Union[AtomMapper, list[AtomMapper]],
         scorer: Callable[[AtomMapping], float],
         network_generator: _AbstractNetworkAlgorithm,  ## TODO: rename this to network_algorithm?
-
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister=None,
@@ -67,9 +66,7 @@ class NetworkGenerator(NetworkPlanner):
             self._initial_edge_lister, "n_processes"
         ):
             self.n_processes = n_processes
-        if self._initial_edge_lister is not None and hasattr(
-            self._initial_edge_lister, "progress"
-        ):
+        if self._initial_edge_lister is not None and hasattr(self._initial_edge_lister, "progress"):
             self._initial_edge_lister._progress = progress
         self._progress = progress
 
@@ -83,9 +80,7 @@ class NetworkGenerator(NetworkPlanner):
     @progress.setter
     def progress(self, progress: bool):
         self._progress = progress
-        if self._initial_edge_lister is not None and hasattr(
-            self._initial_edge_lister, "progress"
-        ):
+        if self._initial_edge_lister is not None and hasattr(self._initial_edge_lister, "progress"):
             self._initial_edge_lister._progress = progress
 
     @abc.abstractmethod

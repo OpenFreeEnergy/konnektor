@@ -70,9 +70,7 @@ class NetworkConcatenator(NetworkPlanner):
         return self.concatenate_networks(*args, **kwargs)
 
     @abc.abstractmethod
-    def concatenate_networks(
-        self, ligand_networks: Iterable[LigandNetwork]
-    ) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
 
         Parameters

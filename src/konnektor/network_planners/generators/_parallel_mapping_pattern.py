@@ -47,14 +47,9 @@ def thread_mapping(args) -> list[AtomMapping]:
                 except:
                     continue
                 if len(tmp_mappings) > 0:
-                    tmp_best_mapping = min(
-                        tmp_mappings, key=lambda m: m.annotations["score"]
-                    )
+                    tmp_best_mapping = min(tmp_mappings, key=lambda m: m.annotations["score"])
 
-                    if (
-                        tmp_best_mapping.annotations["score"] < best_score
-                        or best_mapping is None
-                    ):
+                    if tmp_best_mapping.annotations["score"] < best_score or best_mapping is None:
                         best_score = tmp_best_mapping.annotations["score"]
                         best_mapping = tmp_best_mapping
 
@@ -113,15 +108,9 @@ def _parallel_map_scoring(
 
     # Prepare parallel execution.
     # suboptimal implementation, but itertools.batch is python 3.12,
-    batches = (
-        possible_edges[i : i + n_batches]
-        for i in range(0, len(possible_edges), n_batches)
-    )
+    batches = (possible_edges[i : i + n_batches] for i in range(0, len(possible_edges), n_batches))
 
-    jobs = [
-        (job_id, combination, mappers, scorer)
-        for job_id, combination in enumerate(batches)
-    ]
+    jobs = [(job_id, combination, mappers, scorer) for job_id, combination in enumerate(batches)]
 
     # Execute parallelism
     mappings = []

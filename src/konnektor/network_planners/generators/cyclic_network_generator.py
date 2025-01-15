@@ -103,16 +103,13 @@ class CyclicNetworkGenerator(NetworkGenerator):
         """
 
         # Build Full Graph
-        initial_networks = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_networks = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
         # print("prepare network")
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations["score"] for k in edges]

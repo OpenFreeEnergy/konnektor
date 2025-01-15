@@ -81,15 +81,12 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             a redundant MST network.
         """
 
-        initial_network = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
@@ -101,9 +98,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             edges = list(edge_weight.keys())
 
             # filter for already selected edges
-            filter_sEdges = lambda x: (
-                x not in selected_edges and x[::-1] not in selected_edges
-            )
+            filter_sEdges = lambda x: (x not in selected_edges and x[::-1] not in selected_edges)
             edges = list(filter(filter_sEdges, edges))
             # print("Edges", len(edges), edges)
 

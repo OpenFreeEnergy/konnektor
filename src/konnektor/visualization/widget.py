@@ -105,9 +105,7 @@ def _build_cytoscape(
             {
                 "name": n.name,
                 "classes": "ligand",
-                "img": mol2svg(
-                    n.to_rdkit(), represent_molecules_twoD=represent_molecules_2D
-                ),
+                "img": mol2svg(n.to_rdkit(), represent_molecules_twoD=represent_molecules_2D),
                 "col": c,
             },
         )
@@ -271,6 +269,4 @@ def draw_network_widget(
         )
         return v
 
-    return interactive_widget(
-        network=network, layout=layout, show_molecules=show_molecules
-    )
+    return interactive_widget(network=network, layout=layout, show_molecules=show_molecules)

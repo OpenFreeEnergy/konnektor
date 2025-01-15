@@ -50,9 +50,7 @@ def rminimal_spanning_network_redundancy(toluene_vs_others):
     return network, nred
 
 
-def test_rminimal_spanning_network(
-    rminimal_spanning_network_redundancy, toluene_vs_others
-):
+def test_rminimal_spanning_network(rminimal_spanning_network_redundancy, toluene_vs_others):
     tol, others = toluene_vs_others
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
     assert len(minimal_spanning_network.nodes) == len(others) + 1
@@ -78,7 +76,5 @@ def test_minimal_rmst_network_noedger(toluene_vs_others):
     mapper = ErrorMapper()
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
-        planner = RedundantMinimalSpanningTreeNetworkGenerator(
-            mappers=mapper, scorer=genScorer
-        )
+        planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
         network = planner.generate_ligand_network(components=others + [toluene, nimrod])

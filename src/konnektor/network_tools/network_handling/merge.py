@@ -4,9 +4,7 @@
 from gufe import LigandNetwork
 
 
-def merge_two_networks(
-    network1: LigandNetwork, network2: LigandNetwork
-) -> LigandNetwork:
+def merge_two_networks(network1: LigandNetwork, network2: LigandNetwork) -> LigandNetwork:
     """
     Merging networks, is similar to a union of a set of nodes and edgees,
     if they are all connected via at least one edge. This means, that  at
