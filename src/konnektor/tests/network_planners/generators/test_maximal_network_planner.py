@@ -2,17 +2,17 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import pytest
-from gufe import AtomMapper, AtomMapping, LigandAtomMapping
 
 from konnektor.network_planners import MaximalNetworkGenerator
 from konnektor.tests.network_planners.conf import (
-    BadMapper,
-    GenAtomMapper,
-    SuperBadMapper,
     atom_mapping_basic_test_files,
-    genScorer,
     toluene_vs_others,
+    genScorer,
+    GenAtomMapper,
+    BadMapper,
+    SuperBadMapper,
 )
+from gufe import LigandAtomMapping, AtomMapper, AtomMapping
 from konnektor.utils.toy_data import build_random_dataset
 
 

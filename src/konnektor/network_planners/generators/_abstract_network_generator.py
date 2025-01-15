@@ -5,12 +5,12 @@ import abc
 import logging
 from typing import Callable, Iterable, Union
 
-from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping
+from gufe import LigandNetwork, Component
 
 from konnektor.network_planners._networkx_implementations import (
     _AbstractNetworkAlgorithm,
 )
-
 from ..NetworkPlanner import NetworkPlanner
 
 log = logging.getLogger(__name__)

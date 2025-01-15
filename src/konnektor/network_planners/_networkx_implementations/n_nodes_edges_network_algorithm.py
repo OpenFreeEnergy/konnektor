@@ -5,6 +5,7 @@ import networkx as nx
 
 from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
+
 # Todo: check that the resulting graph is connnected.
 
 

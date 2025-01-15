@@ -7,9 +7,9 @@ from gufe import LigandNetwork
 from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.network_planners import NNodeEdgesNetworkGenerator
 from konnektor.tests.network_planners.conf import (
-    GenAtomMapper,
     atom_mapping_basic_test_files,
     genScorer,
+    GenAtomMapper,
 )
 
 

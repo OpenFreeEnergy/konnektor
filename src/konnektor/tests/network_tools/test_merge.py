@@ -1,7 +1,7 @@
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_tools.network_handling.merge import (
-    merge_networks,
     merge_two_networks,
+    merge_networks,
 )
 from konnektor.utils.toy_data import build_n_random_mst_network
 

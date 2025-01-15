@@ -5,7 +5,8 @@ import functools
 import itertools
 from typing import Iterable, Union
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper
+from gufe import LigandNetwork, Component
 from tqdm.auto import tqdm
 
 from ._abstract_network_generator import NetworkGenerator

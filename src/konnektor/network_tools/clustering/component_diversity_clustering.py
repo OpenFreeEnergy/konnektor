@@ -6,7 +6,7 @@ import logging
 import numpy as np
 from gufe import Component
 from scikit_mol.fingerprints import MorganFingerprintTransformer
-from sklearn.base import ClusterMixin, TransformerMixin
+from sklearn.base import TransformerMixin, ClusterMixin
 from sklearn.cluster import KMeans
 from sklearn.pipeline import Pipeline
 

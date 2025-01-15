@@ -3,11 +3,11 @@
 
 import random
 from copy import deepcopy
-from typing import Optional, Union
-
-import networkx as nx
+from typing import Union
 import numpy as np
+import networkx as nx
 from gufe import LigandNetwork, SmallMoleculeComponent
+from typing import Optional
 
 from .. import network_tools as tools
 

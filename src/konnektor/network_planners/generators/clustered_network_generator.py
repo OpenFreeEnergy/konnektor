@@ -6,12 +6,12 @@ import inspect
 import logging
 from typing import Iterable, Union
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import Component, LigandNetwork, AtomMapper
 
 # Clustering
 from scikit_mol.fingerprints import (
-    MorganFingerprintTransformer,
     RDKitFingerprintTransformer,
+    MorganFingerprintTransformer,
 )
 from sklearn.cluster import HDBSCAN, KMeans
 from tqdm import tqdm
@@ -19,14 +19,14 @@ from tqdm import tqdm
 from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
 )
-
-from ...network_tools import append_component, concatenate_networks
-from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
-from ..concatenators import MstConcatenator
-from ..concatenators._abstract_network_concatenator import NetworkConcatenator
 from ._abstract_network_generator import NetworkGenerator
 from .cyclic_network_generator import CyclicNetworkGenerator
 from .star_network_generator import StarNetworkGenerator
+from ..concatenators import MstConcatenator
+from ...network_tools import append_component, concatenate_networks
+from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
+from ..concatenators._abstract_network_concatenator import NetworkConcatenator
+
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)

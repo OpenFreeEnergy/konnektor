@@ -7,8 +7,8 @@ from gufe import LigandNetwork
 from konnektor.network_planners.concatenators.max_concatenator import MaxConcatenator
 from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
-    atom_mapping_basic_test_files,
     genScorer,
+    atom_mapping_basic_test_files,
     ligand_network_ab,
 )
 

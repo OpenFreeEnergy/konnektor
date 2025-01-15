@@ -4,7 +4,8 @@
 from typing import Iterable, Tuple
 
 import numpy as np
-from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
+from gufe import LigandAtomMapping, AtomMapper, AtomMapping
+from gufe import SmallMoleculeComponent, LigandNetwork
 from rdkit import Chem
 
 

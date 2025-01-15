@@ -3,8 +3,9 @@
 
 import os
 
-from gufe import SmallMoleculeComponent
 from rdkit import Chem
+
+from gufe import SmallMoleculeComponent
 
 root_path = os.path.dirname(__file__)
 benzenes_sdf_path = f"{root_path}/benzenes_RHFE.sdf"
