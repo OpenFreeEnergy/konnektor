@@ -99,9 +99,7 @@ class ScaffoldClusterer(_AbstractClusterer):
         return mols2candidates
 
     @staticmethod
-    def find_solution(
-        mol_to_candidates: dict[Chem.Mol, list[str]]
-    ) -> list[tuple[str, int]]:
+    def find_solution(mol_to_candidates: dict[Chem.Mol, list[str]]) -> list[tuple[str, int]]:
         # returns the best scaffolds that cover all mols
         # returns a list of (scaffold smiles, n heavy atoms)
 
@@ -122,9 +120,7 @@ class ScaffoldClusterer(_AbstractClusterer):
 
             return covered_mols == set(all_mols)
 
-        candidate_scaffolds = set(
-            itertools.chain.from_iterable(mol_to_candidates.values())
-        )
+        candidate_scaffolds = set(itertools.chain.from_iterable(mol_to_candidates.values()))
         # try one scaffold to see if it catches all molecules
         # then try all combinations of two scaffolds to see if we cover
         # etc until we find a solution

@@ -142,9 +142,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if len(self.clusters) == 1 and -1 in self.clusters:
             for network_planner in self.sub_network_planners:
                 try:
-                    sub_network = network_planner.generate_ligand_network(
-                        self.clusters[-1]
-                    )
+                    sub_network = network_planner.generate_ligand_network(self.clusters[-1])
                     break
                 except Exception as err:
                     print("ERR", "\n".join(err.args))
@@ -156,9 +154,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
                     if len(mols) > 1:
                         for network_planner in self.sub_network_planners:
                             try:
-                                sub_network = network_planner.generate_ligand_network(
-                                    mols
-                                )
+                                sub_network = network_planner.generate_ligand_network(mols)
 
                                 self.sub_networks.append(sub_network)
                                 break

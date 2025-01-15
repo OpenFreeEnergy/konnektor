@@ -111,9 +111,7 @@ class StarNetworkGenerator(NetworkGenerator):
                 scorer = self.scorer
 
             if self.progress is True:
-                progress = functools.partial(
-                    tqdm, total=len(components), delay=1.5, desc="Mapping"
-                )
+                progress = functools.partial(tqdm, total=len(components), delay=1.5, desc="Mapping")
             else:
                 progress = lambda x: x
 

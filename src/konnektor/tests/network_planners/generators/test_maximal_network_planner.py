@@ -10,17 +10,16 @@ from konnektor.tests.network_planners.conf import (
     genScorer,
     GenAtomMapper,
     BadMapper,
-    SuperBadMapper
+    SuperBadMapper,
 )
 from gufe import LigandAtomMapping, AtomMapper, AtomMapping
 from konnektor.utils.toy_data import build_random_dataset
 
+
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 @pytest.mark.parametrize("with_scorer", [True, False])
-def test_generate_maximal_network(
-    toluene_vs_others, with_progress, with_scorer, n_process
-):
+def test_generate_maximal_network(toluene_vs_others, with_progress, with_scorer, n_process):
     toluene, others = toluene_vs_others
 
     mapper = GenAtomMapper()
@@ -45,18 +44,19 @@ def test_generate_maximal_network(
         for edge in network.edges:
             assert "score" not in edge.annotations
 
+
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, with_progress):
     """If no scorer is provided, the first mapping of the last mapper should be used.
-       Note: this test isn't great because BadMapper only returns one mapping
+    Note: this test isn't great because BadMapper only returns one mapping
     """
 
     toluene, others = toluene_vs_others
-    components = others+[toluene]
+    components = others + [toluene]
 
     planner = MaximalNetworkGenerator(
-        mappers= [SuperBadMapper(), GenAtomMapper(), BadMapper()],
+        mappers=[SuperBadMapper(), GenAtomMapper(), BadMapper()],
         scorer=None,
         progress=with_progress,
         n_processes=n_process,
@@ -64,4 +64,4 @@ def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, w
 
     network = planner.generate_ligand_network(components)
 
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges)*[{0:0}]
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]

@@ -32,9 +32,7 @@ class NetworkPlanner(abc.ABC):
         # generic Network_Planner attribs
         if isinstance(mappers, AtomMapper):
             self._mappers = [mappers]
-        elif isinstance(mappers, Iterable) and all(
-            isinstance(m, AtomMapper) for m in mappers
-        ):
+        elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
             self._mappers = mappers
         elif mappers is None:
             self._mappers = None
@@ -53,9 +51,7 @@ class NetworkPlanner(abc.ABC):
     def mappers(self, mappers: Union[AtomMapper, list[AtomMapper]]):
         if mappers is AtomMapper:
             self._mappers = [mappers]
-        elif isinstance(mappers, Iterable) and all(
-            isinstance(m, AtomMapper) for m in mappers
-        ):
+        elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
             self._mappers = mappers
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:

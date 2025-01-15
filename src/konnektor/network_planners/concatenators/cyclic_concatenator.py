@@ -61,9 +61,7 @@ class CyclicConcatenator(NetworkConcatenator):
         self.n_connecting_edges = n_connecting_cycles
         self.cycle_sizes = cycle_sizes
 
-    def concatenate_networks(
-        self, ligand_networks: Iterable[LigandNetwork]
-    ) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
 
         Parameters
@@ -85,14 +83,10 @@ class CyclicConcatenator(NetworkConcatenator):
 
         selected_edges = []
         selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(
-            ligand_networks, 2
-        ):
+        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
             # Generate fully connected Bipartite Graph
             ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
-            fully_connected_graph = self._initial_edge_lister(
-                [ligandNetworkA, ligandNetworkB]
-            )
+            fully_connected_graph = self._initial_edge_lister([ligandNetworkA, ligandNetworkB])
             bipartite_graph_mappings = list(fully_connected_graph.edges)
 
             # TODO Cycle Selection
@@ -105,9 +99,7 @@ class CyclicConcatenator(NetworkConcatenator):
             selected_edges.extend(network.edges)
             selected_nodes.extend(network.nodes)
 
-        concat_LigandNetwork = LigandNetwork(
-            edges=selected_edges, nodes=set(selected_nodes)
-        )
+        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
 
         log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 

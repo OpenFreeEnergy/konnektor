@@ -93,15 +93,12 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
             the resulting ligand network.
         """
         # Build Full Graph
-        initial_networks = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_networks = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations["score"] for k in edges]
@@ -109,7 +106,6 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         sg = self.network_generator.generate_network(edges=edges, weights=weights)
 
         selected_mappings = [
-            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
-            for k in sg.edges
+            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in sg.edges
         ]
         return LigandNetwork(edges=selected_mappings, nodes=components)

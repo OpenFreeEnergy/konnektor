@@ -11,7 +11,6 @@ from konnektor.tests.data.conf import nine_mols_edges
 
 
 def test_mst_network_generation(nine_mols_edges):
-
     nodes = list(set([n for e in nine_mols_edges for n in e]))
     nodesA = nodes[:4]
     nodesB = nodes[4:]

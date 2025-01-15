@@ -74,9 +74,7 @@ def test_genScorer():
 
 def test_build_random_dataset():
     n_compounds = 30
-    compounds, mapper, scorer = build_random_dataset(
-        n_compounds=n_compounds, rand_seed=42
-    )
+    compounds, mapper, scorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
 
     assert len(compounds) == n_compounds
     assert all(isinstance(c, SmallMoleculeComponent) for c in compounds)
@@ -107,14 +105,8 @@ def test_build_n_random_mst_network(n_sub_networks, overlap):
 
     assert len(mst_networks) == n_sub_networks
     assert all(isinstance(mst_network, LigandNetwork) for mst_network in mst_networks)
-    assert (
-        len(set([n for mst_network in mst_networks for n in mst_network.nodes]))
-        == n_compounds
-    )
-    assert all(
-        len(mst_network.edges) == len(mst_network.nodes) - 1
-        for mst_network in mst_networks
-    )
+    assert len(set([n for mst_network in mst_networks for n in mst_network.nodes])) == n_compounds
+    assert all(len(mst_network.edges) == len(mst_network.nodes) - 1 for mst_network in mst_networks)
 
     if overlap > 0:
         for i, net in enumerate(mst_networks):
@@ -123,9 +115,7 @@ def test_build_n_random_mst_network(n_sub_networks, overlap):
             elif i == n_sub_networks - 1:
                 assert (
                     len(net.nodes)
-                    == n_compounds // n_sub_networks
-                    + n_compounds % n_sub_networks
-                    + overlap
+                    == n_compounds // n_sub_networks + n_compounds % n_sub_networks + overlap
                 )
             else:
                 assert len(net.nodes) == n_compounds // n_sub_networks + overlap
@@ -133,9 +123,7 @@ def test_build_n_random_mst_network(n_sub_networks, overlap):
 
 def build_random_fully_connected_network():
     n_compounds = 30
-    mst_network = build_random_fully_connected_network(
-        n_compounds=n_compounds, rand_seed=42
-    )
+    mst_network = build_random_fully_connected_network(n_compounds=n_compounds, rand_seed=42)
 
     assert isinstance(mst_network, LigandNetwork)
     assert len(mst_network.nodes) == n_compounds

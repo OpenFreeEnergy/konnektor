@@ -68,11 +68,7 @@ class ImergeIntermediator(Intermediator):
 
         # prune groups to get intermediates
         pruner = pruners.BasePruner(
-            [
-                pruners.TanimotoScorer(
-                    transformer=pruners.HarmonicMeanTransformer(exponent=4)
-                )
-            ],
+            [pruners.TanimotoScorer(transformer=pruners.HarmonicMeanTransformer(exponent=4))],
             topn=1,
         )
 
