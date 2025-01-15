@@ -5,8 +5,7 @@ import abc
 import logging
 from typing import Iterable, Union
 
-from gufe import AtomMapper
-from gufe import LigandNetwork, Component
+from gufe import AtomMapper, Component, LigandNetwork
 
 log = logging.getLogger(__name__)
 

@@ -4,14 +4,13 @@ This clusterer attempts to cluster compounds based on their scaffolds.
 It is built on rdkit's rdScaffoldNetwork module.
 """
 
-from collections import defaultdict
 import itertools
+from collections import defaultdict
 
+from gufe import Component
 from rdkit import Chem
 from rdkit.Chem import rdMolHash
 from rdkit.Chem.Scaffolds import rdScaffoldNetwork
-
-from gufe import Component
 
 from ._abstract_clusterer import _AbstractClusterer
 

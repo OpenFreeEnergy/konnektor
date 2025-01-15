@@ -3,7 +3,8 @@
 
 import pytest
 from gufe import SmallMoleculeComponent
-from konnektor.data import get_benzene_ligands, get_hif2a_ligands, get_charged_ligands
+
+from konnektor.data import get_benzene_ligands, get_charged_ligands, get_hif2a_ligands
 
 
 def test_get_benzenes():

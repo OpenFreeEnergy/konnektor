@@ -4,6 +4,7 @@
 import numpy as np
 from gufe import LigandNetwork
 from sklearn.cluster import KMeans
+
 from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.network_planners.generators.clustered_network_generator import (
     ClusteredNetworkGenerator,
@@ -18,7 +19,7 @@ def test_clustered_network_planner():
     n_compounds = 40
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
 
-    from konnektor.network_planners import RadialLigandNetworkPlanner, MstConcatenator
+    from konnektor.network_planners import MstConcatenator, RadialLigandNetworkPlanner
 
     sub_networker = RadialLigandNetworkPlanner(mappers=genMapper, scorer=genScorer)
     concatenator = MstConcatenator(mappers=genMapper, scorer=genScorer)

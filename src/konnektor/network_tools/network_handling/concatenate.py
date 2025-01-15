@@ -3,7 +3,7 @@
 
 from typing import Iterable
 
-from gufe import LigandNetwork, Component
+from gufe import Component, LigandNetwork
 
 from konnektor.network_planners.concatenators._abstract_network_concatenator import (
     NetworkConcatenator,
