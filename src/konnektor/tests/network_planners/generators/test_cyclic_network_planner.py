@@ -2,9 +2,10 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import numpy as np
+
 from konnektor.network_analysis import (
-    get_is_connected,
     get_component_number_cycles,
+    get_is_connected,
     get_network_score,
 )
 from konnektor.network_planners import CyclicNetworkGenerator

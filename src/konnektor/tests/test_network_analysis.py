@@ -1,23 +1,22 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
 import numpy as np
-
+import pytest
 from gufe import LigandNetwork
+
 from konnektor.network_analysis import (
-    get_network_score,
-    get_is_connected,
     get_component_connectivities,
     get_component_number_cycles,
-    get_number_of_network_cycles,
     get_component_scores,
+    get_is_connected,
+    get_network_score,
+    get_number_of_network_cycles,
     get_transformation_failure_robustness,
 )
-
 from konnektor.utils.toy_data import (
-    build_random_mst_network,
     build_random_fully_connected_network,
+    build_random_mst_network,
 )
 
 

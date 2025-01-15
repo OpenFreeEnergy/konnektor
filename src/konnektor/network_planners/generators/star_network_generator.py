@@ -1,13 +1,14 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
-from tqdm import tqdm
 import functools
+from typing import Iterable, Union
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
+from tqdm import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 

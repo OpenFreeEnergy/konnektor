@@ -4,6 +4,7 @@
 import numpy as np
 from gufe import LigandNetwork
 from sklearn.cluster import KMeans
+
 from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.network_planners.generators.clustered_network_generator import (
     StarrySkyNetworkGenerator,
