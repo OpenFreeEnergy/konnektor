@@ -1,12 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import numpy as np
 import pytest
+import numpy as np
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.network_planners import TwinStarNetworkGenerator
+from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.utils.toy_data import build_random_dataset
 
 

@@ -5,14 +5,15 @@ from rdkit import Chem
 
 try:
     # R-group enumeration intermediate generator
-    from rgroupinterm import pruners, rgroupenumeration
+    from rgroupinterm import rgroupenumeration
+    from rgroupinterm import pruners
 except:
     pass
 
 from gufe import SmallMoleculeComponent
 
-from ...utils.optional_import import requires_package
 from ._abstract_intermediator import Intermediator
+from ...utils.optional_import import requires_package
 
 
 @requires_package("rgroupinterm")

@@ -3,15 +3,15 @@ import pytest
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import MstConcatenator
 from konnektor.network_tools.network_handling.concatenate import (
-    append_component,
     concatenate_networks,
+    append_component,
 )
 from konnektor.utils.toy_data import (
     build_n_random_mst_network,
-    build_random_dataset,
     build_random_mst_network,
-    genMapper,
+    build_random_dataset,
     genScorer,
+    genMapper,
 )
 
 

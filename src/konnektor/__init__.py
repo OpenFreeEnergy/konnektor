@@ -2,29 +2,33 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 # basic gufe types:
-from gufe import Component, ProteinComponent, SmallMoleculeComponent
-
-from . import network_analysis
+from gufe import Component, SmallMoleculeComponent, ProteinComponent
 
 # Konnektor content
 from .network_planners import (
-    ClusteredNetworkGenerator,
-    CyclicNetworkGenerator,
-    HeuristicMaximalNetworkGenerator,
     MaximalNetworkGenerator,
-    MinimalSpanningTreeNetworkGenerator,
-    MstConcatenator,
-    NNodeEdgesNetworkGenerator,
+    HeuristicMaximalNetworkGenerator,
     RadialLigandNetworkPlanner,
+    NNodeEdgesNetworkGenerator,
+    MinimalSpanningTreeNetworkGenerator,
+    CyclicNetworkGenerator,
+    ClusteredNetworkGenerator,
     StarrySkyNetworkGenerator,
+    MstConcatenator,
+)
+
+from .network_tools import (
+    concatenate_networks,
+    merge_networks,
+    append_component,
+    delete_transformation,
 )
 from .network_tools import (
     ChargeClusterer,
-    ComponentsDiversityClusterer,
     ScaffoldClusterer,
-    append_component,
-    concatenate_networks,
-    delete_transformation,
-    merge_networks,
+    ComponentsDiversityClusterer,
 )
+
+from . import network_analysis
+
 from .visualization import draw_ligand_network

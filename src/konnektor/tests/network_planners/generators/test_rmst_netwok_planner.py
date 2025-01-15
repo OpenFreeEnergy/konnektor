@@ -1,22 +1,23 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import gufe
-import networkx as nx
 import numpy as np
+import networkx as nx
 import pytest
+
+import gufe
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import RedundantMinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
-    ErrorMapper,
-    GenAtomMapper,
-    atom_mapping_basic_test_files,
-    genScorer,
-    mol_from_smiles,
     toluene_vs_others,
+    atom_mapping_basic_test_files,
+    mol_from_smiles,
+    genScorer,
+    GenAtomMapper,
+    ErrorMapper,
 )
+from konnektor.network_analysis import get_network_score
 
 
 def test_rminimal_spanning_network_mappers(atom_mapping_basic_test_files):

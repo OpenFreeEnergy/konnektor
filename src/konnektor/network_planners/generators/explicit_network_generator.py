@@ -1,12 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import itertools
 import warnings
+import itertools
 from collections import Counter
 from typing import Iterable, Tuple, Union
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import Component, LigandNetwork, AtomMapper
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring

@@ -2,10 +2,10 @@ from gufe import Component
 
 from konnektor.network_tools.clustering.auxilliary_featurizer import ChargeTransformer
 from konnektor.network_tools.clustering.charge_clustering import ChargeClusterer
+from konnektor.network_tools.clustering.scaffold_clustering import ScaffoldClusterer
 from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
 )
-from konnektor.network_tools.clustering.scaffold_clustering import ScaffoldClusterer
 from konnektor.utils.toy_data import build_random_dataset
 
 

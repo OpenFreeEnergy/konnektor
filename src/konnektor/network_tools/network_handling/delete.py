@@ -1,7 +1,6 @@
 from typing import Union
 
-from gufe import Component, LigandAtomMapping, LigandNetwork
-
+from gufe import LigandNetwork, LigandAtomMapping, Component
 from ...network_analysis import get_is_connected
 
 

@@ -3,16 +3,16 @@
 
 import numpy as np
 import pytest
-from gufe import AtomMapper, AtomMapping, LigandNetwork, SmallMoleculeComponent
+from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent, LigandNetwork
 from rdkit import Chem
 
 from konnektor.utils.toy_data import (
-    build_n_random_mst_network,
-    build_random_dataset,
-    build_random_fully_connected_network,
-    build_random_mst_network,
     genMapper,
     genScorer,
+    build_random_dataset,
+    build_random_mst_network,
+    build_random_fully_connected_network,
+    build_n_random_mst_network,
 )
 
 

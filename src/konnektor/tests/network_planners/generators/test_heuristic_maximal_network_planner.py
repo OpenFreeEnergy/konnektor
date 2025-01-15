@@ -5,13 +5,13 @@ import pytest
 
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import HeuristicMaximalNetworkGenerator
-from konnektor.tests.network_planners.conf import (
-    BadMapper,
-    GenAtomMapper,
-    SuperBadMapper,
-    genScorer,
-)
 from konnektor.utils.toy_data import build_random_dataset
+from konnektor.tests.network_planners.conf import (
+    genScorer,
+    GenAtomMapper,
+    BadMapper,
+    SuperBadMapper,
+)
 
 
 @pytest.mark.parametrize("n_process", [1, 2])

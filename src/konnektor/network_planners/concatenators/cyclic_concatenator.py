@@ -6,9 +6,9 @@ from typing import Iterable, Union
 
 from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 
-from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
+from .._networkx_implementations import MstNetworkAlgorithm
 
 log = logging.getLogger(__name__)
 

@@ -1,13 +1,11 @@
-import itertools
-
 import pytest
+import itertools
 from gufe import ComponentMapping
-
-from ...network_planners.generators._parallel_mapping_pattern import (
-    _parallel_map_scoring,
-    thread_mapping,
-)
 from ...utils.toy_data import build_random_dataset
+from ...network_planners.generators._parallel_mapping_pattern import (
+    thread_mapping,
+    _parallel_map_scoring,
+)
 
 
 def test_thread_mapping():

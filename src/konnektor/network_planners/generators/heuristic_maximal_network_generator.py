@@ -6,11 +6,12 @@ import itertools
 from typing import Iterable, Union
 
 import numpy as np
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import Component, LigandNetwork, AtomMapper
 from tqdm.auto import tqdm
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
+
 
 # Todo: is graph connectivity ensured?
 

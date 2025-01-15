@@ -1,5 +1,4 @@
 import random
-
 import numpy as np
 
 # Test Data:
@@ -38,8 +37,8 @@ for sub_cycle_size_range in tqdm(sub_cycle_size_ranges, desc="cycle size"):
         gs.append(network_planner.generate_network(edges=edges, weights=weights))
 
 
-import networkx as nx
 import numpy as np
+import networkx as nx
 from matplotlib import pyplot as plt
 
 cols = len(node_cycle_connectivitys) + 1

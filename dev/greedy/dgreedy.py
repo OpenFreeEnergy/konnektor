@@ -1,7 +1,5 @@
-import datetime as dt
-
 import numpy as np
-
+import datetime as dt
 from konnektor.network_generator_algorithms import CyclicNetworkGenerator
 
 sub_cycle_size_range = 3
