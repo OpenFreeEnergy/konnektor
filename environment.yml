@@ -20,7 +20,7 @@ dependencies:
   - scipy
   - networkx
   - scikit-learn
-  - scikit-mol
+  - scikit-mol <0.4.6
   - dill
   # Chem
   - rdkit==2024.03.5
