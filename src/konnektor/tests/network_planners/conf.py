@@ -3,15 +3,11 @@
 
 import importlib
 import inspect
-from importlib import resources
 
 import pytest
 from gufe import AtomMapper, LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
 from rdkit import Chem
 from rdkit.Chem import AllChem
-
-import konnektor
-from konnektor import network_planners
 
 
 def mol_from_smiles(smiles: str) -> Chem.Mol:
