@@ -106,10 +106,11 @@ class StarNetworkGenerator(NetworkGenerator):
             selected_mappings = [edge_map[k] for k in rg.edges]
 
         else:  # Given central ligands: less effort. - Trivial Case
-            if self.scorer is None:
-                scorer = lambda x: -1
-            else:
-                scorer = self.scorer
+            # TODO: commenting this out because scorer isn't used - should it be used?
+            # if self.scorer is None:
+            #     scorer = lambda x: -1
+            # else:
+            #     scorer = self.scorer
 
             if self.progress is True:
                 progress = functools.partial(tqdm, total=len(components), delay=1.5, desc="Mapping")

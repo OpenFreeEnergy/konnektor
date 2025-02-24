@@ -74,4 +74,4 @@ def test_minimal_rmst_network_noedger(toluene_vs_others):
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
-        network = planner.generate_ligand_network(components=others + [toluene, nimrod])
+        planner.generate_ligand_network(components=others + [toluene, nimrod])

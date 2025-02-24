@@ -100,10 +100,10 @@ def _parallel_map_scoring(
 
     possible_edges = list(possible_edges)
     n_batches = 10 * n_processes
-    total = len(possible_edges)
+    # total = len(possible_edges)
 
-    # size of each batch +fetch division rest
-    batch_num = (total // n_batches) + 1
+    # # size of each batch +fetch division rest
+    # batch_num = (total // n_batches) + 1
 
     # Prepare parallel execution.
     # suboptimal implementation, but itertools.batch is python 3.12,

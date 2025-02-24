@@ -75,7 +75,7 @@ def test_star_network_failure(atom_mapping_basic_test_files):
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
 
     with pytest.raises(ValueError, match="No mapping found for"):
-        network = planner.generate_ligand_network(
+        planner.generate_ligand_network(
             components=[nigel],
             central_component=atom_mapping_basic_test_files["toluene"],
         )

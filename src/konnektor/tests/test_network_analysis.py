@@ -204,18 +204,3 @@ def test_get_node_scores_fully_connected_graph():
     assert len(n_scores) == n_compounds
     assert len(set(n_scores.keys()).intersection(expected_set)) == 0
     np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in n_scores.items()])
-
-
-def test_get_node_scores_fully_connected_graph():
-    n_compounds = 30
-    expected_set = set(map(str, range(n_compounds)))
-    g = build_random_fully_connected_network(n_compounds, uni_score=True)
-
-    n_scores = get_component_scores(g, normalize=False)
-
-    expected_arr = np.zeros(shape=n_compounds)
-    expected_arr += n_compounds - 1
-
-    assert len(n_scores) == n_compounds
-    assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in n_scores.items()])
