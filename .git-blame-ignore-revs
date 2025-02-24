@@ -1,0 +1,4 @@
+# applying ruff formatting by atravitz in https://github.com/OpenFreeEnergy/konnektor/pull/109
+05933cbe75a41a2eb6ddbe84db4fcfe94f269c84  # isort
+bd3020cb4dce75b5e4273e263c652c29dc47f79f  # isort
+b673395957d150b8967ffc6d81a5c0b5aee856ef  # ruff formatting
