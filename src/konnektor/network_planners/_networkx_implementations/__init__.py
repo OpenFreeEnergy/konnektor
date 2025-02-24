@@ -10,3 +10,13 @@ from .cyclic_network_algorithm import CyclicNetworkAlgorithm
 from .mst_network_algorithm import MstNetworkAlgorithm
 from .n_nodes_edges_network_algorithm import NNodeEdgesNetworkAlgorithm
 from .radial_network_algorithm import RadialNetworkAlgorithm
+
+all = [
+    _AbstractNetworkAlgorithm,
+    _AbstractNetworkConcatenator,
+    MatchingConcatenatAlgorithm,
+    CyclicNetworkAlgorithm,
+    MstNetworkAlgorithm,
+    NNodeEdgesNetworkAlgorithm,
+    RadialNetworkAlgorithm,
+]
