@@ -30,7 +30,7 @@ exclude = [
 ]
 
 # Same as Black.
-line-length = 100 # up for debate
+line-length = 120 # up for debate
 indent-width = 4
 
 # Assume minimum Python 3.10
@@ -40,14 +40,15 @@ target-version = "py310"
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 select = [
     # Pyflakes
-    "F4",
+    "F",
     # Pycodestyle
-    # "E",
-    # "W",
+    # "E", # TODO: add this back in
+    "W",
     # isort
     "I"
 ]
 ignore = []
+
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]

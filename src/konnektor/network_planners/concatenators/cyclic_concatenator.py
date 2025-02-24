@@ -79,28 +79,28 @@ class CyclicConcatenator(NetworkConcatenator):
 
         """
         raise NotImplementedError()
-        # Todo: implement.
+        # TODO: implement.
 
-        selected_edges = []
-        selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
-            # Generate fully connected Bipartite Graph
-            ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
-            fully_connected_graph = self._initial_edge_lister([ligandNetworkA, ligandNetworkB])
-            bipartite_graph_mappings = list(fully_connected_graph.edges)
+        # selected_edges = []
+        # selected_nodes = []
+        # for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
+        #     # Generate fully connected Bipartite Graph
+        #     ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
+        #     fully_connected_graph = self._initial_edge_lister([ligandNetworkA, ligandNetworkB])
+        #     bipartite_graph_mappings = list(fully_connected_graph.edges)
 
-            # TODO Cycle Selection
+        #     # TODO Cycle Selection
 
-            selected_edges.extend(selected_mappings)
+        #     selected_edges.extend(selected_mappings)
 
-        # Constructed final Edges:
-        # Add all old network edges:
-        for network in ligand_networks:
-            selected_edges.extend(network.edges)
-            selected_nodes.extend(network.nodes)
+        # # Constructed final Edges:
+        # # Add all old network edges:
+        # for network in ligand_networks:
+        #     selected_edges.extend(network.edges)
+        #     selected_nodes.extend(network.nodes)
 
-        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
+        # concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
 
-        log.info(f"Total Concatenated Edges: {len(selected_edges)}")
+        # log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
-        return concat_LigandNetwork
+        # return concat_LigandNetwork

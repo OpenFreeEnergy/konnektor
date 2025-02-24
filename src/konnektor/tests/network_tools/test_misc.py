@@ -36,7 +36,7 @@ def test_delete_connected_mst_component():
             break
 
     with pytest.raises(RuntimeError, match="Resulting network is not connected anymore!"):
-        new_network = delete_component(network=network, component=del_node)
+        delete_component(network=network, component=del_node)
 
 
 def test_delete_mst_component():
@@ -67,7 +67,7 @@ def test_delete_connected_mst_transformation():
     del_edge = list(network.edges)[0]
 
     with pytest.raises(RuntimeError, match="Resulting network is not connected anymore!"):
-        new_network = delete_transformation(network=network, transformation=del_edge)
+        delete_transformation(network=network, transformation=del_edge)
 
 
 def test_delete_mst_transformation():

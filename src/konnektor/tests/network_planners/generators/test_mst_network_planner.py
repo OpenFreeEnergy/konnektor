@@ -90,4 +90,4 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
-        network = planner.generate_ligand_network(components=others + [toluene, nimrod])
+        planner.generate_ligand_network(components=others + [toluene, nimrod])

@@ -106,7 +106,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             weights = [edge_weight[e] for e in edges]
             edge_weight = dict(list(zip(edges, weights)))
             # print("dEdges", len(edge_weight))
-            ns = set([n for e in edges for n in e])
+            # ns = set([n for e in edges for n in e])
             # print("nodes", len(ns), ns)
 
             mg = self.network_generator.generate_network(edges, weights)
