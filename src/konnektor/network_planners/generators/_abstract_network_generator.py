@@ -71,7 +71,7 @@ class NetworkGenerator(NetworkPlanner):
         self._progress = progress
 
     @property
-    def progress(self) -> bool:
+    def progress(self) -> bool:  # noqa TODO: address this in a follow-up PR
         """
         shows a progress bar if True
         """
