@@ -9,8 +9,10 @@ from konnektor.tests.network_planners.conf import (
     BadMapper,
     ErrorMapper,
     GenAtomMapper,
+    atom_mapping_basic_test_files,
     genScorer,
     mol_from_smiles,
+    toluene_vs_others,
 )
 
 

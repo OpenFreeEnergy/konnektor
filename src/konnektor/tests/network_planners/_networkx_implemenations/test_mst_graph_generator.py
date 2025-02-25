@@ -4,6 +4,7 @@
 import networkx as nx
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
+from konnektor.tests.data.conf import nine_mols_edges
 
 
 def test_mst_network_generation(nine_mols_edges):

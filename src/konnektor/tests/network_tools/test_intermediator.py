@@ -4,6 +4,7 @@
 import pytest
 from gufe import SmallMoleculeComponent
 from rdkit import Chem
+from rdkit.Chem import AllChem
 
 from ...network_tools import ImergeIntermediator
 

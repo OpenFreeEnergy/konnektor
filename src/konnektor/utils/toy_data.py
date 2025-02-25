@@ -1,6 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
+from typing import Iterable, Tuple
 
 import numpy as np
 from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
