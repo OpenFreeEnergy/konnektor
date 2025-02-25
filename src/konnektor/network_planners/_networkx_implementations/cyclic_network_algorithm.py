@@ -267,7 +267,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
                 all_node_collection.extend(list(start_edge))
 
                 adding_node = lambda e: len(cycle_nodes.intersection(set(e))) == 1
-                use_edge = lambda e: not e in cycle_edges and adding_node(e) and not_target_node(e)
+                use_edge = lambda e: e not in cycle_edges and adding_node(e) and not_target_node(e)
 
                 successor_node = (
                     prioqueue[i][1] if (target_node == prioqueue[i][0]) else prioqueue[i][0]
