@@ -79,7 +79,7 @@ class RadialNetworkAlgorithm(_AbstractNetworkAlgorithm):
                 edges=edges,
                 weights=weights,
             )
-        elif isinstance(central_node, (SmallMoleculeComponent, str)):
+        elif isinstance(central_node, SmallMoleculeComponent | str):
             central_nodes = [(central_node, 1)]
         else:
             raise ValueError("invalide central node type: " + str(type(central_node)))
