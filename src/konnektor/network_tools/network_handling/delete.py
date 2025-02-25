@@ -1,4 +1,3 @@
-from typing import Union
 
 from gufe import Component, LigandAtomMapping, LigandNetwork
 
@@ -7,7 +6,7 @@ from ...network_analysis import get_is_connected
 
 def delete_transformation(
     network: LigandNetwork,
-    transformation: Union[LigandAtomMapping, tuple[Component, Component], list[LigandAtomMapping]],
+    transformation: LigandAtomMapping | tuple[Component, Component] | list[LigandAtomMapping],
     must_stay_connected: bool = True,
 ) -> LigandNetwork:
     """
@@ -45,7 +44,7 @@ def delete_transformation(
 
 def delete_component(
     network: LigandNetwork,
-    component: Union[Component, list[Component]],
+    component: Component | list[Component],
     must_stay_connected: bool = True,
 ) -> LigandNetwork:
     """

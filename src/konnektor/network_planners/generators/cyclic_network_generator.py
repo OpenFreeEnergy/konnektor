@@ -1,7 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, List, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
@@ -18,10 +18,10 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class CyclicNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         node_present_in_cycles: int = 2,
-        cycle_sizes: Union[int, List[int]] = 3,
+        cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,

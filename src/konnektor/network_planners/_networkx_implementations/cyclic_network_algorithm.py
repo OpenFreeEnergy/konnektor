@@ -2,8 +2,8 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import logging
+from collections.abc import Iterable
 from datetime import datetime
-from typing import Iterable, List, Tuple
 
 import networkx as nx
 import numpy as np
@@ -85,7 +85,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
     Cycle building
     """
 
-    def _translate_input(self, edges: List[Tuple[int, int]], weights: List[float]) -> Graph:
+    def _translate_input(self, edges: list[tuple[int, int]], weights: list[float]) -> Graph:
         log.info("\tTranslate input to Networkx Graph")
 
         # build Edges:
@@ -125,7 +125,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
 
         return g
 
-    def _generate_cyclic_paths(self, graph: Graph) -> Tuple[List[int], float]:
+    def _generate_cyclic_paths(self, graph: Graph) -> tuple[list[int], float]:
         n_nodes = len(graph.nodes)
         if self.max_sub_cycle_size > n_nodes:
             raise ValueError("a cycle can not be larger, than the number of nodes.")
@@ -152,8 +152,8 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
         return cyclic_paths_scored
 
     def _greedy_select_cylces_by_node_connectivity(
-        self, cyclic_paths_scored: Tuple[List[int], float], graph: Graph
-    ) -> List[List[int]]:
+        self, cyclic_paths_scored: tuple[list[int], float], graph: Graph
+    ) -> list[list[int]]:
         # Build priorityQueue for MST selection
         log.info("\tBuild Cycle Priority Queue")
         cycle_priority_queue = list(
@@ -217,7 +217,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
         return selected_cycles
 
     def generate_network_double_greedy(
-        self, edges: List[Tuple[int, int]], weights: List[float], edge_limitor=200
+        self, edges: list[tuple[int, int]], weights: list[float], edge_limitor=200
     ) -> Graph:
         log.info("Building Cyclic Graph - START")
         start_time_total = datetime.now()
@@ -320,7 +320,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
         Cycle metrics
     """
 
-    def _score_summation(self, c: List[int], g: Graph) -> float:
+    def _score_summation(self, c: list[int], g: Graph) -> float:
         d = 0
         for i in range(len(c)):  # Calculate the score of the cycle
             n1 = c[i]

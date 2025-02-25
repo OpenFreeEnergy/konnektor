@@ -4,7 +4,7 @@
 import functools
 import itertools
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 from tqdm import tqdm
@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 class MaxConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         show_progress: bool = False,

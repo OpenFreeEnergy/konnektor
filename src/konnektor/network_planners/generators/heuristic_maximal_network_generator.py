@@ -3,7 +3,7 @@
 
 import functools
 import itertools
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 import numpy as np
 from gufe import AtomMapper, Component, LigandNetwork
@@ -18,7 +18,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_samples: int = 100,
         progress: bool = False,

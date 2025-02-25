@@ -2,7 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 
@@ -19,10 +19,10 @@ log = logging.getLogger(__name__)
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, Iterable[AtomMapper]],
+        mappers: AtomMapper | Iterable[AtomMapper],
         scorer: AtomMappingScorer,
         n_connecting_cycles: int = 2,
-        cycle_sizes: Union[int, list[int]] = 3,
+        cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator = None,
     ):
