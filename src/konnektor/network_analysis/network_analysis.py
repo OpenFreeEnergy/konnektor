@@ -1,9 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import random
-from copy import deepcopy
-from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
