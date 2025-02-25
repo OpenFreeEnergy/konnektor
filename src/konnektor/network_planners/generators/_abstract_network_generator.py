@@ -24,7 +24,7 @@ class NetworkGenerator(NetworkPlanner):
         self,
         mappers: Union[AtomMapper, list[AtomMapper]],
         scorer: Callable[[AtomMapping], float],
-        network_generator: _AbstractNetworkAlgorithm,  ## TODO: rename this to network_algorithm?
+        network_generator: _AbstractNetworkAlgorithm,  # TODO: rename this to network_algorithm?
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister=None,

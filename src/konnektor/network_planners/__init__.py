@@ -9,7 +9,7 @@ from .generators.clustered_network_generator import (
     StarrySkyNetworkGenerator,
 )
 
-## Other
+# Other
 from .generators.cyclic_network_generator import CyclicNetworkGenerator
 from .generators.explicit_network_generator import ExplicitNetworkGenerator
 from .generators.heuristic_maximal_network_generator import (
@@ -17,7 +17,7 @@ from .generators.heuristic_maximal_network_generator import (
 )
 from .generators.maximal_network_generator import MaximalNetworkGenerator
 
-## MST like Networks
+# MST like Networks
 from .generators.minimal_spanning_tree_network_generator import (
     MinimalSpanningTreeNetworkGenerator,
 )
@@ -26,7 +26,7 @@ from .generators.redundant_minimal_spanning_tree_network_generator import (
     RedundantMinimalSpanningTreeNetworkGenerator,
 )
 
-## Starmap Like Networks
+# Starmap Like Networks
 from .generators.star_network_generator import (
     RadialLigandNetworkPlanner,
     StarNetworkGenerator,

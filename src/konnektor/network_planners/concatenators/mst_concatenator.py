@@ -49,7 +49,7 @@ class MstConcatenator(NetworkConcatenator):
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
-            _initial_edge_lister=None,  ## TODO: should this be _initial_edge_lister?
+            _initial_edge_lister=None,  # TODO: should this be _initial_edge_lister?
         )
         self.n_connecting_edges = n_connecting_edges
 
