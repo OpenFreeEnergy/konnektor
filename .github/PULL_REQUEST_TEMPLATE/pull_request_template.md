@@ -16,6 +16,6 @@ Please note any issues this fixes using [closing keywords]( https://help.github.
 - [ ] I certify that this contribution is covered by the MIT License [here](https://github.com/OpenFreeEnergy/openfe/blob/main/LICENSE) and the **Developer Certificate of Origin** at <https://developercertificate.org/>.
 
 ## Tips
-* Comment "pre-commit.ci autofix" to have pre-commit.ci atomically format your PR.
+* Comment "pre-commit.ci autofix" to have pre-commit.ci auto-format your PR.
   Since this will create a commit, it is best to make this comment when you are finished with your work.
 
