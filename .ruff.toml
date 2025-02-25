@@ -47,6 +47,7 @@ select = [
     "E3",  # blank lines
     # "E7"   # TODO: add this back in
     # "C901"  # mccabe complexity  TODO: add this back in 
+    "UP",
 ]   
 ignore = []
 preview = true

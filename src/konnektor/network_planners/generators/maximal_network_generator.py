@@ -3,7 +3,7 @@
 
 import functools
 import itertools
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 from tqdm.auto import tqdm
@@ -15,7 +15,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         progress: bool = False,
         n_processes: int = 1,

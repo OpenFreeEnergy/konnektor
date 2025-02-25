@@ -3,7 +3,7 @@
 
 import itertools
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 
@@ -20,7 +20,7 @@ log = logging.getLogger(__name__)
 class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_connecting_edges: int = 2,
         n_processes: int = 1,

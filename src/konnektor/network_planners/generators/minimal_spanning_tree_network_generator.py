@@ -1,7 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
@@ -14,7 +14,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         progress: bool = False,

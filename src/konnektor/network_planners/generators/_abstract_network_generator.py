@@ -3,7 +3,7 @@
 
 import abc
 import logging
-from typing import Callable, Iterable, Union
+from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
@@ -22,7 +22,7 @@ class NetworkGenerator(NetworkPlanner):
 
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer: Callable[[AtomMapping], float],
         network_generator: _AbstractNetworkAlgorithm,  # TODO: rename this to network_algorithm?
         n_processes: int = 1,

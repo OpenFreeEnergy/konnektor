@@ -4,7 +4,7 @@
 import itertools
 import warnings
 from collections import Counter
-from typing import Iterable, Tuple, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
@@ -15,7 +15,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class ExplicitNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         progress: bool = False,
@@ -43,7 +43,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(
         self,
-        edges: Iterable[Tuple[Component, Component]],
+        edges: Iterable[tuple[Component, Component]],
     ) -> LigandNetwork:
         """
         Create a network with pre-defined edges.
@@ -150,7 +150,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         nm2comp = {l.name: l for l in components}
 
         if len(nm2comp) < len(components):
-            dupes = Counter((l.name for l in components))
+            dupes = Counter(l.name for l in components)
             dupe_names = [k for k, v in dupes.items() if v > 1]
             raise ValueError(f"Duplicate names: {dupe_names}")
 

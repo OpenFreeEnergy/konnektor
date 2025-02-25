@@ -1,7 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Tuple
 
 import numpy as np
 from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
@@ -152,7 +151,7 @@ def build_n_random_mst_network(
     sub_networks: int = 2,
     overlap: int = 1,
     uni_score: bool = False,
-) -> Tuple[LigandNetwork, LigandNetwork]:
+) -> tuple[LigandNetwork, LigandNetwork]:
     """
     This function returns a randomized toy mst graph.
 

@@ -4,7 +4,7 @@
 import functools
 import inspect
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
@@ -40,7 +40,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
             featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
         ),
-        mappers: Union[AtomMapper, list[AtomMapper]] = None,  # include None in this union?
+        mappers: AtomMapper | list[AtomMapper] = None,  # include None in this union?
         scorer=None,
         n_processes: int = 1,
         progress: bool = False,
@@ -196,7 +196,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
 class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
             featurize=MorganFingerprintTransformer(),

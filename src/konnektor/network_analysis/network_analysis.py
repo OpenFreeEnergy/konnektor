@@ -1,7 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Optional, Union
 
 import networkx as nx
 import numpy as np
@@ -102,7 +101,7 @@ def get_number_of_network_cycles(ligand_network: LigandNetwork, higher_bound: in
 
 def get_component_connectivities(
     ligand_network: LigandNetwork, normalize: bool = False
-) -> dict[SmallMoleculeComponent, Union[float, int]]:
+) -> dict[SmallMoleculeComponent, float | int]:
     """
     Calculate the connectivities for all nodes in the graph.
 
@@ -193,7 +192,7 @@ def get_transformation_failure_robustness(
     ligand_network: LigandNetwork,
     failure_rate: float = 0.05,
     nrepeats: int = 100,
-    seed: Optional[int] = None,
+    seed: int | None = None,
 ) -> float:
     """
     Estimate the robustness of a LigandNetwork, by removing n edges,

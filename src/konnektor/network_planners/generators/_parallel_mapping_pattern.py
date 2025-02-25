@@ -3,7 +3,7 @@
 
 import functools
 import multiprocessing as mult
-from typing import Callable
+from collections.abc import Callable
 
 from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent
 from tqdm.auto import tqdm
