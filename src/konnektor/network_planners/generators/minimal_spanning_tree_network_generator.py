@@ -89,8 +89,8 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         mg = self.network_generator.generate_network(edges, weights)
 
         if not mg.connected:
-            nodes_index = {l: components.index(l) for l in components}
-            missing_nodes = [l for l in components if (nodes_index[l] in mg.nodes)]
+            nodes_index = {c: components.index(c) for c in components}
+            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
             raise RuntimeError("Unable to create edges for some nodes: " + str(list(missing_nodes)))
 
         selected_mappings = [

@@ -147,10 +147,10 @@ class ExplicitNetworkGenerator(NetworkGenerator):
           if multiple molecules have the same name (this would otherwise be
           problematic)
         """
-        nm2comp = {l.name: l for l in components}
+        nm2comp = {c.name: c for c in components}
 
         if len(nm2comp) < len(components):
-            dupes = Counter(l.name for l in components)
+            dupes = Counter(c.name for c in components)
             dupe_names = [k for k, v in dupes.items() if v > 1]
             raise ValueError(f"Duplicate names: {dupe_names}")
 

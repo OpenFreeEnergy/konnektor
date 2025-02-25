@@ -87,7 +87,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if hasattr(self.clusterer.featurize, "n_jobs"):
             self.clusterer.featurize.njobs = n_processes
 
-        if not isinstance(sub_network_planners, (tuple, list)):
+        if not isinstance(sub_network_planners, tuple | list):
             sub_network_planners = [sub_network_planners]
 
         self.sub_network_planners = []
