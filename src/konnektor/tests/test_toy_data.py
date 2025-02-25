@@ -120,9 +120,12 @@ def test_build_n_random_mst_network(n_sub_networks, overlap):
             else:
                 assert len(net.nodes) == n_compounds // n_sub_networks + overlap
 
+
 def test_build_random_fully_connected_network():
     n_compounds = 30
-    mst_network = build_random_fully_connected_network(n_compounds=n_compounds, rand_seed=42)
+    mst_network = build_random_fully_connected_network(
+        n_compounds=n_compounds, rand_seed=42
+    )
 
     assert isinstance(mst_network, LigandNetwork)
     assert len(mst_network.nodes) == n_compounds
