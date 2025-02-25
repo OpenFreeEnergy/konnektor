@@ -30,7 +30,7 @@ exclude = [
 ]
 
 # Same as Black.
-line-length = 120 # up for debate
+line-length = 100 # up for debate
 indent-width = 4
 
 # Assume minimum Python 3.10
@@ -39,13 +39,10 @@ target-version = "py310"
 [lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 select = [
-    # Pyflakes
-    "F",
-    # Pycodestyle
-    # "E", # TODO: add this back in
-    "W",
-    # isort
-    "I"
+    "F",  # Pyflakes
+    "I",  # isort
+    "W",  # pycodestyle warnings
+    "E", # pycodestyle errors TODO: add this back in
 ]
 ignore = []
 
