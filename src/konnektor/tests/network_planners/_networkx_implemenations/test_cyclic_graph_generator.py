@@ -4,6 +4,7 @@
 import networkx as nx
 
 from konnektor.network_planners._networkx_implementations import CyclicNetworkAlgorithm
+from konnektor.tests.data.conf import nine_mols_edges
 
 
 # more test here also for the params

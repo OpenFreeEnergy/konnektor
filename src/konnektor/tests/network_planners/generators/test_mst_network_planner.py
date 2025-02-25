@@ -12,8 +12,10 @@ from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     ErrorMapper,
     GenAtomMapper,
+    atom_mapping_basic_test_files,
     genScorer,
     mol_from_smiles,
+    toluene_vs_others,
 )
 
 
