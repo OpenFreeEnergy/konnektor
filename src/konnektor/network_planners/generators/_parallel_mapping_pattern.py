@@ -25,7 +25,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 
     """
 
-    jobID, compound_pairs, mappers, scorer = args
+    jobID, compound_pairs, mappers, scorer = args  # noqa
 
     mappings = []
     for component_pair in compound_pairs:

@@ -48,7 +48,7 @@ def rminimal_spanning_network_redundancy(toluene_vs_others):
 
 
 def test_rminimal_spanning_network(rminimal_spanning_network_redundancy, toluene_vs_others):
-    tol, others = toluene_vs_others
+    _, others = toluene_vs_others
     minimal_spanning_network = rminimal_spanning_network_redundancy[0]
     assert len(minimal_spanning_network.nodes) == len(others) + 1
     for edge in minimal_spanning_network.edges:

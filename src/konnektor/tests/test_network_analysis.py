@@ -28,7 +28,7 @@ def test_get_is_connected():
 
     # Check for disconnected.
     g_disscon = LigandNetwork(nodes=g.nodes, edges=list(g.edges)[1:])
-    assert get_is_connected(g_disscon) == False
+    assert get_is_connected(g_disscon) == False  # noqa
 
 
 def test_get_node_connectives():

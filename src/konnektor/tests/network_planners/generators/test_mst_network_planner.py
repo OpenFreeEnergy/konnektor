@@ -44,7 +44,7 @@ def minimal_spanning_network(toluene_vs_others):
 
 
 def test_minimal_spanning_network(minimal_spanning_network, toluene_vs_others):
-    tol, others = toluene_vs_others
+    _, others = toluene_vs_others
     assert len(minimal_spanning_network.nodes) == len(others) + 1
     for edge in minimal_spanning_network.edges:
         assert edge.componentA_to_componentB != {0: 0}  # lomap should find something
