@@ -39,14 +39,16 @@ target-version = "py310"
 [lint]
 # Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
 select = [
-    # "F4",  # Pyflakes
+    "F",  # Pyflakes
     "I",  # isort
     "W",  # pycodestyle warnings
     "E",  # pycodestyle errors
     # "C901"  # mccabe complexity  TODO: add this back in 
-    # "UP",
+    "UP",
 ]   
 ignore = [
+    "F401",  # unused import - (TODO: fix this when refactoring tests)
+    "F811",  # redefinition (TODO: fix this when refactoring tests)
     "E402",   # module-level import not at top (conflicts w/ isort)
     "E501",  # line-length violations (black enforces these)
     "E731",  # lambda expressions (TODO: we should fix these)
