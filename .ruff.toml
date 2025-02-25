@@ -42,9 +42,14 @@ select = [
     "F",  # Pyflakes
     "I",  # isort
     "W",  # pycodestyle warnings
-    "E", # pycodestyle errors TODO: add this back in
-]
+    "E1",  # indents
+    "E2",  # whitespace
+    "E3",  # blank lines
+    # "E7"   # TODO: add this back in
+    # "C901"  # mccabe complexity  TODO: add this back in 
+]   
 ignore = []
+preview = true
 
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
