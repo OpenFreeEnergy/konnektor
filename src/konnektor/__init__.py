@@ -2,33 +2,49 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 # basic gufe types:
-from gufe import Component, SmallMoleculeComponent, ProteinComponent
+from gufe import Component, ProteinComponent, SmallMoleculeComponent
 
 # Konnektor content
 from .network_planners import (
-    MaximalNetworkGenerator,
-    HeuristicMaximalNetworkGenerator,
-    RadialLigandNetworkPlanner,
-    NNodeEdgesNetworkGenerator,
-    MinimalSpanningTreeNetworkGenerator,
-    CyclicNetworkGenerator,
     ClusteredNetworkGenerator,
-    StarrySkyNetworkGenerator,
+    CyclicNetworkGenerator,
+    HeuristicMaximalNetworkGenerator,
+    MaximalNetworkGenerator,
+    MinimalSpanningTreeNetworkGenerator,
     MstConcatenator,
-)
-
-from .network_tools import (
-    concatenate_networks,
-    merge_networks,
-    append_component,
-    delete_transformation,
+    NNodeEdgesNetworkGenerator,
+    RadialLigandNetworkPlanner,
+    StarrySkyNetworkGenerator,
 )
 from .network_tools import (
     ChargeClusterer,
-    ScaffoldClusterer,
     ComponentsDiversityClusterer,
+    ScaffoldClusterer,
+    append_component,
+    concatenate_networks,
+    delete_transformation,
+    merge_networks,
 )
+from .visualization import draw_ligand_network as draw_ligand_network
 
-from . import network_analysis
-
-from .visualization import draw_ligand_network
+__all__ = [
+    Component,
+    ProteinComponent,
+    SmallMoleculeComponent,
+    ClusteredNetworkGenerator,
+    CyclicNetworkGenerator,
+    HeuristicMaximalNetworkGenerator,
+    MaximalNetworkGenerator,
+    MinimalSpanningTreeNetworkGenerator,
+    MstConcatenator,
+    NNodeEdgesNetworkGenerator,
+    RadialLigandNetworkPlanner,
+    StarrySkyNetworkGenerator,
+    ChargeClusterer,
+    ComponentsDiversityClusterer,
+    ScaffoldClusterer,
+    append_component,
+    concatenate_networks,
+    delete_transformation,
+    merge_networks,
+]

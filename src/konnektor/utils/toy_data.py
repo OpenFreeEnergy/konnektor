@@ -1,11 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Tuple
 
 import numpy as np
-from gufe import LigandAtomMapping, AtomMapper, AtomMapping
-from gufe import SmallMoleculeComponent, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
 from rdkit import Chem
 
 
@@ -107,9 +105,7 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
     ]
     mols = [Chem.AddHs(Chem.MolFromSmiles(s)) for s in smiles]
     [Chem.rdDistGeom.EmbedMolecule(m) for m in mols]
-    compounds = [
-        SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)
-    ]
+    compounds = [SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)]
 
     return compounds, gen_mapper, gen_scorer
 
@@ -155,7 +151,7 @@ def build_n_random_mst_network(
     sub_networks: int = 2,
     overlap: int = 1,
     uni_score: bool = False,
-) -> Tuple[LigandNetwork, LigandNetwork]:
+) -> tuple[LigandNetwork, LigandNetwork]:
     """
     This function returns a randomized toy mst graph.
 

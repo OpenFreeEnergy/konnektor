@@ -1,16 +1,16 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from tqdm import tqdm
 import functools
 import itertools
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
+from tqdm import tqdm
 
-from ._abstract_network_concatenator import NetworkConcatenator
 from ..generators._parallel_mapping_pattern import _parallel_map_scoring
+from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ log = logging.getLogger(__name__)
 class MaxConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         show_progress: bool = False,
@@ -50,9 +50,7 @@ class MaxConcatenator(NetworkConcatenator):
         )
         self.progress = show_progress
 
-    def concatenate_networks(
-        self, ligand_networks: Iterable[LigandNetwork]
-    ) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
 
         Parameters
@@ -76,9 +74,7 @@ class MaxConcatenator(NetworkConcatenator):
 
         selected_edges = []
         selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(
-            ligand_networks, 2
-        ):
+        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
             # Generate Full Bipartite Graph
             nodesA = ligandNetworkA.nodes
             nodesB = ligandNetworkB.nodes
@@ -116,9 +112,7 @@ class MaxConcatenator(NetworkConcatenator):
 
                         if self.scorer:
                             tmp_mappings = [
-                                mapping.with_annotations(
-                                    {"score": self.scorer(mapping)}
-                                )
+                                mapping.with_annotations({"score": self.scorer(mapping)})
                                 for mapping in mapping_generator
                             ]
 
@@ -152,9 +146,7 @@ class MaxConcatenator(NetworkConcatenator):
             selected_edges.extend(network.edges)
             selected_nodes.extend(network.nodes)
 
-        concat_LigandNetwork = LigandNetwork(
-            edges=selected_edges, nodes=set(selected_nodes)
-        )
+        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
 
         log.info(f"Total Concatenated Edges: {len(selected_edges)} ")
 

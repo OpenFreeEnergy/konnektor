@@ -4,14 +4,14 @@
 import functools
 import inspect
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 # Clustering
 from scikit_mol.fingerprints import (
-    RDKitFingerprintTransformer,
     MorganFingerprintTransformer,
+    RDKitFingerprintTransformer,
 )
 from sklearn.cluster import HDBSCAN, KMeans
 from tqdm import tqdm
@@ -19,14 +19,14 @@ from tqdm import tqdm
 from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
 )
+
+from ...network_tools import append_component, concatenate_networks
+from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
+from ..concatenators import MstConcatenator
+from ..concatenators._abstract_network_concatenator import NetworkConcatenator
 from ._abstract_network_generator import NetworkGenerator
 from .cyclic_network_generator import CyclicNetworkGenerator
 from .star_network_generator import StarNetworkGenerator
-from ..concatenators import MstConcatenator
-from ...network_tools import append_component, concatenate_networks
-from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
-from ..concatenators._abstract_network_concatenator import NetworkConcatenator
-
 
 log = logging.getLogger()
 log.setLevel(logging.INFO)
@@ -40,7 +40,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         clusterer: ComponentsDiversityClusterer = ComponentsDiversityClusterer(
             featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
         ),
-        mappers: Union[AtomMapper, list[AtomMapper]] = None,  # include None in this union?
+        mappers: AtomMapper | list[AtomMapper] = None,  # include None in this union?
         scorer=None,
         n_processes: int = 1,
         progress: bool = False,
@@ -87,7 +87,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if hasattr(self.clusterer.featurize, "n_jobs"):
             self.clusterer.featurize.njobs = n_processes
 
-        if not isinstance(sub_network_planners, (tuple, list)):
+        if not isinstance(sub_network_planners, tuple | list):
             sub_network_planners = [sub_network_planners]
 
         self.sub_network_planners = []
@@ -142,9 +142,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if len(self.clusters) == 1 and -1 in self.clusters:
             for network_planner in self.sub_network_planners:
                 try:
-                    sub_network = network_planner.generate_ligand_network(
-                        self.clusters[-1]
-                    )
+                    sub_network = network_planner.generate_ligand_network(self.clusters[-1])
                     break
                 except Exception as err:
                     print("ERR", "\n".join(err.args))
@@ -156,9 +154,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
                     if len(mols) > 1:
                         for network_planner in self.sub_network_planners:
                             try:
-                                sub_network = network_planner.generate_ligand_network(
-                                    mols
-                                )
+                                sub_network = network_planner.generate_ligand_network(mols)
 
                                 self.sub_networks.append(sub_network)
                                 break
@@ -200,7 +196,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
 class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
             featurize=MorganFingerprintTransformer(),

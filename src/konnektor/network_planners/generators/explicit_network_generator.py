@@ -1,12 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import warnings
 import itertools
+import warnings
 from collections import Counter
-from typing import Iterable, Tuple, Union
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
@@ -15,7 +15,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class ExplicitNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         progress: bool = False,
@@ -43,7 +43,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(
         self,
-        edges: Iterable[Tuple[Component, Component]],
+        edges: Iterable[tuple[Component, Component]],
     ) -> LigandNetwork:
         """
         Create a network with pre-defined edges.
@@ -111,8 +111,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                 edges.append((components[i], components[j]))
             except IndexError:
                 raise IndexError(
-                    f"Invalid ligand id, requested {i} {j} "
-                    f"with {len(components)} available"
+                    f"Invalid ligand id, requested {i} {j} with {len(components)} available"
                 )
 
         return self.generate_ligand_network(edges=edges)
@@ -148,10 +147,10 @@ class ExplicitNetworkGenerator(NetworkGenerator):
           if multiple molecules have the same name (this would otherwise be
           problematic)
         """
-        nm2comp = {l.name: l for l in components}
+        nm2comp = {c.name: c for c in components}
 
         if len(nm2comp) < len(components):
-            dupes = Counter((l.name for l in components))
+            dupes = Counter(c.name for c in components)
             dupe_names = [k for k, v in dupes.items() if v > 1]
             raise ValueError(f"Duplicate names: {dupe_names}")
 
@@ -160,14 +159,8 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             try:
                 edges.append((nm2comp[nameA], nm2comp[nameB]))
             except KeyError:
-                badnames = [
-                    nm
-                    for nm in itertools.chain.from_iterable(names)
-                    if nm not in nm2comp
-                ]
+                badnames = [nm for nm in itertools.chain.from_iterable(names) if nm not in nm2comp]
                 available = [ligand.name for ligand in components]
-                raise KeyError(
-                    f"Invalid name(s) requested {badnames}.  " f"Available: {available}"
-                )
+                raise KeyError(f"Invalid name(s) requested {badnames}.  Available: {available}")
 
         return self.generate_ligand_network(edges=edges)

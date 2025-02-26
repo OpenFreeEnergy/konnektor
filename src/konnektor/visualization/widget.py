@@ -1,16 +1,16 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import networkx as nx
-import numpy as np
 from urllib import parse
 
+import networkx as nx
+import numpy as np
 from rdkit import Chem
 from rdkit.Chem.Draw import rdMolDraw2D
 
 try:
-    from ipywidgets import interact, fixed
     import ipycytoscape
+    from ipywidgets import fixed, interact
 except ImportError:
     pass  # Don't throw  error, will happen later
 
@@ -18,8 +18,8 @@ import gufe
 from gufe import AtomMapping, LigandNetwork
 from gufe.visualization.mapping_visualization import draw_mapping
 
-from . import color_gradient
 from ..utils.optional_import import requires_package
+from . import color_gradient
 
 
 def get_node_connectivities(cg: LigandNetwork) -> list[int]:
@@ -105,9 +105,7 @@ def _build_cytoscape(
             {
                 "name": n.name,
                 "classes": "ligand",
-                "img": mol2svg(
-                    n.to_rdkit(), represent_molecules_twoD=represent_molecules_2D
-                ),
+                "img": mol2svg(n.to_rdkit(), represent_molecules_twoD=represent_molecules_2D),
                 "col": c,
             },
         )
@@ -271,6 +269,4 @@ def draw_network_widget(
         )
         return v
 
-    return interactive_widget(
-        network=network, layout=layout, show_molecules=show_molecules
-    )
+    return interactive_widget(network=network, layout=layout, show_molecules=show_molecules)

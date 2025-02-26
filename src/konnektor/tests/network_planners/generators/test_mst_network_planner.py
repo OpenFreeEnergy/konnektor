@@ -7,16 +7,16 @@ import numpy as np
 import pytest
 from gufe import LigandNetwork
 
+from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
-    toluene_vs_others,
-    atom_mapping_basic_test_files,
-    mol_from_smiles,
-    genScorer,
-    GenAtomMapper,
     ErrorMapper,
+    GenAtomMapper,
+    atom_mapping_basic_test_files,
+    genScorer,
+    mol_from_smiles,
+    toluene_vs_others,
 )
-from konnektor.network_analysis import get_network_score
 
 
 def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
@@ -46,7 +46,7 @@ def minimal_spanning_network(toluene_vs_others):
 
 
 def test_minimal_spanning_network(minimal_spanning_network, toluene_vs_others):
-    tol, others = toluene_vs_others
+    _, others = toluene_vs_others
     assert len(minimal_spanning_network.nodes) == len(others) + 1
     for edge in minimal_spanning_network.edges:
         assert edge.componentA_to_componentB != {0: 0}  # lomap should find something
@@ -66,8 +66,7 @@ def test_minimal_spanning_network_regression(minimal_spanning_network):
     # issue #244, this was previously giving non-reproducible (yet valid)
     # networks when scores were tied.
     edge_ids = sorted(
-        (edge.componentA.name, edge.componentB.name)
-        for edge in minimal_spanning_network.edges
+        (edge.componentA.name, edge.componentB.name) for edge in minimal_spanning_network.edges
     )
     ref = sorted(
         [
@@ -93,4 +92,4 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
-        network = planner.generate_ligand_network(components=others + [toluene, nimrod])
+        planner.generate_ligand_network(components=others + [toluene, nimrod])

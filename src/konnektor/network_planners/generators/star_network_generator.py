@@ -1,13 +1,14 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
-from tqdm import tqdm
 import functools
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
+from tqdm import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -15,7 +16,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class StarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         progress: bool = False,
@@ -105,15 +106,14 @@ class StarNetworkGenerator(NetworkGenerator):
             selected_mappings = [edge_map[k] for k in rg.edges]
 
         else:  # Given central ligands: less effort. - Trivial Case
-            if self.scorer is None:
-                scorer = lambda x: -1
-            else:
-                scorer = self.scorer
+            # TODO: commenting this out because scorer isn't used - should it be used?
+            # if self.scorer is None:
+            #     scorer = lambda x: -1
+            # else:
+            #     scorer = self.scorer
 
             if self.progress is True:
-                progress = functools.partial(
-                    tqdm, total=len(components), delay=1.5, desc="Mapping"
-                )
+                progress = functools.partial(tqdm, total=len(components), delay=1.5, desc="Mapping")
             else:
                 progress = lambda x: x
 

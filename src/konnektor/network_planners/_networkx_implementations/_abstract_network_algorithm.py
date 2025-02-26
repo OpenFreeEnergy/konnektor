@@ -7,19 +7,15 @@ import networkx as nx
 
 
 class _AbstractNetworkAlgorithm(abc.ABC):
-
     def __call__(self, *args, **kwargs):
         return self.generate_network(*args, **kwargs)
 
     @abc.abstractmethod
-    def generate_network(
-        self, edges: list[tuple[int, int]], weights: list[float]
-    ) -> nx.Graph:
+    def generate_network(self, edges: list[tuple[int, int]], weights: list[float]) -> nx.Graph:
         raise NotImplementedError()
 
 
 class _AbstractNetworkConcatenator(abc.ABC):
-
     def __call__(self, *args, **kwargs):
         return self.concatenate_networks(*args, **kwargs)
 

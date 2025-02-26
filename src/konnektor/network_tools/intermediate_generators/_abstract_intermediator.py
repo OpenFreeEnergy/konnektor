@@ -1,9 +1,9 @@
 import abc
 import inspect
-from typing import Iterator
+from collections.abc import Iterator
 
-from gufe.tokenization import GufeTokenizable
 from gufe import SmallMoleculeComponent
+from gufe.tokenization import GufeTokenizable
 
 
 class Intermediator(GufeTokenizable):

@@ -3,17 +3,15 @@
 
 import importlib
 import inspect
-import pytest
 from importlib import resources
+
+import pytest
+from gufe import AtomMapper, LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
 import konnektor
 from konnektor import network_planners
-
-from gufe import AtomMapper
-from gufe import SmallMoleculeComponent, LigandAtomMapping
-from gufe import LigandNetwork, LigandAtomMapping
 
 
 def mol_from_smiles(smiles: str) -> Chem.Mol:
@@ -121,11 +119,7 @@ def genScorer(mapping):
 @pytest.fixture(scope="session")
 def toluene_vs_others(atom_mapping_basic_test_files):
     central_ligand_name = "toluene"
-    others = [
-        v
-        for (k, v) in atom_mapping_basic_test_files.items()
-        if k != central_ligand_name
-    ]
+    others = [v for (k, v) in atom_mapping_basic_test_files.items() if k != central_ligand_name]
     toluene = atom_mapping_basic_test_files[central_ligand_name]
     return toluene, others
 
