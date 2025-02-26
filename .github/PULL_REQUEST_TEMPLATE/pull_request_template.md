@@ -19,3 +19,7 @@ Please note any issues this fixes using [closing keywords]( https://help.github.
 * Comment "pre-commit.ci autofix" to have pre-commit.ci auto-format your PR.
   Since this will create a commit, it is best to make this comment when you are finished with your work.
 
+## Reviewer Checklist
+- [ ] news entry has been added if necessary
+- [ ] pre-commit auto fix has been run
+- [ ] any API breaks have been documented
