@@ -26,10 +26,8 @@ exclude = [
     "node_modules",
     "site-packages",
     "venv",
-    "*.ipynb",  # until we have a reason to include nb formatting
+    "*.ipynb",  # TODO: auto-format notebooks
 ]
-
-# Same as Black.
 line-length = 100 # up for debate
 indent-width = 4
 
