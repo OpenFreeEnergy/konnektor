@@ -12,4 +12,3 @@ API docs
    api/konnektor.visualization
    api/konnektor.utils
    api/konnektor.data
-
