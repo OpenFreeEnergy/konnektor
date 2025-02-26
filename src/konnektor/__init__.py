@@ -4,6 +4,11 @@
 # basic gufe types:
 from gufe import Component, ProteinComponent, SmallMoleculeComponent
 
+from ._version import (
+    __version__,
+    __version_tuple__,
+)
+
 # Konnektor content
 from .network_planners import (
     ClusteredNetworkGenerator,
@@ -26,10 +31,6 @@ from .network_tools import (
     merge_networks,
 )
 from .visualization import draw_ligand_network as draw_ligand_network
-from ._version import (
-    __version__,
-    __version_tuple__,
-)
 
 __all__ = [
     Component,

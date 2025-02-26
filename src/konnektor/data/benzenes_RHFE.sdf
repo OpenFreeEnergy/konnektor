@@ -43,25 +43,25 @@ lig_1
  10 19  1  0
  10 20  1  0
 M  END
->  <id>  (1) 
+>  <id>  (1)
 1
 
->  <name>  (1) 
+>  <name>  (1)
 _O6T
 
->  <iupac>  (1) 
+>  <iupac>  (1)
 1,2-dimethoxybenzene
 
->  <smiles>  (1) 
+>  <smiles>  (1)
 [H]c1c([H])c([H])c(OC([H])([H])[H])c(OC([H])([H])[H])c1[H]
 
->  <doi>  (1) 
+>  <doi>  (1)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (1) 
+>  <measurement>  (1)
 {'doi': '10.1007/s10822-014-9738-y', 'error': '0.1', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-5.33', 'comment': ''}
 
->  <key>  (1) 
+>  <key>  (1)
 lig_1
 
 $$$$
@@ -124,25 +124,25 @@ lig_2
  11 26  1  0
  11 27  1  0
 M  END
->  <id>  (2) 
+>  <id>  (2)
 2
 
->  <name>  (2) 
+>  <name>  (2)
 _O70
 
->  <iupac>  (2) 
+>  <iupac>  (2)
 (2R,5R)-2-methyl-5-prop-1-en-2-ylcyclohexan-1-one
 
->  <smiles>  (2) 
+>  <smiles>  (2)
 [H]C([H])=C(C([H])([H])[H])[C@@]1([H])C([H])([H])C(=O)[C@]([H])(C([H])([H])[H])C([H])([H])C1([H])[H]
 
->  <doi>  (2) 
+>  <doi>  (2)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (2) 
+>  <measurement>  (2)
 {'doi': '10.1007/s10822-014-9738-y', 'error': '0.25', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-2.53', 'comment': ''}
 
->  <key>  (2) 
+>  <key>  (2)
 lig_2
 
 $$$$
@@ -205,25 +205,25 @@ lig_3
  11 26  1  0
  11 27  1  0
 M  END
->  <id>  (3) 
+>  <id>  (3)
 3
 
->  <name>  (3) 
+>  <name>  (3)
 _O71
 
->  <iupac>  (3) 
+>  <iupac>  (3)
 (1S,5R)-2-methyl-5-prop-1-en-2-ylcyclohex-2-en-1-ol
 
->  <smiles>  (3) 
+>  <smiles>  (3)
 [H]O[C@]1([H])C(C([H])([H])[H])=C([H])C([H])([H])[C@@]([H])(C(=C([H])[H])C([H])([H])[H])C1([H])[H]
 
->  <doi>  (3) 
+>  <doi>  (3)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (3) 
+>  <measurement>  (3)
 {'doi': '10.1007/s10822-014-9738-y', 'error': '0.28', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-3.20', 'comment': ''}
 
->  <key>  (3) 
+>  <key>  (3)
 lig_3
 
 $$$$
@@ -260,25 +260,25 @@ lig_4
   6 13  1  0
   6 14  1  0
 M  END
->  <id>  (4) 
+>  <id>  (4)
 4
 
->  <name>  (4) 
+>  <name>  (4)
 _P8I
 
->  <iupac>  (4) 
+>  <iupac>  (4)
 cyclopentanone
 
->  <smiles>  (4) 
+>  <smiles>  (4)
 [H]C1([H])C(=O)C([H])([H])C([H])([H])C1([H])[H]
 
->  <doi>  (4) 
+>  <doi>  (4)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (4) 
+>  <measurement>  (4)
 {'doi': '10.1021/ct050097l', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-4.70,', 'comment': ''}
 
->  <key>  (4) 
+>  <key>  (4)
 lig_4
 
 $$$$
@@ -343,25 +343,25 @@ lig_5
  14 26  1  0
  15 27  1  0
 M  END
->  <id>  (5) 
+>  <id>  (5)
 5
 
->  <name>  (5) 
+>  <name>  (5)
 6J29
 
->  <iupac>  (5) 
+>  <iupac>  (5)
 1-amino-4-hydroxyanthracene-9,10-dione
 
->  <smiles>  (5) 
+>  <smiles>  (5)
 [H]Oc1c([H])c([H])c(N([H])[H])c2c1C(=O)c1c([H])c([H])c([H])c([H])c1C2=O
 
->  <doi>  (5) 
+>  <doi>  (5)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (5) 
+>  <measurement>  (5)
 {'doi': '10.1007/s10822-014-9738-y', 'error': '0.29', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-9.5', 'comment': ''}
 
->  <key>  (5) 
+>  <key>  (5)
 lig_5
 
 $$$$
@@ -404,25 +404,25 @@ lig_6
   8 16  1  0
   9 17  1  0
 M  END
->  <id>  (6) 
+>  <id>  (6)
 6
 
->  <name>  (6) 
+>  <name>  (6)
 6KET
 
->  <iupac>  (6) 
+>  <iupac>  (6)
 3-methoxyphenol
 
->  <smiles>  (6) 
+>  <smiles>  (6)
 [H]Oc1c([H])c([H])c([H])c(OC([H])([H])[H])c1[H]
 
->  <doi>  (6) 
+>  <doi>  (6)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (6) 
+>  <measurement>  (6)
 {'doi': '10.1021/ct050097l', 'error': '0.6', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-7.66', 'comment': ''}
 
->  <key>  (6) 
+>  <key>  (6)
 lig_6
 
 $$$$
@@ -481,25 +481,25 @@ lig_7
  11 23  1  1
  13 24  1  6
 M  END
->  <id>  (7) 
+>  <id>  (7)
 7
 
->  <name>  (7) 
+>  <name>  (7)
 8018
 
->  <iupac>  (7) 
+>  <iupac>  (7)
 (1R,2S,3R,4R,6S,7S)-1,3,4,7,8,9,10,10-octachlorotricyclo[5.2.1.02,6]dec-8-ene
 
->  <smiles>  (7) 
+>  <smiles>  (7)
 [H]C1([H])[C@@]2([H])[C@]([H])([C@]3(Cl)C(Cl)=C(Cl)[C@@]2(Cl)C3(Cl)Cl)[C@@]([H])(Cl)[C@]1([H])Cl
 
->  <doi>  (7) 
+>  <doi>  (7)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (7) 
+>  <measurement>  (7)
 {'doi': '10.1021/jp806724u', 'error': '0.1', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-3.44', 'comment': ''}
 
->  <key>  (7) 
+>  <key>  (7)
 lig_7
 
 $$$$
@@ -546,25 +546,25 @@ lig_8
  11 18  1  0
  12 19  1  0
 M  END
->  <id>  (8) 
+>  <id>  (8)
 8
 
->  <name>  (8) 
+>  <name>  (8)
 E1VB
 
->  <iupac>  (8) 
+>  <iupac>  (8)
 [1,2,2-Trifluoroethoxy]benzene
 
->  <smiles>  (8) 
+>  <smiles>  (8)
 [H]c1c([H])c([H])c(O[C@]([H])(F)C([H])(F)F)c([H])c1[H]
 
->  <doi>  (8) 
+>  <doi>  (8)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (8) 
+>  <measurement>  (8)
 {'doi': '10.1007/s10822-014-9747-x', 'error': '0.6', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-1.29', 'comment': ''}
 
->  <key>  (8) 
+>  <key>  (8)
 lig_8
 
 $$$$
@@ -609,25 +609,25 @@ lig_9
   8 17  1  0
   9 18  1  0
 M  END
->  <id>  (9) 
+>  <id>  (9)
 9
 
->  <name>  (9) 
+>  <name>  (9)
 F313
 
->  <iupac>  (9) 
+>  <iupac>  (9)
 4-methoxyaniline
 
->  <smiles>  (9) 
+>  <smiles>  (9)
 [H]c1c([H])c(N([H])[H])c([H])c([H])c1OC([H])([H])[H]
 
->  <doi>  (9) 
+>  <doi>  (9)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (9) 
+>  <measurement>  (9)
 {'doi': '10.1021/ct050097', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-7.48', 'comment': ''}
 
->  <key>  (9) 
+>  <key>  (9)
 lig_9
 
 $$$$
@@ -685,25 +685,25 @@ lig_10
  10 23  1  0
  11 24  1  0
 M  END
->  <id>  (10) 
+>  <id>  (10)
 10
 
->  <name>  (10) 
+>  <name>  (10)
 G078
 
->  <iupac>  (10) 
+>  <iupac>  (10)
 1,4-dimethylnaphthalene
 
->  <smiles>  (10) 
+>  <smiles>  (10)
 [H]c1c([H])c([H])c2c(C([H])([H])[H])c([H])c([H])c(C([H])([H])[H])c2c1[H]
 
->  <doi>  (10) 
+>  <doi>  (10)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (10) 
+>  <measurement>  (10)
 {'doi': '10.1007/bf00646936', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-2.82', 'comment': ''}
 
->  <key>  (10) 
+>  <key>  (10)
 lig_10
 
 $$$$
@@ -736,25 +736,25 @@ lig_11
   7 11  1  0
   8 12  1  0
 M  END
->  <id>  (11) 
+>  <id>  (11)
 11
 
->  <name>  (11) 
+>  <name>  (11)
 G277
 
->  <iupac>  (11) 
+>  <iupac>  (11)
 cyclohexa-2,5-diene-1,4-dione
 
->  <smiles>  (11) 
+>  <smiles>  (11)
 [H]C1=C([H])C(=O)C([H])=C([H])C1=O
 
->  <doi>  (11) 
+>  <doi>  (11)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (11) 
+>  <measurement>  (11)
 {'doi': '10.1021/ja00236a026', 'error': '0.19', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-5.78', 'comment': ''}
 
->  <key>  (11) 
+>  <key>  (11)
 lig_11
 
 $$$$
@@ -805,25 +805,25 @@ lig_12
   8 20  1  0
   9 21  1  0
 M  END
->  <id>  (12) 
+>  <id>  (12)
 12
 
->  <name>  (12) 
+>  <name>  (12)
 M030
 
->  <iupac>  (12) 
+>  <iupac>  (12)
 1,3,5-trimethylbenzene
 
->  <smiles>  (12) 
+>  <smiles>  (12)
 [H]c1c(C([H])([H])[H])c([H])c(C([H])([H])[H])c([H])c1C([H])([H])[H]
 
->  <doi>  (12) 
+>  <doi>  (12)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (12) 
+>  <measurement>  (12)
 {'doi': '10.1021/ct050097l', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-1.21', 'comment': ''}
 
->  <key>  (12) 
+>  <key>  (12)
 lig_12
 
 $$$$
@@ -860,25 +860,25 @@ lig_13
   5 13  1  0
   6 14  1  0
 M  END
->  <id>  (13) 
+>  <id>  (13)
 13
 
->  <name>  (13) 
+>  <name>  (13)
 M097
 
->  <iupac>  (13) 
+>  <iupac>  (13)
 2-chloroaniline
 
->  <smiles>  (13) 
+>  <smiles>  (13)
 [H]c1c([H])c([H])c(N([H])[H])c(Cl)c1[H]
 
->  <doi>  (13) 
+>  <doi>  (13)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (13) 
+>  <measurement>  (13)
 {'doi': '10.1021/ct050097l', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-4.91', 'comment': ''}
 
->  <key>  (13) 
+>  <key>  (13)
 lig_13
 
 $$$$
@@ -921,25 +921,25 @@ lig_14
   7 16  1  0
   8 17  1  0
 M  END
->  <id>  (14) 
+>  <id>  (14)
 14
 
->  <name>  (14) 
+>  <name>  (14)
 M218
 
->  <iupac>  (14) 
+>  <iupac>  (14)
 N-methylaniline
 
->  <smiles>  (14) 
+>  <smiles>  (14)
 [H]c1c([H])c([H])c(N([H])C([H])([H])[H])c([H])c1[H]
 
->  <doi>  (14) 
+>  <doi>  (14)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (14) 
+>  <measurement>  (14)
 {'doi': '10.1021/ct050097l', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-4.69', 'comment': ''}
 
->  <key>  (14) 
+>  <key>  (14)
 lig_14
 
 $$$$
@@ -978,25 +978,25 @@ lig_15
   7 14  1  0
   8 15  1  0
 M  END
->  <id>  (15) 
+>  <id>  (15)
 15
 
->  <name>  (15) 
+>  <name>  (15)
 S002
 
->  <iupac>  (15) 
+>  <iupac>  (15)
 Benzylbromide
 
->  <smiles>  (15) 
+>  <smiles>  (15)
 [H]c1c([H])c([H])c(C([H])([H])Br)c([H])c1[H]
 
->  <doi>  (15) 
+>  <doi>  (15)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (15) 
+>  <measurement>  (15)
 {'doi': '10.1021/jm070549+', 'error': '0.20', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-2.38', 'comment': ''}
 
->  <key>  (15) 
+>  <key>  (15)
 lig_15
 
 $$$$
@@ -1031,25 +1031,25 @@ lig_16
   7 12  1  0
   8 13  1  0
 M  END
->  <id>  (16) 
+>  <id>  (16)
 16
 
->  <name>  (16) 
+>  <name>  (16)
 TVVS
 
->  <iupac>  (16) 
+>  <iupac>  (16)
 pyridine-4-carbaldehyde
 
->  <smiles>  (16) 
+>  <smiles>  (16)
 [H]C(=O)c1c([H])c([H])nc([H])c1[H]
 
->  <doi>  (16) 
+>  <doi>  (16)
 10.1007/s10822-022-00445-6
 
->  <measurement>  (16) 
+>  <measurement>  (16)
 {'doi': '10.1021/ct050097l', 'error': '0.60', 'type': 'hydration FE', 'unit': 'kcal/mol', 'value': '-7.00', 'comment': ''}
 
->  <key>  (16) 
+>  <key>  (16)
 lig_16
 
 $$$$
