@@ -121,11 +121,12 @@ def test_build_n_random_mst_network(n_sub_networks, overlap):
                 assert len(net.nodes) == n_compounds // n_sub_networks + overlap
 
 
-# rename this so it gets picked up by pytest
-def _build_random_fully_connected_network():
+def test_build_random_fully_connected_network():
     n_compounds = 30
-    mst_network = build_random_fully_connected_network(n_compounds=n_compounds, rand_seed=42)
+    fully_connected_network = build_random_fully_connected_network(
+        n_compounds=n_compounds, rand_seed=42
+    )
 
-    assert isinstance(mst_network, LigandNetwork)
-    assert len(mst_network.nodes) == n_compounds
-    assert len(mst_network.edges) == n_compounds * (n_compounds - 1)
+    assert isinstance(fully_connected_network, LigandNetwork)
+    assert len(fully_connected_network.nodes) == n_compounds
+    assert len(fully_connected_network.edges) == (n_compounds * (n_compounds - 1)) / 2
