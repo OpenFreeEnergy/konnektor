@@ -24,5 +24,3 @@ Try our interactive demo: ![Open In Colab](https://colab.research.google.com/ass
    tutorial
    guide
    api
-
-

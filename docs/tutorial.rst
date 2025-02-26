@@ -6,4 +6,3 @@ Tutorial
    :maxdepth: 2
 
    tutorial/building_networks
-

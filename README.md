@@ -15,7 +15,7 @@ Konnektor: Tools for Networks in your FE Calculations
 [![build](https://github.com/OpenFreeEnergy/konnektor/actions/workflows/ci.yaml/badge.svg)](https://github.com/OpenFreeEnergy/konnektor/actions/workflows/ci.yaml)
 [![coverage](https://codecov.io/gh/OpenFreeEnergy/konnektor/branch/main/graph/badge.svg)](https://codecov.io/gh/OpenFreeEnergy/konnektor)
 [![Documentation Status](https://readthedocs.org/projects/konnektor/badge/?version=latest)](https://konnektor.readthedocs.io/en/latest/?badge=latest)
-
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/OpenFreeEnergy/konnektor/main.svg)](https://results.pre-commit.ci/latest/github/OpenFreeEnergy/konnektor/main)
 [![Pip Install](https://img.shields.io/badge/pip%20install-konnektor-d9c4b1)](https://pypi.org/project/konnektor/)
 
 Konnektor is a package supporting you in planning your free calculations.

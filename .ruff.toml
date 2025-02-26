@@ -41,9 +41,9 @@ select = [
     "I",  # isort
     "W",  # pycodestyle warnings
     "E",  # pycodestyle errors
-    # "C901"  # mccabe complexity  TODO: add this back in 
+    # "C901"  # mccabe complexity  TODO: add this back in
     "UP",
-]   
+]
 ignore = [
     "F401",  # unused import - (TODO: fix this when refactoring tests)
     "F811",  # redefinition (TODO: fix this when refactoring tests)
