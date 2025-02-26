@@ -10,7 +10,9 @@ repos:
     rev: v5.0.0
     hooks:
     - id: trailing-whitespace
+      exclude: '\.(pdb|gro|top|sdf|xml|cif|graphml)$'
     - id: end-of-file-fixer
+      exclude: '\.(graphml)$'
     - id: check-yaml
     - id: check-toml
     - id: check-added-large-files
