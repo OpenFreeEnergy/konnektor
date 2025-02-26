@@ -60,7 +60,7 @@ jobs:
           python -Ic "import konnektor"
       - name: "Environment Information"
         run: |
-          micromamba info 
+          micromamba info
           micromamba list
       - name: "Run tests"
         run: |
