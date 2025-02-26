@@ -129,6 +129,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
                     else:
                         try:
                             best_mapping = next(mapping_generator)
+                            break
                         except:
                             print("warning")
                             continue
