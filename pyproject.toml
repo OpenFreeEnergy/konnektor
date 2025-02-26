@@ -1,6 +1,7 @@
 [build-system]
 requires=[
-	"setuptools>=61.0",
+	"setuptools>=64.0",
+    "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -33,6 +34,9 @@ dependencies = [
   'scikit-learn',
   'ipycytoscape',
 ]
+
+[tool.setuptools_scm]
+version_file = "src/konnektor/_version.py"
 
 [project.optional-dependencies]
 test = [
