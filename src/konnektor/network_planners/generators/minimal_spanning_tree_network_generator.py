@@ -1,11 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import LigandNetwork, Component, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -13,7 +14,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_processes: int = 1,
         progress: bool = False,
@@ -75,15 +76,12 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         """
 
-        initial_network = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
@@ -91,15 +89,12 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         mg = self.network_generator.generate_network(edges, weights)
 
         if not mg.connected:
-            nodes_index = {l: components.index(l) for l in components}
-            missing_nodes = [l for l in components if (nodes_index[l] in mg.nodes)]
-            raise RuntimeError(
-                "Unable to create edges for some nodes: " + str(list(missing_nodes))
-            )
+            nodes_index = {c: components.index(c) for c in components}
+            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
+            raise RuntimeError("Unable to create edges for some nodes: " + str(list(missing_nodes)))
 
         selected_mappings = [
-            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
-            for k in mg.edges
+            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
         ]
 
         return LigandNetwork(edges=selected_mappings, nodes=components)

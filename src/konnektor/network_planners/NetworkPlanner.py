@@ -3,10 +3,9 @@
 
 import abc
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import AtomMapper
-from gufe import LigandNetwork, Component
+from gufe import AtomMapper, Component, LigandNetwork
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 class NetworkPlanner(abc.ABC):
-    def __init__(self, mappers: Union[AtomMapper, list[AtomMapper]], scorer):
+    def __init__(self, mappers: AtomMapper | list[AtomMapper], scorer):
         """This class is an implementation for the NetworkPlanner interface.
         It defines the std. class for a Konnektor NetworkPlanner
 
@@ -32,9 +31,7 @@ class NetworkPlanner(abc.ABC):
         # generic Network_Planner attribs
         if isinstance(mappers, AtomMapper):
             self._mappers = [mappers]
-        elif isinstance(mappers, Iterable) and all(
-            isinstance(m, AtomMapper) for m in mappers
-        ):
+        elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
             self._mappers = mappers
         elif mappers is None:
             self._mappers = None
@@ -50,12 +47,10 @@ class NetworkPlanner(abc.ABC):
         return self._mappers
 
     @mappers.setter
-    def mappers(self, mappers: Union[AtomMapper, list[AtomMapper]]):
+    def mappers(self, mappers: AtomMapper | list[AtomMapper]):
         if mappers is AtomMapper:
             self._mappers = [mappers]
-        elif isinstance(mappers, Iterable) and all(
-            isinstance(m, AtomMapper) for m in mappers
-        ):
+        elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
             self._mappers = mappers
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:

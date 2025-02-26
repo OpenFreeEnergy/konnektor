@@ -1,13 +1,14 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import (
     NNodeEdgesNetworkAlgorithm,
 )
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -15,7 +16,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class NNodeEdgesNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         target_component_connectivity: int = 3,
         n_processes: int = 1,
@@ -93,15 +94,12 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
             the resulting ligand network.
         """
         # Build Full Graph
-        initial_networks = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_networks = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations["score"] for k in edges]
@@ -109,7 +107,6 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         sg = self.network_generator.generate_network(edges=edges, weights=weights)
 
         selected_mappings = [
-            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
-            for k in sg.edges
+            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in sg.edges
         ]
         return LigandNetwork(edges=selected_mappings, nodes=components)

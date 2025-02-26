@@ -3,15 +3,14 @@
 
 import functools
 import itertools
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 import numpy as np
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 from tqdm.auto import tqdm
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
-
 
 # Todo: is graph connectivity ensured?
 
@@ -19,7 +18,7 @@ from ._parallel_mapping_pattern import _parallel_map_scoring
 class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_samples: int = 100,
         progress: bool = False,
@@ -105,9 +104,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             )
         else:  # serial variant
             if self.progress is True:
-                progress = functools.partial(
-                    tqdm, total=total, delay=1.5, desc="Mapping"
-                )
+                progress = functools.partial(tqdm, total=total, delay=1.5, desc="Mapping")
             else:
                 progress = lambda x: x
 

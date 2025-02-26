@@ -11,7 +11,6 @@ log = logging.getLogger(__name__)
 
 
 class MatchingConcatenatAlgorithm(_AbstractNetworkConcatenator):
-
     def concatenate_networks(
         self,
         nodesA: list[int],

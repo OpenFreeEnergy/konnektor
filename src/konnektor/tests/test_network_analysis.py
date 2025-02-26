@@ -1,36 +1,34 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import pytest
 import numpy as np
-
+import pytest
 from gufe import LigandNetwork
+
 from konnektor.network_analysis import (
-    get_network_score,
-    get_is_connected,
     get_component_connectivities,
     get_component_number_cycles,
-    get_number_of_network_cycles,
     get_component_scores,
+    get_is_connected,
+    get_network_score,
+    get_number_of_network_cycles,
     get_transformation_failure_robustness,
 )
-
 from konnektor.utils.toy_data import (
-    build_random_mst_network,
     build_random_fully_connected_network,
+    build_random_mst_network,
 )
 
 
 #   Graph Topology related functionalities - Connectivity
 def test_get_is_connected():
-
     # Check for connected.
     g = build_random_mst_network()
     assert get_is_connected(g)
 
     # Check for disconnected.
     g_disscon = LigandNetwork(nodes=g.nodes, edges=list(g.edges)[1:])
-    assert get_is_connected(g_disscon) == False
+    assert get_is_connected(g_disscon) == False  # noqa
 
 
 def test_get_node_connectives():
@@ -87,9 +85,7 @@ def test_get_edge_failure_robustness(grapher, expected_robustness, failure_rate,
     if exact:
         np.testing.assert_allclose(actual=robustness, desired=expected_robustness)
     else:
-        np.testing.assert_allclose(
-            actual=robustness, desired=expected_robustness, rtol=0.25
-        )
+        np.testing.assert_allclose(actual=robustness, desired=expected_robustness, rtol=0.25)
 
 
 #   Graph Topology related functionalities - Cycles
@@ -114,9 +110,7 @@ def test_get_node_number_cycles_fully_connected_graph(n_cycle_size):
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += expected_number_of_cycles_per_node
-    np.testing.assert_array_almost_equal(
-        x=expected_arr, y=[n for i, n in result_dict.items()]
-    )
+    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in result_dict.items()])
 
 
 def test_get_node_number_cycles_mst_graph():
@@ -132,9 +126,7 @@ def test_get_node_number_cycles_mst_graph():
     assert len(set(result_dict.keys()).intersection(expected_set)) == 0
 
     expected_arr = np.zeros(shape=n_compounds)  # expect zero cycles in a tree
-    np.testing.assert_array_almost_equal(
-        expected_arr, [n for i, n in result_dict.items()]
-    )
+    np.testing.assert_array_almost_equal(expected_arr, [n for i, n in result_dict.items()])
 
 
 @pytest.mark.parametrize("n_cycle_size", [3, 4])
@@ -145,9 +137,7 @@ def test_get_number_of_graph_cycles_fully_connected_graph(n_cycle_size):
     # Compute the number of cycles as before, except, now make each cycle unique (if cycle size == 3 make sure to count only 1)
     expected_cycles_per_cs = []
     for cycle_size in range(3, n_cycle_size + 1):
-        expected_ncyles = (
-            n_compounds * np.prod([n_compounds - i for i in range(1, cycle_size)]) / 2
-        )
+        expected_ncyles = n_compounds * np.prod([n_compounds - i for i in range(1, cycle_size)]) / 2
         expected_cycles_per_cs.append(expected_ncyles / cycle_size)
     expected_number_of_graph_cycles = sum(expected_cycles_per_cs)
 
@@ -198,9 +188,7 @@ def test_get_norm_node_scores_fully_connected_graph():
 
     assert len(n_scores) == n_compounds
     assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(
-        x=expected_arr, y=[n for i, n in n_scores.items()]
-    )
+    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in n_scores.items()])
 
 
 def test_get_node_scores_fully_connected_graph():
@@ -215,23 +203,4 @@ def test_get_node_scores_fully_connected_graph():
 
     assert len(n_scores) == n_compounds
     assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(
-        x=expected_arr, y=[n for i, n in n_scores.items()]
-    )
-
-
-def test_get_node_scores_fully_connected_graph():
-    n_compounds = 30
-    expected_set = set(map(str, range(n_compounds)))
-    g = build_random_fully_connected_network(n_compounds, uni_score=True)
-
-    n_scores = get_component_scores(g, normalize=False)
-
-    expected_arr = np.zeros(shape=n_compounds)
-    expected_arr += n_compounds - 1
-
-    assert len(n_scores) == n_compounds
-    assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(
-        x=expected_arr, y=[n for i, n in n_scores.items()]
-    )
+    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in n_scores.items()])

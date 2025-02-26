@@ -5,15 +5,14 @@ from rdkit import Chem
 
 try:
     # R-group enumeration intermediate generator
-    from rgroupinterm import rgroupenumeration
-    from rgroupinterm import pruners
+    from rgroupinterm import pruners, rgroupenumeration
 except:
     pass
 
 from gufe import SmallMoleculeComponent
 
-from ._abstract_intermediator import Intermediator
 from ...utils.optional_import import requires_package
+from ._abstract_intermediator import Intermediator
 
 
 @requires_package("rgroupinterm")
@@ -68,11 +67,7 @@ class ImergeIntermediator(Intermediator):
 
         # prune groups to get intermediates
         pruner = pruners.BasePruner(
-            [
-                pruners.TanimotoScorer(
-                    transformer=pruners.HarmonicMeanTransformer(exponent=4)
-                )
-            ],
+            [pruners.TanimotoScorer(transformer=pruners.HarmonicMeanTransformer(exponent=4))],
             topn=1,
         )
 

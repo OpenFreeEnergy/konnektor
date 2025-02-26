@@ -2,13 +2,13 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
 from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
 
+from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
-from .._networkx_implementations import MstNetworkAlgorithm
 
 log = logging.getLogger(__name__)
 
@@ -19,10 +19,10 @@ log = logging.getLogger(__name__)
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, Iterable[AtomMapper]],
+        mappers: AtomMapper | Iterable[AtomMapper],
         scorer: AtomMappingScorer,
         n_connecting_cycles: int = 2,
-        cycle_sizes: Union[int, list[int]] = 3,
+        cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator = None,
     ):
@@ -61,9 +61,7 @@ class CyclicConcatenator(NetworkConcatenator):
         self.n_connecting_edges = n_connecting_cycles
         self.cycle_sizes = cycle_sizes
 
-    def concatenate_networks(
-        self, ligand_networks: Iterable[LigandNetwork]
-    ) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
 
         Parameters
@@ -81,34 +79,28 @@ class CyclicConcatenator(NetworkConcatenator):
 
         """
         raise NotImplementedError()
-        # Todo: implement.
+        # TODO: implement.
 
-        selected_edges = []
-        selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(
-            ligand_networks, 2
-        ):
-            # Generate fully connected Bipartite Graph
-            ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
-            fully_connected_graph = self._initial_edge_lister(
-                [ligandNetworkA, ligandNetworkB]
-            )
-            bipartite_graph_mappings = list(fully_connected_graph.edges)
+        # selected_edges = []
+        # selected_nodes = []
+        # for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
+        #     # Generate fully connected Bipartite Graph
+        #     ligands = ligandNetworkA.nodes | ligandNetworkB.nodes
+        #     fully_connected_graph = self._initial_edge_lister([ligandNetworkA, ligandNetworkB])
+        #     bipartite_graph_mappings = list(fully_connected_graph.edges)
 
-            # TODO Cycle Selection
+        #     # TODO Cycle Selection
 
-            selected_edges.extend(selected_mappings)
+        #     selected_edges.extend(selected_mappings)
 
-        # Constructed final Edges:
-        # Add all old network edges:
-        for network in ligand_networks:
-            selected_edges.extend(network.edges)
-            selected_nodes.extend(network.nodes)
+        # # Constructed final Edges:
+        # # Add all old network edges:
+        # for network in ligand_networks:
+        #     selected_edges.extend(network.edges)
+        #     selected_nodes.extend(network.nodes)
 
-        concat_LigandNetwork = LigandNetwork(
-            edges=selected_edges, nodes=set(selected_nodes)
-        )
+        # concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
 
-        log.info(f"Total Concatenated Edges: {len(selected_edges)}")
+        # log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
-        return concat_LigandNetwork
+        # return concat_LigandNetwork

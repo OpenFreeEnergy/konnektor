@@ -6,7 +6,7 @@ import logging
 import numpy as np
 from gufe import Component
 from scikit_mol.fingerprints import MorganFingerprintTransformer
-from sklearn.base import TransformerMixin, ClusterMixin
+from sklearn.base import ClusterMixin, TransformerMixin
 from sklearn.cluster import KMeans
 from sklearn.pipeline import Pipeline
 
@@ -54,9 +54,7 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         else:
             return self._cluster_centers
 
-    def cluster_compounds(
-        self, components: list[Component]
-    ) -> dict[int, list[Component]]:
+    def cluster_compounds(self, components: list[Component]) -> dict[int, list[Component]]:
         """
             The method featurizes and clusters the molecules according to the features.
 
@@ -73,9 +71,7 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
             the index represents the clusterid, the values are lists of Components, corresponding to the clusters.
         """
         # Build Pipeline
-        self.pipe = Pipeline(
-            [("mol_transformer", self.featurize), ("Cluster", self.cluster)]
-        )
+        self.pipe = Pipeline([("mol_transformer", self.featurize), ("Cluster", self.cluster)])
         self.pipe.fit([c.to_rdkit() for c in components])
 
         # Retrieve Results

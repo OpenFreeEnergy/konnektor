@@ -1,13 +1,10 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import random
-from copy import deepcopy
-from typing import Union
-import numpy as np
+
 import networkx as nx
+import numpy as np
 from gufe import LigandNetwork, SmallMoleculeComponent
-from typing import Optional
 
 from .. import network_tools as tools
 
@@ -78,15 +75,11 @@ def get_network_efficiency(ligand_network: LigandNetwork) -> float:
     float
         sum of all edges the graph score
     """
-    score = sum([e.annotations["score"] for e in ligand_network.edges]) / len(
-        ligand_network.edges
-    )
+    score = sum([e.annotations["score"] for e in ligand_network.edges]) / len(ligand_network.edges)
     return score
 
 
-def get_number_of_network_cycles(
-    ligand_network: LigandNetwork, higher_bound: int = 3
-) -> int:
+def get_number_of_network_cycles(ligand_network: LigandNetwork, higher_bound: int = 3) -> int:
     """
     Calculate the graph cycles, upt to the upper bound.
 
@@ -102,15 +95,13 @@ def get_number_of_network_cycles(
         number of counted cycles.
     """
     graph = nx.DiGraph(ligand_network.graph).to_undirected()
-    raw_cycles = [
-        str(sorted(c)) for c in nx.simple_cycles(graph, length_bound=higher_bound)
-    ]
+    raw_cycles = [str(sorted(c)) for c in nx.simple_cycles(graph, length_bound=higher_bound)]
     return len(raw_cycles)
 
 
 def get_component_connectivities(
     ligand_network: LigandNetwork, normalize: bool = False
-) -> dict[SmallMoleculeComponent, Union[float, int]]:
+) -> dict[SmallMoleculeComponent, float | int]:
     """
     Calculate the connectivities for all nodes in the graph.
 
@@ -126,13 +117,10 @@ def get_component_connectivities(
     if normalize:
         n_edges = ligand_network.graph.number_of_edges()
         return {
-            n: sum([n in e for e in ligand_network.edges]) / n_edges
-            for n in ligand_network.nodes
+            n: sum([n in e for e in ligand_network.edges]) / n_edges for n in ligand_network.nodes
         }
     else:
-        return {
-            n: sum([n in e for e in ligand_network.edges]) for n in ligand_network.nodes
-        }
+        return {n: sum([n in e for e in ligand_network.edges]) for n in ligand_network.nodes}
 
 
 def get_component_scores(
@@ -154,8 +142,7 @@ def get_component_scores(
     if normalize:
         n_edges = ligand_network.graph.number_of_edges()
         return {
-            n: sum([e.annotations["score"] for e in ligand_network.edges if n in e])
-            / n_edges
+            n: sum([e.annotations["score"] for e in ligand_network.edges if n in e]) / n_edges
             for n in ligand_network.nodes
         }
     else:
@@ -205,7 +192,7 @@ def get_transformation_failure_robustness(
     ligand_network: LigandNetwork,
     failure_rate: float = 0.05,
     nrepeats: int = 100,
-    seed: Optional[int] = None,
+    seed: int | None = None,
 ) -> float:
     """
     Estimate the robustness of a LigandNetwork, by removing n edges,

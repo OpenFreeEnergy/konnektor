@@ -3,15 +3,14 @@
 
 import abc
 import logging
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import AtomMapper
-from gufe import LigandNetwork
+from gufe import AtomMapper, LigandNetwork
 
-from ..NetworkPlanner import NetworkPlanner
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
+from ..NetworkPlanner import NetworkPlanner
 
 log = logging.getLogger(__name__)
 
@@ -22,7 +21,7 @@ class NetworkConcatenator(NetworkPlanner):
 
     def __init__(
         self,
-        mappers: Union[AtomMapper, Iterable[AtomMapper]],
+        mappers: AtomMapper | Iterable[AtomMapper],
         scorer,
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
@@ -70,9 +69,7 @@ class NetworkConcatenator(NetworkPlanner):
         return self.concatenate_networks(*args, **kwargs)
 
     @abc.abstractmethod
-    def concatenate_networks(
-        self, ligand_networks: Iterable[LigandNetwork]
-    ) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
 
         Parameters

@@ -1,16 +1,16 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Union, List, Iterable
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import (
     CyclicNetworkAlgorithm as nx_CNG,
 )
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
-
 
 # Todo: check this algorithm again
 
@@ -18,10 +18,10 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class CyclicNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         node_present_in_cycles: int = 2,
-        cycle_sizes: Union[int, List[int]] = 3,
+        cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
@@ -103,16 +103,13 @@ class CyclicNetworkGenerator(NetworkGenerator):
         """
 
         # Build Full Graph
-        initial_networks = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_networks = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_networks.edges
 
         # Translate Mappings to graphable:
         # print("prepare network")
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations["score"] for k in edges]

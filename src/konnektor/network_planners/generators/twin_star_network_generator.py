@@ -1,11 +1,12 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Iterable, Union
+from collections.abc import Iterable
 
-from gufe import Component, LigandNetwork, AtomMapper
+from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
+
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -13,7 +14,7 @@ from .maximal_network_generator import MaximalNetworkGenerator
 class TwinStarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: Union[AtomMapper, list[AtomMapper]],
+        mappers: AtomMapper | list[AtomMapper],
         scorer,
         n_centers: int = 2,
         n_processes: int = 1,
@@ -92,15 +93,12 @@ class TwinStarNetworkGenerator(NetworkGenerator):
         components = list(components)
 
         # Full Graph Construction
-        initial_network = self._initial_edge_lister.generate_ligand_network(
-            components=components
-        )
+        initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
 
         # Translate Mappings to graphable:
         edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m
-            for m in mappings
+            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
         }
         edges = list(sorted(edge_map.keys()))
         weights = [edge_map[k].annotations["score"] for k in edges]

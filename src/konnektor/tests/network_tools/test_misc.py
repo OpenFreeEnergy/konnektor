@@ -1,12 +1,13 @@
 import pytest
+
 from konnektor.network_analysis import get_is_connected
 from konnektor.network_tools.network_handling.delete import (
     delete_component,
     delete_transformation,
 )
 from konnektor.utils.toy_data import (
-    build_random_mst_network,
     build_random_fully_connected_network,
+    build_random_mst_network,
 )
 
 
@@ -34,19 +35,15 @@ def test_delete_connected_mst_component():
             del_node = n
             break
 
-    with pytest.raises(
-        RuntimeError, match="Resulting network is not connected anymore!"
-    ):
-        new_network = delete_component(network=network, component=del_node)
+    with pytest.raises(RuntimeError, match="Resulting network is not connected anymore!"):
+        delete_component(network=network, component=del_node)
 
 
 def test_delete_mst_component():
     network = build_random_mst_network(n_compounds=10)
     del_node = list(network.nodes)[0]
 
-    new_network = delete_component(
-        network=network, component=del_node, must_stay_connected=False
-    )
+    new_network = delete_component(network=network, component=del_node, must_stay_connected=False)
 
     assert len(new_network.nodes) == len(network.nodes) - 1
     assert len(new_network.edges) < len(network.edges)
@@ -69,10 +66,8 @@ def test_delete_connected_mst_transformation():
     network = build_random_mst_network(n_compounds=10)
     del_edge = list(network.edges)[0]
 
-    with pytest.raises(
-        RuntimeError, match="Resulting network is not connected anymore!"
-    ):
-        new_network = delete_transformation(network=network, transformation=del_edge)
+    with pytest.raises(RuntimeError, match="Resulting network is not connected anymore!"):
+        delete_transformation(network=network, transformation=del_edge)
 
 
 def test_delete_mst_transformation():

@@ -3,7 +3,7 @@
 
 import numpy as np
 
-rgb2hex = lambda r, g, b: "#%02x%02x%02x" % (int(r * 256), int(g * 256), int(b * 256))
+rgb2hex = lambda r, g, b: "#%02x%02x%02x" % (int(r * 256), int(g * 256), int(b * 256))  # noqa
 
 OFE_COLORS = (
     (49 / 256, 57 / 256, 77 / 256),  # Badass Blue
