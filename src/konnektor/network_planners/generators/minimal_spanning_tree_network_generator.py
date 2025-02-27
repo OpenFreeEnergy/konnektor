@@ -96,5 +96,11 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         selected_mappings = [
             edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
         ]
-
-        return LigandNetwork(edges=selected_mappings, nodes=components)
+        ligand_network =  LigandNetwork(edges=selected_mappings, nodes=components)
+        
+        # TODO:  I think we need to do this check *after* selected_mappings
+        if not ligand_network.is_connected():
+            nodes_index = {c: components.index(c) for c in components}
+            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
+            raise RuntimeError("LIGAND ERROR: Unable to create edges for some nodes: " + str(list(missing_nodes)))
+        return ligand_network
