@@ -1,11 +1,13 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
+import gufe
 import pytest
 
 from konnektor.network_planners import MaximalNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     BadMapper,
+    ErrorMapper,
     GenAtomMapper,
     SuperBadMapper,
     genScorer,
@@ -61,3 +63,14 @@ def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, w
     network = planner.generate_ligand_network(components)
 
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
+
+
+def test_maximal_network_no_mappings(toluene_vs_others):
+    toluene, others = toluene_vs_others
+    nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
+
+    mapper = ErrorMapper()
+
+    with pytest.raises(RuntimeError, match="Could not generate any mapping"):
+        planner = MaximalNetworkGenerator(mappers=mapper, scorer=genScorer)
+        planner.generate_ligand_network(components=others + [toluene, nimrod])
