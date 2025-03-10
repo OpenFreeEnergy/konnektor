@@ -28,7 +28,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of `Transformations`.
         This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
-        `Transformation`, the Network is immediatly disconnected.
+        `Transformation`, the Network is immediately disconnected.
         The disconnectivity will translate to a loss of `Component` s in the final FE Network.
 
         Parameters
