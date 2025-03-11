@@ -6,9 +6,8 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
+from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
 from ._abstract_network_generator import NetworkGenerator
-from ._parallel_mapping_pattern import _parallel_map_scoring
-from ._serial_mapping_pattern import _serial_map_scoring
 
 
 class MaximalNetworkGenerator(NetworkGenerator):

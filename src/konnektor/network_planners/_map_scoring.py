@@ -29,34 +29,9 @@ def thread_mapping(args) -> list[AtomMapping]:
 
     mappings = []
     for component_pair in compound_pairs:
-        best_score = 0.0
-        best_mapping = None
-        molA = component_pair[0]
-        molB = component_pair[1]
-
-        for mapper in mappers:
-            mapping_generator = mapper.suggest_mappings(molA, molB)
-
-            if scorer:
-                try:
-                    tmp_mappings = [
-                        mapping.with_annotations({"score": scorer(mapping)})
-                        for mapping in mapping_generator
-                    ]
-                except:
-                    continue
-                if len(tmp_mappings) > 0:
-                    tmp_best_mapping = min(tmp_mappings, key=lambda m: m.annotations["score"])
-
-                    if tmp_best_mapping.annotations["score"] < best_score or best_mapping is None:
-                        best_score = tmp_best_mapping.annotations["score"]
-                        best_mapping = tmp_best_mapping
-
-            else:
-                try:
-                    best_mapping = next(mapping_generator)
-                except:
-                    continue
+        best_mapping = determine_best_mapping(
+            component_pair=component_pair, mappers=mappers, scorer=scorer
+        )
         if best_mapping is not None:
             mappings.append(best_mapping)
 
@@ -100,10 +75,6 @@ def _parallel_map_scoring(
 
     possible_edges = list(possible_edges)
     n_batches = 10 * n_processes
-    # total = len(possible_edges)
-
-    # # size of each batch +fetch division rest
-    # batch_num = (total // n_batches) + 1
 
     # Prepare parallel execution.
     # suboptimal implementation, but itertools.batch is python 3.12,
@@ -118,3 +89,64 @@ def _parallel_map_scoring(
             mappings.extend(sub_result)
 
     return mappings
+
+
+def _serial_map_scoring(
+    possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
+    scorer: Callable[[AtomMapping], float],
+    mappers: list[AtomMapper],
+    edges_to_score: int,
+    show_progress: bool = True,
+):
+    if show_progress is True:
+        progress = functools.partial(tqdm, total=edges_to_score, delay=1.5, desc="Mapping")
+    else:
+        progress = lambda x: x
+
+    mappings = []
+    for component_pair in progress(possible_edges):
+        best_mapping = determine_best_mapping(
+            component_pair=component_pair, mappers=mappers, scorer=scorer
+        )
+
+        if best_mapping is not None:
+            mappings.append(best_mapping)
+
+    return mappings
+
+
+def determine_best_mapping(
+    component_pair: tuple[SmallMoleculeComponent],
+    mappers: AtomMapper | list[AtomMapper],
+    scorer: Callable,
+):
+    best_score = 0.0
+    best_mapping = None
+    molA = component_pair[0]
+    molB = component_pair[1]
+
+    for mapper in mappers:
+        try:
+            mapping_generator = mapper.suggest_mappings(molA, molB)
+        except:
+            continue
+
+        if scorer:
+            tmp_mappings = [
+                mapping.with_annotations({"score": scorer(mapping)})
+                for mapping in mapping_generator
+            ]
+
+            if len(tmp_mappings) > 0:
+                tmp_best_mapping = min(tmp_mappings, key=lambda m: m.annotations["score"])
+
+                if tmp_best_mapping.annotations["score"] < best_score or best_mapping is None:
+                    best_score = tmp_best_mapping.annotations["score"]
+                    best_mapping = tmp_best_mapping
+        else:
+            try:
+                best_mapping = next(mapping_generator)
+            except:
+                continue
+
+    return best_mapping
