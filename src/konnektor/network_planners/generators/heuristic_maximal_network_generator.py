@@ -1,16 +1,15 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import functools
 import itertools
 from collections.abc import Iterable
 
 import numpy as np
 from gufe import AtomMapper, Component, LigandNetwork
-from tqdm.auto import tqdm
 
 from ._abstract_network_generator import NetworkGenerator
 from ._parallel_mapping_pattern import _parallel_map_scoring
+from ._serial_mapping_pattern import _serial_map_scoring
 
 # Todo: is graph connectivity ensured?
 
@@ -103,45 +102,13 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                 show_progress=self.progress,
             )
         else:  # serial variant
-            if self.progress is True:
-                progress = functools.partial(tqdm, total=total, delay=1.5, desc="Mapping")
-            else:
-                progress = lambda x: x
-
-            mappings = []
-            for component_pair in progress(sample_combinations):
-                best_score = 0.0
-                best_mapping = None
-                molA = component_pair[0]
-                molB = component_pair[1]
-
-                for mapper in self.mappers:
-                    mapping_generator = mapper.suggest_mappings(molA, molB)
-
-                    if self.scorer:
-                        tmp_mappings = [
-                            mapping.with_annotations({"score": self.scorer(mapping)})
-                            for mapping in mapping_generator
-                        ]
-
-                        if len(tmp_mappings) > 0:
-                            tmp_best_mapping = min(
-                                tmp_mappings, key=lambda m: m.annotations["score"]
-                            )
-
-                            if (
-                                tmp_best_mapping.annotations["score"] < best_score
-                                or best_mapping is None
-                            ):
-                                best_score = tmp_best_mapping.annotations["score"]
-                                best_mapping = tmp_best_mapping
-                    else:
-                        try:
-                            best_mapping = next(mapping_generator)
-                        except:
-                            continue
-                if best_mapping is not None:
-                    mappings.append(best_mapping)
+            mappings = _serial_map_scoring(
+                possible_edges=sample_combinations,
+                scorer=self.scorer,
+                mappers=self.mappers,
+                edges_to_score=total,
+                show_progress=self.progress,
+            )
 
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")

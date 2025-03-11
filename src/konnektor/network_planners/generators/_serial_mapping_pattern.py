@@ -46,7 +46,6 @@ def _serial_map_scoring(
                 try:
                     best_mapping = next(mapping_generator)
                 except:
-                    print("warning")
                     continue
 
         if best_mapping is not None:
