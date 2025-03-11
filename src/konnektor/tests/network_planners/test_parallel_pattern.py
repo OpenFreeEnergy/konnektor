@@ -3,10 +3,11 @@ import itertools
 import pytest
 from gufe import ComponentMapping
 
-from ...network_planners.generators._parallel_mapping_pattern import (
+from konnektor.network_planners._map_scoring import (
     _parallel_map_scoring,
     thread_mapping,
 )
+
 from ...utils.toy_data import build_random_dataset
 
 

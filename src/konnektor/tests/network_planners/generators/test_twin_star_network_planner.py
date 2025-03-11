@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import numpy as np
-import pytest
 from gufe import LigandNetwork
 
 from konnektor.network_analysis import get_is_connected, get_network_score

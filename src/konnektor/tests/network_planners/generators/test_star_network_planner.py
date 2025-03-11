@@ -9,10 +9,8 @@ from konnektor.tests.network_planners.conf import (
     BadMapper,
     ErrorMapper,
     GenAtomMapper,
-    atom_mapping_basic_test_files,
     genScorer,
     mol_from_smiles,
-    toluene_vs_others,
 )
 
 
@@ -76,7 +74,7 @@ def test_star_network_failure(atom_mapping_basic_test_files):
     mapper = ErrorMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
 
-    with pytest.raises(ValueError, match="No mapping found for"):
+    with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner.generate_ligand_network(
             components=[nigel],
             central_component=atom_mapping_basic_test_files["toluene"],
