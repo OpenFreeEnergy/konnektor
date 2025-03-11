@@ -29,7 +29,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 
     mappings = []
     for component_pair in compound_pairs:
-        best_mapping = determine_best_mapping(
+        best_mapping = _determine_best_mapping(
             component_pair=component_pair, mappers=mappers, scorer=scorer
         )
         if best_mapping is not None:
@@ -105,7 +105,7 @@ def _serial_map_scoring(
 
     mappings = []
     for component_pair in progress(possible_edges):
-        best_mapping = determine_best_mapping(
+        best_mapping = _determine_best_mapping(
             component_pair=component_pair, mappers=mappers, scorer=scorer
         )
 
@@ -115,7 +115,7 @@ def _serial_map_scoring(
     return mappings
 
 
-def determine_best_mapping(
+def _determine_best_mapping(
     component_pair: tuple[SmallMoleculeComponent],
     mappers: AtomMapper | list[AtomMapper],
     scorer: Callable,
