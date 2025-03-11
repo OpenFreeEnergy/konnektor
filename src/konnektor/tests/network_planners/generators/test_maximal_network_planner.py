@@ -28,10 +28,11 @@ def test_generate_maximal_network(toluene_vs_others, with_progress, with_scorer,
     )
     network = planner.generate_ligand_network(others + [toluene])
 
-    assert len(network.nodes) == len(others) + 1
+    n_expected_nodes = len(others) + 1
+    assert len(network.nodes) == n_expected_nodes
 
-    edge_count = len(others) * (len(others) + 1) / 2
-    assert len(network.edges) == edge_count
+    n_expected_nodes = n_expected_nodes * (n_expected_nodes - 1) / 2
+    assert len(network.edges) == n_expected_nodes
 
     if scorer:
         for edge in network.edges:
