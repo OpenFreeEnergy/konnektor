@@ -90,4 +90,5 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
 
     with pytest.raises(RuntimeError, match="Unable to create edges"):
         planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
-        planner.generate_ligand_network(components=others + [toluene, nimrod])
+        components = others + [toluene, nimrod]
+        planner.generate_ligand_network(components=components)
