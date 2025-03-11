@@ -12,7 +12,6 @@ def toluene_vs_others(atom_mapping_basic_test_files):
     toluene = atom_mapping_basic_test_files[central_ligand_name]
     return toluene, others
 
-
 @pytest.fixture(scope="session")
 def atom_mapping_basic_test_files():
     # a dict of {filenames.strip(mol2): SmallMoleculeComponent} for a simple
@@ -33,7 +32,6 @@ def atom_mapping_basic_test_files():
             files[f] = SmallMoleculeComponent(mol, name=f)
 
     return files
-
 
 @pytest.fixture(scope="session")
 def ligand_network_ab(atom_mapping_basic_test_files):
