@@ -86,6 +86,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
 
+        # TODO: this can output a network with fewer nodes than were input - do we want to allow this?
         mg = self.network_generator.generate_network(edges, weights)
 
         if not mg.connected:
