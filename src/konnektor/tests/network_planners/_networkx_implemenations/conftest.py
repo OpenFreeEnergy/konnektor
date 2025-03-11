@@ -1,7 +1,7 @@
 import pytest
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def nine_mols_edges():
     data = [
         ["lig_12", "lig_14", 0.29531191028128656],
@@ -45,7 +45,7 @@ def nine_mols_edges():
     return data
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def nine_mols_edges_two_sets():
     data = [
         ["lig_12", "lig_14", 0.29531191028128656],
