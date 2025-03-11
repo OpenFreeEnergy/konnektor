@@ -86,4 +86,3 @@ class ErrorMapper(DummyAtomMapper):
 
 def genScorer(mapping):
     return 1.0 / len(mapping.componentA_to_componentB)
-
