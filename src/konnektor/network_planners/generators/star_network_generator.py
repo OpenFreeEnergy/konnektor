@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 
+from .._map_scoring import _determine_best_mapping
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -108,12 +109,6 @@ class StarNetworkGenerator(NetworkGenerator):
             selected_mappings = [edge_map[k] for k in rg.edges]
 
         else:  # Given central ligands: less effort. - Trivial Case
-            # TODO: commenting this out because scorer isn't used - should it be used?
-            # if self.scorer is None:
-            #     scorer = lambda x: -1
-            # else:
-            #     scorer = self.scorer
-
             if self.progress is True:
                 progress = functools.partial(tqdm, total=len(components), delay=1.5, desc="Mapping")
             else:
@@ -158,6 +153,11 @@ class StarNetworkGenerator(NetworkGenerator):
                             continue
                 if best_mapping is not None:
                     selected_mappings.append(best_mapping)
+
+        if len(selected_mappings) == 0:
+            raise RuntimeError("Could not generate any mapping!")
+
+        # TODO: raise a warning if some nodes are disconnected?
 
         return LigandNetwork(edges=selected_mappings, nodes=components)
 
