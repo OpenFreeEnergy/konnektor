@@ -48,6 +48,7 @@ class DummyAtomMapper(AtomMapper):
 
 
 class GenAtomMapper(DummyAtomMapper):
+    """Generic mapper that makes a single valid mapping."""
     def suggest_mappings(
         self, componentA: SmallMoleculeComponent, componentB: SmallMoleculeComponent
     ):
@@ -59,6 +60,23 @@ class GenAtomMapper(DummyAtomMapper):
             componentB,
             componentA_to_componentB={k: v for k, v in zip(atomsA, atomsB)},
         )
+
+
+class MultiAtomMapper(DummyAtomMapper):
+    """Returns two mapping suggestions, the second mapping is just reversed"""
+    def suggest_mappings(
+        self, componentA: SmallMoleculeComponent, componentB: SmallMoleculeComponent
+    ):
+        atomsA = range(componentA.to_rdkit().GetNumAtoms())
+        atomsB = list(range(componentB.to_rdkit().GetNumAtoms()))
+
+        # first map to atomsB forwards, then map in the reverse order
+        for dir in [1, -1]:
+            yield LigandAtomMapping(
+                componentA,
+                componentB,
+                componentA_to_componentB={k: v for k, v in zip(atomsA, atomsB[::dir])},
+            )
 
 
 class BadMapper(DummyAtomMapper):

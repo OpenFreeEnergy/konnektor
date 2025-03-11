@@ -2,9 +2,10 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import itertools
-from collections.abc import Iterable
+from collections.abc import Iterable, Callable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
+from tqdm.auto import tqdm
 
 from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
 from ._abstract_network_generator import NetworkGenerator
@@ -14,7 +15,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float] | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
@@ -44,6 +45,10 @@ class MaximalNetworkGenerator(NetworkGenerator):
         n_processes: int
             number of processes that can be used for the network generation. (default: 1)
         """
+
+        if isinstance(mappers, list) and scorer is None:
+            if len(mappers) > 1:
+                raise ValueError('You must provide a scorer when passing in multiple mappers.')
 
         super().__init__(
             mappers=mappers,
@@ -89,13 +94,52 @@ class MaximalNetworkGenerator(NetworkGenerator):
                 show_progress=self.progress,
             )
         else:  # serial variant
-            mappings = _serial_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_edges_to_score=total,
-                show_progress=self.progress,
-            )
+            if self.progress is True:
+                progress = functools.partial(tqdm, total=total, delay=1.5, desc="Mapping")
+            else:
+                progress = lambda x: x
+
+            mappings = []
+            for component_pair in progress(itertools.combinations(components, 2)):
+                best_score = 0.0
+                best_mapping = None
+                molA = component_pair[0]
+                molB = component_pair[1]
+
+                for mapper in self.mappers:
+                    try:
+                        mapping_generator = mapper.suggest_mappings(molA, molB)
+                    except:
+                        continue
+
+                    if self.scorer:
+                        tmp_mappings = [
+                            mapping.with_annotations({"score": self.scorer(mapping)})
+                            for mapping in mapping_generator
+                        ]
+
+                        if len(tmp_mappings) > 0:
+                            tmp_best_mapping = min(
+                                tmp_mappings, key=lambda m: m.annotations["score"]
+                            )
+
+                            if (
+                                tmp_best_mapping.annotations["score"] < best_score
+                                or best_mapping is None
+                            ):
+                                best_score = tmp_best_mapping.annotations["score"]
+                                best_mapping = tmp_best_mapping
+                    else:
+                        tmp_mappings = [mapping for mapping in mapping_generator]
+                        if len(tmp_mappings) > 1:
+                            raise ValueError(f"The mapper '{mapper}' generated multiple mappings, but no scorer was provided. You must provide a scorer when using mappers that generate multiple mappings.")
+                        try:
+                            best_mapping = tmp_mappings[0]
+                        except IndexError:
+                            continue
+
+                if best_mapping is not None:
+                    mappings.append(best_mapping)
 
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")
