@@ -45,8 +45,6 @@ select = [
     "UP",
 ]
 ignore = [
-    "F401",  # unused import - (TODO: fix this when refactoring tests)
-    "F811",  # redefinition (TODO: fix this when refactoring tests)
     "E402",   # module-level import not at top (conflicts w/ isort)
     "E501",  # line-length violations (black enforces these)
     "E731",  # lambda expressions (TODO: we should fix these)
