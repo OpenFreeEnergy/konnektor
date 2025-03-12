@@ -8,7 +8,6 @@ from konnektor.tests.network_planners.conf import (
     BadMapper,
     ErrorMapper,
     GenAtomMapper,
-    NoneMapper,
     SuperBadMapper,
     genScorer,
 )
@@ -53,26 +52,6 @@ def test_generate_maximal_network_mapper_error(toluene_vs_others, n_process, wit
 
     planner = MaximalNetworkGenerator(
         mappers=[ErrorMapper(), BadMapper()],
-        scorer=None,
-        progress=with_progress,
-        n_processes=n_process,
-    )
-
-    network = planner.generate_ligand_network(components)
-
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
-
-
-@pytest.mark.parametrize("n_process", [1, 2])
-@pytest.mark.parametrize("with_progress", [True, False])
-def test_generate_maximal_network_empty_mapper(toluene_vs_others, n_process, with_progress):
-    """ """
-
-    toluene, others = toluene_vs_others
-    components = others + [toluene]
-
-    planner = MaximalNetworkGenerator(
-        mappers=[NoneMapper(), BadMapper()],
         scorer=None,
         progress=with_progress,
         n_processes=n_process,

@@ -60,7 +60,7 @@ def _determine_best_mapping(
         else:
             try:
                 best_mapping = next(mapping_generator)
-            except:
+            except:  # TODO: I don't think this except is needed
                 continue
 
     return best_mapping
