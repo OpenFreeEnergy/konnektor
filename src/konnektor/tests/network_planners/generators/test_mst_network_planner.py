@@ -10,7 +10,6 @@ from gufe import LigandNetwork
 from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
-    ErrorMapper,
     GenAtomMapper,
     genScorer,
     mol_from_smiles,
