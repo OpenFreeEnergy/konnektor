@@ -9,7 +9,6 @@ from konnektor.tests.network_planners.conf import (
     BadMapper,
     GenAtomMapper,
     SuperBadMapper,
-    genScorer,
 )
 from konnektor.utils.toy_data import build_random_dataset
 
