@@ -84,5 +84,12 @@ class ErrorMapper(DummyAtomMapper):
         raise ValueError("No mapping found for")
 
 
+class NoneMapper(DummyAtomMapper):
+    def suggest_mappings(
+        self, componentA: SmallMoleculeComponent, componentB: SmallMoleculeComponent
+    ):
+        yield None
+
+
 def genScorer(mapping):
     return 1.0 / len(mapping.componentA_to_componentB)
