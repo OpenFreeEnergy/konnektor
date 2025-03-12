@@ -11,6 +11,7 @@ from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
     SuperBadMapper,
     genScorer,
+    mol_from_smiles,
 )
 
 
