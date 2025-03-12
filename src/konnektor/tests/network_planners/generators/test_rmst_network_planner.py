@@ -68,6 +68,7 @@ def test_rminimal_spanning_network_connectedness(rminimal_spanning_network_redun
 
 # TODO: directly test HeuristicMaximalNetworkGenerator instead?
 def test_minimal_rmst_network_no_mapping(toluene_vs_others):
+
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
