@@ -1,7 +1,7 @@
 [build-system]
 requires=[
-	"setuptools>=61.0",
-	"versioningit",
+	"setuptools>=64.0",
+    "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -35,6 +35,10 @@ dependencies = [
   'ipycytoscape',
 ]
 
+[tool.setuptools_scm]
+version_file = "src/konnektor/_version.py"
+fallback_version = "0.0.0"
+
 [project.optional-dependencies]
 test = [
   'pytest',
@@ -50,22 +54,6 @@ dev = [
 
 [tool.setuptools.package-data]
 konnektor = ["**/*.sdf",]
-
-[tool.versioningit]
-default-version = "1+unknown"
-
-[tool.versioningit.format]
-distance = "{base_version}+{distance}.{vcs}{rev}"
-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
-distance-dirty = "{base_version}+{distance}.{vcs}{rev}.dirty"
-
-[tool.versioningit.vcs]
-method = "git"
-match = ["*"]
-default-tag = "0.0.0"
-
-[tool.versioningit.write]
-file = "src/konnektor/_version.py"
 
 [tool.pytest.ini_options]
 addopts = "--ignore=dev"
