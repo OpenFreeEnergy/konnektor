@@ -45,7 +45,6 @@ def nine_mols_edges():
     return data
 
 
-
 @pytest.fixture()
 def nine_mols_edges_two_sets():
     data = [
