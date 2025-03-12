@@ -9,6 +9,43 @@ from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent
 from tqdm.auto import tqdm
 
 
+def _determine_best_mapping(
+    component_pair: tuple[SmallMoleculeComponent],
+    mappers: AtomMapper | list[AtomMapper],
+    scorer: Callable,
+):
+    best_score = 0.0
+    best_mapping = None
+    molA = component_pair[0]
+    molB = component_pair[1]
+
+    for mapper in mappers:
+        try:
+            mapping_generator = mapper.suggest_mappings(molA, molB)
+        except:
+            continue
+
+        if scorer:
+            tmp_mappings = [
+                mapping.with_annotations({"score": scorer(mapping)})
+                for mapping in mapping_generator
+            ]
+
+            if len(tmp_mappings) > 0:
+                tmp_best_mapping = min(tmp_mappings, key=lambda m: m.annotations["score"])
+
+                if tmp_best_mapping.annotations["score"] < best_score or best_mapping is None:
+                    best_score = tmp_best_mapping.annotations["score"]
+                    best_mapping = tmp_best_mapping
+        else:
+            try:
+                best_mapping = next(mapping_generator)
+            except:
+                continue
+
+    return best_mapping
+
+
 def thread_mapping(args) -> list[AtomMapping]:
     """
     Helper function working as thread for parallel execution.
@@ -113,40 +150,3 @@ def _serial_map_scoring(
             mappings.append(best_mapping)
 
     return mappings
-
-
-def _determine_best_mapping(
-    component_pair: tuple[SmallMoleculeComponent],
-    mappers: AtomMapper | list[AtomMapper],
-    scorer: Callable,
-):
-    best_score = 0.0
-    best_mapping = None
-    molA = component_pair[0]
-    molB = component_pair[1]
-
-    for mapper in mappers:
-        try:
-            mapping_generator = mapper.suggest_mappings(molA, molB)
-        except:
-            continue
-
-        if scorer:
-            tmp_mappings = [
-                mapping.with_annotations({"score": scorer(mapping)})
-                for mapping in mapping_generator
-            ]
-
-            if len(tmp_mappings) > 0:
-                tmp_best_mapping = min(tmp_mappings, key=lambda m: m.annotations["score"])
-
-                if tmp_best_mapping.annotations["score"] < best_score or best_mapping is None:
-                    best_score = tmp_best_mapping.annotations["score"]
-                    best_mapping = tmp_best_mapping
-        else:
-            try:
-                best_mapping = next(mapping_generator)
-            except:
-                continue
-
-    return best_mapping
