@@ -52,4 +52,6 @@ __all__ = [
     concatenate_networks,
     delete_transformation,
     merge_networks,
+    __version__,
+    __version_tuple__,
 ]
