@@ -93,7 +93,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
                 possible_edges=itertools.combinations(components, 2),
                 scorer=self.scorer,
                 mappers=self.mappers,
-                edges_to_score=total,
+                n_edges_to_score=total,
                 show_progress=self.progress,
             )
 

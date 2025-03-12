@@ -105,7 +105,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                 possible_edges=sample_combinations,
                 scorer=self.scorer,
                 mappers=self.mappers,
-                edges_to_score=total,
+                n_edges_to_score=total,
                 show_progress=self.progress,
             )
 

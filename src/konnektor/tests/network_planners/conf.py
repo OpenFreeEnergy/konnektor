@@ -79,8 +79,6 @@ class ErrorMapper(DummyAtomMapper):
     def suggest_mappings(
         self, componentA: SmallMoleculeComponent, componentB: SmallMoleculeComponent
     ):
-        # raise StopIteration('No mapping found for')# Check for good solution
-        # here
         raise ValueError("No mapping found for")
 
 
