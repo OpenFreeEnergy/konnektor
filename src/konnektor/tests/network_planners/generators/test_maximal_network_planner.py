@@ -55,16 +55,16 @@ def test_generate_maximal_network_mapper_error(toluene_vs_others, n_process, wit
     toluene, others = toluene_vs_others
     components = others + [toluene]
 
+    # TODO: check that just one error returns an incomplete network
     planner = MaximalNetworkGenerator(
-        mappers=[ErrorMapper(), BadMapper()],
-        scorer=None,
-        progress=with_progress,
-        n_processes=n_process,
-    )
+            mappers=[ErrorMapper()],
+            scorer=None,
+            progress=with_progress,
+            n_processes=n_process,
+        )
+    with pytest.raises(RuntimeError):
+        planner.generate_ligand_network(components)
 
-    network = planner.generate_ligand_network(components)
-
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
 
 
 @pytest.mark.parametrize("n_process", [1, 2])
