@@ -7,8 +7,8 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 
+from ...network_planners._map_scoring import _parallel_map_scoring
 from .._networkx_implementations import MstNetworkAlgorithm
-from ..generators._parallel_mapping_pattern import _parallel_map_scoring
 from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)

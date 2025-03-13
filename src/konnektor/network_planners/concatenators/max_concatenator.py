@@ -1,15 +1,13 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import functools
 import itertools
 import logging
 from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
-from tqdm import tqdm
 
-from ..generators._parallel_mapping_pattern import _parallel_map_scoring
+from ...network_planners._map_scoring import _parallel_map_scoring, _serial_map_scoring
 from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
@@ -90,52 +88,13 @@ class MaxConcatenator(NetworkConcatenator):
                 )
 
             else:  # serial variant
-                if self.progress is True:
-                    progress = functools.partial(
-                        tqdm, total=len(pedges), delay=1.5, desc="Mapping Subnets"
-                    )
-                else:
-                    progress = lambda x: x
-
-                bipartite_graph_mappings = []
-                for component_pair in progress(pedges):
-                    best_score = 0.0
-                    best_mapping = None
-                    molA = component_pair[0]
-                    molB = component_pair[1]
-
-                    for mapper in self.mappers:
-                        try:
-                            mapping_generator = mapper.suggest_mappings(molA, molB)
-                        except:
-                            continue
-
-                        if self.scorer:
-                            tmp_mappings = [
-                                mapping.with_annotations({"score": self.scorer(mapping)})
-                                for mapping in mapping_generator
-                            ]
-
-                            if len(tmp_mappings) > 0:
-                                tmp_best_mapping = min(
-                                    tmp_mappings, key=lambda m: m.annotations["score"]
-                                )
-
-                                if (
-                                    tmp_best_mapping.annotations["score"] < best_score
-                                    or best_mapping is None
-                                ):
-                                    best_score = tmp_best_mapping.annotations["score"]
-                                    best_mapping = tmp_best_mapping
-                        else:
-                            try:
-                                best_mapping = next(mapping_generator)
-                            except:
-                                print("warning")
-                                continue
-
-                    if best_mapping is not None:
-                        bipartite_graph_mappings.append(best_mapping)
+                bipartite_graph_mappings = _serial_map_scoring(
+                    possible_edges=pedges,
+                    scorer=self.scorer,
+                    mappers=self.mappers,
+                    n_edges_to_score=len(pedges),
+                    show_progress=self.progress,
+                )
 
             # Add network connecting edges
             selected_edges.extend(bipartite_graph_mappings)
