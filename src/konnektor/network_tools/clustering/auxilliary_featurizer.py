@@ -1,7 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from typing import Optional
 
 import numpy as np
 from rdkit import Chem
@@ -9,7 +8,7 @@ from scikit_mol.fingerprints.baseclasses import BaseFpsTransformer
 
 
 class ChargeTransformer(BaseFpsTransformer):
-    def __init__(self, n_jobs: Optional[int] = None):
+    def __init__(self, n_jobs: int | None = None):
         """Calculates the RDKit FormalCharge and provides it as single field vector.
 
         Parameters
