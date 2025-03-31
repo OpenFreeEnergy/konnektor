@@ -5,10 +5,10 @@ from typing import Optional
 
 import numpy as np
 from rdkit import Chem
-from scikit_mol.fingerprints import FpsTransformer
+from scikit_mol.fingerprints.baseclasses import BaseFpsTransformer
 
 
-class ChargeTransformer(FpsTransformer):
+class ChargeTransformer(BaseFpsTransformer):
     def __init__(self, n_jobs: Optional[int] = None):
         """Calculates the RDKit FormalCharge and provides it as single field vector.
 
@@ -22,9 +22,6 @@ class ChargeTransformer(FpsTransformer):
         """
         super().__init__(n_jobs=n_jobs)
         self.fpSize = 1
-
-    def _mol2fp(self, mol):
-        pass
 
     def _transform_mol(self, mol):
         return np.array([Chem.GetFormalCharge(mol)])
