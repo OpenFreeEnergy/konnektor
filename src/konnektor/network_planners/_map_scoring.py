@@ -58,11 +58,15 @@ def _determine_best_mapping(
                     best_score = tmp_best_mapping.annotations["score"]
                     best_mapping = tmp_best_mapping
         else:
+            tmp_mappings = [mapping for mapping in mapping_generator]
+            if len(tmp_mappings) > 1:
+                raise ValueError(
+                    f"The mapper '{mapper}' generated multiple mappings, but no scorer was provided. You must provide a scorer when using mappers that generate multiple mappings."
+                )
             try:
-                best_mapping = next(mapping_generator)
-            except:  # TODO: I don't think this except is needed
+                best_mapping = tmp_mappings[0]
+            except IndexError:
                 continue
-
     return best_mapping
 
 
