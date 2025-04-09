@@ -20,7 +20,7 @@ dependencies:
   - scipy
   - networkx
   - scikit-learn
-  - scikit-mol <0.4.6
+  - scikit-mol>=0.5.5  # https://github.com/EBjerrum/scikit-mol/pull/68
   - dill
   # Chem
   - rdkit==2024.03.5
