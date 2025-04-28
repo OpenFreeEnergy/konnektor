@@ -14,7 +14,7 @@ Ontop of the described ligand network planners, Konnektor gives access to tools,
 Analysis of networks, like calculating graph scores, getting the connectivities of network nodes or calculating the network robustness are available too.
 Last we want to bring to your attention our Network visualization tools and the provided interactive network visualization widget for IPython like in Jupyter-Lab/Notebooks.
 
-Try our interactive demo: ![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)
+Try our interactive demo: |Colab|
 
 .. toctree::
    :maxdepth: 2
@@ -24,3 +24,6 @@ Try our interactive demo: ![Open In Colab](https://colab.research.google.com/ass
    tutorial
    guide
    api
+
+.. |Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
+   :target: https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x
