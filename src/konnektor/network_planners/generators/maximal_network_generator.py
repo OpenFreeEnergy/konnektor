@@ -2,9 +2,9 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import itertools
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
 from ._abstract_network_generator import NetworkGenerator
@@ -14,7 +14,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float] | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
@@ -44,6 +44,10 @@ class MaximalNetworkGenerator(NetworkGenerator):
         n_processes: int
             number of processes that can be used for the network generation. (default: 1)
         """
+
+        if isinstance(mappers, list) and scorer is None:
+            if len(mappers) > 1:
+                raise ValueError("You must provide a scorer when passing in multiple mappers.")
 
         super().__init__(
             mappers=mappers,
