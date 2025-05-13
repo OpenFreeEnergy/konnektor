@@ -6,6 +6,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 from tqdm import tqdm
+import warnings
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 
@@ -32,7 +33,7 @@ class StarNetworkGenerator(NetworkGenerator):
 
         The Star Network is most edge efficient, but not most graph score efficient, as it has to find a
         central `Component`, which usually is a compromise for all 'Component's.
-        From a robustness point of view, the Star Network, will immediatly be disconnected if one `Transformation` fails.
+        From a robustness point of view, the Star Network, will immediately be disconnected if one `Transformation` fails.
         However the loss of `Component` s is very limited, as only one ligand is lost per `Transformation` failure.
 
         Parameters
@@ -146,7 +147,10 @@ class StarNetworkGenerator(NetworkGenerator):
                                 best_mapping = tmp_best_mapping
                     else:
                         try:
+                            # TODO: output which mapper is first?
+                            warnings.warn("Multiple mappers were provided, but no scorer. Only the first mapper provided will be used.")
                             best_mapping = next(mapping_generator)
+                            break
                         except:
                             continue
                 if best_mapping is not None:

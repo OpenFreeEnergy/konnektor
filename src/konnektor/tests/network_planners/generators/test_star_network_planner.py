@@ -60,10 +60,11 @@ def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
     # in this one, we should always take the bad mapper
     mapper = BadMapper()
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
-    network = planner.generate_ligand_network(components=others, central_component=toluene)
+
+    with pytest.warns():
+        network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)
-
     for edge in network.edges:
         assert edge.componentA_to_componentB == {0: 0}
 

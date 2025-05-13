@@ -78,7 +78,7 @@ def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, w
         progress=with_progress,
         n_processes=n_process,
     )
-
-    network = planner.generate_ligand_network(components)
+    with pytest.warns():
+        network = planner.generate_ligand_network(components)
 
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
