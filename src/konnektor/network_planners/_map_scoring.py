@@ -62,6 +62,7 @@ def _determine_best_mapping(
             try:
                 warnings.warn("Multiple mappers were provided, but no scorer. Only the first mapper provided will be used.")
                 best_mapping = next(mapping_generator)
+                break
             except:  # TODO: I don't think this except is needed
                 continue
 
