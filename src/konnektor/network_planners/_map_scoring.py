@@ -42,7 +42,7 @@ def _determine_best_mapping(
     for mapper in mappers:
         try:
             mapping_generator = mapper.suggest_mappings(molA, molB)
-        except:
+        except:  # TODO: fix this bare except
             continue
 
         if scorer:
