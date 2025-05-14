@@ -37,7 +37,7 @@ class NetworkPlanner(abc.ABC):
             self._mappers = None
         else:
             raise ValueError("Atom mappers are not the required type!")
-        
+
         self.scorer = scorer
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
