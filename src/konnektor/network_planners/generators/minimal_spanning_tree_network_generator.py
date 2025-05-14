@@ -28,7 +28,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of `Transformations`.
         This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
-        `Transformation`, the Network is immediatly disconnected.
+        `Transformation`, the Network is immediately disconnected.
         The disconnectivity will translate to a loss of `Component` s in the final FE Network.
 
         Parameters
@@ -86,6 +86,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
 
+        # TODO: this can output a network with fewer nodes than were input - do we want to allow this?
         mg = self.network_generator.generate_network(edges, weights)
 
         if not mg.connected:
@@ -96,5 +97,13 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         selected_mappings = [
             edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
         ]
+        ligand_network = LigandNetwork(edges=selected_mappings, nodes=components)
 
-        return LigandNetwork(edges=selected_mappings, nodes=components)
+        # TODO:  I think we need to do this check *after* selected_mappings
+        if not ligand_network.is_connected():
+            nodes_index = {c: components.index(c) for c in components}
+            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
+            raise RuntimeError(
+                "LIGAND ERROR: Unable to create edges for some nodes: " + str(list(missing_nodes))
+            )
+        return ligand_network
