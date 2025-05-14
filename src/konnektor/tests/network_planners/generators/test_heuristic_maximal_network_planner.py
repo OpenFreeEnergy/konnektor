@@ -38,7 +38,7 @@ def test_generate_maximal_network(with_progress, n_process):
 
 @pytest.mark.parametrize("with_progress", [True, False])
 @pytest.mark.parametrize("n_process", [1, 2])
-def test_generate_maximal_network_missing_scorer(with_progress, n_process):
+def test_generate_heuristic_maximal_network_missing_scorer(with_progress, n_process):
     """If no scorer is provided, the first mapping of the first mapper should be used."""
     n_compounds = 4
     components, _, _ = build_random_dataset(n_compounds=n_compounds)
@@ -59,5 +59,5 @@ def test_generate_maximal_network_missing_scorer(with_progress, n_process):
     assert len(network.edges) > n_compounds
     assert get_is_connected(network)
 
-    # it should use the first mapper, which is BadMultiMapper
+    # it should use the mapping ({0:2}) of the first mapper (BadMultiMapper)
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 2}]

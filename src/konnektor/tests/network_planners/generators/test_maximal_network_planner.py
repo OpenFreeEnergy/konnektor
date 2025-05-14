@@ -8,6 +8,7 @@ from konnektor.tests.network_planners.conf import (
     BadMapper,
     ErrorMapper,
     GenAtomMapper,
+    BadMultiMapper,
     SuperBadMapper,
     genScorer,
 )
@@ -65,15 +66,12 @@ def test_generate_maximal_network_mapper_error(toluene_vs_others, n_process, wit
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, with_progress):
-    """If no scorer is provided, the first mapping of the last mapper should be used.
-    Note: this test isn't great because BadMapper only returns one mapping
-    """
-
+    """If no scorer is provided, the first mapping of the first mapper should be used."""
     toluene, others = toluene_vs_others
     components = others + [toluene]
 
     planner = MaximalNetworkGenerator(
-        mappers=[SuperBadMapper(), GenAtomMapper(), BadMapper()],
+        mappers=[BadMultiMapper(), SuperBadMapper(), BadMapper()],
         scorer=None,
         progress=with_progress,
         n_processes=n_process,
@@ -81,4 +79,5 @@ def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, w
     with pytest.warns():
         network = planner.generate_ligand_network(components)
 
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
+    # it should use the mapping ({0:2}) of the first mapper (BadMultiMapper)
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 2}]
