@@ -7,6 +7,7 @@ from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import HeuristicMaximalNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     BadMapper,
+    BadMultiMapper,
     GenAtomMapper,
     SuperBadMapper,
 )
@@ -35,18 +36,15 @@ def test_generate_maximal_network(with_progress, n_process):
     assert len(network.edges) > n_compounds
     assert get_is_connected(network)
 
-
-@pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
+@pytest.mark.parametrize("n_process", [1, 2])
 def test_generate_maximal_network_missing_scorer(with_progress, n_process):
-    """If no scorer is provided, the first mapping of the last mapper should be used.
-    Note: this test isn't great because BadMapper only returns one mapping
-    """
+    """If no scorer is provided, the first mapping of the first mapper should be used."""
     n_compounds = 4
     components, _, _ = build_random_dataset(n_compounds=n_compounds)
 
     planner = HeuristicMaximalNetworkGenerator(
-        mappers=[SuperBadMapper(), GenAtomMapper(), BadMapper()],
+        mappers=[BadMultiMapper(), SuperBadMapper(), BadMapper()],
         scorer=None,
         n_samples=3,
         progress=with_progress,
@@ -61,4 +59,5 @@ def test_generate_maximal_network_missing_scorer(with_progress, n_process):
     assert len(network.edges) > n_compounds
     assert get_is_connected(network)
 
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
+    # it should use the first mapper, which is BadMultiMapper
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 4}]
