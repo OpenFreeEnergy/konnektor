@@ -151,6 +151,7 @@ class StarNetworkGenerator(NetworkGenerator):
                             warnings.warn(
                                 f"Multiple mappers were provided, but no scorer. Only the first mapper provided will be used: {mapper}"
                             )
+                            best_mapping = next(mapping_generator)
                             break
                         except:
                             continue

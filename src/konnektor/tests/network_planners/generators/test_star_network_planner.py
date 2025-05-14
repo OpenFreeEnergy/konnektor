@@ -7,8 +7,10 @@ from gufe import SmallMoleculeComponent
 import konnektor
 from konnektor.tests.network_planners.conf import (
     BadMapper,
+    BadMultiMapper,
     ErrorMapper,
     GenAtomMapper,
+    SuperBadMapper,
     genScorer,
     mol_from_smiles,
 )
@@ -58,15 +60,15 @@ def test_star_network_with_scorer(toluene_vs_others):
 def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
     # in this one, we should always take the bad mapper
-    mapper = BadMapper()
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
+    mappers = [BadMultiMapper(), SuperBadMapper(), BadMapper()]
+    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mappers, scorer=None)
 
-    with pytest.warns():
+    with pytest.warns(match="Only the first mapper provided will be used: <BadMulti"):
         network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)
     for edge in network.edges:
-        assert edge.componentA_to_componentB == {0: 0}
+        assert edge.componentA_to_componentB == {0: 2}
 
 
 def test_star_network_failure(atom_mapping_basic_test_files):
