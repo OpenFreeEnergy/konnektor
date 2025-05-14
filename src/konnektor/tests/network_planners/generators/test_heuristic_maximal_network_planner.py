@@ -8,7 +8,6 @@ from konnektor.network_planners import HeuristicMaximalNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     BadMapper,
     BadMultiMapper,
-    GenAtomMapper,
     SuperBadMapper,
 )
 from konnektor.utils.toy_data import build_random_dataset
@@ -36,6 +35,7 @@ def test_generate_maximal_network(with_progress, n_process):
     assert len(network.edges) > n_compounds
     assert get_is_connected(network)
 
+
 @pytest.mark.parametrize("with_progress", [True, False])
 @pytest.mark.parametrize("n_process", [1, 2])
 def test_generate_heuristic_maximal_network_missing_scorer(with_progress, n_process):
@@ -50,10 +50,11 @@ def test_generate_heuristic_maximal_network_missing_scorer(with_progress, n_proc
         progress=with_progress,
         n_processes=n_process,
     )
+    # with pytest.warns(match="Only the first mapper provided will be used: <BadMulti"):
+    # TODO: warning isn't working with multiprocessing
     network = planner.generate_ligand_network(components)
 
     assert len(network.nodes) == n_compounds
-
     edge_count = n_compounds * 3
     assert len(network.edges) <= edge_count
     assert len(network.edges) > n_compounds
