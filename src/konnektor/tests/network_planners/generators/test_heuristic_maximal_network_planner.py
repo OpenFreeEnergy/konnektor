@@ -60,4 +60,4 @@ def test_generate_maximal_network_missing_scorer(with_progress, n_process):
     assert get_is_connected(network)
 
     # it should use the first mapper, which is BadMultiMapper
-    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 4}]
+    assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 2}]

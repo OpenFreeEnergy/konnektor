@@ -59,7 +59,14 @@ class GenAtomMapper(DummyAtomMapper):
             componentB,
             componentA_to_componentB={k: v for k, v in zip(atomsA, atomsB)},
         )
+class BadMultiMapper(DummyAtomMapper):
+    """Test mapper that yields multiple mapping suggestions."""
+    def suggest_mappings(
+        self, componentA: SmallMoleculeComponent, componentB: SmallMoleculeComponent
+    ):
 
+        for i in range(2, 4):  # arbitrary integers, useful for testing
+            yield LigandAtomMapping(componentA, componentB, componentA_to_componentB={0: i})
 
 class BadMapper(DummyAtomMapper):
     def suggest_mappings(
