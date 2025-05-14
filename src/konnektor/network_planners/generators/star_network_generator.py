@@ -2,11 +2,11 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
+import warnings
 from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 from tqdm import tqdm
-import warnings
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 
@@ -147,9 +147,10 @@ class StarNetworkGenerator(NetworkGenerator):
                                 best_mapping = tmp_best_mapping
                     else:
                         try:
-                            # TODO: output which mapper is first?
-                            warnings.warn("Multiple mappers were provided, but no scorer. Only the first mapper provided will be used.")
-                            best_mapping = next(mapping_generator)
+                            # TODO: this is duplicated code, use _map_scoring
+                            warnings.warn(
+                                f"Multiple mappers were provided, but no scorer. Only the first mapper provided will be used: {mapper}"
+                            )
                             break
                         except:
                             continue

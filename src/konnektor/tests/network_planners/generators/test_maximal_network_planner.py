@@ -65,7 +65,7 @@ def test_generate_maximal_network_mapper_error(toluene_vs_others, n_process, wit
 
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
-def test_generate_maximal_network_missing_scorer(toluene_vs_others, n_process, with_progress):
+def test_generate_maximal_network_no_scorer(toluene_vs_others, n_process, with_progress):
     """If no scorer is provided, the first mapping of the first mapper should be used."""
     toluene, others = toluene_vs_others
     components = others + [toluene]
