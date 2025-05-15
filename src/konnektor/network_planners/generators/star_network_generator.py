@@ -38,10 +38,11 @@ class StarNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : AtomMapper or list of AtomMappers
             the atom mapper is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
+            Callable which returns a float between [0,1] for any LigandAtomMapping.
+            Used to assign scores to potential mappings; higher scores indicate better mappings.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
