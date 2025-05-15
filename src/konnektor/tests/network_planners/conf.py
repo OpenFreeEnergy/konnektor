@@ -93,4 +93,7 @@ class ErrorMapper(DummyAtomMapper):
 
 
 def genScorer(mapping):
-    return 1.0 / len(mapping.componentA_to_componentB)
+    """A general scorer for testing where the score is proportional to the length of the mapping.
+    (i.e. a longer mapping gets a higher, and therefore better, score)
+    """
+    return 1 - (1.0 / len(mapping.componentA_to_componentB))

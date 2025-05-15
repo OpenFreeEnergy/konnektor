@@ -37,7 +37,7 @@ def test_generate_maximal_network(toluene_vs_others, with_progress, with_scorer,
     if scorer:
         for edge in network.edges:
             score = edge.annotations["score"]
-            assert score == 1.0 / len(edge.componentA_to_componentB)
+            assert score == 1 - 1.0 / len(edge.componentA_to_componentB)
     else:
         for edge in network.edges:
             assert "score" not in edge.annotations
