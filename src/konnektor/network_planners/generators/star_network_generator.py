@@ -116,41 +116,11 @@ class StarNetworkGenerator(NetworkGenerator):
 
             selected_mappings = []
             for component in progress(components):
-                best_score = 0.0
-                best_mapping = None
-                molA = central_component
-                molB = component
-
-                for mapper in self.mappers:
-                    mapping_generator = mapper.suggest_mappings(molA, molB)
-
-                    if self.scorer:
-                        tmp_mappings = [
-                            mapping.with_annotations({"score": self.scorer(mapping)})
-                            for mapping in mapping_generator
-                        ]
-
-                        if len(tmp_mappings) > 0:
-                            tmp_best_mapping = min(
-                                tmp_mappings, key=lambda m: m.annotations["score"]
-                            )
-
-                            if (
-                                tmp_best_mapping.annotations["score"] < best_score
-                                or best_mapping is None
-                            ):
-                                best_score = tmp_best_mapping.annotations["score"]
-                                best_mapping = tmp_best_mapping
-                    else:
-                        try:
-                            # TODO: this is duplicated code, use _map_scoring
-                            warnings.warn(
-                                f"Multiple mappers were provided, but no scorer. Only the first mapper provided will be used: {mapper}"
-                            )
-                            best_mapping = next(mapping_generator)
-                            break
-                        except:
-                            continue
+                best_mapping = _determine_best_mapping(
+                    component_pair=(central_component, component),
+                    mappers=self.mappers,
+                    scorer=self.scorer,
+                )
                 if best_mapping is not None:
                     selected_mappings.append(best_mapping)
 
