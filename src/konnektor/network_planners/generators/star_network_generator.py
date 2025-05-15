@@ -2,6 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
+import warnings
 from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
@@ -32,15 +33,16 @@ class StarNetworkGenerator(NetworkGenerator):
 
         The Star Network is most edge efficient, but not most graph score efficient, as it has to find a
         central `Component`, which usually is a compromise for all 'Component's.
-        From a robustness point of view, the Star Network, will immediatly be disconnected if one `Transformation` fails.
+        From a robustness point of view, the Star Network, will immediately be disconnected if one `Transformation` fails.
         However the loss of `Component` s is very limited, as only one ligand is lost per `Transformation` failure.
 
         Parameters
         ----------
-        mapper : AtomMapper
+        mappers : AtomMapper or list of AtomMappers
             the atom mapper is required, to define the connection between two ligands.
         scorer : AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
+            Callable which returns a float between [0,1] for any LigandAtomMapping.
+            Used to assign scores to potential mappings; higher scores indicate better mappings.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
@@ -146,7 +148,12 @@ class StarNetworkGenerator(NetworkGenerator):
                                 best_mapping = tmp_best_mapping
                     else:
                         try:
+                            # TODO: this is duplicated code, use _map_scoring
+                            warnings.warn(
+                                f"Multiple mappers were provided, but no scorer. Only the first mapper provided will be used: {mapper}"
+                            )
                             best_mapping = next(mapping_generator)
+                            break
                         except:
                             continue
                 if best_mapping is not None:

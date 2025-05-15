@@ -3,6 +3,7 @@
 
 import functools
 import multiprocessing as mult
+import warnings
 from collections.abc import Callable
 
 from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent
@@ -42,7 +43,7 @@ def _determine_best_mapping(
     for mapper in mappers:
         try:
             mapping_generator = mapper.suggest_mappings(molA, molB)
-        except:
+        except:  # TODO: I don't like this bare except
             continue
 
         if scorer:
@@ -59,7 +60,11 @@ def _determine_best_mapping(
                     best_mapping = tmp_best_mapping
         else:
             try:
+                warnings.warn(
+                    f"Multiple mappers were provided, but no scorer. Only the first mapper provided will be used: {mapper}"
+                )
                 best_mapping = next(mapping_generator)
+                break
             except:  # TODO: I don't think this except is needed
                 continue
 
