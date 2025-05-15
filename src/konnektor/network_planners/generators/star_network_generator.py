@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
-import warnings
 from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
