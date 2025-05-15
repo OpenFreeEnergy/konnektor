@@ -29,4 +29,4 @@ def test_nedges_network_mappers(atom_mapping_basic_test_files):
     assert len(network.edges) <= len(ligands) * 2
     assert get_is_connected(network)
 
-    np.testing.assert_allclose(get_network_score(network), 0.066667, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(network), 0.933333, rtol=0.01)

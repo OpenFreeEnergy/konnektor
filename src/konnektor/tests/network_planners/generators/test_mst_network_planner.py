@@ -29,7 +29,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
 
     assert isinstance(network, LigandNetwork)
     assert list(network.edges)
-    np.testing.assert_allclose(get_network_score(network), 0.066667, rtol=0.001)
+    np.testing.assert_allclose(get_network_score(network), 0.933333, rtol=0.001)
 
 
 @pytest.fixture(scope="session")

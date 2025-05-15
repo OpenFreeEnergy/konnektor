@@ -44,9 +44,9 @@ def test_star_network(atom_mapping_basic_test_files, toluene_vs_others, as_list)
 def test_star_network_with_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
 
-    mapper = GenAtomMapper()
+    mappers = [BadMapper(), GenAtomMapper()]
     scorer = genScorer
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=scorer)
+    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mappers, scorer=scorer)
     network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)
@@ -54,7 +54,7 @@ def test_star_network_with_scorer(toluene_vs_others):
     for edge in network.edges:
         assert len(edge.componentA_to_componentB) > 1  # we didn't take the bad mapper
         assert "score" in edge.annotations
-        assert edge.annotations["score"] == 1.0 / len(edge.componentA_to_componentB)
+        assert edge.annotations["score"] == (1 - 1.0 / len(edge.componentA_to_componentB))
 
 
 def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
