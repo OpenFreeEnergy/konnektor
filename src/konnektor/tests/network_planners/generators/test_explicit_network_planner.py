@@ -51,21 +51,19 @@ def test_explicit_network_planner_from_indices_disconnected():
 
 
 def test_explicit_network_planner_from_names():
+    pass
+
+
+def test_explicit_network_planner_from_names_disconnected():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
-    print(components[0].name)
     names = [("0", "1"), ("1", "2"), ("2", "3"), ("1", "5"), ("1", "6")]
-    unique_names = set([i for e in names for i in e])
 
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
     ligand_network = planner.generate_network_from_names(components=components, names=names)
 
     assert isinstance(ligand_network, LigandNetwork)
-    assert len(ligand_network.nodes) == len(unique_names)
+    assert len(ligand_network.nodes) == n_compounds
     assert len(ligand_network.edges) == len(names)
-    assert get_is_connected(ligand_network)
-
-
-def test_explicit_network_planner_from_names_disconnected():
-    pass
+    assert not get_is_connected(ligand_network)

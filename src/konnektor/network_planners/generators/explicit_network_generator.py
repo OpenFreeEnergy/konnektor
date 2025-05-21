@@ -86,7 +86,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         components : list[Component]
-            ``SmallMoleculeComponent``/s to place into the network.
+            ``Component``/s to place into the network.
 
         indices : list[tuple[int, int]]
             Edges to form between the components, represented as tuples of indices of the list of components.
@@ -124,8 +124,8 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        components : list of Components
-          the small molecules to place into the network
+        components : list[Component]
+                ``Component``/s to place into the network.
         mapper: AtomMapper
           the atom mapper to use to construct edges
         names : list of tuples of names
@@ -140,10 +140,9 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Raises
         ------
         KeyError
-          if an invalid name is requested
+          If a name in ``names`` is not present in ``components`.
         ValueError
-          if multiple molecules have the same name (this would otherwise be
-          problematic)
+          If multiple molecules have the same name (molecule names must be unique)
         """
         nm2comp = {c.name: c for c in components}
 
@@ -161,4 +160,4 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                 available = [ligand.name for ligand in components]
                 raise KeyError(f"Invalid name(s) requested {badnames}.  Available: {available}")
 
-        return self.generate_ligand_network(edges=edges)
+        return self.generate_ligand_network(edges=edges, nodes=components)
