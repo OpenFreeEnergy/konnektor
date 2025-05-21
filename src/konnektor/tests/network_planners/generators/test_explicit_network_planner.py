@@ -107,6 +107,17 @@ def test_explicit_network_planner_from_names_bad_name():
         planner.generate_network_from_names(components=components, names=[("0", "4")])
 
 
+def test_explicit_network_planner_from_names_duplicate_name():
+    n_compounds = 4
+    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    # make a duplicate
+    components.append(components[0])
+
+    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    with pytest.raises(ValueError, match=r"Duplicate names: \['0'\]"):
+        planner.generate_network_from_names(components=components, names=[("0", "1")])
+
+
 def test_explicit_network_planner_from_names_disconnected():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
