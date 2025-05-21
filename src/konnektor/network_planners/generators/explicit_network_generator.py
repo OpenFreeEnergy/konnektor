@@ -42,23 +42,31 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         )
 
     def generate_ligand_network(
-        self, edges: Iterable[tuple[Component, Component]], nodes: Iterable[Component] | None = None
+        self,
+        edges: Iterable[tuple[Component, Component]],
+        nodes: Iterable[Component] | None = None,
     ) -> LigandNetwork:
         """
         Create a network with pre-defined edges.
+        The network can be defined by specifying only edges, in which case the nodes are implicitly added.
 
-        This can be used as initial_edge_lister
+        This can be used as initial_edge_lister.
 
         Parameters
         ----------
-        edges: Iterable[Tuple[Component,Component]]
-            planned edges, that will be connected with mappings and scores.
+        edges: Iterable[Tuple[Component, Component]]
+            Planned edges, that will be connected with mappings and scores.
             Each Tuple in this case represent one edge.
 
+        nodes: Iterable[Component] | None
+            A list of nodes to be included in the network.
+            Optional, since the network can be defined by specifying only edges.
+            This is useful for adding isolated (unconnected) nodes.
+    
         Returns
         -------
         LigandNetwork
-            the provided network.
+
         """
 
         mappings = _parallel_map_scoring(
