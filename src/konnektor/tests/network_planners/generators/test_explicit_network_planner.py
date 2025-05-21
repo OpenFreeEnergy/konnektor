@@ -3,6 +3,7 @@
 
 import itertools
 
+import pytest
 from gufe import LigandNetwork
 
 from konnektor.network_analysis import get_is_connected
@@ -28,22 +29,28 @@ def test_explicit_network_planner():
     assert get_is_connected(ligand_network)
 
 
-def test_explicit_network_planner_with_indices():
+def test_explicit_network_planner_from_indices():
+    pass
+
+
+def test_explicit_network_planner_from_indices_disconnected():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     indices = [(1, 2), (2, 3), (3, 4), (2, 5), (2, 6)]
-    unique_indices = set([i for e in indices for i in e])
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
-    ligand_network = planner.generate_network_from_indices(components=components, indices=indices)
+    with pytest.warns(match="Generated network is not fully connected"):
+        ligand_network = planner.generate_network_from_indices(
+            components=components, indices=indices
+        )
 
     assert isinstance(ligand_network, LigandNetwork)
-    assert len(ligand_network.nodes) == len(unique_indices)
+    assert len(ligand_network.nodes) == n_compounds
     assert len(ligand_network.edges) == len(indices)
-    assert get_is_connected(ligand_network)
+    assert not get_is_connected(ligand_network)
 
 
-def test_explicit_network_planner_with_names():
+def test_explicit_network_planner_from_names():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     print(components[0].name)
@@ -58,3 +65,7 @@ def test_explicit_network_planner_with_names():
     assert len(ligand_network.nodes) == len(unique_names)
     assert len(ligand_network.edges) == len(names)
     assert get_is_connected(ligand_network)
+
+
+def test_explicit_network_planner_from_names_disconnected():
+    pass

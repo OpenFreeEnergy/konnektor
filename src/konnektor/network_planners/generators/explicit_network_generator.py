@@ -42,8 +42,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         )
 
     def generate_ligand_network(
-        self,
-        edges: Iterable[tuple[Component, Component]],
+        self, edges: Iterable[tuple[Component, Component]], nodes: Iterable[Component] | None = None
     ) -> LigandNetwork:
         """
         Create a network with pre-defined edges.
@@ -61,7 +60,6 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         LigandNetwork
             the provided network.
         """
-        nodes = list(set([n for e in edges for n in e]))
 
         mappings = _parallel_map_scoring(
             possible_edges=edges,
@@ -87,14 +85,13 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        components : list of Components
-          the small molecules to place into the network
-        mapper: AtomMapper
-          the atom mapper to use to construct edges
-        indices : list of tuples of indices
-          the edges to form where the values refer to names of the small molecules,
-          eg `[(3, 4), ...]` will create an edge between the 3rd and 4th molecules
-          remembering that Python uses 0-based indexing
+        components : list[Component]
+            ``SmallMoleculeComponent``/s to place into the network.
+
+        indices : list[tuple[int, int]]
+            Edges to form between the components, represented as tuples of indices of the list of components.
+            e.g. `[(3, 4), ...]` will create an edge between the 3rd and 4th molecules
+            (remember that Python uses 0-based indexing)
 
         Returns
         -------
@@ -103,9 +100,10 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Raises
         ------
         IndexError
-          if an invalid ligand index is requested
+            Throws an error if the ``indices`` specified are not present in ``components``.
         """
         edges = []
+
         for i, j in indices:
             try:
                 edges.append((components[i], components[j]))
@@ -114,7 +112,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                     f"Invalid ligand id, requested {i} {j} with {len(components)} available"
                 )
 
-        return self.generate_ligand_network(edges=edges)
+        return self.generate_ligand_network(edges=edges, nodes=components)
 
     def generate_network_from_names(
         self,
