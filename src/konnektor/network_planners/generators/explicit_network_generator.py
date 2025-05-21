@@ -125,12 +125,12 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         components : list[Component]
-                ``Component``/s to place into the network.
+          ``Component``/s to place into the network.
         mapper: AtomMapper
           the atom mapper to use to construct edges
         names : list of tuples of names
           the edges to form where the values refer to names of the small molecules,
-          eg `[('benzene', 'toluene'), ...]` will create an edge between the
+          eg ``[('benzene', 'toluene'), ...]`` will create an edge between the
           molecule with names 'benzene' and 'toluene'
 
         Returns
@@ -140,7 +140,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Raises
         ------
         KeyError
-          If a name in ``names`` is not present in ``components`.
+          If a name in ``names`` is not present in ``components``.
         ValueError
           If multiple molecules have the same name (molecule names must be unique)
         """
