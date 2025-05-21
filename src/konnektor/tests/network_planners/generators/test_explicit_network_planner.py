@@ -91,6 +91,14 @@ def test_explicit_network_planner_from_names():
     assert get_is_connected(ligand_network)
 
 
+def test_explicit_network_planner_from_names_bad_name():
+    n_compounds = 4
+    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    with pytest.raises(KeyError, match=r"Invalid name\(s\) requested \['4'\]"):
+        planner.generate_network_from_names(components=components, names=[("0", "4")])
+
+
 def test_explicit_network_planner_from_names_disconnected():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
