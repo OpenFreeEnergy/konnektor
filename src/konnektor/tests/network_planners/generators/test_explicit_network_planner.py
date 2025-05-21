@@ -51,6 +51,12 @@ def test_explicit_network_planner_from_indices():
 
     assert get_is_connected(ligand_network)
 
+def test_explicit_network_planner_from_indices_bad_index():
+    n_compounds = 4
+    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    with pytest.raises(IndexError, match=r"Invalid ligand index. Requested \(0, 4\)"):
+        planner.generate_network_from_indices(components=components, indices=[(0, 4)])
 
 def test_explicit_network_planner_from_indices_disconnected():
     n_compounds = 20

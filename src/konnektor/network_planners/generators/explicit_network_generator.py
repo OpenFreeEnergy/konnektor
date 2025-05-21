@@ -116,9 +116,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             try:
                 edges.append((components[i], components[j]))
             except IndexError:
-                raise IndexError(
-                    f"Invalid ligand id, requested {i} {j} with {len(components)} available"
-                )
+                raise IndexError(f"Invalid ligand index. Requested ({i}, {j}) for iterable of length {len(components)}. Please choose values in range 0-{len(components)-1}.")
 
         return self.generate_ligand_network(edges=edges, nodes=components)
 
