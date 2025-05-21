@@ -42,8 +42,8 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
-            this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.
+            ``NetworkPlanner`` to be used to generate the initial set of edges. For standard usage, the Maximal NetworkPlanner is often appropriate.
+            For very large networks, the ``HeuristicMaximalNetworkPlanner`` might be a useful alternative.
             (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:
@@ -67,7 +67,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         components: Iterable[Component]
-        the components to be used for the LigandNetwork
+            ``Components`` to be used as nodes in the ``LigandNetwork``.
 
         Returns
         -------
@@ -99,7 +99,6 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         ]
         ligand_network = LigandNetwork(edges=selected_mappings, nodes=components)
 
-        # TODO:  I think we need to do this check *after* selected_mappings
         if not ligand_network.is_connected():
             nodes_index = {c: components.index(c) for c in components}
             missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
