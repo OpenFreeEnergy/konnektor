@@ -62,7 +62,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             A list of nodes to be included in the network.
             Optional, since the network can be defined by specifying only edges.
             This is useful for adding isolated (unconnected) nodes.
-    
+
         Returns
         -------
         LigandNetwork
