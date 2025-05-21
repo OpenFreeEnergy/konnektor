@@ -24,47 +24,87 @@ def test_explicit_network_planner():
     ligand_network = planner(edges)
 
     assert isinstance(ligand_network, LigandNetwork)
-    assert len(ligand_network.nodes) == n_compounds
-    assert len(ligand_network.edges) == (n_compounds * (n_compounds - 1)) // 2
+    assert ligand_network.nodes == frozenset(components)
+
+    result_edges = [(e.componentA, e.componentB) for e in ligand_network.edges]
+    assert frozenset(result_edges) == frozenset(edges)
+
     assert get_is_connected(ligand_network)
 
 
 def test_explicit_network_planner_from_indices():
-    pass
+    n_compounds = 6
+    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    edges = [(0, 2), (1, 2), (2, 3), (3, 4), (2, 5)]
+
+    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+
+    ligand_network = planner.generate_network_from_indices(components=components, indices=edges)
+
+    assert isinstance(ligand_network, LigandNetwork)
+    assert ligand_network.nodes == frozenset(components)
+
+    # names are equal to their indices in this dataset,
+    # so we can verify we pulled the correct indices this way:
+    result_edges = [(int(e.componentA.name), int(e.componentB.name)) for e in ligand_network.edges]
+    assert frozenset(result_edges) == frozenset(edges)
+
+    assert get_is_connected(ligand_network)
 
 
 def test_explicit_network_planner_from_indices_disconnected():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
-    indices = [(1, 2), (2, 3), (3, 4), (2, 5), (2, 6)]
+    edges = [(1, 2), (2, 3), (3, 4), (2, 5), (2, 6)]
+
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
     with pytest.warns(match="Generated network is not fully connected"):
-        ligand_network = planner.generate_network_from_indices(
-            components=components, indices=indices
-        )
+        ligand_network = planner.generate_network_from_indices(components=components, indices=edges)
 
     assert isinstance(ligand_network, LigandNetwork)
-    assert len(ligand_network.nodes) == n_compounds
-    assert len(ligand_network.edges) == len(indices)
+    assert ligand_network.nodes == frozenset(components)
+
+    # names are equal to their indices in this dataset,
+    # so we can verify we pulled the correct indices this way:
+    result_edges = [(int(e.componentA.name), int(e.componentB.name)) for e in ligand_network.edges]
+    assert frozenset(result_edges) == frozenset(edges)
+
     assert not get_is_connected(ligand_network)
 
 
 def test_explicit_network_planner_from_names():
-    pass
+    n_compounds = 6
+    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    edges = [("0", "1"), ("1", "2"), ("2", "3"), ("3", "4"), ("3", "5")]
+
+    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+
+    ligand_network = planner.generate_network_from_names(components=components, names=edges)
+
+    assert isinstance(ligand_network, LigandNetwork)
+    assert ligand_network.nodes == frozenset(components)
+
+    result_edges = [(e.componentA.name, e.componentB.name) for e in ligand_network.edges]
+    assert frozenset(result_edges) == frozenset(edges)
+
+    assert get_is_connected(ligand_network)
 
 
 def test_explicit_network_planner_from_names_disconnected():
     n_compounds = 20
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
-    names = [("0", "1"), ("1", "2"), ("2", "3"), ("1", "5"), ("1", "6")]
+    edges = [("0", "1"), ("1", "2"), ("2", "3"), ("1", "5"), ("1", "6")]
 
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
     with pytest.warns(match="Generated network is not fully connected"):
-        ligand_network = planner.generate_network_from_names(components=components, names=names)
+        ligand_network = planner.generate_network_from_names(components=components, names=edges)
 
     assert isinstance(ligand_network, LigandNetwork)
-    assert len(ligand_network.nodes) == n_compounds
-    assert len(ligand_network.edges) == len(names)
+    assert ligand_network.nodes == frozenset(components)
+
+    result_edges = [(e.componentA.name, e.componentB.name) for e in ligand_network.edges]
+    assert frozenset(result_edges) == frozenset(edges)
+
     assert not get_is_connected(ligand_network)
