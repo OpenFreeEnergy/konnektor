@@ -78,7 +78,6 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
-
         # Translate Mappings to graphable:
         edge_map = {
             (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
@@ -86,25 +85,22 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
 
-        # TODO: this can output a network with fewer nodes than were input - do we want to allow this, or throw a warning?
         mg = self.network_generator.generate_network(edges, weights)
 
-        if not mg.connected:
-            nodes_index = {c: components.index(c) for c in components}
-            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
-            raise RuntimeError("Unable to create edges for some nodes: " + str(list(missing_nodes)))
-
+        # TODO: collect all the mappings, use j->i mapping if i->j not found? - double check this
         selected_mappings = [
             edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
         ]
 
-        ligand_network = LigandNetwork(edges=selected_mappings, nodes=components)
+        # intentionally make the ligand_network based *only* on the edges,
+        # so we can catch any missing nodes in the next step
+        mst_ligand_network = LigandNetwork(edges=selected_mappings)
 
         # check again for the case where selected_mappings results in a disconnected network
-        if not ligand_network.is_connected():
-            nodes_index = {c: components.index(c) for c in components}
-            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
+        missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
+        if missing_nodes:
             raise RuntimeError(
                 "LIGAND ERROR: Unable to create edges for some nodes: " + str(list(missing_nodes))
             )
-        return ligand_network
+
+        return mst_ligand_network
