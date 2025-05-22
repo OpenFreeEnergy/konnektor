@@ -97,7 +97,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             ``Component``/s to place into the network.
 
         indices : list[tuple[int, int]]
-            Edges to form between the components, represented as tuples of indices of the list of components.
+            Edges to form between the ``Components``, represented as tuples of indices of the list of ``Component``/s.
             e.g. `[(3, 4), ...]` will create an edge between the 3rd and 4th molecules
             (remember that Python uses 0-based indexing)
 
