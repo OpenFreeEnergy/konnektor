@@ -125,7 +125,7 @@ def test_explicit_network_planner_from_names_disconnected():
 
     planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
 
-    with pytest.warns(match="Generated network is not fully connected"):
+    with pytest.warns(match="Generated network is not connected"):
         ligand_network = planner.generate_network_from_names(components=components, names=edges)
 
     assert isinstance(ligand_network, LigandNetwork)
