@@ -22,31 +22,31 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The `RedundantMinimalSpanningTreeNetworkGenerator` is an approach that tries to increase
-        robustness to `Transformation` failures in an MST-like network.
+        The ``RedundantMinimalSpanningTreeNetworkGenerator`` is an approach that tries to increase
+        robustness to ``Transformation`` failures in an MST-like network.
 
-        This algorithm executes the MST algorithm `n_redundancy` times, always removing
-        already-selected `Transformations` in each iteration, and finally builds the overlay of all the networks.
+        This algorithm executes the MST algorithm ``n_redundancy`` times, always removing
+        already-selected ``Transformations`` in each iteration, and finally builds the overlay of all the networks.
         This is constructs the Redundant MST Network.
 
-        In this way, the number of edges is increased, but the network is also less vulnerable to `Transformation` failures.
+        In this way, the number of edges is increased, but the network is also less vulnerable to ``Transformation`` failures.
 
         Parameters
         ----------
         mappers :  Union[AtomMapper, list[AtomMapper]]
-            the `AtomMapper` s to use to propose `AtomMapping` s.  At least 1 required,
+            the ``AtomMapper``/s to use to propose ``AtomMapping``/s.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
         scorer : AtomMappingScorer
-            any callable which takes a `AtomMapping` and returns a float
+            any callable which takes a ``AtomMapping`` and returns a float
         n_redundancy: int
-            use MST n times to get a redundant set of `Transformations`.
+            use MST n times to get a redundant set of ``Transformations``.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional
             if true a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkGenerator, optional
-            this `NetworkGenerator` is used to give the initial set of edges. For standard usage, the `MaximalNetworkGenerator` is used. (default: MaximalNetworkPlanner)
+            this ``NetworkGenerator`` is used to give the initial set of edges. For standard usage, the ``MaximalNetworkGenerator`` is used. (default: MaximalNetworkPlanner)
 
 
         """
@@ -68,13 +68,13 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """
-        generate a redundant mst network for the given compounds.
+        Generate a redundant MST network from the given ``Component``/s.
 
 
         Parameters
         ----------
         components: Iterable[Component]
-            the components to be used for the LigandNetwork
+            ``Components`` to be used as nodes in the ``LigandNetwork``.
 
         Returns
         -------
