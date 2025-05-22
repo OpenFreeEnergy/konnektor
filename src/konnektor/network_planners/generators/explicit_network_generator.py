@@ -47,16 +47,14 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         nodes: Iterable[Component] | None = None,
     ) -> LigandNetwork:
         """
-        Create a network with pre-defined edges.
+        Create a network with explicitly-defined edges and nodes.
         The network can be defined by specifying only edges, in which case the nodes are implicitly added.
-
-        This can be used as initial_edge_lister.
 
         Parameters
         ----------
         edges: Iterable[Tuple[Component, Component]]
-            Planned edges, that will be connected with mappings and scores.
-            Each Tuple in this case represent one edge.
+            Planned edges that will be connected with mappings and scores.
+            Each Tuple represents one edge.
 
         nodes: Iterable[Component] | None
             A list of nodes to be included in the network.
