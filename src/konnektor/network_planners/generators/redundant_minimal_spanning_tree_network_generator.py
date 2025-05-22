@@ -127,4 +127,14 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             for k in selected_edges
         ]
 
-        return LigandNetwork(edges=selected_mappings, nodes=components)
+        ligand_network = LigandNetwork(edges=selected_mappings, nodes=components)
+
+        # check again for the case where selected_mappings results in a disconnected network
+        if not ligand_network.is_connected():
+            nodes_index = {c: components.index(c) for c in components}
+            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
+            raise RuntimeError(
+                "LIGAND ERROR: Unable to create edges for some nodes: " + str(list(missing_nodes))
+            )
+
+        return ligand_network
