@@ -188,6 +188,7 @@ def _serial_map_scoring(
         progress = lambda x: x
 
     mappings = []
+
     for component_pair in progress(possible_edges):
         best_mapping = _determine_best_mapping(
             component_pair=component_pair, mappers=mappers, scorer=scorer
