@@ -65,6 +65,11 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         -------
         LigandNetwork
 
+
+        Warns
+        -----
+        Warning
+            Raises a warning if the network is not connected as a single network.
         """
 
         mappings = _parallel_map_scoring(
@@ -77,7 +82,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         network = LigandNetwork(edges=mappings, nodes=nodes)
         if not network.is_connected():
-            warnings.warn("Generated network is not fully connected")
+            warnings.warn("Generated network is not connected as a single network.")
 
         return network
 
@@ -106,7 +111,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Raises
         ------
         IndexError
-            Throws an error if the ``indices`` specified are not present in ``components``.
+            Throws an error if the ``indices`` specified are not present in ``components``.j
         """
         edges = []
 
