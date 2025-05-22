@@ -64,7 +64,7 @@ class genScorer:  # (AtomMappingScorer):
         Parameters
         ----------
         mapping: AtomMapping
-            the score will not be depending on the mapping! this mimicks only classical scorer use.
+            the score will not be depending on the mapping! this mimics only classical scorer use.
 
         Returns
         -------
