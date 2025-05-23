@@ -10,6 +10,7 @@ from gufe import LigandNetwork
 from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
+    CustomExcludeMapper,
     ErrorMapper,
     GenAtomMapper,
     genScorer,
@@ -95,15 +96,15 @@ def test_minimal_spanning_network_no_mappings(toluene_vs_others):
 
 def test_minimal_spanning_network_unreachable(toluene_vs_others):
     toluene, others = toluene_vs_others
-    nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
+    nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"), name="exclude_me")
+    components = others + [toluene, nimrod]
 
     # TODO: generate a test case where one node can't be connected
-    mapper = GenAtomMapper()
+    mapper = CustomExcludeMapper()
 
-    def scorer(mapping):
-        return len(mapping.componentA_to_componentB)
-
-    with pytest.raises(RuntimeError, match="Unable to create edges"):
+    with pytest.raises(
+        RuntimeError,
+        match=r"LIGAND ERROR: Unable to create edges for some nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]",
+    ):
         planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
-        components = others + [toluene, nimrod]
         planner.generate_ligand_network(components=components)
