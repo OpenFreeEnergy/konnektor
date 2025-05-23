@@ -98,13 +98,10 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"), name="exclude_me")
     components = others + [toluene, nimrod]
+    mapper = CustomExcludeMapper()  # this will exclude nimrod due to 'exclude' in its name
 
-    # TODO: generate a test case where one node can't be connected
-    mapper = CustomExcludeMapper()
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
 
-    with pytest.raises(
-        RuntimeError,
-        match=r"LIGAND ERROR: Unable to create edges for some nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]",
-    ):
-        planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+    err_str = r"LIGAND ERROR: Unable to create edges for some nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
+    with pytest.raises(RuntimeError, match=err_str):
         planner.generate_ligand_network(components=components)
