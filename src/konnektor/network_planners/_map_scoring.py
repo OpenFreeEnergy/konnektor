@@ -27,8 +27,8 @@ def _determine_best_mapping(
         The two molecules for which the best mapping will be determined.
     mappers : AtomMapper | list[AtomMapper]
         The mapper(s) to use to generate possible mappings between the molecules in the ``component_pair``.
-    scorer : Callable
-        _description_
+    scorer : Optional[Callable]
+        The mapping scorer to use, in the form of a ``Callable`` that takes in an ``AtomMapping`` and returns a float in [0,1].
 
     Returns
     -------
