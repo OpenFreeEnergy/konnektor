@@ -102,6 +102,6 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
 
     planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
 
-    err_str = r"LIGAND ERROR: Unable to create edges for some nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
+    err_str = r"ERROR: Unable to create edges for the following nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
     with pytest.raises(RuntimeError, match=err_str):
         planner.generate_ligand_network(components=components)
