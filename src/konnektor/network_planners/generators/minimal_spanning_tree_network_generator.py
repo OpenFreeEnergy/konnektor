@@ -78,6 +78,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
         mappings = initial_network.edges
+
         # Translate Mappings to graphable:
         edge_map = {
             (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
