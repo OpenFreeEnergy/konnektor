@@ -70,8 +70,7 @@ def test_minimal_rmst_network_no_edges(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
-    mapper = ErrorMapper()
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=ErrorMapper(), scorer=genScorer)
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
-        planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
         planner.generate_ligand_network(components=others + [toluene, nimrod])
