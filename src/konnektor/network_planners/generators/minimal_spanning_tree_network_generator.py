@@ -97,11 +97,11 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         # so we can catch any missing nodes in the next step
         mst_ligand_network = LigandNetwork(edges=selected_mappings)
 
-        # check again for the case where selected_mappings results in a disconnected network
+        # check for a disconnected network
         missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
         if missing_nodes:
             raise RuntimeError(
-                "LIGAND ERROR: Unable to create edges for some nodes: " + str(list(missing_nodes))
+                "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
             )
 
         return mst_ligand_network

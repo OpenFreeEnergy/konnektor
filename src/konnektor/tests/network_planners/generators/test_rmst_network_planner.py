@@ -10,6 +10,7 @@ from gufe import LigandNetwork
 from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import RedundantMinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
+    CustomExcludeMapper,
     ErrorMapper,
     GenAtomMapper,
     genScorer,
@@ -75,3 +76,16 @@ def test_minimal_rmst_network_no_mapping(toluene_vs_others):
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner.generate_ligand_network(components=others + [toluene, nimrod])
+
+
+def test_rmst_unreachable(toluene_vs_others):
+    toluene, others = toluene_vs_others
+    nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"), name="exclude_me")
+    components = others + [toluene, nimrod]
+    mapper = CustomExcludeMapper()  # this will exclude nimrod due to 'exclude' in its name
+
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+
+    err_str = r"ERROR: Unable to create edges for the following node: \[SmallMoleculeComponent\(name=exclude_me\)\]"
+    with pytest.raises(RuntimeError, match=err_str):
+        planner.generate_ligand_network(components=components)
