@@ -106,7 +106,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             edge_weight = dict(list(zip(edges, weights)))
 
             mg = self.network_generator.generate_network(edges, weights)
-
+            # TODO: im not sure this will ever catch isolated nodes, since it's constructed explicitly from edges
             if not mg.connected:
                 nodes_index = {c: components.index(c) for c in components}
                 missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
