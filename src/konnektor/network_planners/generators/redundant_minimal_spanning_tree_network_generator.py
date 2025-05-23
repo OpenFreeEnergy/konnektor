@@ -95,7 +95,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         edge_weight = dict(zip(edges, weights))
 
         selected_edges = []
-        for _ in range(self.n_redundancy):
+        for n in range(self.n_redundancy):
             edges = list(edge_weight.keys())
 
             # filter for already selected edges
@@ -107,12 +107,11 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
             mg = self.network_generator.generate_network(edges, weights)
 
-            # TODO: do we want this check as well?
             if not mg.connected:
                 nodes_index = {c: components.index(c) for c in components}
                 missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
                 raise RuntimeError(
-                    "Unable to create edges for some nodes: " + str(list(missing_nodes))
+                    f"Unable to create edges for the following node during redundancy iteration {n}: {missing_nodes}"
                 )
 
             selected_edges.extend(list(mg.edges))
