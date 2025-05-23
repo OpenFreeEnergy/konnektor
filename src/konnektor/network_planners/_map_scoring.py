@@ -55,7 +55,7 @@ def _determine_best_mapping(
             if len(tmp_mappings) > 0:
                 # TODO: where should we enforce that this score is in [0,1]?
                 tmp_best_mapping = max(tmp_mappings, key=lambda m: m.annotations["score"])
-                # TODO: we still need a more explicit tie-breaking scheme
+                # TODO: we still need a tie-breaking scheme, then we can get rid of 'best_mapping is None'
                 if tmp_best_mapping.annotations["score"] > best_score or best_mapping is None:
                     best_score = tmp_best_mapping.annotations["score"]
                     best_mapping = tmp_best_mapping
