@@ -88,7 +88,6 @@ def test_generate_maximal_network_no_scorer(toluene_vs_others, n_process, with_p
     # it should use the mapping ({0:2}) of the first mapper (BadMultiMapper)
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 2}]
 
-
 @pytest.mark.parametrize("n_process", [1, 2])
 def test_generate_maximal_network_no_edges(toluene_vs_others, n_process):
     toluene, others = toluene_vs_others
