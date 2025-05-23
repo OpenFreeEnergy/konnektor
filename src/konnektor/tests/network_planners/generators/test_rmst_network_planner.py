@@ -66,7 +66,7 @@ def test_rminimal_spanning_network_connectedness(rminimal_spanning_network_redun
     assert nx.is_connected(nx.MultiGraph(minimal_spanning_network.graph))
 
 
-def test_minimal_rmst_network_noedger(toluene_vs_others):
+def test_minimal_rmst_network_no_edges(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
