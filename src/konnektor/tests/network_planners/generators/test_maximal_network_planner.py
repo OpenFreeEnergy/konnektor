@@ -46,8 +46,9 @@ def test_generate_maximal_network(toluene_vs_others, with_progress, with_scorer,
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_generate_maximal_network_mapper_error(toluene_vs_others, n_process, with_progress):
-    """ """
-
+    """If no scorer, use the first valid mapper.
+    # TODO: do we want this behavior, or should we enforce using the first mapper, then error out?
+    """
     toluene, others = toluene_vs_others
     components = others + [toluene]
 
@@ -60,6 +61,7 @@ def test_generate_maximal_network_mapper_error(toluene_vs_others, n_process, wit
 
     network = planner.generate_ligand_network(components)
 
+    # make sure the BadMapper was used ({0:0})
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 0}]
 
 
