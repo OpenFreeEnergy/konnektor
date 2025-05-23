@@ -105,5 +105,6 @@ class MaximalNetworkGenerator(NetworkGenerator):
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")
 
+        # TODO: raise an error? warning? if resulting network is disconnected
         network = LigandNetwork(edges=mappings, nodes=components)
         return network
