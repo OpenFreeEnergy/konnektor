@@ -86,6 +86,6 @@ def test_rmst_unreachable(toluene_vs_others):
 
     planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
 
-    err_str = r"ERROR: Unable to create edges for the following node: \[SmallMoleculeComponent\(name=exclude_me\)\]"
+    err_str = r"ERROR: Unable to create edges for the following nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
     with pytest.raises(RuntimeError, match=err_str):
         planner.generate_ligand_network(components=components)
