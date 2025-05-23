@@ -19,7 +19,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         n_processes: int = 1,
     ):
         """
-        The `MaximalNetworkGenerator` attempts to build a fully connected graph (every node connected to every other node) for given set of `Component`/s.
+        The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of `Component`/s.
 
         The edges of the graph are ``Transformation`` s, which contain `AtomMapping` s of pairwise `Component`/s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
