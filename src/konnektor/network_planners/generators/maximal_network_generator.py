@@ -14,14 +14,14 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: Callable,
+        scorer: Callable | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
         """
         The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of `Component`/s.
 
-        The edges of the graph are ``Transformation`` s, which contain `AtomMapping` s of pairwise `Component`/s.
+        The edges of the graph are ``Transformation`` s, which contain ``AtomMapping`` s of pairwise ``Component``/s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
 
         If multiple ``AtomMapper``/s are provided, but no scorer, the *first valid* ``AtomMapper`` provided will be used.
@@ -38,7 +38,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         ----------
         mappers: Union[AtomMapper, list[AtomMapper]]
             ``AtomMapper`` to use to define the relationship between two ligands.
-        scorer: Callable
+        scorer: Callable, optional
             Scoring function that takes in an atom mapping and returns a score in [0,1].
         progress: bool, optional
             If True, a progress bar will be displayed. (default: False)
