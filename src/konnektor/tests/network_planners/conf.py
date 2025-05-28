@@ -92,8 +92,13 @@ class ErrorMapper(DummyAtomMapper):
         raise ValueError("No mapping found for")
 
 
-def genScorer(mapping):
+def genScorer(mapping) -> float:
     """A general scorer for testing where the score is proportional to the length of the mapping.
     (i.e. a longer mapping gets a higher, and therefore better, score)
     """
     return 1 - (1.0 / len(mapping.componentA_to_componentB))
+
+
+def zeroScorer(mapping):
+    """A test scorer that always returns zero."""
+    return 0
