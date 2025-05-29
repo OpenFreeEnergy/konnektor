@@ -63,7 +63,7 @@ def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
     mappers = [BadMultiMapper(), SuperBadMapper(), BadMapper()]
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mappers, scorer=None)
 
-    with pytest.warns(match="Only the first mapper provided will be used: <BadMulti"):
+    with pytest.warns(match="Only the first valid mapper will be used: <BadMulti"):
         network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)

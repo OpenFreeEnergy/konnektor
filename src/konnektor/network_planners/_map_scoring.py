@@ -64,8 +64,8 @@ def _determine_best_mapping(
                 best_mapping = next(mapping_generator)
                 if len(mappers) > 1:
                     warnings.warn(
-                        "Multiple mappers were provided, but no scorer."
-                        f"Only the first valid mapper provided will be used: {mapper}"
+                        "Multiple mappers were provided, but no scorer. "
+                        f"Only the first valid mapper will be used: {mapper}"
                     )
                 break
             except:  # TODO: fix this bare except, or remove it (first mapper vs. first valid mapper)
