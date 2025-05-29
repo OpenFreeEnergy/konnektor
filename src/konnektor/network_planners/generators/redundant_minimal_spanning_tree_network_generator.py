@@ -1,8 +1,10 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
+import warnings
 from collections.abc import Iterable
 
+import networkx as nx
 from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
@@ -104,8 +106,14 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
             weights = [edge_weight[e] for e in edges]
             edge_weight = dict(list(zip(edges, weights)))
-
-            mg = self.network_generator.generate_network(edges, weights)
+            # TODO: if weights and edge_weight are [], this breaks!
+            # try/except for now to reproduce openfe behavior, but handle this better
+            try:
+                mg = self.network_generator.generate_network(edges, weights)
+            except nx.NetworkXPointlessConcept:
+                warnings.warn(
+                    f"Cannot create any minimal spanning network redundancy iteration {n}"
+                )
             # TODO: im not sure this will ever catch isolated nodes, since it's constructed explicitly from edges
             if not mg.connected:
                 nodes_index = {c: components.index(c) for c in components}
@@ -115,7 +123,6 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
                 )
 
             selected_edges.extend(list(mg.edges))
-
         selected_mappings = [
             edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])]
             for k in selected_edges
