@@ -41,6 +41,33 @@ def test_star_network(atom_mapping_basic_test_files, toluene_vs_others, as_list)
     )
 
 
+def test_star_network_central_in_components(atom_mapping_basic_test_files, toluene_vs_others):
+    """issue #544, if including the central ligand in "ligands", warn and make sure there isn't self-edge"""
+    toluene, others = toluene_vs_others
+    all_ligands = others + [toluene]
+    central_ligand_name = "toluene"
+    mapper = GenAtomMapper()
+
+    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
+    with pytest.warns(UserWarning, match="The central_component 'toluene' was also found"):
+        network = planner.generate_ligand_network(components=all_ligands, central_component=toluene)
+
+    assert ("toluene", "toluene") not in {
+        (e.componentA.name, e.componentB.name) for e in network.edges
+    }
+    # couple sanity checks
+    assert len(network.nodes) == len(atom_mapping_basic_test_files)
+    assert len(network.edges) == len(others)
+    # check that all ligands are present, i.e. we included everyone
+    ligands_in_network = {mol.name for mol in network.nodes}
+    assert ligands_in_network == set(atom_mapping_basic_test_files.keys())
+    # check that every edge has the central ligand within
+    assert all(
+        (central_ligand_name in {mapping.componentA.name, mapping.componentB.name})
+        for mapping in network.edges
+    )
+
+
 def test_star_network_with_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
 

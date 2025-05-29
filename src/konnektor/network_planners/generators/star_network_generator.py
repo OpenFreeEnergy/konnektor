@@ -2,6 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
+import warnings
 from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
@@ -115,6 +116,14 @@ class StarNetworkGenerator(NetworkGenerator):
 
             selected_mappings = []
             for component in progress(components):
+                if component == central_component:
+                    wmsg = (
+                        f"The central_component '{central_component.name}' was also found in "
+                        "the list of components to arrange around the central_component, "
+                        f"this will be ignored (no self-edge will be created for {central_component.name})."
+                    )
+                    warnings.warn(wmsg)
+                    continue
                 best_mapping = _determine_best_mapping(
                     component_pair=(central_component, component),
                     mappers=self.mappers,
