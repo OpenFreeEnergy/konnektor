@@ -49,7 +49,7 @@ def test_star_network_central_in_components(atom_mapping_basic_test_files, tolue
     mapper = GenAtomMapper()
 
     planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
-    with pytest.warns(UserWarning, match="The central_component 'toluene' was also found"):
+    with pytest.warns(UserWarning, match="The central component 'toluene' is present in the list"):
         network = planner.generate_ligand_network(components=all_ligands, central_component=toluene)
 
     assert ("toluene", "toluene") not in {
