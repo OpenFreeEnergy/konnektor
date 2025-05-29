@@ -112,14 +112,14 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
                 mg = self.network_generator.generate_network(edges, weights)
             except nx.NetworkXPointlessConcept:
                 warnings.warn(
-                    f"Cannot create any minimal spanning network redundancy iteration {n}"
+                    f"Cannot create any minimal spanning network for redundancy iteration {n + 1}"
                 )
             # TODO: im not sure this will ever catch isolated nodes, since it's constructed explicitly from edges
             if not mg.connected:
                 nodes_index = {c: components.index(c) for c in components}
                 missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
                 raise RuntimeError(
-                    f"Unable to create edges for the following node during redundancy iteration {n}: {missing_nodes}"
+                    f"Unable to create edges for the following node during redundancy iteration {n + 1}: {missing_nodes}"
                 )
 
             selected_edges.extend(list(mg.edges))

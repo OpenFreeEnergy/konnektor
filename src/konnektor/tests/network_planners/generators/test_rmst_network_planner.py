@@ -78,6 +78,19 @@ def test_minimal_rmst_network_no_mapping(toluene_vs_others):
         planner.generate_ligand_network(components=others + [toluene, nimrod])
 
 
+def test_rmst_requested_too_much_redundancy(toluene_vs_others):
+    _, others = toluene_vs_others
+    # just take 2 components so that a redundant network > 2 redundancy will fail
+    components = others[0:2]
+    mapper = GenAtomMapper()
+
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+
+    err_str = r"Cannot create any minimal spanning network for redundancy iteration 2"
+    with pytest.warns(match=err_str):
+        planner.generate_ligand_network(components=components)
+
+
 def test_rmst_unreachable(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"), name="exclude_me")
