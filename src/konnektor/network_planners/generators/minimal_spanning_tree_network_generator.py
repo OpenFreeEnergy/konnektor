@@ -22,25 +22,25 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     ):
         """
         The ``MinimalSpanningTreeNetworkGenerator``, builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
-        The ``Transformation`` s of the Network are represented by an ``AtomMapping`` s, which are scored by a ``AtomMappingScorer``.
+        The ``Transformation`` s of the network are represented by an ``AtomMapping`` s, which are scored by a ``AtomMappingScorer``.
 
         For the MST algorithm, the Kruskal Algorithm is used.
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of ``Transformations``.
         This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
-        ``Transformation``, the Network is immediately disconnected.
+        ``Transformation``, the network is immediately disconnected.
         The disconnectivity will translate to a loss of ``Component``/s in the final FE Network.
 
         Parameters
         ----------
         mapper :  Union[AtomMapper, list[AtomMapper]]
-            the ``AtomMapper`` is required, to define the connection between two ligands.
+            ``AtomMapper`` or list of ``AtomMapper``/s to use to define the relationship between two ligands.
         scorer : AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
+            The scoring function to use for evaluating an atom mapping. Should give a score in [0,1].
         n_processes: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            Number of processes to be used for parallelization. (default: 1)
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+            If True, a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
             ``NetworkPlanner`` to be used to generate the initial set of edges. For standard usage, the Maximal NetworkPlanner is often appropriate.
             For very large networks, the ``HeuristicMaximalNetworkPlanner`` might be a useful alternative.
