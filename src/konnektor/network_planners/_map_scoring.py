@@ -12,7 +12,7 @@ from tqdm.auto import tqdm
 
 def _determine_best_mapping(
     component_pair: tuple[SmallMoleculeComponent],
-    mappers: AtomMapper | list[AtomMapper],
+    mappers: list[AtomMapper],
     scorer: Callable | None,
 ) -> AtomMapping:
     """
@@ -61,12 +61,14 @@ def _determine_best_mapping(
                     best_mapping = tmp_best_mapping
         else:
             try:
-                warnings.warn(
-                    f"Multiple mappers were provided, but no scorer. Only the first mapper provided will be used: {mapper}"
-                )
                 best_mapping = next(mapping_generator)
+                if len(mappers) > 1:
+                    warnings.warn(
+                        "Multiple mappers were provided, but no scorer. "
+                        f"Only the first valid mapper will be used: {mapper}"
+                    )
                 break
-            except:  # TODO: I don't think this except is needed
+            except:  # TODO: fix this bare except, or remove it (first mapper vs. first valid mapper)
                 continue
 
     return best_mapping
