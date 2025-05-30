@@ -24,7 +24,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The ``RedundantMinimalSpanningTreeNetworkGenerator`` is an approach that tries to increase
+        The ``RedundantMinimalSpanningTreeNetworkGenerator`` is an approach that attempts to increase
         robustness to ``Transformation`` failures in an MST-like network.
 
         This algorithm executes the MST algorithm ``n_redundancy`` times, always removing
@@ -42,7 +42,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         scorer : AtomMappingScorer
             any callable which takes a ``AtomMapping`` and returns a float
         n_redundancy: int
-            use MST n times to get a redundant set of ``Transformations``.
+            use MST n times to get a redundant set of ``Transformations``. If ``n_redundancy`` is greater than the number of redundant MSTs able to be generated, a warning will be raised and the resulting network will contain the maximum number of redundant MSTs able to be generated.
         n_processes: int, optional
             number of processes that can be used for the network generation. (default: 1)
         progress: bool, optional

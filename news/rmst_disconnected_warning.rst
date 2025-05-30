@@ -4,7 +4,7 @@
 
 **Changed:**
 
-* For ``RedundantMinimalSpanningTreeNetworkGenerator``, if the number of redundancies (``n_redundancy``) is larger than the number of redundant MSTs able to be generated for the network, a warning will be raised, and the resulting network will contain the most redudant MSTs able to be generated for the input network.
+* For ``RedundantMinimalSpanningTreeNetworkGenerator``, if the number of redundancies (``n_redundancy``) is larger than the number of redundant MSTs able to be generated for the network, a warning will be raised, and the resulting network will contain the most redudant MSTs able to be generated.
 
 **Deprecated:**
 
