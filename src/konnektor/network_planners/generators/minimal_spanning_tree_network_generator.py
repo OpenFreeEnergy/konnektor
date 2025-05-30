@@ -72,7 +72,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         Returns
         -------
         LigandNetwork
-            a ligand network generated following the MST rules.
+            ``LigandNetwork`` generated following the MST rules.
 
         """
 
