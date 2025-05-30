@@ -92,6 +92,27 @@ class ErrorMapper(DummyAtomMapper):
         raise ValueError("No mapping found for")
 
 
+class CustomExcludeMapper(DummyAtomMapper):
+    """A mapper that will not return a mapping for any SmallMoleculeComponent that contains 'exclude' in its name.
+    Useful for testing disconnected networks. This mimics how LOMAP will return empty for invalid mappings.
+    """
+
+    def suggest_mappings(
+        self, componentA: SmallMoleculeComponent, componentB: SmallMoleculeComponent
+    ):
+        if "exclude" in componentA.name or "exclude" in componentB.name:
+            return
+
+        atomsA = range(componentA.to_rdkit().GetNumAtoms())
+        atomsB = range(componentB.to_rdkit().GetNumAtoms())
+
+        yield LigandAtomMapping(
+            componentA,
+            componentB,
+            componentA_to_componentB={k: v for k, v in zip(atomsA, atomsB)},
+        )
+
+
 def genScorer(mapping) -> float:
     """A general scorer for testing where the score is proportional to the length of the mapping.
     (i.e. a longer mapping gets a higher, and therefore better, score)

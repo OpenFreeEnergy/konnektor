@@ -21,29 +21,29 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
-        The `MinimalSpanningTreeNetworkGenerator`, builds an minimal spanning tree (MST) network for a given set of `Component` s.\
-        The `Transformation` s of the Network are represented by an `AtomMapping` s, which are scored by a `AtomMappingScorer`.
+        The ``MinimalSpanningTreeNetworkGenerator``, builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
+        The ``Transformation`` s of the network are represented by an ``AtomMapping`` s, which are scored by a ``AtomMappingScorer``.
 
         For the MST algorithm, the Kruskal Algorithm is used.
 
-        The MST algorithm gives the optimal graph score possible and the minimal required set of `Transformations`.
+        The MST algorithm gives the optimal graph score possible and the minimal required set of ``Transformations``.
         This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
-        `Transformation`, the Network is immediatly disconnected.
-        The disconnectivity will translate to a loss of `Component` s in the final FE Network.
+        ``Transformation``, the network is immediately disconnected.
+        The disconnectivity will translate to a loss of ``Component``/s in the final FE Network.
 
         Parameters
         ----------
         mapper :  Union[AtomMapper, list[AtomMapper]]
-            the `AtomMapper` is required, to define the connection between two ligands.
+            ``AtomMapper`` or list of ``AtomMapper``/s to use to define the relationship between two ligands.
         scorer : AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
+            The scoring function to use for evaluating an atom mapping. Should give a score in [0,1].
         n_processes: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            Number of processes to be used for parallelization. (default: 1)
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+            If True, a progress bar will be displayed. (default: False)
         _initial_edge_lister: NetworkPlanner, optional
-            this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner.
+            ``NetworkPlanner`` to be used to generate the initial set of edges. For standard usage, the Maximal NetworkPlanner is often appropriate.
+            For very large networks, the ``HeuristicMaximalNetworkPlanner`` might be a useful alternative.
             (default: MaximalNetworkPlanner)
         """
         if _initial_edge_lister is None:
@@ -62,17 +62,17 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
         """
-        Generate a MST network from a list of components.
+        Generate a MST network from the given ``Component``/s.
 
         Parameters
         ----------
         components: Iterable[Component]
-        the components to be used for the LigandNetwork
+            ``Components`` to be used as nodes in the ``LigandNetwork``.
 
         Returns
         -------
         LigandNetwork
-            a ligand network following the MST rules.
+            ``LigandNetwork`` generated following the MST rules.
 
         """
 
@@ -88,13 +88,20 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         mg = self.network_generator.generate_network(edges, weights)
 
-        if not mg.connected:
-            nodes_index = {c: components.index(c) for c in components}
-            missing_nodes = [c for c in components if (nodes_index[c] in mg.nodes)]
-            raise RuntimeError("Unable to create edges for some nodes: " + str(list(missing_nodes)))
-
+        # TODO: collect all the mappings, use j->i mapping if i->j not found? - double check this
         selected_mappings = [
             edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
         ]
 
-        return LigandNetwork(edges=selected_mappings, nodes=components)
+        # intentionally make the ligand_network based *only* on the edges,
+        # so we can catch any missing nodes in the next step
+        mst_ligand_network = LigandNetwork(edges=selected_mappings)
+
+        # check for a disconnected network
+        missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
+        if missing_nodes:
+            raise RuntimeError(
+                "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
+            )
+
+        return mst_ligand_network

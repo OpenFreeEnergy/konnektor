@@ -118,8 +118,8 @@ class StarNetworkGenerator(NetworkGenerator):
             for component in progress(components):
                 if component == central_component:
                     wmsg = (
-                        f"The central_component '{central_component.name}' was also found in "
-                        "the list of components to arrange around the central_component, "
+                        f"The central component '{central_component.name}' is present in "
+                        "the list of components to arrange around the central component, "
                         f"this will be ignored (no self-edge will be created for {central_component.name})."
                     )
                     warnings.warn(wmsg)
