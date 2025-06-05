@@ -74,6 +74,11 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         LigandNetwork
             ``LigandNetwork`` generated following the MST rules.
 
+        Raises
+        ------
+        RuntimeError
+            If one or more nodes are not included in the MST.
+
         """
 
         initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
@@ -103,5 +108,6 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             raise RuntimeError(
                 "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
             )
+        # TODO: warn if disconnected? (i.e. minimal spanning forest)
 
         return mst_ligand_network
