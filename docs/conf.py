@@ -11,6 +11,8 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+from pathlib import Path
+import shutil
 import sys
 
 sys.path.insert(0, os.path.abspath("../src"))
@@ -29,8 +31,11 @@ author = "The OpenFE Development Team"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    "nbsphinx",
+    "nbsphinx_link",
+    "sphinx.ext.autosectionlabel",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -79,3 +84,26 @@ html_theme_options = {
 html_css_files = [
     "css/custom.css",
 ]
+
+# Extensions for the myst parser
+myst_enable_extensions = [
+    "dollarmath",
+    "colon_fence",
+    "smartquotes",
+    "replacements",
+    "deflist",
+    "attrs_inline",
+]
+myst_heading_anchors = 3
+
+
+example_notebooks_path = Path("ExampleNotebooks")
+
+try:
+    if example_notebooks_path.exists():
+        pass
+    else:
+        source = Path("../examples")
+        shutil.copytree(source, example_notebooks_path)
+except Exception as e:
+    raise OSError("Could not copy over example notebooks")
