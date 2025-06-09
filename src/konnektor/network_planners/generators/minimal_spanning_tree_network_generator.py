@@ -3,6 +3,7 @@
 
 from collections.abc import Iterable
 
+import networkx as nx
 from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
@@ -77,31 +78,50 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         """
 
         initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
-        mappings = initial_network.edges
 
-        # Translate Mappings to graphable:
-        edge_map = {
-            (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
-        }
-        edges = list(edge_map.keys())
-        weights = [edge_map[k].annotations["score"] for k in edges]
+        # Flip network scores so we can use minimal algorithm
+        g2 = nx.MultiGraph()
+        for e1, e2, d in initial_network.graph.edges(data=True):
+            g2.add_edge(e1, e2, weight=-d["score"], object=d["object"])
 
-        mg = self.network_generator.generate_network(edges, weights)
-
-        # TODO: collect all the mappings, use j->i mapping if i->j not found? - double check this
-        selected_mappings = [
-            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
-        ]
-
-        # intentionally make the ligand_network based *only* on the edges,
-        # so we can catch any missing nodes in the next step
-        mst_ligand_network = LigandNetwork(edges=selected_mappings)
-
-        # check for a disconnected network
-        missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
+        # Next analyze that network to create minimal spanning network. Because
+        # we carry the original (directed) LigandAtomMapping, we don't lose
+        # direction information when converting to an undirected graph.
+        min_edges = nx.minimum_spanning_edges(g2)
+        min_mappings = [edge_data["object"] for _, _, _, edge_data in min_edges]
+        min_network = LigandNetwork(min_mappings)
+        missing_nodes = set(initial_network.nodes) - set(min_network.nodes)
         if missing_nodes:
             raise RuntimeError(
                 "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
             )
+        return min_network
 
-        return mst_ligand_network
+        # mappings = initial_network.edges
+
+        # # Translate Mappings to graphable:
+        # edge_map = {
+        #     (components.index(m.componentA), components.index(m.componentB)): m for m in mappings
+        # }
+        # edges = list(edge_map.keys())
+        # weights = [edge_map[k].annotations["score"] for k in edges]
+
+        # mg = self.network_generator.generate_network(edges, weights)
+
+        # # TODO: collect all the mappings, use j->i mapping if i->j not found? - double check this
+        # selected_mappings = [
+        #     edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
+        # ]
+
+        # # intentionally make the ligand_network based *only* on the edges,
+        # # so we can catch any missing nodes in the next step
+        # mst_ligand_network = LigandNetwork(edges=selected_mappings)
+
+        # # check for a disconnected network
+        # missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
+        # if missing_nodes:
+        #     raise RuntimeError(
+        #         "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
+        #     )
+
+        # return mst_ligand_network
