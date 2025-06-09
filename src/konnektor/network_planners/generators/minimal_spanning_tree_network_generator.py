@@ -89,13 +89,6 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         # direction information when converting to an undirected graph.
         min_edges = nx.minimum_spanning_edges(g2)
         min_mappings = [edge_data["object"] for _, _, _, edge_data in min_edges]
-        min_network = LigandNetwork(min_mappings)
-        missing_nodes = set(initial_network.nodes) - set(min_network.nodes)
-        if missing_nodes:
-            raise RuntimeError(
-                "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
-            )
-        return min_network
 
         # mappings = initial_network.edges
 
@@ -113,15 +106,15 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         #     edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
         # ]
 
-        # # intentionally make the ligand_network based *only* on the edges,
-        # # so we can catch any missing nodes in the next step
-        # mst_ligand_network = LigandNetwork(edges=selected_mappings)
+        # intentionally make the ligand_network based *only* on the edges,
+        # so we can catch any missing nodes in the next step
+        mst_ligand_network = LigandNetwork(edges=min_mappings)
 
-        # # check for a disconnected network
-        # missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
-        # if missing_nodes:
-        #     raise RuntimeError(
-        #         "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
-        #     )
+        # check for a disconnected network
+        missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
+        if missing_nodes:
+            raise RuntimeError(
+                "ERROR: Unable to create edges for the following nodes: " + str(list(missing_nodes))
+            )
 
-        # return mst_ligand_network
+        return mst_ligand_network
