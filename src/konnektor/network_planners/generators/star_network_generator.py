@@ -140,4 +140,4 @@ class StarNetworkGenerator(NetworkGenerator):
         return LigandNetwork(edges=selected_mappings, nodes=components)
 
 
-RadialLigandNetworkPlanner = StarNetworkGenerator
+RadialNetworkGenerator = StarNetworkGenerator
