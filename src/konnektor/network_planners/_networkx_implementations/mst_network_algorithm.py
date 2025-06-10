@@ -9,15 +9,13 @@ from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
     def generate_network(self, initial_network: nx.Graph, n_edges: int = None) -> nx.Graph:
-        # Flip network scores so we can use minimal algorithm
-        # TODO: call `update` to make this lighter, or just use max spanning tree.
-        g2 = nx.MultiGraph()
-        for e1, e2, d in initial_network.graph.edges(data=True):
-            g2.add_edge(e1, e2, weight=-d["score"], object=d["object"])
+        # we actually use a maximum spanning tree since higher scores are better
+        # TODO: make sure we get the directed edges back out
+        min_edges = nx.maximum_spanning_edges(
+            initial_network.to_undirected(), weight="score", keys=True, data=True
+        )
 
-        min_edges = nx.minimum_spanning_edges(g2, weight="weight", keys=True, data=True)
-
-        nodes = initial_network.nodes
+        nodes = initial_network.nodes(data=True)
         if n_edges is None:
             n_edges = len(nodes) - 1  # max number of MST edges
 
