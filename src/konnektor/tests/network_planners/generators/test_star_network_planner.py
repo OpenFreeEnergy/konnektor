@@ -25,7 +25,7 @@ def test_star_network(atom_mapping_basic_test_files, toluene_vs_others, as_list)
     if as_list:
         mapper = [mapper]
 
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
+    planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mapper, scorer=None)
     network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     # couple sanity checks
@@ -48,7 +48,7 @@ def test_star_network_central_in_components(atom_mapping_basic_test_files, tolue
     central_ligand_name = "toluene"
     mapper = GenAtomMapper()
 
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
+    planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mapper, scorer=None)
     with pytest.warns(UserWarning, match="The central component 'toluene' is present in the list"):
         network = planner.generate_ligand_network(components=all_ligands, central_component=toluene)
 
@@ -73,7 +73,7 @@ def test_star_network_with_scorer(toluene_vs_others):
 
     mappers = [BadMapper(), GenAtomMapper()]
     scorer = genScorer
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mappers, scorer=scorer)
+    planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mappers, scorer=scorer)
     network = planner.generate_ligand_network(components=others, central_component=toluene)
 
     assert len(network.edges) == len(others)
@@ -88,7 +88,7 @@ def test_star_network_multiple_mappers_no_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
     # in this one, we should always take the bad mapper
     mappers = [BadMultiMapper(), SuperBadMapper(), BadMapper()]
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mappers, scorer=None)
+    planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mappers, scorer=None)
 
     with pytest.warns(match="Only the first valid mapper will be used: <BadMulti"):
         network = planner.generate_ligand_network(components=others, central_component=toluene)
@@ -102,7 +102,7 @@ def test_star_network_multiple_mappers_no_scorer_takes_first_valid(toluene_vs_ot
     toluene, others = toluene_vs_others
     # in this one, we should always take the bad mapper
     mappers = [ErrorMapper(), BadMultiMapper()]
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mappers, scorer=None)
+    planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mappers, scorer=None)
 
     with pytest.warns(match="Only the first valid mapper will be used: <BadMulti"):
         network = planner.generate_ligand_network(components=others, central_component=toluene)
@@ -116,7 +116,7 @@ def test_star_network_failure(atom_mapping_basic_test_files):
     nigel = SmallMoleculeComponent(mol_from_smiles("N"))
 
     mapper = ErrorMapper()
-    planner = konnektor.network_planners.RadialLigandNetworkPlanner(mappers=mapper, scorer=None)
+    planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mapper, scorer=None)
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner.generate_ligand_network(

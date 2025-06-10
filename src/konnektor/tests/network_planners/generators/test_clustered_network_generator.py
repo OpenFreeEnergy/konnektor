@@ -19,9 +19,9 @@ def test_clustered_network_planner():
     n_compounds = 40
     components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
 
-    from konnektor.network_planners import MstConcatenator, RadialLigandNetworkPlanner
+    from konnektor.network_planners import MstConcatenator, RadialNetworkGenerator
 
-    sub_networker = RadialLigandNetworkPlanner(mappers=genMapper, scorer=genScorer)
+    sub_networker = RadialNetworkGenerator(mappers=genMapper, scorer=genScorer)
     concatenator = MstConcatenator(mappers=genMapper, scorer=genScorer)
     clusterer = ComponentsDiversityClusterer(cluster=KMeans(n_clusters=3))
 
