@@ -78,7 +78,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
 
         initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
 
-        mst_network = self.network_generator.generate_network(initial_network)
+        mst_network = self.network_generator.generate_network(initial_network.graph)
 
         min_mappings = [edge_data["object"] for _, _, edge_data in mst_network.edges(data=True)]
 

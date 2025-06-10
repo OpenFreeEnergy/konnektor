@@ -18,14 +18,15 @@ def test_mst_network_generation(nine_mols_edges):
         ("lig_11", "lig_16"),
     ]
 
-    edges = [(e[0], e[1]) for e in nine_mols_edges]
-    weights = [e[2] for e in nine_mols_edges]
-    nodes = set([n for e in edges for n in e])
+    init_graph = nx.Graph()
+    init_graph.add_weighted_edges_from(
+        ebunch_to_add=[(e[0], e[1], e[2]) for e in nine_mols_edges], weight="score"
+    )
 
     gen = MstNetworkAlgorithm()
-    g = gen.generate_network(edges, weights)
+    g = gen.generate_network(init_graph)
 
-    assert len(nodes) - 1 == len(g.edges)
+    assert len(g.nodes) - 1 == len(g.edges)
     assert [e in g.edges for e in expected_edges]  # TODO: Does not work as intended.
     assert all([e[0] != e[1] for e in g.edges])  # No self connectivity
     assert isinstance(g, nx.Graph)
