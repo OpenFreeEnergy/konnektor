@@ -6,7 +6,7 @@ import warnings
 from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 

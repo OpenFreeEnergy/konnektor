@@ -14,7 +14,7 @@ from scikit_mol.fingerprints import (
     RDKitFingerprintTransformer,
 )
 from sklearn.cluster import HDBSCAN, KMeans
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
