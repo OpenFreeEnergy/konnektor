@@ -134,3 +134,6 @@ _version.py
 #IDE
 .idea
 .vscode
+
+# rever
+rever/

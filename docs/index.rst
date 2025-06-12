@@ -24,6 +24,7 @@ Try our interactive demo: |Colab|
    tutorial
    guide
    api
+   CHANGELOG
 
 .. |Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
    :target: https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x
