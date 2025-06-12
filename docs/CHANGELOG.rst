@@ -16,5 +16,3 @@ v0.2.0
 * **konnektor** now treats mapping scores of 1.0 as best, and 0.0 as worst. This is an inversion from the prior behavior (0.0 best, 1.0 worst) to match the behavior of the rest of the openfe ecosystem (`#138 <https://github.com/OpenFreeEnergy/konnektor/pull/138>`_).
 * Renamed ``RadialLigandNetworkPlanner`` to ``RadialNetworkGenerator`` to be consistent with the other network generator class names (`#160 <https://github.com/OpenFreeEnergy/konnektor/pull/160>`_).
 * For ``RedundantMinimalSpanningTreeNetworkGenerator``, if the number of redundancies (``n_redundancy``) is larger than the number of redundant MSTs able to be generated for the network, a warning will be raised, and the resulting network will contain the most redundant MSTs able to be generated (`#122 <https://github.com/OpenFreeEnergy/konnektor/pull/122>`_).
-
-
