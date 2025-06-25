@@ -10,6 +10,7 @@ from gufe import LigandNetwork
 from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import RedundantMinimalSpanningTreeNetworkGenerator
 from konnektor.tests.network_planners.conf import (
+    CustomExcludeMapper,
     ErrorMapper,
     GenAtomMapper,
     genScorer,
@@ -66,12 +67,38 @@ def test_rminimal_spanning_network_connectedness(rminimal_spanning_network_redun
     assert nx.is_connected(nx.MultiGraph(minimal_spanning_network.graph))
 
 
-def test_minimal_rmst_network_noedger(toluene_vs_others):
+# TODO: directly test HeuristicMaximalNetworkGenerator instead?
+def test_minimal_rmst_network_no_mapping(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
-    mapper = ErrorMapper()
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=ErrorMapper(), scorer=genScorer)
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
-        planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
         planner.generate_ligand_network(components=others + [toluene, nimrod])
+
+
+def test_rmst_requested_too_much_redundancy(toluene_vs_others):
+    _, others = toluene_vs_others
+    # just take 2 components so that a redundant network > 2 redundancy will fail
+    components = others[0:2]
+    mapper = GenAtomMapper()
+
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+
+    err_str = r"Cannot create any minimal spanning network for redundancy iteration 2"
+    with pytest.warns(match=err_str):
+        planner.generate_ligand_network(components=components)
+
+
+def test_rmst_unreachable(toluene_vs_others):
+    toluene, others = toluene_vs_others
+    nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"), name="exclude_me")
+    components = others + [toluene, nimrod]
+    mapper = CustomExcludeMapper()  # this will exclude nimrod due to 'exclude' in its name
+
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+
+    err_str = r"ERROR: Unable to create edges for the following nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
+    with pytest.raises(RuntimeError, match=err_str):
+        planner.generate_ligand_network(components=components)

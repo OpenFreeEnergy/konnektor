@@ -28,7 +28,7 @@ from .generators.redundant_minimal_spanning_tree_network_generator import (
 
 # Starmap Like Networks
 from .generators.star_network_generator import (
-    RadialLigandNetworkPlanner,
+    RadialNetworkGenerator,
     StarNetworkGenerator,
 )
 from .generators.twin_star_network_generator import TwinStarNetworkGenerator
@@ -44,7 +44,7 @@ __all__ = [
     MinimalSpanningTreeNetworkGenerator,
     NNodeEdgesNetworkGenerator,
     RedundantMinimalSpanningTreeNetworkGenerator,
-    RadialLigandNetworkPlanner,
+    RadialNetworkGenerator,
     StarNetworkGenerator,
     TwinStarNetworkGenerator,
 ]

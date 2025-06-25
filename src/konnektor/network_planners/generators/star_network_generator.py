@@ -2,10 +2,11 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
+import warnings
 from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
-from tqdm import tqdm
+from tqdm.auto import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 
@@ -115,6 +116,14 @@ class StarNetworkGenerator(NetworkGenerator):
 
             selected_mappings = []
             for component in progress(components):
+                if component == central_component:
+                    wmsg = (
+                        f"The central component '{central_component.name}' is present in "
+                        "the list of components to arrange around the central component, "
+                        f"this will be ignored (no self-edge will be created for {central_component.name})."
+                    )
+                    warnings.warn(wmsg)
+                    continue
                 best_mapping = _determine_best_mapping(
                     component_pair=(central_component, component),
                     mappers=self.mappers,
@@ -131,4 +140,4 @@ class StarNetworkGenerator(NetworkGenerator):
         return LigandNetwork(edges=selected_mappings, nodes=components)
 
 
-RadialLigandNetworkPlanner = StarNetworkGenerator
+RadialNetworkGenerator = StarNetworkGenerator

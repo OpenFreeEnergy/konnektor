@@ -18,7 +18,7 @@ from .network_planners import (
     MinimalSpanningTreeNetworkGenerator,
     MstConcatenator,
     NNodeEdgesNetworkGenerator,
-    RadialLigandNetworkPlanner,
+    RadialNetworkGenerator,
     StarrySkyNetworkGenerator,
 )
 from .network_tools import (
@@ -43,7 +43,7 @@ __all__ = [
     MinimalSpanningTreeNetworkGenerator,
     MstConcatenator,
     NNodeEdgesNetworkGenerator,
-    RadialLigandNetworkPlanner,
+    RadialNetworkGenerator,
     StarrySkyNetworkGenerator,
     ChargeClusterer,
     ComponentsDiversityClusterer,

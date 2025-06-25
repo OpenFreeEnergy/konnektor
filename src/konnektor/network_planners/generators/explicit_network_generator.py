@@ -44,24 +44,33 @@ class ExplicitNetworkGenerator(NetworkGenerator):
     def generate_ligand_network(
         self,
         edges: Iterable[tuple[Component, Component]],
+        nodes: Iterable[Component] | None = None,
     ) -> LigandNetwork:
         """
-        Create a network with pre-defined edges.
-
-        This can be used as initial_edge_lister
+        Create a network with explicitly-defined edges and nodes.
+        The network can be defined by specifying only edges, in which case the nodes are implicitly added.
 
         Parameters
         ----------
-        edges: Iterable[Tuple[Component,Component]]
-            planned edges, that will be connected with mappings and scores.
-            Each Tuple in this case represent one edge.
+        edges: Iterable[Tuple[Component, Component]]
+            Planned edges that will be connected with mappings and scores.
+            Each Tuple represents one edge.
+
+        nodes: Iterable[Component] | None
+            A list of nodes to be included in the network.
+            Optional, since the network can be defined by specifying only edges.
+            This is useful for adding isolated (unconnected) nodes.
 
         Returns
         -------
         LigandNetwork
-            the provided network.
+
+
+        Warns
+        -----
+        Warning
+            Raises a warning if the network is not connected as a single network.
         """
-        nodes = list(set([n for e in edges for n in e]))
 
         mappings = _parallel_map_scoring(
             possible_edges=edges,
@@ -73,7 +82,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         network = LigandNetwork(edges=mappings, nodes=nodes)
         if not network.is_connected():
-            warnings.warn("Generated network is not fully connected")
+            warnings.warn("Generated network is not connected as a single network.")
 
         return network
 
@@ -87,14 +96,13 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        components : list of Components
-          the small molecules to place into the network
-        mapper: AtomMapper
-          the atom mapper to use to construct edges
-        indices : list of tuples of indices
-          the edges to form where the values refer to names of the small molecules,
-          eg `[(3, 4), ...]` will create an edge between the 3rd and 4th molecules
-          remembering that Python uses 0-based indexing
+        components : list[Component]
+            ``Component``/s to place into the network.
+
+        indices : list[tuple[int, int]]
+            Edges to form between the ``Components``, represented as tuples of indices of the list of ``Component``/s.
+            e.g. `[(3, 4), ...]` will create an edge between the 3rd and 4th molecules
+            (remember that Python uses 0-based indexing)
 
         Returns
         -------
@@ -103,18 +111,19 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Raises
         ------
         IndexError
-          if an invalid ligand index is requested
+            Throws an error if the ``indices`` specified are not present in ``components``.j
         """
         edges = []
+
         for i, j in indices:
             try:
                 edges.append((components[i], components[j]))
             except IndexError:
                 raise IndexError(
-                    f"Invalid ligand id, requested {i} {j} with {len(components)} available"
+                    f"Invalid ligand index. Requested ({i}, {j}) for iterable of length {len(components)}. Please choose values in range 0-{len(components) - 1}."
                 )
 
-        return self.generate_ligand_network(edges=edges)
+        return self.generate_ligand_network(edges=edges, nodes=components)
 
     def generate_network_from_names(
         self,
@@ -126,13 +135,13 @@ class ExplicitNetworkGenerator(NetworkGenerator):
 
         Parameters
         ----------
-        components : list of Components
-          the small molecules to place into the network
+        components : list[Component]
+          ``Component``/s to place into the network.
         mapper: AtomMapper
           the atom mapper to use to construct edges
         names : list of tuples of names
           the edges to form where the values refer to names of the small molecules,
-          eg `[('benzene', 'toluene'), ...]` will create an edge between the
+          eg ``[('benzene', 'toluene'), ...]`` will create an edge between the
           molecule with names 'benzene' and 'toluene'
 
         Returns
@@ -142,10 +151,9 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         Raises
         ------
         KeyError
-          if an invalid name is requested
+          If a name in ``names`` is not present in ``components``.
         ValueError
-          if multiple molecules have the same name (this would otherwise be
-          problematic)
+          If multiple molecules have the same name (molecule names must be unique)
         """
         nm2comp = {c.name: c for c in components}
 
@@ -163,4 +171,4 @@ class ExplicitNetworkGenerator(NetworkGenerator):
                 available = [ligand.name for ligand in components]
                 raise KeyError(f"Invalid name(s) requested {badnames}.  Available: {available}")
 
-        return self.generate_ligand_network(edges=edges)
+        return self.generate_ligand_network(edges=edges, nodes=components)

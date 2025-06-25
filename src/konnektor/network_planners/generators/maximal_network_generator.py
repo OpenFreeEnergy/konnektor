@@ -2,7 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import itertools
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
@@ -14,35 +14,36 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
         """
-        The `MaximalNetworkGenerator` builds a fully connected graph for given set of `Component` s.
-        It assumes each `Component` can be connected to every other `Component`.
-        The `Transformation` s of this graph are realized as `AtomMapping` s of pairwise `Component` s.
+        The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of `Component`/s.
+
+        The edges of the graph are ``Transformation`` s, which contain ``AtomMapping`` s of pairwise ``Component``/s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
+
+        If multiple ``AtomMapper``/s are provided, but no scorer, the *first valid* ``AtomMapper`` provided will be used.
 
         ... note::
         This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
         However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
         then remove edges to achieve the desired design.
 
-        This class is recommended as an `initial_edge_lister` for other approaches.
-        The `MaximalNetworkGenerator` is parallelized and the number of CPUs can be given with `n_processes`.
-        All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
+        This class is recommended as an ``initial_edge_lister`` for other network generators.
+        The ``MaximalNetworkGenerator`` is parallelized and the number of CPUs can be chosen with the ``n_processes`` argument.
 
         Parameters
         ----------
         mappers: Union[AtomMapper, list[AtomMapper]]
-            the atom mapper is required, to define the connection between two ligands.
-        scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
+            ``AtomMapper`` to use to define the relationship between two ligands.
+        scorer: Callable, optional
+            Scoring function that takes in an atom mapping and returns a score in [0,1].
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
+            If True, a progress bar will be displayed. (default: False)
         n_processes: int
-            number of processes that can be used for the network generation. (default: 1)
+            Number of processes to use for network generation. (default: 1)
         """
 
         super().__init__(
@@ -65,17 +66,17 @@ class MaximalNetworkGenerator(NetworkGenerator):
         generators (which then optimize based on the scores) or to debug atom
         mappers (to see which mappings the mapper fails to generate).
 
-
         Parameters
         ----------
         components : Iterable[SmallMoleculeComponent]
-          the ligands to include in the LigandNetwork
+            ``SmallMoleculeComponent``/s to include as nodes in the ``LigandNetwork``.
 
         Returns
         -------
         LigandNetwork
-            a ligand network containing all possible mappings, ideally a fully connected graph.
+            ``LigandNetwork`` containing all possible mappings, ideally a fully connected graph.
         """
+
         components = list(components)
         total = len(components) * (len(components) - 1) // 2
 
@@ -100,5 +101,6 @@ class MaximalNetworkGenerator(NetworkGenerator):
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")
 
+        # TODO: raise an error? warning? if resulting network is disconnected
         network = LigandNetwork(edges=mappings, nodes=components)
         return network
