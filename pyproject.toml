@@ -1,7 +1,7 @@
 [build-system]
 requires=[
 	"setuptools>=64.0",
-    "setuptools-scm>=8",
+  "setuptools-scm>=8",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -46,7 +46,6 @@ test = [
   'pytest-cov[all]',
 ]
 dev = [
-  'black',
   'pre-commit',
 ]
 
@@ -58,3 +57,26 @@ konnektor = ["**/*.sdf",]
 
 [tool.pytest.ini_options]
 addopts = "--ignore=dev"
+
+[tool.ruff]
+exclude = [
+    "*.ipynb",  # TODO: auto-format notebooks
+]
+line-length = 100
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+select = [
+    "F",  # Pyflakes
+    "I",  # isort
+    "W",  # pycodestyle warnings
+    "E",  # pycodestyle errors
+    # "C901"  # mccabe complexity  TODO: add this back in
+    "UP",
+]
+ignore = [
+    "E402",   # module-level import not at top (conflicts w/ isort)
+    "E501",  # line-length violations (black enforces these)
+    "E731",  # lambda expressions (TODO: we should fix these)
+    "E722",  # bare excepts (TODO: we should fix these in a follow-up PR)
+    ]
