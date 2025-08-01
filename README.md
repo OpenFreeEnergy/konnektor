@@ -94,7 +94,7 @@ fig.show()
 Konnektor can be installed from conda-forge:
 
 ```shell
-mamba install -c conda-forge konnnektor
+mamba install -c conda-forge konnektor
 ```
 
 ### Developement version
