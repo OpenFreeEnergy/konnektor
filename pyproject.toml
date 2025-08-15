@@ -42,7 +42,6 @@ dependencies = [
 ]
 
 optional-dependencies.dev = [
-  "black",
   "pre-commit",
 ]
 optional-dependencies.test = [
@@ -57,6 +56,28 @@ konnektor = [ "**/*.sdf" ]
 [tool.setuptools_scm]
 version_file = "src/konnektor/_version.py"
 fallback_version = "0.0.0"
+
+[tool.ruff]
+line-length = 100
+
+exclude = [
+  "*.ipynb", # TODO: auto-format notebooks
+]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+lint.select = [
+  "E", # pycodestyle errors
+  "F", # Pyflakes
+  "I", # isort
+  # "C901"  # mccabe complexity  TODO: add this back in
+  "UP",
+  "W",  # pycodestyle warnings
+]
+lint.ignore = [
+  "E402", # module-level import not at top (conflicts w/ isort)
+  "E501", # line-length violations (black enforces these)
+  "E722", # bare excepts (TODO: we should fix these in a follow-up PR)
+  "E731", # lambda expressions (TODO: we should fix these)
+]
 
 [tool.pytest.ini_options]
 addopts = "--ignore=dev"
