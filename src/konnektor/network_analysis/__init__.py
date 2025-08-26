@@ -12,11 +12,11 @@ from .network_analysis import (
 )
 
 __all__ = [
-    get_component_connectivities,
-    get_component_number_cycles,
-    get_component_scores,
-    get_is_connected,
-    get_network_score,
-    get_number_of_network_cycles,
-    get_transformation_failure_robustness,
+    "get_component_connectivities",
+    "get_component_number_cycles",
+    "get_component_scores",
+    "get_is_connected",
+    "get_network_score",
+    "get_number_of_network_cycles",
+    "get_transformation_failure_robustness",
 ]
