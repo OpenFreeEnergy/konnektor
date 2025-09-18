@@ -1,13 +1,13 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/openfe
 import io
-import matplotlib
-from rdkit import Chem
-from typing import Dict, Tuple
 
-from .network_plotting import GraphDrawing, Node, Edge
+import matplotlib
+from gufe import LigandNetwork, SmallMoleculeComponent
 from gufe.visualization.mapping_visualization import draw_one_molecule_mapping
-from gufe import SmallMoleculeComponent, LigandNetwork
+from rdkit import Chem
+
+from .network_plotting import Edge, GraphDrawing, Node
 
 
 class AtomMappingEdge(Edge):
@@ -24,26 +24,26 @@ class AtomMappingEdge(Edge):
         Data dictionary for this edge. Must have key ``object``, which maps
         to an :class:`.AtomMapping`.
     """
-    def __init__(self, node_artist1: Node, node_artist2: Node, data: Dict):
+
+    def __init__(self, node_artist1: Node, node_artist2: Node, data: dict):
         super().__init__(node_artist1, node_artist2, data)
         self.left_image = None
         self.right_image = None
 
     def _draw_mapped_molecule(
         self,
-        extent: Tuple[float, float, float, float],
+        extent: tuple[float, float, float, float],
         molA: SmallMoleculeComponent,
         molB: SmallMoleculeComponent,
-        molA_to_molB: Dict[int, int]
+        molA_to_molB: dict[int, int],
     ):
         # create the image in a format matplotlib can handle
         d2d = Chem.Draw.rdMolDraw2D.MolDraw2DCairo(300, 300, 300, 300)
         d2d.drawOptions().setBackgroundColour((1, 1, 1, 0.7))
         # TODO: use a custom draw2d object; figure size from transforms
-        img_bytes = draw_one_molecule_mapping(molA_to_molB,
-                                              molA.to_rdkit(),
-                                              molB.to_rdkit(),
-                                              d2d=d2d)
+        img_bytes = draw_one_molecule_mapping(
+            molA_to_molB, molA.to_rdkit(), molB.to_rdkit(), d2d=d2d
+        )
         img_filelike = io.BytesIO(img_bytes)  # imread needs filelike
         img_data = matplotlib.pyplot.imread(img_filelike)
 
@@ -73,7 +73,7 @@ class AtomMappingEdge(Edge):
         left_x0, left_x1 = 0.05 * dx + x0, 0.45 * dx + x0
         right_x0, right_x1 = 0.55 * dx + x0, 0.95 * dx + x0
         y0, y1 = self.artist.axes.get_ylim()
-        dy = y1 - y0
+        # dy = y1 - y0
         y_bottom, y_top = 0.5 * dx + y0, 0.9 * dx + y0
 
         left_extent = (left_x0, left_x1, y_bottom, y_top)
@@ -82,7 +82,7 @@ class AtomMappingEdge(Edge):
 
     def select(self, event, graph):
         super().select(event, graph)
-        mapping = self.data['object']
+        mapping = self.data["object"]
 
         # figure out which node is to the left and which to the right
         xs = [node.xy[0] for node in self.node_artists]
@@ -99,14 +99,8 @@ class AtomMappingEdge(Edge):
 
         left_extent, right_extent = self._get_image_extents()
 
-        self.left_image = self._draw_mapped_molecule(left_extent,
-                                                     left,
-                                                     right,
-                                                     left_to_right)
-        self.right_image = self._draw_mapped_molecule(right_extent,
-                                                      right,
-                                                      left,
-                                                      right_to_left)
+        self.left_image = self._draw_mapped_molecule(left_extent, left, right, left_to_right)
+        self.right_image = self._draw_mapped_molecule(right_extent, right, left, right_to_left)
         graph.fig.canvas.draw()
 
     def unselect(self):
@@ -121,8 +115,7 @@ class AtomMappingEdge(Edge):
 
 class LigandNode(Node):
     def _make_artist(self, x, y, dx, dy):
-        artist = matplotlib.text.Text(x, y, self.node.name, color='blue',
-                                      backgroundcolor='white')
+        artist = matplotlib.text.Text(x, y, self.node.name, color="blue", backgroundcolor="white")
         return artist
 
     def register_artist(self, ax):
@@ -151,6 +144,7 @@ class AtomMappingNetworkDrawing(GraphDrawing):
     positions : Optional[Dict[SmallMoleculeComponent, Tuple[float, float]]]
         mapping of node to position
     """
+
     NodeCls = LigandNode
     EdgeCls = AtomMappingEdge
 
