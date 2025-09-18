@@ -5,7 +5,7 @@ import matplotlib
 from rdkit import Chem
 from typing import Dict, Tuple
 
-from network_plotting import GraphDrawing, Node, Edge
+from .network_plotting import GraphDrawing, Node, Edge
 from gufe.visualization.mapping_visualization import draw_one_molecule_mapping
 from gufe import SmallMoleculeComponent, LigandNetwork
 

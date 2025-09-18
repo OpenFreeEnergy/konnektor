@@ -17,7 +17,7 @@ from matplotlib.patches import Rectangle
 from matplotlib.lines import Line2D
 
 from typing import Optional, Any, Union, cast
-from custom_typing import (
+from .custom_typing import (
     MPL_MouseEvent, MPL_FigureCanvasBase, MPL_Axes, TypeAlias
 )
 
