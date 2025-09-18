@@ -9,6 +9,11 @@ dependencies:
   # Sci
   - numpy
   - networkx
+  # gufe imports, TODO: remove these once we mamba install
+  - msgpack-python
+  - openff-toolkit-base == 0.17.0
+  - openmm
+  - pydantic
   # Chem
   - rdkit==2024.03.5
   # Vis
