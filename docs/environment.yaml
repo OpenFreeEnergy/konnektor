@@ -1,15 +1,9 @@
-name: konnektor
+name: konnektor-docs
 channels:
   - conda-forge
 dependencies:
   - python
   - pip
-  #Test
-  - pytest
-  - pytest-cov
-  - pytest-rerunfailures
-  - pytest-xdist
-  - coverage
   - mypy
   - nbval
   #Typing
