@@ -1,12 +1,10 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/openfe
 from collections.abc import Iterable
-from importlib import resources
 from typing import NamedTuple
 
 import pytest
 from gufe import LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
-from rdkit import Chem
 
 from .network_planners.conf import mol_from_smiles
 
@@ -62,18 +60,6 @@ def std_edges(mols):
     edge23 = LigandAtomMapping(mol2, mol3, {0: 0})
     edge13 = LigandAtomMapping(mol1, mol3, {0: 0, 2: 1})
     return edge12, edge23, edge13
-
-
-@pytest.fixture(scope="session")
-def benzene_transforms():
-    # a dict of Molecules for benzene transformations
-    mols = {}
-    with resources.as_file(resources.files("openfe.tests.data")) as d:
-        fn = str(d / "benzene_modifications.sdf")
-        supplier = Chem.SDMolSupplier(fn, removeHs=False)
-        for mol in supplier:
-            mols[mol.GetProp("_Name")] = SmallMoleculeComponent(mol)
-    return mols
 
 
 class _NetworkTestContainer(NamedTuple):
