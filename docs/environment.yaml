@@ -5,7 +5,7 @@ dependencies:
   - python
   - pip
   #Typing
-  - gufe
+  # - gufe
   - typing-extensions
   # Sci
   - numpy
