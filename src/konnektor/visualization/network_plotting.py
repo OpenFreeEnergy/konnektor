@@ -11,16 +11,20 @@ behavior how the graph is visualized or what happens on interactive events.
 from __future__ import annotations
 
 import itertools
-from typing import Any, cast
+from typing import Any, TypeAlias, cast
 
+import matplotlib.axes
+import matplotlib.backend_bases
 import networkx as nx
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
 
-from .custom_typing import MPL_Axes, MPL_FigureCanvasBase, MPL_MouseEvent, TypeAlias
-
 ClickLocation: TypeAlias = tuple[tuple[float, float], tuple[Any, Any]]
+
+MPL_FigureCanvasBase: TypeAlias = matplotlib.backend_bases.FigureCanvasBase
+MPL_MouseEvent: TypeAlias = matplotlib.backend_bases.MouseEvent
+MPL_Axes: TypeAlias = matplotlib.axes.Axes
 
 
 class Node:
