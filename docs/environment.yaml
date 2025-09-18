@@ -1,0 +1,34 @@
+name: konnektor
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  #Test
+  - pytest
+  - pytest-cov
+  - pytest-rerunfailures
+  - pytest-xdist
+  - coverage
+  - mypy
+  - nbval
+  #Typing
+  - gufe
+  - typing-extensions
+  # Sci
+  - numpy
+  - scipy
+  - networkx
+  - scikit-learn
+  - scikit-mol>=0.5.5  # https://github.com/EBjerrum/scikit-mol/pull/68
+  - dill
+  # Chem
+  - rdkit==2024.03.5
+  # Vis
+  - ipycytoscape
+  # docs
+  - myst-parser
+  - pydata-sphinx-theme
+  - tqdm
+  - pip:
+    - git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@a45f3edd5bc3e973c1a01b577c71efa1b62a65d6
