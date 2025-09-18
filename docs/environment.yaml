@@ -4,13 +4,11 @@ channels:
 dependencies:
   - python
   - pip
-  - mypy
   #Typing
   - gufe
   - typing-extensions
   # Sci
   - numpy
-  - scipy
   - networkx
   # Chem
   - rdkit==2024.03.5
