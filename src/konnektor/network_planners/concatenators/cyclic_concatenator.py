@@ -28,7 +28,7 @@ class CyclicConcatenator(NetworkConcatenator):
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator|None = None,
+        _initial_edge_lister: NetworkConcatenator | None = None,
     ):
         """
         This concatenators is connnecting two Networks with a kruskal like
