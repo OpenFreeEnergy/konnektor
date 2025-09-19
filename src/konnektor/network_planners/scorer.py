@@ -3,7 +3,6 @@ from typing import TypeAlias
 
 from gufe import AtomMapping
 
-AtomMappingScorer: TypeAlias = Callable[
-    [AtomMapping], float
-]  # TODO: this will be implemented in gufe
+# TODO: this will be implemented in gufe
+AtomMappingScorer: TypeAlias = Callable[[AtomMapping], float]
 """A function that takes in an ``AtomMapping`` and returns a float between 0 and 1."""
