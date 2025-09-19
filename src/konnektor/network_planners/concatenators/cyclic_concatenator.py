@@ -7,10 +7,9 @@ from collections.abc import Iterable
 from gufe import AtomMapper, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
-from .max_concatenator import MaxConcatenator
-
 from ..scorer import AtomMappingScorer
 from ._abstract_network_concatenator import NetworkConcatenator
+from .max_concatenator import MaxConcatenator
 
 log = logging.getLogger(__name__)
 
