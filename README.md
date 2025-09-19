@@ -104,7 +104,7 @@ The developing setup of Konnektor works like this:
 git clone https://github.com/OpenFreeEnergy/konnektor.git
 
 cd konnektor
-mamba env create -f environment.yml
+mamba env create -f environment.yaml
 
 mamba activate konnektor
 pip install -e .
