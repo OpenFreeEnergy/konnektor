@@ -1,0 +1,45 @@
+name: "mypy"
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -leo pipefail {0}
+
+jobs:
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: "Setup Micromamba"
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          environment-name: konnektor
+          cache-environment: true
+          cache-downloads: true
+          create-args: >-
+            python=3.12
+            rdkit=2025.03.4
+            mypy
+          init-shell: bash
+
+      - name: "Environment Information"
+        run: |
+          micromamba info
+          micromamba list
+
+      - name: "Lint with mypy"
+        run: |
+          mypy --version
+          mypy
