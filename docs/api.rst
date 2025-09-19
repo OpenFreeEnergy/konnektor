@@ -2,13 +2,13 @@ API docs
 --------
 
 
-.. toctree::
-   :maxdepth: 4
-   :caption: API Contents:
+.. autosummary::
+   :toctree: generated
+   :recursive:
 
-   api/konnektor.planners
-   api/konnektor.tools
-   api/konnektor.analysis
-   api/konnektor.visualization
-   api/konnektor.utils
-   api/konnektor.data
+   konnektor.planners
+   konnektor.tools
+   konnektor.analysis
+   konnektor.visualization
+   konnektor.utils
+   konnektor.data
