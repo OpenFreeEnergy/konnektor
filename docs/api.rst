@@ -6,9 +6,7 @@ API docs
    :toctree: generated
    :recursive:
 
-   konnektor.planners
-   konnektor.tools
-   konnektor.analysis
+   konnektor.network_analysis
+   konnektor.network_planners
+   konnektor.network_tools
    konnektor.visualization
-   konnektor.utils
-   konnektor.data
