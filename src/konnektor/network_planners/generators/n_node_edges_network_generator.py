@@ -8,6 +8,7 @@ from gufe import AtomMapper, Component, LigandNetwork
 from konnektor.network_planners._networkx_implementations import (
     NNodeEdgesNetworkAlgorithm,
 )
+from konnektor.network_planners.scorer import AtomMappingScorer
 
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
@@ -17,7 +18,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         target_component_connectivity: int = 3,
         n_processes: int = 1,
         progress: bool = False,
