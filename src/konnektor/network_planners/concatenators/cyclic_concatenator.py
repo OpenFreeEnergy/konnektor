@@ -3,13 +3,16 @@
 
 import logging
 from collections.abc import Iterable
+from typing import TYPE_CHECKING
 
 from gufe import AtomMapper, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
-from ..scorer import AtomMappingScorer
-from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
+
+if TYPE_CHECKING:
+    from ..scorer import AtomMappingScorer
+    from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +28,7 @@ class CyclicConcatenator(NetworkConcatenator):
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator = None,
+        _initial_edge_lister: NetworkConcatenator|None = None,
     ):
         """
         This concatenators is connnecting two Networks with a kruskal like
