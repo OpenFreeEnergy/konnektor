@@ -50,3 +50,8 @@ konnektor.network\_planners.concatenators
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: konnektor.network_planners.concatenators.max_concatenator
+   :members:
+   :undoc-members:
+   :show-inheritance:
