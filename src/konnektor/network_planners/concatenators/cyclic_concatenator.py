@@ -2,15 +2,16 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import logging
-from collections.abc import Iterable
 from typing import TYPE_CHECKING
-
-from gufe import AtomMapper, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
 from .max_concatenator import MaxConcatenator
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from gufe import AtomMapper, LigandNetwork
+
     from ..scorer import AtomMappingScorer
     from ._abstract_network_concatenator import NetworkConcatenator
 
