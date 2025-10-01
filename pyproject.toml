@@ -2,7 +2,7 @@
 build-backend = "setuptools.build_meta"
 
 requires = [
-  "setuptools>=64",
+  "setuptools>=77.0.3",
   "setuptools-scm>=8",
 ]
 
@@ -20,7 +20,6 @@ authors = [
 ]
 requires-python = ">=3.10"
 classifiers = [
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
@@ -49,6 +48,8 @@ optional-dependencies.test = [
   "pytest-cov[all]",
 ]
 urls."Homepage" = "https://github.com/OpenFreeEnergy/konnektor"
+license = "MIT"
+license-files = ["LICENSE"]
 
 [tool.setuptools.package-data]
 konnektor = [ "**/*.sdf" ]
