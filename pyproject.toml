@@ -10,6 +10,9 @@ requires = [
 name = "konnektor"
 description = "Konnektor is a package for calculating networks."
 readme = "README.md"
+license = "MIT"
+license-files = [ "LICENSE" ]
+
 authors = [
   { name = "Benjamin Ries", email = "benjamin-ries@outlook.com" },
   { name = "Hannah Baumann", email = "hannah.baumann@omsf.io" },
@@ -48,8 +51,6 @@ optional-dependencies.test = [
   "pytest-cov[all]",
 ]
 urls."Homepage" = "https://github.com/OpenFreeEnergy/konnektor"
-license = "MIT"
-license-files = ["LICENSE"]
 
 [tool.setuptools.package-data]
 konnektor = [ "**/*.sdf" ]
