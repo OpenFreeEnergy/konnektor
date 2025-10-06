@@ -4,9 +4,10 @@
 import logging
 from collections.abc import Iterable
 
-from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
+from gufe import AtomMapper, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
+from ..scorer import AtomMappingScorer
 from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
 
