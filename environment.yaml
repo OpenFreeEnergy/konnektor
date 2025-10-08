@@ -16,7 +16,7 @@ dependencies:
   - gufe
   - typing-extensions
   # Sci
-  - numpy
+  - numpy <2.3  # TypeError: assert_array_almost_equal() got an unexpected keyword argument 'x'
   - scipy
   - networkx
   - scikit-learn
