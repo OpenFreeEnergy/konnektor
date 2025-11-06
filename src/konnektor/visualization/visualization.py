@@ -35,7 +35,7 @@ def draw_ligand_network(
     node_size: int, optional
         size of the node visualization. (default 2050)
     edge_width: int, optional
-        widht of drawn edges. (default 3)
+        width of drawn edges. (default 3)
     fontsize: int, optional
         fontsize of labels. (default 18)
 
@@ -47,14 +47,15 @@ def draw_ligand_network(
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
     edges = list(sorted(edge_map.keys()))
-    weights = [edge_map[k].annotations["score"] for k in edges]
 
     # g = network.graph
     g = nx.Graph()
     for n in ligands:
         g.add_node(n.name)
-    g.add_weighted_edges_from(ebunch_to_add=[(e[0], e[1], w) for e, w in zip(edges, weights)])
+    g.add_edges_from(ebunch_to_add=edges)
 
+    # we set all edge weights=1 for the purpose of viz
+    # TODO: do we want an option to color-code by edge weight(score)?
     pos = nx.spring_layout(g, weight=1)
 
     if ax is None:
