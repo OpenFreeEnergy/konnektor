@@ -4,6 +4,15 @@ Changelog
 
 .. current developments
 
+v0.2.1
+====================
+
+**Fixed:**
+
+* Fixed bug where ``konnektor.visualization.draw_ligand_network`` did not work for networks without scored edges (frequently star/radial or explicit networks) (`PR #191 <https://github.com/OpenFreeEnergy/konnektor/pull/191>`_).
+
+
+
 v0.2.0
 ======
 
