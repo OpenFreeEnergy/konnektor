@@ -16,6 +16,7 @@ from scikit_mol.fingerprints import (
 from sklearn.cluster import HDBSCAN, KMeans
 from tqdm.auto import tqdm
 
+from konnektor.network_planners.scorer import AtomMappingScorer
 from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
 )
@@ -41,7 +42,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             featurize=RDKitFingerprintTransformer(), cluster=KMeans(n_clusters=3)
         ),
         mappers: AtomMapper | list[AtomMapper] = None,  # include None in this union?
-        scorer=None,
+        scorer: AtomMappingScorer | None = None,
         n_processes: int = 1,
         progress: bool = False,
     ):
@@ -64,7 +65,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             Separates the `Component` s along the first dimension.
         mappers:  Union[AtomMapper, list[AtomMapper]]
             Defines the connection between two ligands if `NetworkConcatenator` s or  `NetworkGenerator` s are provided. Otherwise, (?) (default:None)
-        scorer: AtomMappingScorer
+        scorer: AtomMappingScorer or None
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional
             if True a progress bar will be displayed. (default: False)
@@ -197,7 +198,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
             featurize=MorganFingerprintTransformer(),
             cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1 / 2048),
