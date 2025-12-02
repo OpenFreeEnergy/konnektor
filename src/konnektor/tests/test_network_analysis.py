@@ -110,7 +110,7 @@ def test_get_node_number_cycles_fully_connected_graph(n_cycle_size):
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += expected_number_of_cycles_per_node
-    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in result_dict.items()])
+    np.testing.assert_array_almost_equal(expected_arr, [n for i, n in result_dict.items()])
 
 
 def test_get_node_number_cycles_mst_graph():
@@ -188,7 +188,7 @@ def test_get_norm_node_scores_fully_connected_graph():
 
     assert len(n_scores) == n_compounds
     assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in n_scores.items()])
+    np.testing.assert_array_almost_equal(expected_arr, [n for n in n_scores.values()])
 
 
 def test_get_node_scores_fully_connected_graph():
@@ -203,4 +203,4 @@ def test_get_node_scores_fully_connected_graph():
 
     assert len(n_scores) == n_compounds
     assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(x=expected_arr, y=[n for i, n in n_scores.items()])
+    np.testing.assert_array_almost_equal(expected_arr, [n for n in n_scores.values()])

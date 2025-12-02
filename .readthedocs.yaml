@@ -1,26 +1,19 @@
 version: 2
 
 build:
-  os: "ubuntu-20.04"
+  os: ubuntu-24.04
   tools:
-    python: "mambaforge-4.10"
+    python: "miniconda3-3.12-24.9"
 
 sphinx:
    configuration: docs/conf.py
    fail_on_warning: true
 
 conda:
-<<<<<<< HEAD:.readthedocs.yaml
-  environment: environment.yml
-
-python:
-  # Install our python package before building the docs so setuptools-scm generates the version for RTD to find.
-=======
   environment: docs/environment.yaml
 
 python:
-  # Install our python package before building the docs
->>>>>>> aed3c76 (port over env file from elsewhere and merge):readthedocs.yaml
+  # Install our python package before building the docs so setuptools-scm generates the version for RTD to find.
   install:
     - method: pip
       path: .

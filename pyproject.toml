@@ -1,60 +1,85 @@
 [build-system]
-requires=[
-	"setuptools>=64.0",
-    "setuptools-scm>=8",
-]
 build-backend = "setuptools.build_meta"
+
+requires = [
+  "setuptools>=77.0.3",
+  "setuptools-scm>=8",
+]
 
 [project]
 name = "konnektor"
-dynamic = ["version"]
-authors=[
-    {name="Benjamin Ries", email="benjamin-ries@outlook.com"},
-    {name="Hannah Baumann", email="hannah.baumann@omsf.io"},
-    {name="David Swenson", email="dwhswenson@gmail.com"},
-    {name="Irfan Alibay", email="irfan.alibay@gmail.com"},
-    {name="Mike Henry", email="mike.henry@choderalab.org"},
-    {name="Richard J Gowers", email="richardjgowers@gmail.com"},
+description = "Konnektor is a package for calculating networks."
+readme = "README.md"
+license = "MIT"
+license-files = [ "LICENSE" ]
+
+authors = [
+  { name = "Benjamin Ries", email = "benjamin-ries@outlook.com" },
+  { name = "Hannah Baumann", email = "hannah.baumann@omsf.io" },
+  { name = "David Swenson", email = "dwhswenson@gmail.com" },
+  { name = "Irfan Alibay", email = "irfan.alibay@gmail.com" },
+  { name = "Mike Henry", email = "mike.henry@choderalab.org" },
+  { name = "Richard J Gowers", email = "richardjgowers@gmail.com" },
 ]
-description="Konnektor is a package for calculating networks."
-readme="README.md"
 requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
 
+dynamic = [ "version" ]
 dependencies = [
-  'gufe',
-  'numpy',
-  'rdkit',
-  'networkx',
-  'scikit-mol',
-  'scikit-learn',
-  'tqdm',
-  'ipycytoscape',
+  "gufe",
+  "ipycytoscape",
+  "networkx",
+  "numpy",
+  "rdkit",
+  "scikit-learn",
+  "scikit-mol",
+  "tqdm",
 ]
+
+optional-dependencies.dev = [
+  "pre-commit",
+]
+optional-dependencies.test = [
+  "pytest",
+  "pytest-cov[all]",
+]
+urls."Homepage" = "https://github.com/OpenFreeEnergy/konnektor"
+
+[tool.setuptools.package-data]
+konnektor = [ "**/*.sdf" ]
 
 [tool.setuptools_scm]
 version_file = "src/konnektor/_version.py"
 fallback_version = "0.0.0"
 
-[project.optional-dependencies]
-test = [
-  'pytest',
-  'pytest-cov[all]',
-]
-dev = [
-  'black',
-  'pre-commit',
-]
+[tool.ruff]
+line-length = 100
 
-[project.urls]
-"Homepage" = "https://github.com/OpenFreeEnergy/konnektor"
-
-[tool.setuptools.package-data]
-konnektor = ["**/*.sdf",]
+exclude = [
+  "*.ipynb", # TODO: auto-format notebooks
+]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+lint.select = [
+  "E", # pycodestyle errors
+  "F", # Pyflakes
+  "I", # isort
+  # "C901"  # mccabe complexity  TODO: add this back in
+  "UP",
+  "W",  # pycodestyle warnings
+]
+lint.ignore = [
+  "E402", # module-level import not at top (conflicts w/ isort)
+  "E501", # line-length violations (black enforces these)
+  "E722", # bare excepts (TODO: we should fix these in a follow-up PR)
+  "E731", # lambda expressions (TODO: we should fix these)
+]
 
 [tool.pytest.ini_options]
 addopts = "--ignore=dev"

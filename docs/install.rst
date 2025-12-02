@@ -22,7 +22,7 @@ following example, allowing modification of the code live in the package:
     git clone https://github.com/OpenFreeEnergy/konnektor.git
 
     cd konnektor
-    mamba env create -f environment.yml
+    mamba env create -f environment.yaml
 
     mamba activate konnektor
     python -m pip install -e .

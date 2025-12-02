@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - main
+    # Skip CI if changed files only affect the following folders
+    # See here for more details: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-excluding-paths
+    paths-ignore:
+      - "docs/*"
   push:
     branches:
       - main
@@ -42,7 +46,7 @@ jobs:
         run: echo "date=$(date +%Y-%m-%d)" >> "${GITHUB_OUTPUT}"
       - uses: mamba-org/setup-micromamba@v2
         with:
-          environment-file: environment.yml
+          environment-file: environment.yaml
           environment-name: konnektor
           cache-environment: true
           cache-downloads: true

@@ -1,35 +1,28 @@
-name: docs
+name: konnektor-docs
 channels:
-- https://conda.anaconda.org/jaimergp/label/unsupported-cudatoolkit-shim
-- https://conda.anaconda.org/conda-forge
+  - conda-forge
 dependencies:
-- gufe>=1.0
-- numpy
-- scipy
-- networkx
-- scikit-learn
-- rdkit==2024.03.5
-- ipycytoscape
-- packaging
-- python=3.10
-- sphinx<7
-- sphinx-click
-- gitpython
-- libsass
-- nbsphinx
-- nbsphinx-link
-- myst-parser
-- pip:
-  - dill
-  - scikit-mol
-  - sphinx-design
-  - sphinx-toolbox
-  - sphinx<7
-  - git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@a45f3edd5bc3e973c1a01b577c71efa1b62a65d6
-
-# These are added automatically by RTD, so we include them here
-# for a consistent environment.
-- mock
-- pillow
-- sphinx
-- sphinx_rtd_theme
+  - python
+  - pip
+  #Typing
+  - typing-extensions
+  # Sci
+  - numpy
+  - networkx
+  # gufe imports, TODO: remove these once we mamba install
+  - msgpack-python
+  - openff-toolkit-base == 0.17.0
+  - openmm
+  - pydantic
+  # Chem
+  - rdkit==2024.03.5
+  # Vis
+  - ipycytoscape
+  # docs
+  - myst-parser
+  - pydata-sphinx-theme
+  - tqdm
+  - pip:
+    - git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@a45f3edd5bc3e973c1a01b577c71efa1b62a65d6
+    # pip install gufe so that conda-forge gufe doesn't pull in ambertools and cause a memory error
+    - git+https://github.com/OpenFreeEnergy/gufe@main
