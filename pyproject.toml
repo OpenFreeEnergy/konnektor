@@ -2,7 +2,7 @@
 build-backend = "setuptools.build_meta"
 
 requires = [
-  "setuptools>=64",
+  "setuptools>=77.0.3",
   "setuptools-scm>=8",
 ]
 
@@ -10,6 +10,9 @@ requires = [
 name = "konnektor"
 description = "Konnektor is a package for calculating networks."
 readme = "README.md"
+license = "MIT"
+license-files = [ "LICENSE" ]
+
 authors = [
   { name = "Benjamin Ries", email = "benjamin-ries@outlook.com" },
   { name = "Hannah Baumann", email = "hannah.baumann@omsf.io" },
@@ -20,7 +23,6 @@ authors = [
 ]
 requires-python = ">=3.10"
 classifiers = [
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.10",
