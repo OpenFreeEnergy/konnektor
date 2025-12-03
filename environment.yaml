@@ -27,13 +27,8 @@ dependencies:
   # Vis
   - ipycytoscape
   # docs
-  - sphinx<7
   - myst-parser
   - pydata-sphinx-theme
   - tqdm
-  - nbsphinx
-  - nbsphinx-link
-
   - pip:
-    - dill
-    - scikit-mol
+    - git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@a45f3edd5bc3e973c1a01b577c71efa1b62a65d6
