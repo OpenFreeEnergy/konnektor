@@ -17,11 +17,11 @@ def get_node_connectivities(cg: nx.Graph) -> list[int]:
 def draw_ligand_network(
     network: LigandNetwork,
     title: str = "",
-    ax: plt.Axes = None,
+    ax: plt.Axes | None = None,
     node_size: int = 2050,
     edge_width: int = 3,
     fontsize: int = 18,
-) -> plt.Figure:
+) -> plt.Figure | None:
     """visualize a LigandNetwork as matplotlib plot, indicating the graph topology.
 
     Parameters
@@ -41,8 +41,8 @@ def draw_ligand_network(
 
     Returns
     -------
-    plt.Figure
-        return the matplotlib figure
+    plt.Figure or None
+        return a matplotlib figure if `ax` is None, otherwise return None.
     """
     ligands = list(network.nodes)
     edge_map = {(m.componentA.name, m.componentB.name): m for m in network.edges}
