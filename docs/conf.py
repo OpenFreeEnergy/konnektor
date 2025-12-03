@@ -11,8 +11,6 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-from pathlib import Path
-import shutil
 import sys
 
 sys.path.insert(0, os.path.abspath("../src"))
@@ -31,8 +29,8 @@ author = "The OpenFE Development Team"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.napoleon',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
     "nbsphinx",
     "sphinx.ext.autosectionlabel",
 ]

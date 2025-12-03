@@ -25,7 +25,7 @@ A longer tutorial which demonstrates how to use some of the different **konnekto
 .. toctree::
    :maxdepth: 2
 
-   konnektor_example 
+   konnektor_example
 
 
 Exploring the different **konnektor** network types
@@ -37,4 +37,3 @@ A tutorial that demonstrates a variety of different network types that can be bu
    :maxdepth: 2
 
    konnektor_networks
-
