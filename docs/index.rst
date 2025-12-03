@@ -1,18 +1,24 @@
-Welcome to Konnektors's documentation!
-=========================================
+Welcome to konnektor's documentation!
+=====================================
 
-Konnektor is a package supporting you in planning your free calculations.
-It contains multiple algorithms and tools for network planning, that make setting up the calculation plans much easier.
-As an example imagen you are given a set of drug candidates that shall be ranked with relative binding free energies.
-In theory you could calculate all the possible network transformations, in order to get your ligand ranking (we call this a Maximal Network).
-However this leads to an explosion in time and compute cost, therefore we need more efficient ways on how to caluclate a drug candidate ranking.
+Konnektor is a Python library for generating networks for free energy calculations.
+It contains algorithms and tools for network planning that make setting up the calculation plans much easier.
+
+If you're looking for a tool to perform free energy calculations, check out `openfe <https://docs.openfree.energy/en/latest/>`_, which uses **konnektor**!.
+
+Why might you need access to different network generation approaches?
+As an example, imagine you are given a set of drug candidates that to be ranked with relative binding free energies.
+In theory, you could calculate _all_ the possible network transformations to get your ligand ranking (we call this a Maximal Network).
+However this leads to an explosion in time and compute cost, so we need more efficient ways on how to calculate a drug candidate ranking.
+
 From a thermodynamic perspective not all transformations are actually required to retrieve a ranking.
-In fact you only need one conection per small molecules to the others in order to get the ranking, like for example in Star Networks or Minimal Spanning Tree (MST) Networks.
-However we found the very efficient networks to be sensitive to transformation failures, this can be solved with network building algorithms, that are slightly more redundant.
+In fact, you only need one connection per small molecules to the others in order to get the ranking, for example a Star Network or Minimal Spanning Tree (MST) Network.
+However, these very efficient networks are sensitive to transformation failures, and so network algorithms that add a degree of redundancy improves the calculation's robustness.
 
-Ontop of the described ligand network planners, Konnektor gives access to tools, that allow for example to concatenate networks or delete transformations of a network.
-Analysis of networks, like calculating graph scores, getting the connectivities of network nodes or calculating the network robustness are available too.
-Last we want to bring to your attention our Network visualization tools and the provided interactive network visualization widget for IPython like in Jupyter-Lab/Notebooks.
+In addition to the network planners included in the library, **konnektor** has tooling for:
+   - Network modification, such as concatenating networks or deleting edges.
+   - Network analysis, including calculating graph scores, getting the connectivities of network nodes, or calculating the network robustness.
+   - Network visualization tools and an interactive network visualization widget for use in IPython environments, such as jupyter notebooks.
 
 Try our interactive demo: |Colab|
 
