@@ -34,7 +34,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
     "nbsphinx",
-    "nbsphinx_link",
     "sphinx.ext.autosectionlabel",
 ]
 
@@ -95,15 +94,3 @@ myst_enable_extensions = [
     "attrs_inline",
 ]
 myst_heading_anchors = 3
-
-
-example_notebooks_path = Path("ExampleNotebooks")
-
-try:
-    if example_notebooks_path.exists():
-        pass
-    else:
-        source = Path("../examples")
-        shutil.copytree(source, example_notebooks_path)
-except Exception as e:
-    raise OSError("Could not copy over example notebooks")

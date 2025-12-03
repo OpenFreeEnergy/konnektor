@@ -4,9 +4,7 @@ channels:
 dependencies:
   - python
   - pip
-  #Typing
   - typing-extensions
-  # Sci
   - numpy
   - networkx
   # gufe imports, TODO: remove these once we mamba install
@@ -14,12 +12,11 @@ dependencies:
   - openff-toolkit-base == 0.17.0
   - openmm
   - pydantic
-  # Chem
   - rdkit==2024.03.5
-  # Vis
   - ipycytoscape
-  # docs
   - myst-parser
+  - sphinx<7
+  - nbsphinx
   - pydata-sphinx-theme
   - tqdm
   - pip:
