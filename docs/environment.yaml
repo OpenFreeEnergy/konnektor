@@ -4,16 +4,12 @@ channels:
 dependencies:
   - python
   - pip
-  #Typing
   - typing-extensions
-  # Sci
   - numpy
   - networkx
   - gufe >=1.7
   - rdkit==2024.03.5
-  # Vis
   - ipycytoscape
-  # docs
   - myst-parser
   - pydata-sphinx-theme
   - tqdm
