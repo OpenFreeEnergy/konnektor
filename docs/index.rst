@@ -23,7 +23,6 @@ In addition to the network planners included in the library, **konnektor** has t
    - Network analysis, including calculating graph scores, getting the connectivities of network nodes, or calculating the network robustness.
    - Network visualization tools and an interactive network visualization widget for use in IPython environments, such as jupyter notebooks.
 
-If you're not ready to install **konnektor** locally, you can explore its functionality with the `interactive demo <https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x>`_ directly in your browser.
 
 .. toctree::
    :maxdepth: 2
