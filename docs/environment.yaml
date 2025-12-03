@@ -15,7 +15,7 @@ dependencies:
   - rdkit==2024.03.5
   - ipycytoscape
   - myst-parser
-  - sphinx<7
+  - sphinx >=8.0
   - nbsphinx
   - pydata-sphinx-theme
   - tqdm
