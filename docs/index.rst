@@ -21,7 +21,7 @@ Try our interactive demo: |Colab|
    :caption: Contents:
 
    install
-   tutorial
+   tutorials/index
    guide
    api
    CHANGELOG

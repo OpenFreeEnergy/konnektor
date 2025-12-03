@@ -1,6 +1,6 @@
-==============================================================
-Network Plannnig for Free Energy Calculations in Drug Design
-==============================================================
+============================================================
+Network Planning for Free Energy Calculations in Drug Design
+============================================================
 
 In this section, we will explore a classical hands-on drug design example,
 specifically the search for the best small molecule to inhibit a protein for drug development.
@@ -46,5 +46,5 @@ Network and the Cyclic Network focus on constructing a set of cycles.
 
 So in applied cases we suggest the slightly more redundant networks in order to build up a robust network for the calculations.
 
-turorial: :doc:`/tutorial/building_networks`.
+tutorial: :doc:`/tutorials/building_networks`.
 NetworkPlanner: :doc:`/guide/network_planner`.
