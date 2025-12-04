@@ -11,11 +11,11 @@ Installation from conda-forge
 
 **konnektor** can be installed from conda-forge using your choice of micromamba (recommended), mamba, or conda:
 
-```shell
-micromamba create -c -conda-forge -n konnektor konnektor
-micromamba activate konnektor
 
-```
+    $ micromamba create -c -conda-forge -n konnektor konnektor
+    $ micromamba activate konnektor
+
+
 
 Developer Installation
 ======================
@@ -25,22 +25,21 @@ For developers, we recommend setting up a local developer installation so that y
 
 First, clone the git repo:
 
-```shell
-    git clone https://github.com/OpenFreeEnergy/konnektor.git
-    cd konnektor
-```
+
+    $ git clone https://github.com/OpenFreeEnergy/konnektor.git
+    $ cd konnektor
+
 
 Then create and activate a conda environment that includes all of **konnektor's** dependencies:
 
-```shell
-    micromamba env create -f environment.yaml
-    micromamba activate konnektor
-```
 
-Finall, create an editable installation:
+    $ micromamba env create -f environment.yaml
+    $ micromamba activate konnektor
 
-```shell
-    python -m pip install -e .
-```
+
+Finally, create an editable installation:
+
+    $ python -m pip install -e .
+
 
 Happy coding!
