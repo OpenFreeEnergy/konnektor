@@ -21,6 +21,10 @@ In addition to network planning algorithms, **konnektor** includes tooling for:
    - Network visualization tools and an interactive network visualization widget for use in IPython environments, such as jupyter notebooks.
 
 
+Check out our article on Konnektor in the Journal of Chemical Information and Modeling: [Konnektor: A Framework for Using Graph Theory to Plan Networks for Free Energy Calculations - Benjamin Ries*, Richard J. Gowers, Hannah M. Baumann, David W. H. Swenson,  Michael M. Henry, James R. B. Eastwood, Irfan Alibay, and David Mobley](https://pubs.acs.org/doi/10.1021/acs.jcim.4c01710).
+
+You can also find our pre-print on [ChemRxiv](https://chemrxiv.org/engage/chemrxiv/article-details/66d9b574cec5d6c1423643e4).
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
