@@ -22,7 +22,7 @@ Try our interactive demo: |Colab|
 
    install
    tutorials/index
-   guide
+   guide/index
    api
    CHANGELOG
 
