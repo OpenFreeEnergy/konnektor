@@ -33,8 +33,8 @@ First, clone the git repo:
 Then create and activate a conda environment that includes all of **konnektor's** dependencies:
 
 ```shell
-    mamba env create -f environment.yaml
-    mamba activate konnektor
+    micromamba env create -f environment.yaml
+    micromamba activate konnektor
 ```
 
 Finall, create an editable installation:
