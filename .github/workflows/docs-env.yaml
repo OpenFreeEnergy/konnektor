@@ -13,8 +13,33 @@ jobs:
 
     steps:
     - name: Install conda-lock with Micromamba
-    - uses: mamba-org/setup-micromamba@v2
+      uses: mamba-org/setup-micromamba@v2
       with:
         environment-name: conda-lock
         create-args: >-
           conda-lock
+
+    - name: Create environment file to lock
+      uses: actions/checkout@v4
+      run: |
+        cat > environment-to-lock.yaml << 'EOF'
+        name: konnektor-docs
+        channels:
+          - conda-forge
+        platforms:
+          - linux-64
+          - osx-arm64
+        dependencies:
+          - konnektor
+          - python=3.12
+        EOF
+
+    - name: Generate lock files
+      run: |
+        conda lock -f environment-to-lock.yaml --lockfile env-conda-lock.yml
+
+    - name: Upload file as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: conda-lock-files
+        path: "*conda-lock.yml"
