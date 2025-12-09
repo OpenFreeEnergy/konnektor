@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Install conda-lock with Micromamba
     - uses: actions/checkout@v4
+    - name: Install conda-lock with Micromamba
     - uses: mamba-org/setup-micromamba@v2
       with:
         environment-name: conda-lock
