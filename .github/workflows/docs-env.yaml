@@ -2,6 +2,7 @@ name: Create Docs Conda-Lock File
 
 on:
   workflow_dispatch:
+  push:
 
 defaults:
   run:
