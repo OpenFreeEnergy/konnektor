@@ -46,4 +46,4 @@ A tutorial that demonstrates a variety of different network types that can be bu
 .. toctree::
    :maxdepth: 2
 
-   konnektor_networks
+   network_generation_algorithms
