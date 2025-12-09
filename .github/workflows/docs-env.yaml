@@ -19,8 +19,8 @@ jobs:
         create-args: >-
           conda-lock
 
+    - uses: actions/checkout@v4
     - name: Create environment file to lock
-      uses: actions/checkout@v4
       run: |
         cat > environment-to-lock.yaml << 'EOF'
         name: konnektor-docs
