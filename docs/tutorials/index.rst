@@ -14,18 +14,28 @@ A simple first-use tutorial for building a ``LigandNetwork`` with **konnektor**.
 .. toctree::
    :maxdepth: 2
 
-   building_networks
+   basic_network_generation
 
 
-Using **konnektor**
--------------------
+Real World Data
+----------------
 
-A longer tutorial which demonstrates how to use some of the different **konnektor** features on toy and real example cases.
+A tutorial using **konnektor** with real-world data.
 
 .. toctree::
    :maxdepth: 2
 
-   konnektor_example
+   real_world_example
+
+Advanced Topics
+---------------
+
+A longer tutorial which demonstrates how to use some of the different **konnektor** features.
+
+.. toctree::
+   :maxdepth: 2
+
+   advanced_topics
 
 
 Exploring the different **konnektor** network types
