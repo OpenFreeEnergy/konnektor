@@ -31,6 +31,6 @@ You can also find our pre-print on [ChemRxiv](https://chemrxiv.org/engage/chemrx
 
    install
    tutorials/index
-   guide
+   guide/index
    api
    CHANGELOG
