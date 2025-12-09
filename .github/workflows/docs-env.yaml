@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
     - name: Install conda-lock with Micromamba
     - uses: mamba-org/setup-micromamba@v2
       with:
@@ -21,6 +20,7 @@ jobs:
           conda-lock
 
     - name: Create environment file to lock
+    - uses: actions/checkout@v4
       run: |
         cat > environment-to-lock.yaml << 'EOF'
         name: konnektor-docs
