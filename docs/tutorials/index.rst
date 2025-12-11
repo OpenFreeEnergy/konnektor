@@ -28,12 +28,14 @@ A tutorial that demonstrates a variety of different network types that can be bu
    network_generation_algorithms
 
 
-Advanced Topics
----------------
+.. TODO: add this back once https://github.com/OpenFreeEnergy/konnektor/issues/202 is resolved
 
-A longer tutorial which demonstrates how to use some of the different **konnektor** features.
+.. Advanced Topics
+.. ---------------
 
-.. toctree::
-   :maxdepth: 2
+.. A longer tutorial which demonstrates how to use some of the different **konnektor** features.
 
-   advanced_topics
+.. .. toctree::
+..    :maxdepth: 2
+
+..    advanced_topics
