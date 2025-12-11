@@ -4,9 +4,7 @@ channels:
 dependencies:
   - python
   - pip
-  #Typing
   - typing-extensions
-  # Sci
   - numpy
   - networkx
   # gufe imports, TODO: remove these once we mamba install
@@ -14,14 +12,14 @@ dependencies:
   - openff-toolkit-base == 0.17.0
   - openmm
   - pydantic
-  # Chem
   - rdkit==2024.03.5
-  # Vis
   - ipycytoscape
-  # docs
   - myst-parser
+  - sphinx >=8.0
+  - nbsphinx
   - pydata-sphinx-theme
   - tqdm
+  - zstandard
   - pip:
     - git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@a45f3edd5bc3e973c1a01b577c71efa1b62a65d6
     # pip install gufe so that conda-forge gufe doesn't pull in ambertools and cause a memory error
