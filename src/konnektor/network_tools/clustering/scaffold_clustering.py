@@ -68,7 +68,7 @@ class ScaffoldClusterer(_AbstractClusterer):
         network: rdScaffoldNetwork.ScaffoldNetwork,
         mols: list[Chem.Mol],
         hac_heuristic: int,
-    ) -> dict[Chem.Mol, list[str]]:
+    ):
         # match scaffolds in network back to normalised input molecules
         # i.e. for each molecule, which scaffolds can apply
 
@@ -98,7 +98,9 @@ class ScaffoldClusterer(_AbstractClusterer):
         return mols2candidates
 
     @staticmethod
-    def find_solution(mol_to_candidates: dict[Chem.Mol, list[str]]) -> list[tuple[str, int]]:
+    def find_solution(mol_to_candidates: dict[Chem.Mol, list[str]]):
+        ## TODO: handle the case where no solution is found
+
         # returns the best scaffolds that cover all mols
         # returns a list of (scaffold smiles, n heavy atoms)
 

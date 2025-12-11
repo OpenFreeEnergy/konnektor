@@ -32,7 +32,7 @@ class genMapper(AtomMapper):
 
 
 class genScorer:  # (AtomMappingScorer):
-    def __init__(self, n_scores: int, rand_seed: int = None):
+    def __init__(self, n_scores: int, rand_seed: int | None = None):
         """
         Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
         The scorer repeats the score sequence after n_scoresth time, calling the scorer obj.
@@ -77,7 +77,7 @@ class genScorer:  # (AtomMappingScorer):
         return v
 
 
-def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
+def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
     """
     This function builds a random dataset of n_compounds artificial molecules.
     Additionally the generic scorer and mapper matching the compounds is returned.
@@ -151,7 +151,7 @@ def build_n_random_mst_network(
     sub_networks: int = 2,
     overlap: int = 1,
     uni_score: bool = False,
-) -> tuple[LigandNetwork, LigandNetwork]:
+) -> list[LigandNetwork]:
     """
     This function returns a randomized toy mst graph.
 
