@@ -3,7 +3,7 @@
 
 import abc
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 class NetworkPlanner(abc.ABC):
-    def __init__(self, mappers: AtomMapper | list[AtomMapper], scorer):
+    def __init__(self, mappers: AtomMapper | list[AtomMapper] | None, scorer: Callable | None):
         """This class is an implementation for the NetworkPlanner interface.
         It defines the std. class for a Konnektor NetworkPlanner
 
@@ -37,6 +37,10 @@ class NetworkPlanner(abc.ABC):
             self._mappers = None
         else:
             raise ValueError("Atom mappers are not the required type!")
+
+        # TODO: technically a generator of length 1 would be fine, but this could be expensive to check. Maybe just raise in _map_scoring instead.
+        if isinstance(mappers, Iterable) and scorer is None:
+            raise ValueError("You must define a scorer if providing multiple mappers.")
 
         self.scorer = scorer
 
