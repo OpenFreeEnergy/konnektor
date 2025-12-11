@@ -58,3 +58,14 @@ def test_append_node():
     # network edges + the network connecting edges
     assert len(new_network.edges) == len(network.edges) + n_connecting_edges
     assert get_is_connected(new_network)
+
+
+def test_concatenate_custom_scorer():
+    def local_scorer(atom_mapping) -> float:
+        return len(atom_mapping)
+
+    MstConcatenator(
+        genMapper(),
+        local_scorer,
+        n_connecting_edges=2,
+    )
