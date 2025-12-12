@@ -1,19 +1,14 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/openfe
+import importlib
 from collections.abc import Iterable
 from typing import NamedTuple
 
 import pytest
 from gufe import LigandAtomMapping, LigandNetwork, SmallMoleculeComponent
+from rdkit import Chem
 
 from .network_planners.conf import mol_from_smiles
-
-
-import importlib
-
-import pytest
-from gufe import SmallMoleculeComponent
-from rdkit import Chem
 
 
 @pytest.fixture(scope="session")
@@ -44,6 +39,7 @@ def toluene_vs_others(atom_mapping_basic_test_files):
     others = [v for (k, v) in atom_mapping_basic_test_files.items() if k != central_ligand_name]
     toluene = atom_mapping_basic_test_files[central_ligand_name]
     return toluene, others
+
 
 @pytest.fixture
 def mols():
