@@ -200,7 +200,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         scorer,
         clusterer: _AbstractClusterer = ComponentsDiversityClusterer(
             featurize=MorganFingerprintTransformer(),
-            cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1 / 2048),
+            cluster=HDBSCAN(metric="jaccard", min_cluster_size=3, alpha=1 / 2048, copy=False),
         ),
         n_processes: int = 1,
         progress: bool = False,
