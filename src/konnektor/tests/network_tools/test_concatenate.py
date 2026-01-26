@@ -60,12 +60,26 @@ def test_append_node():
     assert get_is_connected(new_network)
 
 
-def test_concatenate_custom_scorer():
-    def local_scorer(atom_mapping) -> float:
-        return len(atom_mapping)
+@pytest.fixture()
+def custom_scorer():
+    def _local_scorer(atom_mapping) -> float:
+        return len(atom_mapping.componentA.name)
 
-    MstConcatenator(
-        genMapper(),
-        local_scorer,
-        n_connecting_edges=2,
+    return _local_scorer
+
+
+def test_concatenate_custom_scorer(custom_scorer):
+    n_compounds = 10
+
+    networks = build_n_random_mst_network(
+        n_compounds=n_compounds, sub_networks=2, overlap=1, rand_seed=42
     )
+
+    concatenator = MstConcatenator(
+        genMapper(),
+        custom_scorer,
+        n_connecting_edges=2,
+        n_processes=1,
+    )
+
+    concatenator.concatenate_networks(ligand_networks=networks)

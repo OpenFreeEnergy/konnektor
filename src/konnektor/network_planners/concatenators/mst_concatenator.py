@@ -7,7 +7,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 
-from ...network_planners._map_scoring import _parallel_map_scoring
+from ...network_planners._map_scoring import _serial_map_scoring
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
 
@@ -84,13 +84,22 @@ class MstConcatenator(NetworkConcatenator):
             nodesB = ligandNetworkB.nodes
             pedges = [(na, nb) for na in nodesA for nb in nodesB]
 
-            bipartite_graph_mappings = _parallel_map_scoring(
+            bipartite_graph_mappings = _serial_map_scoring(
                 possible_edges=pedges,
                 scorer=self.scorer,
                 mappers=self.mappers,
-                n_processes=self.n_processes,
+                n_edges_to_score=len(pedges),
                 show_progress=self.progress,
             )
+
+            # TODO: add back in parallel scoring with more tests
+            # bipartite_graph_mappings = _parallel_map_scoring(
+            #     possible_edges=pedges,
+            #     scorer=self.scorer,
+            #     mappers=self.mappers,
+            #     n_processes=self.n_processes,
+            #     show_progress=self.progress,
+            # )
 
             # Find MST subset for Bipartite
             edge_map = {
