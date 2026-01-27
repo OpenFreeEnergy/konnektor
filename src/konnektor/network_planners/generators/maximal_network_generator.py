@@ -78,12 +78,12 @@ class MaximalNetworkGenerator(NetworkGenerator):
         """
 
         components = list(components)
-        total = len(components) * (len(components) - 1) // 2
 
         # Parallel or not Parallel:
         if self.n_processes > 1:
+            # TODO: in the future, this should be any iterable, not only a list
             mappings = _parallel_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
+                possible_edges=list(itertools.combinations(components, 2)),
                 scorer=self.scorer,
                 mappers=self.mappers,
                 n_processes=self.n_processes,
@@ -91,10 +91,9 @@ class MaximalNetworkGenerator(NetworkGenerator):
             )
         else:  # serial variant
             mappings = _serial_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
+                possible_edges=list(itertools.combinations(components, 2)),
                 scorer=self.scorer,
                 mappers=self.mappers,
-                n_edges_to_score=total,
                 show_progress=self.progress,
             )
 
