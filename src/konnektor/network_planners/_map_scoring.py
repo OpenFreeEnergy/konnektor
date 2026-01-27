@@ -119,8 +119,8 @@ def _parallel_map_scoring(
         ]
         for job in as_completed(work_list):
             best_mapping = job.result()
-            if best_mapping is not None:
-                mappings.append(best_mapping)
+            # if best_mapping is not None:
+            mappings.append(best_mapping)
 
     # possible_edges = list(possible_edges)
     # n_batches = 5 * n_processes

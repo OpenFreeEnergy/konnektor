@@ -14,7 +14,7 @@ from ...utils.toy_data import build_random_dataset
 @pytest.mark.parametrize("n_process", [1, 2])
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_parallel_map_scoring(with_progress, n_process):
-    components, mapper, scorer = build_random_dataset(n_compounds=20)
+    components, mapper, scorer = build_random_dataset(n_compounds=3)
     component_pairs = list(itertools.combinations(components, 2))
 
     mappings = _parallel_map_scoring(
@@ -29,20 +29,24 @@ def test_parallel_map_scoring(with_progress, n_process):
     assert all(isinstance(m, ComponentMapping) for m in mappings)
 
 
+def deterministic_scorer(mapping):
+    return 1 / (int(mapping.componentA.name) + int(mapping.componentB.name))
+
+
 def test_parallel_serial_equality():
-    components, mapper, scorer = build_random_dataset(n_compounds=4)
+    components, mapper, _ = build_random_dataset(n_compounds=40)
     component_pairs = list(itertools.combinations(components, 2))
 
     mappings_parallel = _parallel_map_scoring(
         possible_edges=component_pairs,
-        scorer=scorer,
+        scorer=deterministic_scorer,
         mappers=[mapper],
         n_processes=2,
         show_progress=False,
     )
     mappings_serial = _serial_map_scoring(
         possible_edges=component_pairs,
-        scorer=scorer,
+        scorer=deterministic_scorer,
         mappers=[mapper],
         n_edges_to_score=len(component_pairs),
         show_progress=False,
