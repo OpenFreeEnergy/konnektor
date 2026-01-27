@@ -11,7 +11,7 @@ from tqdm.auto import tqdm
 
 
 def _determine_best_mapping(
-    component_pair: tuple[SmallMoleculeComponent],
+    component_pair: tuple[SmallMoleculeComponent, SmallMoleculeComponent],
     mappers: list[AtomMapper],
     scorer: Callable | None,
 ) -> AtomMapping:
@@ -23,7 +23,7 @@ def _determine_best_mapping(
 
     Parameters
     ----------
-    component_pair : tuple[SmallMoleculeComponent]
+    component_pair : tuple[SmallMoleculeComponent, SmallMoleculeComponent]
         The two molecules for which the best mapping will be determined.
     mappers : AtomMapper | list[AtomMapper]
         The mapper(s) to use to generate possible mappings between the molecules in the ``component_pair``.
@@ -159,7 +159,6 @@ def _serial_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
     scorer: Callable[[AtomMapping], float],
     mappers: list[AtomMapper],
-    n_edges_to_score: int,  # TODO: can we auto-detect this from possible_edges?
     show_progress: bool = True,
 ) -> list[AtomMapping]:
     """_summary_
@@ -172,8 +171,6 @@ def _serial_map_scoring(
         scoring the mappings
     mappers: AtomMapper
         atom mapper for the mappings
-    n_edges_to_score : int
-        total number of edges to be scored (for progress bar)
     show_progress: bool
         show a tqdm progressbar.
 
@@ -183,7 +180,7 @@ def _serial_map_scoring(
         return a list of scored atom mappings
     """
     if show_progress is True:
-        progress = functools.partial(tqdm, total=n_edges_to_score, delay=1.5, desc="Mapping")
+        progress = functools.partial(tqdm, total=len(possible_edges), delay=1.5, desc="Mapping")
     else:
         progress = lambda x: x
 

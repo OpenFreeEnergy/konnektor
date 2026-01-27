@@ -74,7 +74,6 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             a heuristic max network.
         """
         components = list(components)
-        total = len(components) * self.n_samples
 
         # Parallel or not Parallel:
         # generate combinations to be searched.
@@ -88,7 +87,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                     [(n, components[i]) for i in sample_indices if n != components[i]]
                 )
         else:
-            sample_combinations = itertools.combinations(components, 2)
+            sample_combinations = list(itertools.combinations(components, 2))
 
         # todo: what to do if not connected?
 
@@ -105,7 +104,6 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                 possible_edges=sample_combinations,
                 scorer=self.scorer,
                 mappers=self.mappers,
-                n_edges_to_score=total,
                 show_progress=self.progress,
             )
 

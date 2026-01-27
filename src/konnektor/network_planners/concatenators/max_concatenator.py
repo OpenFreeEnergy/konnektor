@@ -92,7 +92,6 @@ class MaxConcatenator(NetworkConcatenator):
                     possible_edges=pedges,
                     scorer=self.scorer,
                     mappers=self.mappers,
-                    n_edges_to_score=len(pedges),
                     show_progress=self.progress,
                 )
 
