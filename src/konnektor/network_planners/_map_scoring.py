@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import functools
-import multiprocessing as mult
 import warnings
 from collections.abc import Callable
 
@@ -11,7 +10,7 @@ from tqdm.auto import tqdm
 
 
 def _determine_best_mapping(
-    component_pair: tuple[SmallMoleculeComponent],
+    component_pair: tuple[SmallMoleculeComponent, SmallMoleculeComponent],
     mappers: list[AtomMapper],
     scorer: Callable | None,
 ) -> AtomMapping:
@@ -74,35 +73,6 @@ def _determine_best_mapping(
     return best_mapping
 
 
-def thread_mapping(args) -> list[AtomMapping]:
-    """
-    Helper function working as thread for parallel execution.
-
-    Parameters
-    ----------
-    args:
-        contains a list of: jobID, compound_pairs, mapper, scorer
-
-    Returns
-    -------
-    list[AtomMapping]:
-        return a list of scored atom mappings
-
-    """
-
-    jobID, compound_pairs, mappers, scorer = args  # noqa
-
-    mappings = []
-    for component_pair in compound_pairs:
-        best_mapping = _determine_best_mapping(
-            component_pair=component_pair, mappers=mappers, scorer=scorer
-        )
-        if best_mapping is not None:
-            mappings.append(best_mapping)
-
-    return mappings
-
-
 def _parallel_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
     scorer: Callable[[AtomMapping], float],
@@ -131,26 +101,41 @@ def _parallel_map_scoring(
     list[AtomMapping]:
         return a list of scored atom mappings
     """
-    if show_progress is True and n_processes > 1:
-        n_batches = 10 * n_processes
-        progress = functools.partial(tqdm, total=n_batches, delay=1.5, desc="Mapping")
-    else:
-        progress = lambda x: x
+    # if show_progress is True and n_processes > 1:
+    #     n_batches = 5 * n_processes
+    #     progress = functools.partial(tqdm, total=n_batches, delay=1.5, desc="Mapping")
+    # else:
+    #     progress = lambda x: x
 
-    possible_edges = list(possible_edges)
-    n_batches = 10 * n_processes
+    from concurrent.futures import ThreadPoolExecutor, as_completed
 
-    # Prepare parallel execution.
-    # suboptimal implementation, but itertools.batch is python 3.12,
-    batches = (possible_edges[i : i + n_batches] for i in range(0, len(possible_edges), n_batches))
-
-    jobs = [(job_id, combination, mappers, scorer) for job_id, combination in enumerate(batches)]
-
-    # Execute parallelism
     mappings = []
-    with mult.Pool(n_processes) as p:
-        for sub_result in progress(p.imap(thread_mapping, jobs)):
-            mappings.extend(sub_result)
+    with ThreadPoolExecutor(max_workers=n_processes) as executor:
+        work_list = [
+            executor.submit(
+                _determine_best_mapping, component_pair=edge, mappers=mappers, scorer=scorer
+            )
+            for edge in possible_edges
+        ]
+        for job in as_completed(work_list):
+            best_mapping = job.result()
+            if best_mapping is not None:
+                mappings.append(best_mapping)
+
+    # possible_edges = list(possible_edges)
+    # n_batches = 5 * n_processes
+
+    # # Prepare parallel execution.
+    # # suboptimal implementation, but itertools.batch is python 3.12,
+    # batches = (possible_edges[i : i + n_batches] for i in range(0, len(possible_edges), n_batches))
+
+    # jobs = [(job_id, combination, mappers, scorer) for job_id, combination in enumerate(batches)]
+
+    # # Execute parallelism
+    # mappings = []
+    # with mult.Pool(n_processes) as p:
+    #     for sub_result in progress(p.imap(thread_mapping, jobs)):
+    #         mappings.extend(sub_result)
 
     return mappings
 
