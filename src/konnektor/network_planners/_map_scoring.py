@@ -194,3 +194,15 @@ def _serial_map_scoring(
             mappings.append(best_mapping)
 
     return mappings
+
+
+def _score_mappings(n_processes: int, **kwargs) -> list[AtomMapping]:
+    if n_processes > 1:
+        scored_mappings = _parallel_map_scoring(
+            n_processes=n_processes,
+            **kwargs,
+        )
+    else:  # serial variant
+        scored_mappings = _serial_map_scoring(**kwargs)
+
+    return scored_mappings
