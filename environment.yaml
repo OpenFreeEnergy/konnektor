@@ -23,7 +23,7 @@ dependencies:
   - scikit-mol>=0.5.5  # https://github.com/EBjerrum/scikit-mol/pull/68
   - dill
   # Chem
-  - rdkit==2024.03.5
+  - rdkit
   # Vis
   - ipycytoscape
   # docs
