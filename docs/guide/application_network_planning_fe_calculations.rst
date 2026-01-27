@@ -45,6 +45,3 @@ Network, N-Node Edges Network, and Cyclic Network. Notably, the Twin Star
 Network and the Cyclic Network focus on constructing a set of cycles.
 
 So in applied cases we suggest the slightly more redundant networks in order to build up a robust network for the calculations.
-
-tutorial: :doc:`/tutorials/building_networks`.
-NetworkPlanner: :doc:`/guide/network_planner`.
