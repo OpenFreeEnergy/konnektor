@@ -11,7 +11,7 @@ from konnektor.tests.network_planners.conf import (
     ErrorMapper,
     GenAtomMapper,
     SuperBadMapper,
-    genScorer,
+    length_scorer,
     mol_from_smiles,
 )
 
@@ -72,7 +72,7 @@ def test_star_network_with_scorer(toluene_vs_others):
     toluene, others = toluene_vs_others
 
     mappers = [BadMapper(), GenAtomMapper()]
-    scorer = genScorer
+    scorer = length_scorer
     planner = konnektor.network_planners.RadialNetworkGenerator(mappers=mappers, scorer=scorer)
     network = planner.generate_ligand_network(components=others, central_component=toluene)
 

@@ -12,7 +12,7 @@ from konnektor.utils.toy_data import (
     build_random_fully_connected_network,
     build_random_mst_network,
     emptyMapper,
-    genScorer,
+    randomScorer,
 )
 
 
@@ -35,9 +35,9 @@ def test_emptyMapper():
     assert hasattr(mapping, "componentA_to_componentB")
 
 
-def test_genScorer():
+def test_randomScorer():
     n_scores = 10
-    scorer = genScorer(n_scores=n_scores, rand_seed=42)
+    scorer = randomScorer(n_scores=n_scores, rand_seed=42)
 
     # assert isinstance(scorer, AtomMappingScorer)
     assert len(scorer.vals) == n_scores

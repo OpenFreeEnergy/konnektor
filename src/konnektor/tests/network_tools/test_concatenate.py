@@ -11,7 +11,7 @@ from konnektor.utils.toy_data import (
     build_random_dataset,
     build_random_mst_network,
     emptyMapper,
-    genScorer,
+    randomScorer,
 )
 
 
@@ -25,7 +25,7 @@ def test_concatenate_mst_networks(n_sub_networks):
     )
     concatenator = MstConcatenator(
         emptyMapper(),
-        genScorer(n_scores=n_compounds**2),
+        randomScorer(n_scores=n_compounds**2),
         n_connecting_edges=n_connecting_edges,
     )
 
@@ -48,7 +48,7 @@ def test_append_node():
     compounds, _, _ = build_random_dataset(n_compounds=1, rand_seed=42)
     concatenator = MstConcatenator(
         emptyMapper(),
-        genScorer(n_scores=n_compounds**2),
+        randomScorer(n_scores=n_compounds**2),
         n_connecting_edges=n_connecting_edges,
     )
 
