@@ -15,9 +15,9 @@ from konnektor.utils.toy_data import build_random_dataset
 
 def test_explicit_network_planner():
     n_compounds = 20
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
 
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
 
     edges = list(itertools.combinations(components, 2))
 
@@ -34,10 +34,10 @@ def test_explicit_network_planner():
 
 def test_explicit_network_planner_from_indices():
     n_compounds = 6
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     edges = [(0, 2), (1, 2), (2, 3), (3, 4), (2, 5)]
 
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
 
     ligand_network = planner.generate_network_from_indices(components=components, indices=edges)
 
@@ -54,18 +54,18 @@ def test_explicit_network_planner_from_indices():
 
 def test_explicit_network_planner_from_indices_bad_index():
     n_compounds = 4
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
     with pytest.raises(IndexError, match=r"Invalid ligand index. Requested \(0, 4\)"):
         planner.generate_network_from_indices(components=components, indices=[(0, 4)])
 
 
 def test_explicit_network_planner_from_indices_disconnected():
     n_compounds = 20
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     edges = [(1, 2), (2, 3), (3, 4), (2, 5), (2, 6)]
 
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
 
     with pytest.warns(match="Generated network is not connected"):
         ligand_network = planner.generate_network_from_indices(components=components, indices=edges)
@@ -83,10 +83,10 @@ def test_explicit_network_planner_from_indices_disconnected():
 
 def test_explicit_network_planner_from_names():
     n_compounds = 6
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     edges = [("0", "1"), ("1", "2"), ("2", "3"), ("3", "4"), ("3", "5")]
 
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
 
     ligand_network = planner.generate_network_from_names(components=components, names=edges)
 
@@ -101,29 +101,29 @@ def test_explicit_network_planner_from_names():
 
 def test_explicit_network_planner_from_names_bad_name():
     n_compounds = 4
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
     with pytest.raises(KeyError, match=r"Invalid name\(s\) requested \['4'\]"):
         planner.generate_network_from_names(components=components, names=[("0", "4")])
 
 
 def test_explicit_network_planner_from_names_duplicate_name():
     n_compounds = 4
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     # make a duplicate
     components.append(components[0])
 
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
     with pytest.raises(ValueError, match=r"Duplicate names: \['0'\]"):
         planner.generate_network_from_names(components=components, names=[("0", "1")])
 
 
 def test_explicit_network_planner_from_names_disconnected():
     n_compounds = 20
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
     edges = [("0", "1"), ("1", "2"), ("2", "3"), ("1", "5"), ("1", "6")]
 
-    planner = ExplicitNetworkGenerator(genMapper, genScorer, n_processes=1)
+    planner = ExplicitNetworkGenerator(emptyMapper, genScorer, n_processes=1)
 
     with pytest.warns(match="Generated network is not connected"):
         ligand_network = planner.generate_network_from_names(components=components, names=edges)

@@ -11,12 +11,12 @@ from konnektor.utils.toy_data import (
     build_random_dataset,
     build_random_fully_connected_network,
     build_random_mst_network,
-    genMapper,
+    emptyMapper,
     genScorer,
 )
 
 
-def test_genMapper():
+def test_emptyMapper():
     rdmolA = Chem.MolFromSmiles("c1ccccc1")
     rdmolA = Chem.AddHs(rdmolA)
     Chem.rdDistGeom.EmbedMolecule(rdmolA)
@@ -27,7 +27,7 @@ def test_genMapper():
     Chem.rdDistGeom.EmbedMolecule(rdmolB)
     molB = SmallMoleculeComponent.from_rdkit(rdmolB)
 
-    mapper = genMapper()
+    mapper = emptyMapper()
     mapping = next(mapper.suggest_mappings(molA, molB))
 
     assert isinstance(mapper, AtomMapper)
@@ -54,7 +54,7 @@ def test_genScorer():
     Chem.rdDistGeom.EmbedMolecule(rdmolB)
     molB = SmallMoleculeComponent.from_rdkit(rdmolB)
 
-    mapper = genMapper()
+    mapper = emptyMapper()
     mapping = next(mapper.suggest_mappings(molA, molB))
 
     # let's do some tests

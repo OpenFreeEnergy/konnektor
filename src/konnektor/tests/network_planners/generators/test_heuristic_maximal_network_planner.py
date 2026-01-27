@@ -17,10 +17,10 @@ from konnektor.utils.toy_data import build_random_dataset
 @pytest.mark.parametrize("with_progress", [True, False])
 def test_generate_maximal_network(with_progress, n_process):
     n_compounds = 20
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds)
 
     planner = HeuristicMaximalNetworkGenerator(
-        mappers=genMapper,
+        mappers=emptyMapper,
         scorer=genScorer,
         n_samples=10,
         progress=with_progress,

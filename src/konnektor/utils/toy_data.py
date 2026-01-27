@@ -7,10 +7,10 @@ from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, Smal
 from rdkit import Chem
 
 
-class genMapper(AtomMapper):
+class emptyMapper(AtomMapper):
     def __init__(self):
         """
-        Build a generic Mapper, that only has use for dummy mappings. Generates empty mappings
+        Build a Mapper that only has use for dummy mappings. Generates empty mappings.
         """
         pass
 
@@ -77,7 +77,7 @@ class genScorer:  # (AtomMappingScorer):
         return v
 
 
-def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
+def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
     """
     This function builds a random dataset of n_compounds artificial molecules.
     Additionally the generic scorer and mapper matching the compounds is returned.
@@ -94,7 +94,7 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
     (Iterable[SmallMoleculeComponent], AtomMapper, AtomMappingScorer)
         compounds, mapper, scorer
     """
-    gen_mapper = genMapper()
+    gen_mapper = emptyMapper()
     gen_scorer = genScorer(n_scores=n_compounds, rand_seed=rand_seed)
 
     # generate random Molecules
@@ -130,7 +130,7 @@ def build_random_mst_network(
     LigandNetwork
         the toy mst network
     """
-    compounds, genMapper, genScorer = build_random_dataset(
+    compounds, emptyMapper, genScorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
@@ -139,7 +139,7 @@ def build_random_mst_network(
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=emptyMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network
@@ -169,7 +169,7 @@ def build_n_random_mst_network(
     LigandNetwork
         the toy mst network
     """
-    compounds, genMapper, genScorer = build_random_dataset(
+    compounds, emptyMapper, genScorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
@@ -178,7 +178,7 @@ def build_n_random_mst_network(
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=emptyMapper, scorer=genScorer)
 
     networks = []
     step = n_compounds // sub_networks
@@ -214,7 +214,7 @@ def build_random_fully_connected_network(
     LigandNetwork
         the toy fully connected network
     """
-    compounds, genMapper, genScorer = build_random_dataset(
+    compounds, emptyMapper, genScorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
@@ -223,7 +223,7 @@ def build_random_fully_connected_network(
 
     from konnektor.network_planners import MaximalNetworkGenerator
 
-    planner = MaximalNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = MaximalNetworkGenerator(mappers=emptyMapper, scorer=genScorer)
 
     ligand_network = planner(compounds)
     return ligand_network

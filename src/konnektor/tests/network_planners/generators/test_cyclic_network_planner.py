@@ -15,10 +15,10 @@ from konnektor.utils.toy_data import build_random_dataset
 def test_cyclic_network_planner():
     n_compounds = 8
     ncycles = 2
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
+    components, emptyMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
 
     planner = CyclicNetworkGenerator(
-        mappers=genMapper,
+        mappers=emptyMapper,
         scorer=genScorer,
         cycle_sizes=3,
         node_present_in_cycles=ncycles,
