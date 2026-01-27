@@ -1,2 +1,5 @@
 # applying ruff formatting by atravitz in https://github.com/OpenFreeEnergy/konnektor/pull/109
 52f9e1018ebc66c3f624e2a89f772f3aa7edd11f
+
+# black formatting by riesben in https://github.com/OpenFreeEnergy/konnektor/pull/62
+e18c6abf5297a44cba65c88131b73f813a93dc42

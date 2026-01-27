@@ -12,6 +12,7 @@ repos:
     - id: trailing-whitespace
       exclude: '\.(pdb|gro|top|sdf|xml|cif|graphml)$'
     - id: check-added-large-files
+      args: ["--maxkb=4000"]
     - id: check-case-conflict
     - id: check-symlinks
     - id: check-toml
@@ -27,7 +28,7 @@ repos:
     - id: pyproject-fmt
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.14.7
+  rev: v0.14.10
   hooks:
     # Run the linter.
     - id: ruff
