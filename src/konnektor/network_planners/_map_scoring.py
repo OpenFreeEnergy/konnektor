@@ -4,16 +4,17 @@
 import functools
 import multiprocessing as mult
 import warnings
-from collections.abc import Callable
 
 from gufe import AtomMapper, AtomMapping, SmallMoleculeComponent
 from tqdm.auto import tqdm
+
+from ..scoring import AtomMappingScorer
 
 
 def _determine_best_mapping(
     component_pair: tuple[SmallMoleculeComponent],
     mappers: list[AtomMapper],
-    scorer: Callable | None,
+    scorer: AtomMappingScorer | None,
 ) -> AtomMapping:
     """
     Helper function to generate all possible mappings for ``component_pair`` using the ``mappers``.
@@ -27,8 +28,8 @@ def _determine_best_mapping(
         The two molecules for which the best mapping will be determined.
     mappers : AtomMapper | list[AtomMapper]
         The mapper(s) to use to generate possible mappings between the molecules in the ``component_pair``.
-    scorer : Optional[Callable]
-        The mapping scorer to use, in the form of a ``Callable`` that takes in an ``AtomMapping`` and returns a float in [0,1].
+    scorer : Optional[AtomMappingScorer]
+        The mapping scorer to use, in the form of a ``AtomMappingScorer``, a ``Callable`` that takes in an ``AtomMapping`` and returns a float in [0,1].
 
     Returns
     -------
@@ -105,7 +106,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 
 def _parallel_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
-    scorer: Callable[[AtomMapping], float],
+    scorer: AtomMappingScorer,
     mappers: list[AtomMapper],
     n_processes: int,
     show_progress: bool = True,
@@ -117,8 +118,8 @@ def _parallel_map_scoring(
     ----------
     possible_edges: tuple[SmallMoleculeComponent, SmallMoleculeComponent]
         two  molecules to be mapped.
-    scorer: callable
-        scoring the mappings
+    scorer: AtomMappingScorer
+        scorer to use to evaluate mappings
     mappers: AtomMapper
         atom mapper for the mappings
     n_processes: int
@@ -157,7 +158,7 @@ def _parallel_map_scoring(
 
 def _serial_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
-    scorer: Callable[[AtomMapping], float],
+    scorer: AtomMappingScorer,
     mappers: list[AtomMapper],
     n_edges_to_score: int,  # TODO: can we auto-detect this from possible_edges?
     show_progress: bool = True,
@@ -168,8 +169,8 @@ def _serial_map_scoring(
     ----------
     possible_edges: tuple[SmallMoleculeComponent, SmallMoleculeComponent]
         two  molecules to be mapped.
-    scorer: callable
-        scoring the mappings
+    scorer: AtomMappingScorer
+        scorer to use to evaluate mappings
     mappers: AtomMapper
         atom mapper for the mappings
     n_edges_to_score : int
