@@ -5,6 +5,7 @@ from gufe import ComponentMapping
 
 from konnektor.network_planners._map_scoring import (
     _parallel_map_scoring,
+    _serial_map_scoring,
     thread_mapping,
 )
 
@@ -37,3 +38,40 @@ def test_parallel_map_scoring(with_progress, n_process):
 
     assert len(mappings) == len(component_pairs)
     assert all(isinstance(m, ComponentMapping) for m in mappings)
+
+
+def deterministic_scorer(mapping):
+    return 1 / (int(mapping.componentA.name) + int(mapping.componentB.name))
+
+
+def test_parallel_serial_equality():
+    components, mapper, _ = build_random_dataset(n_compounds=2)
+    component_pairs = list(itertools.combinations(components, 2))
+
+    mappings_parallel = _parallel_map_scoring(
+        possible_edges=component_pairs,
+        scorer=deterministic_scorer,
+        mappers=[mapper],
+        n_processes=8,
+        show_progress=False,
+    )
+    mappings_serial = _serial_map_scoring(
+        possible_edges=component_pairs,
+        scorer=deterministic_scorer,
+        mappers=[mapper],
+        n_edges_to_score=len(component_pairs),
+        show_progress=False,
+    )
+    assert len(mappings_parallel) == len(mappings_serial)
+    assert all(isinstance(m, ComponentMapping) for m in mappings_parallel)
+
+    comps_serial = {(m.componentA, m.componentB) for m in mappings_serial}
+    comps_parallel = {(m.componentA, m.componentB) for m in mappings_parallel}
+    assert comps_serial == comps_parallel
+
+    scores_serial = {m.annotations["score"] for m in mappings_serial}
+    scores_parallel = {m.annotations["score"] for m in mappings_parallel}
+    assert scores_serial == scores_parallel
+
+    assert len(mappings_parallel) == len(mappings_serial)
+    assert set(mappings_parallel) == set(mappings_serial)
