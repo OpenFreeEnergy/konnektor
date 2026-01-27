@@ -4,9 +4,10 @@
 import logging
 from collections.abc import Iterable
 
-from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
+from gufe import AtomMapper, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
+from ..scoring import AtomMappingScorer
 from ._abstract_network_concatenator import NetworkConcatenator
 from .max_concatenator import MaxConcatenator
 
@@ -24,7 +25,7 @@ class CyclicConcatenator(NetworkConcatenator):
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator = None,
+        _initial_edge_lister: NetworkConcatenator | None = None,
     ):
         """
         This concatenators is connnecting two Networks with a kruskal like
