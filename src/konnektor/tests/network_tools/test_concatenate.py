@@ -4,7 +4,6 @@ from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import MstConcatenator
 from konnektor.network_tools.network_handling.concatenate import (
     append_component,
-    concatenate_networks,
 )
 from konnektor.utils.toy_data import (
     build_n_random_mst_network,
@@ -29,7 +28,7 @@ def test_concatenate_mst_networks(n_sub_networks):
         n_connecting_edges=n_connecting_edges,
     )
 
-    new_network = concatenate_networks(networks, concatenator)
+    new_network = concatenator.concatenate_networks(ligand_networks=networks)
 
     assert len(networks) == n_sub_networks
     assert len(new_network.nodes) == n_compounds

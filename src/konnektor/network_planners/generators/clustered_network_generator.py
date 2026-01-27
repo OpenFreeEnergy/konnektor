@@ -20,7 +20,7 @@ from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
 )
 
-from ...network_tools import append_component, concatenate_networks
+from ...network_tools import append_component
 from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
 from ..concatenators import MstConcatenator
 from ..concatenators._abstract_network_concatenator import NetworkConcatenator
@@ -170,9 +170,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
         if len(self.sub_networks) == 1:
             concat_network = self.sub_networks[0]
         else:
-            concat_network = concatenate_networks(
-                networks=self.sub_networks, concatenator=self.concatenator
-            )
+            concat_network = self.concatenator(ligand_networks=self.sub_networks)
 
         # step 4: has the clustering a noise cluster
         if -1 in self.clusters:
