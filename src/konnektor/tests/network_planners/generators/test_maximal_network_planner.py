@@ -11,7 +11,7 @@ from konnektor.tests.network_planners.conf import (
     ErrorMapper,
     GenAtomMapper,
     SuperBadMapper,
-    genScorer,
+    length_scorer,
     mol_from_smiles,
     zeroScorer,
 )
@@ -25,7 +25,7 @@ def test_generate_maximal_network(toluene_vs_others, with_progress, with_scorer,
 
     mapper = GenAtomMapper()
 
-    scorer = genScorer if with_scorer else None
+    scorer = length_scorer if with_scorer else None
 
     planner = MaximalNetworkGenerator(
         mappers=mapper, scorer=scorer, progress=with_progress, n_processes=n_process
@@ -95,7 +95,7 @@ def test_generate_maximal_network_no_edges(toluene_vs_others, n_process):
     components = others + [toluene]
 
     planner = MaximalNetworkGenerator(
-        mappers=ErrorMapper(), scorer=genScorer, progress=False, n_processes=n_process
+        mappers=ErrorMapper(), scorer=length_scorer, progress=False, n_processes=n_process
     )
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
@@ -131,5 +131,5 @@ def test_maximal_network_no_mappings(toluene_vs_others):
     mapper = ErrorMapper()
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
-        planner = MaximalNetworkGenerator(mappers=mapper, scorer=genScorer)
+        planner = MaximalNetworkGenerator(mappers=mapper, scorer=length_scorer)
         planner.generate_ligand_network(components=others + [toluene, nimrod])

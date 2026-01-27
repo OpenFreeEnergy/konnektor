@@ -17,10 +17,14 @@ from konnektor.utils.toy_data import build_random_dataset
 
 def test_starry_sky_network_planner():
     n_compounds = 40
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
+    components, empty_mapper, random_scorer = build_random_dataset(
+        n_compounds=n_compounds, rand_seed=42
+    )
     clusterer = ComponentsDiversityClusterer(cluster=KMeans(n_clusters=3))
 
-    planner = StarrySkyNetworkGenerator(mappers=genMapper, scorer=genScorer, clusterer=clusterer)
+    planner = StarrySkyNetworkGenerator(
+        mappers=empty_mapper, scorer=random_scorer, clusterer=clusterer
+    )
 
     ligand_network = planner(components)
     n_clusters = len(planner.clusters)
