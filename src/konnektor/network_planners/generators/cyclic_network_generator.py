@@ -9,7 +9,7 @@ from konnektor.network_planners._networkx_implementations import (
     CyclicNetworkAlgorithm as nx_CNG,
 )
 
-from ..scorer import AtomMappingScorer
+from ...scoring import AtomMappingScorer
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 

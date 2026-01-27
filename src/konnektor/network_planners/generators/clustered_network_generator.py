@@ -16,10 +16,10 @@ from scikit_mol.fingerprints import (
 from sklearn.cluster import HDBSCAN, KMeans
 from tqdm.auto import tqdm
 
-from konnektor.network_planners.scorer import AtomMappingScorer
 from konnektor.network_tools.clustering.component_diversity_clustering import (
     ComponentsDiversityClusterer,
 )
+from konnektor.scoring import AtomMappingScorer
 
 from ...network_tools import append_component, concatenate_networks
 from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer

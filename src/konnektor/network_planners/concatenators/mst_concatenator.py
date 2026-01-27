@@ -7,7 +7,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 
-from konnektor.network_planners.scorer import AtomMappingScorer
+from konnektor.scoring import AtomMappingScorer
 
 from ...network_planners._map_scoring import _parallel_map_scoring
 from .._networkx_implementations import MstNetworkAlgorithm

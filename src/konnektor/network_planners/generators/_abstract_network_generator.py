@@ -10,7 +10,7 @@ from gufe import AtomMapper, Component, LigandNetwork
 from konnektor.network_planners._networkx_implementations import (
     _AbstractNetworkAlgorithm,
 )
-from konnektor.network_planners.scorer import AtomMappingScorer
+from konnektor.scoring import AtomMappingScorer
 
 from ..NetworkPlanner import NetworkPlanner
 

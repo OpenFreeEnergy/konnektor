@@ -9,7 +9,7 @@ from gufe import AtomMapper, Component, LigandNetwork
 from tqdm.auto import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
-from konnektor.network_planners.scorer import AtomMappingScorer
+from konnektor.scoring import AtomMappingScorer
 
 from .._map_scoring import _determine_best_mapping
 from ._abstract_network_generator import NetworkGenerator

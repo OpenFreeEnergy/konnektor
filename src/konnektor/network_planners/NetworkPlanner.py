@@ -7,7 +7,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from .scorer import AtomMappingScorer
+from ..scoring import AtomMappingScorer
 
 log = logging.getLogger(__name__)
 
