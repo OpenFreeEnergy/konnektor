@@ -17,14 +17,16 @@ from konnektor.utils.toy_data import build_random_dataset
 
 def test_clustered_network_planner():
     n_compounds = 40
-    components, empty_mapper, random_scorer = build_random_dataset(
+
+    # TODO: this test is flaky, depending on the random seed
+    components, empty_mapper, smiles_length_scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=42
     )
 
     from konnektor.network_planners import MstConcatenator, RadialNetworkGenerator
 
-    sub_networker = RadialNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
-    concatenator = MstConcatenator(mappers=empty_mapper, scorer=random_scorer)
+    sub_networker = RadialNetworkGenerator(mappers=empty_mapper, scorer=smiles_length_scorer)
+    concatenator = MstConcatenator(mappers=empty_mapper, scorer=smiles_length_scorer)
     clusterer = ComponentsDiversityClusterer(cluster=KMeans(n_clusters=3))
 
     planner = ClusteredNetworkGenerator(
@@ -35,11 +37,11 @@ def test_clustered_network_planner():
     )
 
     ligand_network = planner(components)
-
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == n_compounds
     assert len(planner.clusters) == 3
     expected_number_of_edges = 3 * ((n_compounds // 3) - 1) + (3 * concatenator.n_connecting_edges)
+
     assert len(ligand_network.edges) == expected_number_of_edges
     assert get_is_connected(ligand_network)
 

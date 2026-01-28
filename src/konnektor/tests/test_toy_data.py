@@ -1,7 +1,6 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-import numpy as np
 import pytest
 from gufe import AtomMapper, AtomMapping, LigandNetwork, SmallMoleculeComponent
 from rdkit import Chem
@@ -12,7 +11,6 @@ from konnektor.utils.toy_data import (
     build_random_fully_connected_network,
     build_random_mst_network,
     emptyMapper,
-    randomScorer,
 )
 
 
@@ -35,41 +33,41 @@ def test_emptyMapper():
     assert hasattr(mapping, "componentA_to_componentB")
 
 
-def test_randomScorer():
-    n_scores = 10
-    scorer = randomScorer(n_scores=n_scores, rand_seed=42)
+# def test_randomScorer():
+#     n_scores = 10
+#     scorer = randomScorer(n_scores=n_scores, rand_seed=42)
 
-    # assert isinstance(scorer, AtomMappingScorer)
-    assert len(scorer.vals) == n_scores
-    assert scorer.i == 0
+#     # assert isinstance(scorer, AtomMappingScorer)
+#     assert len(scorer.vals) == n_scores
+#     assert scorer.i == 0
 
-    # get some input data
-    rdmolA = Chem.MolFromSmiles("c1ccccc1")
-    rdmolA = Chem.AddHs(rdmolA)
-    Chem.rdDistGeom.EmbedMolecule(rdmolA)
-    molA = SmallMoleculeComponent.from_rdkit(rdmolA)
+#     # get some input data
+#     rdmolA = Chem.MolFromSmiles("c1ccccc1")
+#     rdmolA = Chem.AddHs(rdmolA)
+#     Chem.rdDistGeom.EmbedMolecule(rdmolA)
+#     molA = SmallMoleculeComponent.from_rdkit(rdmolA)
 
-    rdmolB = Chem.MolFromSmiles("Cc1ccccc1")
-    rdmolB = Chem.AddHs(rdmolB)
-    Chem.rdDistGeom.EmbedMolecule(rdmolB)
-    molB = SmallMoleculeComponent.from_rdkit(rdmolB)
+#     rdmolB = Chem.MolFromSmiles("Cc1ccccc1")
+#     rdmolB = Chem.AddHs(rdmolB)
+#     Chem.rdDistGeom.EmbedMolecule(rdmolB)
+#     molB = SmallMoleculeComponent.from_rdkit(rdmolB)
 
-    mapper = emptyMapper()
-    mapping = next(mapper.suggest_mappings(molA, molB))
+#     mapper = emptyMapper()
+#     mapping = next(mapper.suggest_mappings(molA, molB))
 
-    # let's do some tests
-    s = scorer(mapping)
+#     # let's do some tests
+#     s = scorer(mapping)
 
-    assert isinstance(s, float)
-    np.testing.assert_allclose(actual=s, desired=0.37454, rtol=0.01)
-    assert s == scorer.vals[0]
-    assert scorer.i == 1
+#     assert isinstance(s, float)
+#     np.testing.assert_allclose(actual=s, desired=0.37454, rtol=0.01)
+#     assert s == scorer.vals[0]
+#     assert scorer.i == 1
 
-    for i in range(scorer.i, 12):
-        s = scorer(mapping)
-        assert s == scorer.vals[i % n_scores]
+#     for i in range(scorer.i, 12):
+#         s = scorer(mapping)
+#         assert s == scorer.vals[i % n_scores]
 
-    assert scorer.i == 2
+#     assert scorer.i == 2
 
 
 def test_build_random_dataset():
@@ -80,7 +78,6 @@ def test_build_random_dataset():
     assert all(isinstance(c, SmallMoleculeComponent) for c in compounds)
     assert isinstance(mapper, AtomMapper)
     # assert isinstance(scorer, AtomMappingScorer)
-    assert len(scorer.vals) == n_compounds
 
 
 def test_build_random_mst_network():

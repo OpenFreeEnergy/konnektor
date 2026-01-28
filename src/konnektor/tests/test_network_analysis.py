@@ -161,19 +161,23 @@ def test_get_number_of_graph_cycles_mst_graph(n_cycle_size):
 
 # Graph Edge Score related Functionality - convoluted scores
 
+# TODO: what do we really want to test here? the graph scores are depended on
+# random seed and an arbitrary scorer.
+
 
 def test_get_mst_graph_score():
     # Check for graph scores.
     seed = 42
     n_compounds = 30
     g = build_random_mst_network(n_compounds=n_compounds, rand_seed=seed)
-    np.testing.assert_allclose(get_network_score(g), 27.52, atol=1e-3)
+
+    np.testing.assert_allclose(get_network_score(g), 5.559632, atol=1e-3)
 
 
 def test_get_fully_connected_graph_score():
     # Check for graph scores.
     g = build_random_fully_connected_network()
-    np.testing.assert_allclose(get_network_score(g), 191.629, atol=1e-3)
+    np.testing.assert_allclose(get_network_score(g), 47.821814, atol=1e-3)
 
 
 def test_get_norm_node_scores_fully_connected_graph():

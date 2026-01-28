@@ -35,4 +35,4 @@ def test_cyclic_network_planner():
     nnode_cycles = get_component_number_cycles(network)
     assert all(v >= ncycles for k, v in nnode_cycles.items())
 
-    np.testing.assert_allclose(get_network_score(network), 10.347529, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(network), 1.643297, rtol=0.01)

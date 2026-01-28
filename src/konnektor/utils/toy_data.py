@@ -31,53 +31,14 @@ class emptyMapper(AtomMapper):
         return vars(self)
 
 
-class randomScorer:  # (AtomMappingScorer):
-    def __init__(self, n_scores: int, rand_seed: int = None):
-        """
-        Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
-        The scorer repeats the score sequence after n_scoresth time, calling the scorer obj.
-        The use of this class is currently envisioned for toydata and testing.
+def smiles_length_scorer(mapping: AtomMapping) -> float:
+    int_A = len(mapping.componentA.smiles)
+    int_B = len(mapping.componentB.smiles)
 
-        Parameters
-        ----------
-        n_scores: int
-            number of scores to build
-        rand_seed: int
-            random number seed for the random scores.
-        """
-        np.random.seed(rand_seed)
-
-        self.vals = np.random.uniform(size=n_scores)
-
-        self.vals = self.vals.astype(float)
-        self.n_scores = n_scores
-        self.i = 0
-
-    def __call__(self, mapping):
-        # todo: remove once subclassed from gufe
-        return self.get_score(mapping)
-
-    def get_score(self, mapping: AtomMapping) -> float:
-        """
-        return the score, at position self.i
-
-        Parameters
-        ----------
-        mapping: AtomMapping
-            the score will not be depending on the mapping! this mimics only classical scorer use.
-
-        Returns
-        -------
-        float
-            score to be returned.
-
-        """
-        v = self.vals[self.i]
-        self.i = (self.i + 1) % self.n_scores
-        return v
+    return 1 / (int_A + int_B)
 
 
-def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
+def build_random_dataset(n_compounds: int = 20, rand_seed: int = 13):
     """
     This function builds a random dataset of n_compounds artificial molecules.
     Additionally the generic scorer and mapper matching the compounds is returned.
@@ -94,20 +55,21 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
     (Iterable[SmallMoleculeComponent], AtomMapper, AtomMappingScorer)
         compounds, mapper, scorer
     """
-    empty_mapper = emptyMapper()
-    random_scorer = randomScorer(n_scores=n_compounds, rand_seed=rand_seed)
+    mapper = emptyMapper()
+    scorer = smiles_length_scorer
 
     # generate random Molecules
     np.random.seed(rand_seed)
     smiles = [
-        "".join(np.random.choice(["C", "O", "N", "S"], replace=True, size=(i % 30) + 1))
+        "".join(np.random.choice(["C", "O", "N", "S"], replace=True, size=(i % 10) + 1))
         for i in range(1, int(n_compounds) + 1)
     ]
     mols = [Chem.AddHs(Chem.MolFromSmiles(s)) for s in smiles]
     [Chem.rdDistGeom.EmbedMolecule(m) for m in mols]
+
     compounds = [SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)]
 
-    return compounds, empty_mapper, random_scorer
+    return compounds, mapper, scorer
 
 
 def build_random_mst_network(
@@ -130,16 +92,16 @@ def build_random_mst_network(
     LigandNetwork
         the toy mst network
     """
-    compounds, empty_mapper, random_scorer = build_random_dataset(
+    compounds, empty_mapper, scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
     if uni_score:
-        random_scorer.get_score = lambda compound: 1
+        scorer = lambda compound: 1
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=empty_mapper, scorer=scorer)
 
     ligand_network = planner(compounds)
     return ligand_network
@@ -169,16 +131,16 @@ def build_n_random_mst_network(
     LigandNetwork
         the toy mst network
     """
-    compounds, empty_mapper, random_scorer = build_random_dataset(
+    compounds, empty_mapper, scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
     if uni_score:
-        random_scorer.get_score = lambda compound: 1
+        scorer = lambda compound: 1
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=empty_mapper, scorer=scorer)
 
     networks = []
     step = n_compounds // sub_networks
@@ -214,16 +176,16 @@ def build_random_fully_connected_network(
     LigandNetwork
         the toy fully connected network
     """
-    compounds, empty_mapper, random_scorer = build_random_dataset(
+    compounds, empty_mapper, scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
     if uni_score:
-        random_scorer.get_score = lambda compound: 1
+        scorer = lambda compound: 1
 
     from konnektor.network_planners import MaximalNetworkGenerator
 
-    planner = MaximalNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
+    planner = MaximalNetworkGenerator(mappers=empty_mapper, scorer=scorer)
 
     ligand_network = planner(compounds)
     return ligand_network
