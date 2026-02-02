@@ -14,6 +14,7 @@ license = "MIT"
 license-files = [ "LICENSE" ]
 
 authors = [
+  { name = "Alyssa Travitz", email = "alyssa.travitz@omsf.io" },
   { name = "Benjamin Ries", email = "benjamin-ries@outlook.com" },
   { name = "David Swenson", email = "dwhswenson@gmail.com" },
   { name = "Hannah Baumann", email = "hannah.baumann@omsf.io" },
