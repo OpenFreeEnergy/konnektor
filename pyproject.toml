@@ -20,6 +20,7 @@ authors = [
   { name = "Irfan Alibay", email = "irfan.alibay@gmail.com" },
   { name = "Mike Henry", email = "mike.henry@choderalab.org" },
   { name = "Richard J Gowers", email = "richardjgowers@gmail.com" },
+  { name = "Alyssa Travitz", email = "alyssa.travitz@omsf.io" },
 ]
 requires-python = ">=3.10,<3.14"
 classifiers = [
