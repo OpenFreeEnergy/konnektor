@@ -7,7 +7,7 @@ from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, Smal
 from rdkit import Chem
 
 
-class emptyMapper(AtomMapper):
+class EmptyMapper(AtomMapper):
     def __init__(self):
         """
         Build a Mapper that only has use for dummy mappings. Generates empty mappings.
