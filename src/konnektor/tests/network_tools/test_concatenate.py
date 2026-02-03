@@ -7,11 +7,11 @@ from konnektor.network_tools.network_handling.concatenate import (
     concatenate_networks,
 )
 from konnektor.utils.toy_data import (
+    EmptyMapper,
+    RandomScorer,
     build_n_random_mst_network,
     build_random_dataset,
     build_random_mst_network,
-    emptyMapper,
-    randomScorer,
 )
 
 
@@ -24,8 +24,8 @@ def test_concatenate_mst_networks(n_sub_networks):
         n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42
     )
     concatenator = MstConcatenator(
-        emptyMapper(),
-        randomScorer(n_scores=n_compounds**2),
+        EmptyMapper(),
+        RandomScorer(n_scores=n_compounds**2),
         n_connecting_edges=n_connecting_edges,
     )
 
@@ -47,8 +47,8 @@ def test_append_node():
     network = build_random_mst_network(n_compounds=n_compounds - 1, rand_seed=42)
     compounds, _, _ = build_random_dataset(n_compounds=1, rand_seed=42)
     concatenator = MstConcatenator(
-        emptyMapper(),
-        randomScorer(n_scores=n_compounds**2),
+        EmptyMapper(),
+        RandomScorer(n_scores=n_compounds**2),
         n_connecting_edges=n_connecting_edges,
     )
 

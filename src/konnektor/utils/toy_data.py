@@ -31,7 +31,7 @@ class EmptyMapper(AtomMapper):
         return vars(self)
 
 
-class randomScorer:  # (AtomMappingScorer):
+class RandomScorer:  # (AtomMappingScorer):
     def __init__(self, n_scores: int, rand_seed: int = None):
         """
         Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
@@ -94,8 +94,8 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
     (Iterable[SmallMoleculeComponent], AtomMapper, AtomMappingScorer)
         compounds, mapper, scorer
     """
-    empty_mapper = emptyMapper()
-    random_scorer = randomScorer(n_scores=n_compounds, rand_seed=rand_seed)
+    empty_mapper = EmptyMapper()
+    random_scorer = RandomScorer(n_scores=n_compounds, rand_seed=rand_seed)
 
     # generate random Molecules
     np.random.seed(rand_seed)
