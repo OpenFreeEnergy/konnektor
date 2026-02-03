@@ -23,8 +23,8 @@ def test_concatenate_deprecated():
         n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42
     )
     concatenator = MstConcatenator(
-        genMapper(),
-        genScorer(n_scores=n_compounds**2),
+        EmptyMapper(),
+        RandomScorer(n_scores=n_compounds**2),
         n_connecting_edges=n_connecting_edges,
     )
     with pytest.warns(DeprecationWarning):  # ,match="use the Concatenator's method instead."):
