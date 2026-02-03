@@ -2,6 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import inspect
+from typing import Literal
 
 from gufe import AtomMapper, LigandAtomMapping, SmallMoleculeComponent
 from rdkit import Chem
@@ -113,13 +114,13 @@ class CustomExcludeMapper(DummyAtomMapper):
         )
 
 
-def genScorer(mapping) -> float:
+def length_scorer(mapping) -> float:
     """A general scorer for testing where the score is proportional to the length of the mapping.
     (i.e. a longer mapping gets a higher, and therefore better, score)
     """
     return 1 - (1.0 / len(mapping.componentA_to_componentB))
 
 
-def zeroScorer(mapping):
+def zeroScorer(mapping) -> Literal[0]:
     """A test scorer that always returns zero."""
     return 0

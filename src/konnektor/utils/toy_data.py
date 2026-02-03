@@ -7,10 +7,10 @@ from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork, Smal
 from rdkit import Chem
 
 
-class genMapper(AtomMapper):
+class EmptyMapper(AtomMapper):
     def __init__(self):
         """
-        Build a generic Mapper, that only has use for dummy mappings. Generates empty mappings
+        Build a Mapper that only has use for dummy mappings. Generates empty mappings.
         """
         pass
 
@@ -31,7 +31,7 @@ class genMapper(AtomMapper):
         return vars(self)
 
 
-class genScorer:  # (AtomMappingScorer):
+class RandomScorer:  # (AtomMappingScorer):
     def __init__(self, n_scores: int, rand_seed: int = None):
         """
         Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
@@ -77,7 +77,7 @@ class genScorer:  # (AtomMappingScorer):
         return v
 
 
-def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
+def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
     """
     This function builds a random dataset of n_compounds artificial molecules.
     Additionally the generic scorer and mapper matching the compounds is returned.
@@ -94,8 +94,8 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
     (Iterable[SmallMoleculeComponent], AtomMapper, AtomMappingScorer)
         compounds, mapper, scorer
     """
-    gen_mapper = genMapper()
-    gen_scorer = genScorer(n_scores=n_compounds, rand_seed=rand_seed)
+    empty_mapper = EmptyMapper()
+    random_scorer = RandomScorer(n_scores=n_compounds, rand_seed=rand_seed)
 
     # generate random Molecules
     np.random.seed(rand_seed)
@@ -107,7 +107,7 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int = None):
     [Chem.rdDistGeom.EmbedMolecule(m) for m in mols]
     compounds = [SmallMoleculeComponent(name=str(i), rdkit=m) for i, m in enumerate(mols)]
 
-    return compounds, gen_mapper, gen_scorer
+    return compounds, empty_mapper, random_scorer
 
 
 def build_random_mst_network(
@@ -130,16 +130,16 @@ def build_random_mst_network(
     LigandNetwork
         the toy mst network
     """
-    compounds, genMapper, genScorer = build_random_dataset(
+    compounds, empty_mapper, random_scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
     if uni_score:
-        genScorer.get_score = lambda compound: 1
+        random_scorer.get_score = lambda compound: 1
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
 
     ligand_network = planner(compounds)
     return ligand_network
@@ -169,16 +169,16 @@ def build_n_random_mst_network(
     LigandNetwork
         the toy mst network
     """
-    compounds, genMapper, genScorer = build_random_dataset(
+    compounds, empty_mapper, random_scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
     if uni_score:
-        genScorer.get_score = lambda compound: 1
+        random_scorer.get_score = lambda compound: 1
 
     from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
 
     networks = []
     step = n_compounds // sub_networks
@@ -214,16 +214,16 @@ def build_random_fully_connected_network(
     LigandNetwork
         the toy fully connected network
     """
-    compounds, genMapper, genScorer = build_random_dataset(
+    compounds, empty_mapper, random_scorer = build_random_dataset(
         n_compounds=n_compounds, rand_seed=rand_seed
     )
 
     if uni_score:
-        genScorer.get_score = lambda compound: 1
+        random_scorer.get_score = lambda compound: 1
 
     from konnektor.network_planners import MaximalNetworkGenerator
 
-    planner = MaximalNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = MaximalNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
 
     ligand_network = planner(compounds)
     return ligand_network

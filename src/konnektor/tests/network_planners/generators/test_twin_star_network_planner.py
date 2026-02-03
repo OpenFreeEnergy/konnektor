@@ -11,9 +11,11 @@ from konnektor.utils.toy_data import build_random_dataset
 
 def test_twin_star_network_planner():
     n_compounds = 40
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
+    components, empty_mapper, random_scorer = build_random_dataset(
+        n_compounds=n_compounds, rand_seed=42
+    )
 
-    planner = TwinStarNetworkGenerator(mappers=genMapper, scorer=genScorer)
+    planner = TwinStarNetworkGenerator(mappers=empty_mapper, scorer=random_scorer)
 
     # Testing
     ligand_network = planner(components)
