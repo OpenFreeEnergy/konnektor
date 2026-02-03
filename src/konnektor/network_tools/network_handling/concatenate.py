@@ -1,6 +1,8 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
+
+import warnings
 from collections.abc import Iterable
 
 from gufe import Component, LigandNetwork
@@ -11,7 +13,7 @@ from konnektor.network_planners.concatenators._abstract_network_concatenator imp
 
 
 def concatenate_networks(
-    networks: Iterable[LigandNetwork], concatenator: NetworkConcatenator
+    ligand_networks: Iterable[LigandNetwork], concatenator: NetworkConcatenator
 ) -> LigandNetwork:
     """
     Concatenate networks, is similar to a union of a set of nodes and edgees,
@@ -31,8 +33,12 @@ def concatenate_networks(
     LigandNetwork
         returns the concatenated network
     """
-
-    concat_network = concatenator.concatenate_networks(ligand_networks=networks)
+    msg = (
+        "concatenate_networks is deprecated, please use the Concatenator's method instead.",
+        "For Example, instead of network_tools.concatenate_networks(mst_concatenator, list_of_networks)``, use ``mst_concatenator.concatenate_networks(list_of_networks)",
+    )
+    warnings.warn(msg, DeprecationWarning)
+    concat_network = concatenator.concatenate_networks(ligand_networks=ligand_networks)
 
     return concat_network
 

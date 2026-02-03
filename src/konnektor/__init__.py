@@ -26,7 +26,6 @@ from .network_tools import (
     ComponentsDiversityClusterer,
     ScaffoldClusterer,
     append_component,
-    concatenate_networks,
     delete_transformation,
     merge_networks,
 )
@@ -49,7 +48,6 @@ __all__ = [
     ComponentsDiversityClusterer,
     ScaffoldClusterer,
     append_component,
-    concatenate_networks,
     delete_transformation,
     merge_networks,
     __version__,
