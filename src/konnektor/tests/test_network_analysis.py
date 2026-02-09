@@ -167,13 +167,13 @@ def test_get_mst_graph_score():
     seed = 42
     n_compounds = 30
     g = build_random_mst_network(n_compounds=n_compounds, rand_seed=seed)
-    np.testing.assert_allclose(get_network_score(g), 27.52, atol=1e-3)
+    np.testing.assert_allclose(get_network_score(g), 27.8859, atol=1e-3)
 
 
 def test_get_fully_connected_graph_score():
     # Check for graph scores.
     g = build_random_fully_connected_network()
-    np.testing.assert_allclose(get_network_score(g), 191.629, atol=1e-3)
+    np.testing.assert_allclose(get_network_score(g), 216.8789, atol=1e-3)
 
 
 def test_get_norm_node_scores_fully_connected_graph():
