@@ -32,47 +32,51 @@ class EmptyMapper(AtomMapper):
 
 
 class RandomScorer:  # (AtomMappingScorer):
-    # TODO: update docstring if this works
-    def __init__(self, n_scores: int, rand_seed: int = None):
+    def __init__(self, n: int, rand_seed: int | None = None):
         """
-        Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
-        The scorer repeats the score sequence after n_scoresth time, calling the scorer obj.
-        The use of this class is currently envisioned for toydata and testing.
+        Builds a scorer that contains a predefined matrix scores of size n x n,
+        where each score is assigned from a uniform random distribution between 1 and 0 upon initialization.
+        The use of this class is currently envisioned for toy data and testing.
 
         Parameters
         ----------
-        n_scores: int
+        n: int
             number of scores to build
         rand_seed: int
             random number seed for the random scores.
         """
+        # TODO: update this to use the new API
+        # https://numpy.org/doc/stable/reference/random/generated/numpy.random.Generator.uniform.html
         np.random.seed(rand_seed)
 
-        self.vals = np.random.uniform(size=(n_scores, n_scores), low=0, high=1.0)
+        self.vals = np.random.uniform(size=(n, n), low=0, high=1.0)
 
-        self.n_scores = n_scores
+        self.n = n
 
-    def __call__(self, mapping):
-        # todo: remove once subclassed from gufe
+    def __call__(self, mapping) -> float:
+        # TODO: remove if subclassed from gufe
         return self.get_score(mapping)
 
     def get_score(self, mapping: AtomMapping) -> float:
         """
-        return the score, at position self.i
+        Retrieve the score from the score matrix at index corresponding to the integer names of
+        componentA and componentB in the mapping.
+
 
         Parameters
         ----------
         mapping: AtomMapping
-            the score will not be depending on the mapping! this mimics only classical scorer use.
+            The mapping to retrieve the score for - names must be integers within (0, n)
 
         Returns
         -------
         float
-            score to be returned.
+            Score corresponding the given AtomMapping
 
         """
         index_a = int(mapping.componentA.name)
         index_b = int(mapping.componentB.name)
+
         score = self.vals[index_a, index_b]
 
         return score
@@ -96,7 +100,7 @@ def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
         compounds, mapper, scorer
     """
     empty_mapper = EmptyMapper()
-    random_scorer = RandomScorer(n_scores=n_compounds, rand_seed=rand_seed)
+    random_scorer = RandomScorer(n=n_compounds, rand_seed=rand_seed)
 
     # generate random Molecules
     np.random.seed(rand_seed)
