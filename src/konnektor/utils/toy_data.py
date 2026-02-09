@@ -32,6 +32,7 @@ class EmptyMapper(AtomMapper):
 
 
 class RandomScorer:  # (AtomMappingScorer):
+    # TODO: update docstring if this works
     def __init__(self, n_scores: int, rand_seed: int = None):
         """
         Builds a scorer that contains a predefined sequence of scores, n_scores long and each score is initially randomly uniformly picked between 1 and 0.
@@ -47,11 +48,9 @@ class RandomScorer:  # (AtomMappingScorer):
         """
         np.random.seed(rand_seed)
 
-        self.vals = np.random.uniform(size=n_scores)
+        self.vals = np.random.uniform(size=(n_scores, n_scores), low=0, high=1.0)
 
-        self.vals = self.vals.astype(float)
         self.n_scores = n_scores
-        self.i = 0
 
     def __call__(self, mapping):
         # todo: remove once subclassed from gufe
@@ -72,9 +71,11 @@ class RandomScorer:  # (AtomMappingScorer):
             score to be returned.
 
         """
-        v = self.vals[self.i]
-        self.i = (self.i + 1) % self.n_scores
-        return v
+        index_a = int(mapping.componentA.name)
+        index_b = int(mapping.componentB.name)
+        score = self.vals[index_a, index_b]
+
+        return score
 
 
 def build_random_dataset(n_compounds: int = 20, rand_seed: int | None = None):
