@@ -2,10 +2,11 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import itertools
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
+from ...scoring import AtomMappingScorer
 from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
 from ._abstract_network_generator import NetworkGenerator
 
@@ -14,7 +15,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: Callable | None,
+        scorer: AtomMappingScorer | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
@@ -38,7 +39,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         ----------
         mappers: Union[AtomMapper, list[AtomMapper]]
             ``AtomMapper`` to use to define the relationship between two ligands.
-        scorer: Callable, optional
+        scorer: AtomMappingScorer, optional
             Scoring function that takes in an atom mapping and returns a score in [0,1].
         progress: bool, optional
             If True, a progress bar will be displayed. (default: False)

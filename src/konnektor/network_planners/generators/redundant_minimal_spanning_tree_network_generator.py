@@ -8,6 +8,7 @@ import networkx as nx
 from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
+from konnektor.scoring import AtomMappingScorer
 
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
@@ -17,7 +18,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         n_redundancy: int = 2,
         n_processes: int = 1,
         progress: bool = False,

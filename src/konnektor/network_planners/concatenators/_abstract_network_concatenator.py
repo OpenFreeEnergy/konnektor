@@ -7,6 +7,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 
+from ...scoring import AtomMappingScorer
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
@@ -22,7 +23,7 @@ class NetworkConcatenator(NetworkPlanner):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
         _initial_edge_lister=None,
