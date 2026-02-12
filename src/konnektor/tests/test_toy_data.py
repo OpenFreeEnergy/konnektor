@@ -36,11 +36,11 @@ def test_EmptyMapper():
 
 
 def test_random_scorer():
-    n_scores = 10
-    scorer = RandomScorer(n_scores=n_scores, rand_seed=42)
+    n_compounds = 10
+    scorer = RandomScorer(n=n_compounds, rand_seed=42)
 
     # assert isinstance(scorer, AtomMappingScorer)
-    assert len(scorer.vals) == n_scores
+    assert scorer.vals.shape == (n_compounds, n_compounds)
 
     # get some input data
     rdmolA = Chem.MolFromSmiles("c1ccccc1")

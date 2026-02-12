@@ -181,14 +181,14 @@ def test_get_norm_node_scores_fully_connected_graph():
     expected_set = set(map(str, range(n_compounds)))
     g = build_random_fully_connected_network(n_compounds, uni_score=True)
 
-    n_scores = get_component_scores(g, normalize=True)
+    scores = get_component_scores(g, normalize=True)
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += (n_compounds - 1) / ((n_compounds - 1) * n_compounds) * 2
 
-    assert len(n_scores) == n_compounds
-    assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(expected_arr, [n for n in n_scores.values()])
+    assert len(scores) == n_compounds
+    assert len(set(scores.keys()).intersection(expected_set)) == 0
+    np.testing.assert_array_almost_equal(expected_arr, [n for n in scores.values()])
 
 
 def test_get_node_scores_fully_connected_graph():
@@ -196,11 +196,11 @@ def test_get_node_scores_fully_connected_graph():
     expected_set = set(map(str, range(n_compounds)))
     g = build_random_fully_connected_network(n_compounds, uni_score=True)
 
-    n_scores = get_component_scores(g, normalize=False)
+    scores = get_component_scores(g, normalize=False)
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += n_compounds - 1
 
-    assert len(n_scores) == n_compounds
-    assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(expected_arr, [n for n in n_scores.values()])
+    assert len(scores) == n_compounds
+    assert len(set(scores.keys()).intersection(expected_set)) == 0
+    np.testing.assert_array_almost_equal(expected_arr, [n for n in scores.values()])
