@@ -24,7 +24,7 @@ def test_concatenate_deprecated():
     )
     concatenator = MstConcatenator(
         EmptyMapper(),
-        RandomScorer(n_scores=n_compounds**2),
+        RandomScorer(n=n_compounds),
         n_connecting_edges=n_connecting_edges,
     )
     with pytest.warns(DeprecationWarning):  # ,match="use the Concatenator's method instead."):
@@ -49,7 +49,7 @@ def test_concatenate_mst_networks(n_sub_networks):
     )
     concatenator = MstConcatenator(
         EmptyMapper(),
-        RandomScorer(n_scores=n_compounds**2),
+        RandomScorer(n=n_compounds),
         n_connecting_edges=n_connecting_edges,
     )
 
@@ -72,7 +72,7 @@ def test_append_node():
     compounds, _, _ = build_random_dataset(n_compounds=1, rand_seed=42)
     concatenator = MstConcatenator(
         EmptyMapper(),
-        RandomScorer(n_scores=n_compounds**2),
+        RandomScorer(n=n_compounds),
         n_connecting_edges=n_connecting_edges,
     )
 
