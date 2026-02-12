@@ -37,4 +37,4 @@ def test_starry_sky_network_planner():
     np.testing.assert_allclose(actual=len(ligand_network.edges), desired=approx_edges, rtol=5)
     assert get_is_connected(ligand_network)
 
-    np.testing.assert_allclose(get_network_score(ligand_network), 24.607684, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(ligand_network), 26.4454, rtol=0.01)

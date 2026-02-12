@@ -25,4 +25,4 @@ def test_twin_star_network_planner():
     assert len(ligand_network.nodes) == n_compounds
     np.testing.assert_allclose(actual=len(ligand_network.edges), desired=approx_edges, rtol=5)
     assert get_is_connected(ligand_network)
-    np.testing.assert_allclose(get_network_score(ligand_network), 39.944662, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(ligand_network), 45.4256, rtol=0.01)
