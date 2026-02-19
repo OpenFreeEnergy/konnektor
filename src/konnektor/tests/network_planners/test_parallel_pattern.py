@@ -59,7 +59,6 @@ def test_parallel_serial_equality():
         possible_edges=component_pairs,
         scorer=deterministic_scorer,
         mappers=[mapper],
-        n_edges_to_score=len(component_pairs),
         show_progress=False,
     )
     assert len(mappings_parallel) == len(mappings_serial)

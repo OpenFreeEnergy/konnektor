@@ -76,6 +76,7 @@ class RandomScorer:  # (AtomMappingScorer):
         """
         index_a = int(mapping.componentA.name)
         index_b = int(mapping.componentB.name)
+
         score = self.vals[index_a, index_b]
 
         return score
