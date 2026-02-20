@@ -7,7 +7,7 @@ from collections.abc import Iterable
 import numpy as np
 from gufe import AtomMapper, Component, LigandNetwork
 
-from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
+from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
 
 # Todo: is graph connectivity ensured?
@@ -74,7 +74,6 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             a heuristic max network.
         """
         components = list(components)
-        total = len(components) * self.n_samples
 
         # Parallel or not Parallel:
         # generate combinations to be searched.
@@ -88,26 +87,17 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                     [(n, components[i]) for i in sample_indices if n != components[i]]
                 )
         else:
-            sample_combinations = itertools.combinations(components, 2)
+            sample_combinations = list(itertools.combinations(components, 2))
 
         # todo: what to do if not connected?
 
-        if self.n_processes > 1:
-            mappings = _parallel_map_scoring(
-                possible_edges=sample_combinations,
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_processes=self.n_processes,
-                show_progress=self.progress,
-            )
-        else:  # serial variant
-            mappings = _serial_map_scoring(
-                possible_edges=sample_combinations,
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_edges_to_score=total,
-                show_progress=self.progress,
-            )
+        mappings = _score_mappings(
+            possible_edges=sample_combinations,
+            scorer=self.scorer,
+            mappers=self.mappers,
+            n_processes=self.n_processes,
+            show_progress=self.progress,
+        )
 
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")

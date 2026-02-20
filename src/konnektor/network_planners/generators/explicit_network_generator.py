@@ -8,7 +8,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from .._map_scoring import _parallel_map_scoring
+from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
 
 
@@ -72,7 +72,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
             Raises a warning if the network is not connected as a single network.
         """
 
-        mappings = _parallel_map_scoring(
+        mappings = _score_mappings(
             possible_edges=edges,
             scorer=self.scorer,
             mappers=self.mappers,
