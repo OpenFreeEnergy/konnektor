@@ -14,7 +14,6 @@ dependencies:
   - nbval
   #Typing
   - gufe
-  - typing-extensions
   # Sci
   - numpy <2.3  # TypeError: assert_array_almost_equal() got an unexpected keyword argument 'x'
   - scipy
@@ -26,6 +25,7 @@ dependencies:
   - rdkit
   # Vis
   - ipycytoscape
+  - pygraphviz  # TODO: optional dependency?
   # docs
   - myst-parser
   - pydata-sphinx-theme
