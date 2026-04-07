@@ -47,7 +47,7 @@ optional-dependencies.test = [
   "pytest",
   "pytest-cov[all]",
 ]
-urls."Homepage" = "https://github.com/OpenFreeEnergy/konnektor"
+urls.Homepage = "https://github.com/OpenFreeEnergy/konnektor"
 
 [tool.setuptools]
 package-data.konnektor = [ "**/*.sdf" ]
