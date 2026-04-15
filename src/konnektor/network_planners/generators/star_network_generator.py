@@ -8,10 +8,9 @@ from collections.abc import Iterable
 from gufe import AtomMapper, Component, LigandNetwork
 from tqdm.auto import tqdm
 
-from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
-from konnektor.scoring import AtomMappingScorer
-
+from ...scoring import AtomMappingScorer
 from .._map_scoring import _determine_best_mapping
+from .._networkx_implementations import RadialNetworkAlgorithm
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 

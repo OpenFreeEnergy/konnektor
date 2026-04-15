@@ -18,9 +18,7 @@ from tqdm.auto import tqdm
 
 from ...network_tools import append_component
 from ...network_tools.clustering._abstract_clusterer import _AbstractClusterer
-from ...network_tools.clustering.component_diversity_clustering import (
-    ComponentsDiversityClusterer,
-)
+from ...network_tools.clustering.component_diversity_clustering import ComponentsDiversityClusterer
 from ...scoring import AtomMappingScorer
 from ..concatenators import MstConcatenator
 from ..concatenators._abstract_network_concatenator import NetworkConcatenator
@@ -64,7 +62,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             Separates the `Component` s along the first dimension.
         mappers:  Union[AtomMapper, list[AtomMapper]]
             Defines the connection between two ligands if `NetworkConcatenator` s or  `NetworkGenerator` s are provided. Otherwise, (?) (default:None)
-        scorer: AtomMappingScorer or None
+        scorer: AtomMappingScorer | None
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional
             if True a progress bar will be displayed. (default: False)

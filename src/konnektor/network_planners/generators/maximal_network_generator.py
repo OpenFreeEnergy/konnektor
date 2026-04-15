@@ -39,9 +39,9 @@ class MaximalNetworkGenerator(NetworkGenerator):
         ----------
         mappers: Union[AtomMapper, list[AtomMapper]]
             ``AtomMapper`` to use to define the relationship between two ligands.
-        scorer: AtomMappingScorer, optional
+        scorer: AtomMappingScorer | None
             Scoring function that takes in an atom mapping and returns a score in [0,1].
-        progress: bool, optional
+        progress: bool | None
             If True, a progress bar will be displayed. (default: False)
         n_processes: int
             Number of processes to use for network generation. (default: 1)
