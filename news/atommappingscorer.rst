@@ -1,6 +1,6 @@
 **Added:**
 
-* Added ``konnektor.scorer.AtomMappingScorer`` type.
+* Added ``konnektor.scoring.AtomMappingScorer`` type.
 
 **Changed:**
 
