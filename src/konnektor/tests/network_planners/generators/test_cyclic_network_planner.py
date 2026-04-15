@@ -15,11 +15,13 @@ from konnektor.utils.toy_data import build_random_dataset
 def test_cyclic_network_planner():
     n_compounds = 8
     ncycles = 2
-    components, genMapper, genScorer = build_random_dataset(n_compounds=n_compounds, rand_seed=42)
+    components, empty_mapper, random_scorer = build_random_dataset(
+        n_compounds=n_compounds, rand_seed=42
+    )
 
     planner = CyclicNetworkGenerator(
-        mappers=genMapper,
-        scorer=genScorer,
+        mappers=empty_mapper,
+        scorer=random_scorer,
         cycle_sizes=3,
         node_present_in_cycles=ncycles,
     )
@@ -33,4 +35,4 @@ def test_cyclic_network_planner():
     nnode_cycles = get_component_number_cycles(network)
     assert all(v >= ncycles for k, v in nnode_cycles.items())
 
-    np.testing.assert_allclose(get_network_score(network), 10.347529, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(network), 8.410257, rtol=0.01)

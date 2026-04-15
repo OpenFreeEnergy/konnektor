@@ -102,7 +102,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             edges = list(edge_weight.keys())
 
             # filter for already selected edges
-            filter_sEdges = lambda x: (x not in selected_edges and x[::-1] not in selected_edges)
+            filter_sEdges = lambda x: x not in selected_edges and x[::-1] not in selected_edges
             edges = list(filter(filter_sEdges, edges))
 
             weights = [edge_weight[e] for e in edges]

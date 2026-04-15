@@ -8,7 +8,7 @@ from konnektor.network_analysis import get_is_connected, get_network_score
 from konnektor.network_planners import NNodeEdgesNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
-    genScorer,
+    length_scorer,
 )
 
 
@@ -20,7 +20,7 @@ def test_nedges_network_mappers(atom_mapping_basic_test_files):
 
     mapper = GenAtomMapper()
     planner = NNodeEdgesNetworkGenerator(
-        mappers=mapper, scorer=genScorer, target_component_connectivity=2
+        mappers=mapper, scorer=length_scorer, target_component_connectivity=2
     )
     network = planner.generate_ligand_network(components=ligands)
 

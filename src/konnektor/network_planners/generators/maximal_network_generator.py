@@ -7,7 +7,7 @@ from collections.abc import Iterable
 from gufe import AtomMapper, Component, LigandNetwork
 
 from ...scoring import AtomMappingScorer
-from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
+from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
 
 
@@ -79,25 +79,13 @@ class MaximalNetworkGenerator(NetworkGenerator):
         """
 
         components = list(components)
-        total = len(components) * (len(components) - 1) // 2
-
-        # Parallel or not Parallel:
-        if self.n_processes > 1:
-            mappings = _parallel_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_processes=self.n_processes,
-                show_progress=self.progress,
-            )
-        else:  # serial variant
-            mappings = _serial_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_edges_to_score=total,
-                show_progress=self.progress,
-            )
+        mappings = _score_mappings(
+            possible_edges=list(itertools.combinations(components, 2)),
+            scorer=self.scorer,
+            mappers=self.mappers,
+            n_processes=self.n_processes,
+            show_progress=self.progress,
+        )
 
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")

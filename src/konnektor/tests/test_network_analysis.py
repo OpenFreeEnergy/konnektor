@@ -44,7 +44,7 @@ def test_get_node_connectives():
     assert len(cons) == n_compounds
     assert len(set(cons.keys()).intersection(expected_set)) == 0
     assert all(n == (len(g.nodes) - 1) for i, n in cons.items())
-    np.testing.assert_array_almost_equal(expected_arr, [n for i, n in cons.items()])
+    np.testing.assert_allclose(list(cons.values()), expected_arr)
 
     cons = get_component_connectivities(g, normalize=True)
     expected_arr = np.zeros(shape=n_compounds)
@@ -52,7 +52,7 @@ def test_get_node_connectives():
 
     assert len(cons) == n_compounds
     assert len(set(cons.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(expected_arr, [n for i, n in cons.items()])
+    np.testing.assert_allclose(list(cons.values()), expected_arr)
 
 
 @pytest.mark.flaky(reruns=3)  # pytest-rerunfailures;
@@ -83,9 +83,9 @@ def test_get_edge_failure_robustness(grapher, expected_robustness, failure_rate,
     )
 
     if exact:
-        np.testing.assert_allclose(actual=robustness, desired=expected_robustness)
+        np.testing.assert_allclose(robustness, expected_robustness)
     else:
-        np.testing.assert_allclose(actual=robustness, desired=expected_robustness, rtol=0.25)
+        np.testing.assert_allclose(robustness, expected_robustness, rtol=0.25)
 
 
 #   Graph Topology related functionalities - Cycles
@@ -110,7 +110,7 @@ def test_get_node_number_cycles_fully_connected_graph(n_cycle_size):
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += expected_number_of_cycles_per_node
-    np.testing.assert_array_almost_equal(expected_arr, [n for i, n in result_dict.items()])
+    np.testing.assert_allclose(list(result_dict.values()), expected_arr)
 
 
 def test_get_node_number_cycles_mst_graph():
@@ -126,7 +126,7 @@ def test_get_node_number_cycles_mst_graph():
     assert len(set(result_dict.keys()).intersection(expected_set)) == 0
 
     expected_arr = np.zeros(shape=n_compounds)  # expect zero cycles in a tree
-    np.testing.assert_array_almost_equal(expected_arr, [n for i, n in result_dict.items()])
+    np.testing.assert_allclose(list(result_dict.values()), expected_arr)
 
 
 @pytest.mark.parametrize("n_cycle_size", [3, 4])
@@ -167,13 +167,13 @@ def test_get_mst_graph_score():
     seed = 42
     n_compounds = 30
     g = build_random_mst_network(n_compounds=n_compounds, rand_seed=seed)
-    np.testing.assert_allclose(get_network_score(g), 27.52, atol=1e-3)
+    np.testing.assert_allclose(get_network_score(g), 27.8859, atol=1e-3)
 
 
 def test_get_fully_connected_graph_score():
     # Check for graph scores.
     g = build_random_fully_connected_network()
-    np.testing.assert_allclose(get_network_score(g), 191.629, atol=1e-3)
+    np.testing.assert_allclose(get_network_score(g), 216.8789, atol=1e-3)
 
 
 def test_get_norm_node_scores_fully_connected_graph():
@@ -181,14 +181,14 @@ def test_get_norm_node_scores_fully_connected_graph():
     expected_set = set(map(str, range(n_compounds)))
     g = build_random_fully_connected_network(n_compounds, uni_score=True)
 
-    n_scores = get_component_scores(g, normalize=True)
+    scores = get_component_scores(g, normalize=True)
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += (n_compounds - 1) / ((n_compounds - 1) * n_compounds) * 2
 
-    assert len(n_scores) == n_compounds
-    assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(expected_arr, [n for n in n_scores.values()])
+    assert len(scores) == n_compounds
+    assert len(set(scores.keys()).intersection(expected_set)) == 0
+    np.testing.assert_allclose(list(scores.values()), expected_arr)
 
 
 def test_get_node_scores_fully_connected_graph():
@@ -196,11 +196,11 @@ def test_get_node_scores_fully_connected_graph():
     expected_set = set(map(str, range(n_compounds)))
     g = build_random_fully_connected_network(n_compounds, uni_score=True)
 
-    n_scores = get_component_scores(g, normalize=False)
+    scores = get_component_scores(g, normalize=False)
 
     expected_arr = np.zeros(shape=n_compounds)
     expected_arr += n_compounds - 1
 
-    assert len(n_scores) == n_compounds
-    assert len(set(n_scores.keys()).intersection(expected_set)) == 0
-    np.testing.assert_array_almost_equal(expected_arr, [n for n in n_scores.values()])
+    assert len(scores) == n_compounds
+    assert len(set(scores.keys()).intersection(expected_set)) == 0
+    np.testing.assert_allclose(list(scores.values()), expected_arr)
