@@ -7,7 +7,7 @@ from collections.abc import Iterable
 
 from gufe import Component, LigandNetwork
 
-from konnektor.network_planners.concatenators._abstract_network_concatenator import (
+from ...network_planners.concatenators._abstract_network_concatenator import (
     NetworkConcatenator,
 )
 

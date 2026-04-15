@@ -5,11 +5,10 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners._networkx_implementations import (
+from ...scoring import AtomMappingScorer
+from .._networkx_implementations import (
     CyclicNetworkAlgorithm as nx_CNG,
 )
-
-from ...scoring import AtomMappingScorer
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 

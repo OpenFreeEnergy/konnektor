@@ -7,9 +7,8 @@ from collections.abc import Iterable
 import networkx as nx
 from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
-from konnektor.scoring import AtomMappingScorer
-
+from ...scoring import AtomMappingScorer
+from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 

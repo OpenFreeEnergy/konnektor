@@ -7,11 +7,10 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners._networkx_implementations import (
+from ...network_planners._networkx_implementations import (
     _AbstractNetworkAlgorithm,
 )
-from konnektor.scoring import AtomMappingScorer
-
+from ...scoring import AtomMappingScorer
 from ..NetworkPlanner import NetworkPlanner
 
 log = logging.getLogger(__name__)
