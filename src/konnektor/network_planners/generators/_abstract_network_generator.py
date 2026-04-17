@@ -3,14 +3,14 @@
 
 import abc
 import logging
-from collections.abc import Callable, Iterable
+from collections.abc import Iterable
 
-from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
+from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners._networkx_implementations import (
+from ...network_planners._networkx_implementations import (
     _AbstractNetworkAlgorithm,
 )
-
+from ...scoring import AtomMappingScorer
 from ..NetworkPlanner import NetworkPlanner
 
 log = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class NetworkGenerator(NetworkPlanner):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: Callable[[AtomMapping], float],
+        scorer: AtomMappingScorer,
         network_generator: _AbstractNetworkAlgorithm,  # TODO: rename this to network_algorithm?
         n_processes: int = 1,
         progress: bool = False,

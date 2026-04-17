@@ -5,10 +5,10 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners._networkx_implementations import (
+from ...scoring import AtomMappingScorer
+from .._networkx_implementations import (
     CyclicNetworkAlgorithm as nx_CNG,
 )
-
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -19,7 +19,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         node_present_in_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,

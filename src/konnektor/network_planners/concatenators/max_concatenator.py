@@ -8,6 +8,7 @@ from collections.abc import Iterable
 from gufe import AtomMapper, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
+from ...scoring import AtomMappingScorer
 from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
@@ -17,7 +18,7 @@ class MaxConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         n_processes: int = 1,
         show_progress: bool = False,
     ):

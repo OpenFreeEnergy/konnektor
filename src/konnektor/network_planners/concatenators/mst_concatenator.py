@@ -8,6 +8,7 @@ from collections.abc import Iterable
 from gufe import AtomMapper, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
+from ...scoring import AtomMappingScorer
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
 
@@ -21,7 +22,7 @@ class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         n_connecting_edges: int = 2,
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator = None,

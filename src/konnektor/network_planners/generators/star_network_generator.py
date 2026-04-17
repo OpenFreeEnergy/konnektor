@@ -8,9 +8,9 @@ from collections.abc import Iterable
 from gufe import AtomMapper, Component, LigandNetwork
 from tqdm.auto import tqdm
 
-from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
-
+from ...scoring import AtomMappingScorer
 from .._map_scoring import _determine_best_mapping
+from .._networkx_implementations import RadialNetworkAlgorithm
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
 
@@ -19,7 +19,7 @@ class StarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: AtomMappingScorer,
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
