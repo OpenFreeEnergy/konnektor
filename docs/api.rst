@@ -3,8 +3,7 @@ API docs
 
 
 .. toctree::
-   :maxdepth: 4
-   :caption: API Contents:
+   :maxdepth: 3
 
    api/konnektor.planners
    api/konnektor.tools
