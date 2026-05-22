@@ -1,5 +1,5 @@
-Guide to Konnektor
-=====================
+User Guide
+==========
 
 .. toctree::
    :maxdepth: 2
