@@ -1,9 +1,9 @@
-================================
-konnektor.network\_tools
-================================
+==============
+network\_tools
+==============
 
-konnektor.network\_tools.clustering
--------------------------------------------------------
+network\_tools.clustering
+-------------------------
 
 .. automodule:: konnektor.network_tools.clustering.charge_clustering
    :members:
@@ -22,8 +22,8 @@ konnektor.network\_tools.clustering
    :show-inheritance:
 
 
-konnektor.network\_tools.network\_handling
--------------------------------------------------------
+network\_tools.network\_handling
+--------------------------------
 
 .. automodule:: konnektor.network_tools.network_handling.merge
    :members:
