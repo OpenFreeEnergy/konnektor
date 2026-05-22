@@ -2,6 +2,10 @@ Guide to Konnektor
 =====================
 
 .. toctree::
+
+   introduction
+
+.. toctree::
    :maxdepth: 2
    :caption: Applications:
 
