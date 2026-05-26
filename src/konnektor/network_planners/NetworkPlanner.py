@@ -49,16 +49,16 @@ class NetworkPlanner(abc.ABC):
         self._mappers = _validate_mappers(mappers)
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+        """Generate a LigandNetwork with the given Components as nodes and using this NetworkPlanner's mappers and scorer to create AtomMapping edges.
 
         Parameters
         ----------
         components : Iterable[Component]
-        the ligands to include in the Network
+            Component(s) to include in the Network
 
         Returns
         -------
         LigandNetwork
-            the resulting ligand network.
+            LigandNetwork with Components as nodes and generated AtomMappings as edges.
         """
         raise NotImplementedError()
