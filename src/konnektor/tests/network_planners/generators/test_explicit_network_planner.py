@@ -135,3 +135,11 @@ def test_explicit_network_planner_from_names_disconnected():
     assert frozenset(result_edges) == frozenset(edges)
 
     assert not get_is_connected(ligand_network)
+
+
+def test_explicit_network_planner_invalid_mapper():
+    n_compounds = 20
+    components, _, random_scorer = build_random_dataset(n_compounds=n_compounds)
+
+    with pytest.raises(ValueError, match="AtomMapper"):
+        _ = ExplicitNetworkGenerator("not a mapper", random_scorer, n_processes=1)

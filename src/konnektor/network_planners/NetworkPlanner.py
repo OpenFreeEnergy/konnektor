@@ -15,7 +15,7 @@ def _validate_mappers(mappers) -> AtomMapper | Iterable[AtomMapper] | None:
     elif mappers is None:
         return None
     else:
-        raise ValueError("Atom mappers are not the required type!")
+        raise ValueError("`mappers` must be of type `AtomMapper`.")
 
 
 class NetworkPlanner(abc.ABC):
@@ -46,7 +46,6 @@ class NetworkPlanner(abc.ABC):
 
     @mappers.setter
     def mappers(self, mappers: AtomMapper | Iterable[AtomMapper] | None):
-
         self._mappers = _validate_mappers(mappers)
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
