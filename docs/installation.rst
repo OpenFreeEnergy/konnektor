@@ -1,4 +1,3 @@
-============
 Installation
 ============
 
@@ -7,14 +6,12 @@ Installation
 If you want to use **konnektor** as a standalone package, see below.
 
 Installation from conda-forge
-=============================
+-----------------------------
 
-**konnektor** can be installed from conda-forge using your choice of micromamba (recommended), mamba, or conda:
-
+**konnektor** can be installed from conda-forge using your choice of micromamba (recommended), mamba, or conda ::
 
     $ micromamba create -c -conda-forge -n konnektor konnektor
     $ micromamba activate konnektor
-
 
 
 Developer Installation
@@ -23,15 +20,13 @@ Developer Installation
 For developers, we recommend setting up a local developer installation so that your changes to the code are immediately reflected in the functionality.
 
 
-First, clone the git repo:
-
+First, clone the git repo ::
 
     $ git clone https://github.com/OpenFreeEnergy/konnektor.git
     $ cd konnektor
 
 
-Then create and activate a conda environment that includes all of **konnektor's** dependencies:
-
+Then create and activate a conda environment that includes all of **konnektor's** dependencies ::
 
     $ micromamba env create -f environment.yaml
     $ micromamba activate konnektor

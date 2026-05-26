@@ -29,7 +29,7 @@ You can also find our pre-print on [ChemRxiv](https://chemrxiv.org/engage/chemrx
    :maxdepth: 2
    :caption: Contents:
 
-   install
+   installation
    tutorials/index
    guide/index
    api
