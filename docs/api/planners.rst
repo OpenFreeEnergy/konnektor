@@ -1,10 +1,10 @@
-================================
-konnektor.network\_planner
-================================
+================
+network\_planner
+================
 
 
-konnektor.network\_planners.generators
--------------------------------------------------------
+network\_planners.generators
+----------------------------
 
 .. automodule:: konnektor.network_planners.generators.maximal_network_generator
    :members:
