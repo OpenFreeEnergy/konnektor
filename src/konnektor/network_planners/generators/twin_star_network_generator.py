@@ -6,7 +6,6 @@ from collections.abc import Iterable
 from gufe import AtomMapper, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
-from konnektor.network_planners.scorer import AtomMappingScorer
 
 from ._abstract_network_generator import NetworkGenerator
 from .maximal_network_generator import MaximalNetworkGenerator
@@ -16,7 +15,7 @@ class TwinStarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: AtomMappingScorer,
+        scorer,
         n_centers: int = 2,
         n_processes: int = 1,
         progress: bool = False,

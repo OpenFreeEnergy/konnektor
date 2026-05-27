@@ -8,8 +8,6 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners.scorer import AtomMappingScorer
-
 from .._map_scoring import _parallel_map_scoring
 from ._abstract_network_generator import NetworkGenerator
 
@@ -18,7 +16,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: AtomMappingScorer,
+        scorer,
         n_processes: int = 1,
         progress: bool = False,
     ):

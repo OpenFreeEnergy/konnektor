@@ -7,8 +7,6 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from .scorer import AtomMappingScorer
-
 log = logging.getLogger(__name__)
 
 
@@ -16,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 class NetworkPlanner(abc.ABC):
-    def __init__(self, mappers: AtomMapper | list[AtomMapper], scorer: AtomMappingScorer):
+    def __init__(self, mappers: AtomMapper | list[AtomMapper], scorer):
         """This class is an implementation for the NetworkPlanner interface.
         It defines the std. class for a Konnektor NetworkPlanner
 

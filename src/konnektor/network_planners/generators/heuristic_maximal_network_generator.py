@@ -7,8 +7,6 @@ from collections.abc import Iterable
 import numpy as np
 from gufe import AtomMapper, Component, LigandNetwork
 
-from konnektor.network_planners.scorer import AtomMappingScorer
-
 from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
 from ._abstract_network_generator import NetworkGenerator
 
@@ -19,7 +17,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: AtomMappingScorer,
+        scorer,
         n_samples: int = 100,
         progress: bool = False,
         n_processes: int = 1,

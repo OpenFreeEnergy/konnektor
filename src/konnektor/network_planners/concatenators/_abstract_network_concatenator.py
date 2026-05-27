@@ -11,7 +11,6 @@ from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
 from ..NetworkPlanner import NetworkPlanner
-from ..scorer import AtomMappingScorer
 
 log = logging.getLogger(__name__)
 
@@ -23,7 +22,7 @@ class NetworkConcatenator(NetworkPlanner):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper],
-        scorer: AtomMappingScorer,
+        scorer,
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
         _initial_edge_lister=None,
