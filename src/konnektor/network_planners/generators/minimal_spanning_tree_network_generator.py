@@ -20,11 +20,10 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         progress: bool = False,
         _initial_edge_lister=None,
     ):
-        """
-        The ``MinimalSpanningTreeNetworkGenerator`` builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
-        Each edge of the network is represented by an ``AtomMapping``, which is scored by the provided ``scorer.
-
-        For the MST algorithm, the Kruskal Algorithm is used.
+        r"""
+        The ``MinimalSpanningTreeNetworkGenerator`` builds an minimal spanning tree (MST) network
+        for a given set of ``Component`` s using the Kruskal Algorithm.
+        Each edge of the network is represented by an ``AtomMapping``, which is scored by the provided ``scorer``.
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of ``Transformations``.
         This makes the  MST Network very efficient, but not very robust.
@@ -33,7 +32,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         mapper :  Union[AtomMapper, list[AtomMapper]]
-            ``AtomMapper`` or list of ``AtomMapper``/s to use to define the relationship between two ligands.
+            ``AtomMapper`` or list of ``AtomMapper``\s to use to define the relationship between two ligands.
         scorer : AtomMappingScorer
             The scoring function to use for evaluating an atom mapping. Should give a score in [0,1].
         n_processes: int, optional
@@ -44,6 +43,8 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             ``NetworkPlanner`` to be used to generate the initial set of edges. For standard usage, the Maximal NetworkPlanner is often appropriate.
             For very large networks, the ``HeuristicMaximalNetworkPlanner`` might be a useful alternative.
             (default: MaximalNetworkPlanner)
+
+
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(
