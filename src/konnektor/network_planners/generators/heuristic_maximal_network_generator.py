@@ -75,6 +75,11 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         """
         components = list(components)
 
+        if self.mappers is None:
+            raise TypeError(
+                "`mappers` must be an AtomMapper or iterable of AtomMappers to generate a maximal network."
+            )
+
         # Parallel or not Parallel:
         # generate combinations to be searched.
         if len(components) > self.n_samples:
@@ -88,8 +93,6 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
                 )
         else:
             sample_combinations = list(itertools.combinations(components, 2))
-
-        # todo: what to do if not connected?
 
         mappings = _score_mappings(
             possible_edges=sample_combinations,
