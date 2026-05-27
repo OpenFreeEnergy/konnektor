@@ -64,7 +64,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
             Separates the `Component` s along the first dimension.
         mappers:  Union[AtomMapper, list[AtomMapper]]
             Defines the connection between two ligands if `NetworkConcatenator` s or  `NetworkGenerator` s are provided. Otherwise, (?) (default:None)
-        scorer: AtomMappingScorer
+        scorer: Callable[[AtomMapping], float]
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1], if only `NetworkConcatenator` or `NetworkGenerator` classes are passed
         progress: bool, optional
             if True a progress bar will be displayed. (default: False)
@@ -222,7 +222,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         ----------
         mapper:  Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two 'Component's
-        scorer: AtomMappingScorer
+        scorer: Callable[[AtomMapping], float]
             scoring function evaluating an `AtomMapping`, and giving a score between [0,1]
         clusterer: ComponentsDiversityClusterer
             This class is seperating the `Component` s along the first dimension.

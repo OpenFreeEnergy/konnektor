@@ -2,9 +2,9 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
@@ -20,7 +20,7 @@ class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper],
-        scorer: AtomMappingScorer,
+        scorer: Callable[[AtomMapping], float],
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
@@ -36,7 +36,7 @@ class CyclicConcatenator(NetworkConcatenator):
             The AtomMapper(s) to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
-        scorer: AtomMappingScorer
+        scorer: Callable[[AtomMapping], float]
             Any callable which takes a AtomMapping and returns a float between [0,1]
         n_connecting_cycles: int, optional
             build at least n cycles between th networks. (default: 2)

@@ -3,9 +3,9 @@
 
 import itertools
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
 from ._abstract_network_concatenator import NetworkConcatenator
@@ -17,7 +17,7 @@ class MaxConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         show_progress: bool = False,
     ):
@@ -30,7 +30,7 @@ class MaxConcatenator(NetworkConcatenator):
         mappers: AtomMapper
             the atom mapper is required to define the connection
             between two ligands.
-        scorer: AtomMappingScorer
+        scorer: Callable[[AtomMapping], float]
             scoring function evaluating an atom mapping, and giving a
             score between [0,1].
         n_processes: int

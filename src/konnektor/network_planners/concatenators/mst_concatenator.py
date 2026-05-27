@@ -3,9 +3,9 @@
 
 import itertools
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
@@ -21,7 +21,7 @@ class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_connecting_edges: int = 2,
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator = None,
@@ -35,7 +35,7 @@ class MstConcatenator(NetworkConcatenator):
         mapper: AtomMapper
             the atom mapper is required, to define the connection between
             two ligands.
-        scorer: AtomMappingScorer
+        scorer: Callable[[AtomMapping], float]
             scoring function evaluating an atom mapping, and giving a score
             between [0,1].
         n_connecting_edges: int, optional

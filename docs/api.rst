@@ -2,12 +2,11 @@ API docs
 --------
 
 
-.. toctree::
-   :maxdepth: 3
+.. autosummary::
+   :toctree: generated
+   :recursive:
 
-   api/planners
-   api/tools
-   api/analysis
-   api/visualization
-   api/utils
-   api/data
+   konnektor.network_analysis
+   konnektor.network_planners
+   konnektor.network_tools
+   konnektor.visualization

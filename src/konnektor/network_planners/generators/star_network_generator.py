@@ -3,9 +3,9 @@
 
 import functools
 import warnings
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 from tqdm.auto import tqdm
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
@@ -19,7 +19,7 @@ class StarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
@@ -41,7 +41,7 @@ class StarNetworkGenerator(NetworkGenerator):
         ----------
         mappers : AtomMapper or list of AtomMappers
             the atom mapper is required, to define the connection between two ligands.
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             Callable which returns a float between [0,1] for any LigandAtomMapping.
             Used to assign scores to potential mappings; higher scores indicate better mappings.
         n_processes: int, optional

@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
 
@@ -15,14 +15,14 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         progress: bool = False,
         _initial_edge_lister: NetworkGenerator = None,
     ):
         """
         The ``MinimalSpanningTreeNetworkGenerator``, builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
-        The ``Transformation`` s of the network are represented by an ``AtomMapping`` s, which are scored by a ``AtomMappingScorer``.
+        The ``Transformation`` s of the network are represented by an ``AtomMapping`` s, which are scored by the ``scorer``.
 
         For the MST algorithm, the Kruskal Algorithm is used.
 
@@ -35,7 +35,7 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         ----------
         mapper :  Union[AtomMapper, list[AtomMapper]]
             ``AtomMapper`` or list of ``AtomMapper``/s to use to define the relationship between two ligands.
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             The scoring function to use for evaluating an atom mapping. Should give a score in [0,1].
         n_processes: int, optional
             Number of processes to be used for parallelization. (default: 1)

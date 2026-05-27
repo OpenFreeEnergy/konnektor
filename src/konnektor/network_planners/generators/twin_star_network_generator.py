@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 
@@ -15,7 +15,7 @@ class TwinStarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_centers: int = 2,
         n_processes: int = 1,
         progress: bool = False,
@@ -42,7 +42,7 @@ class TwinStarNetworkGenerator(NetworkGenerator):
         ----------
         mapper :  Union[AtomMapper, list[AtomMapper]]
             the atom mapper is required, to define the connection between two ligands.
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         n_centers: int, optional
             the number of centers in the network. (default: 2)

@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import (
     NNodeEdgesNetworkAlgorithm,
@@ -17,7 +17,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         target_component_connectivity: int = 3,
         n_processes: int = 1,
         progress: bool = False,
@@ -34,7 +34,7 @@ class NNodeEdgesNetworkGenerator(NetworkGenerator):
         ----------
         mapper : AtomMapper
             the `AtomMapper` to use to propose `AtomMapping` s.
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             any callable which takes a `AtomMapping` and returns a float
         target_node_connectivity: int
             the number of connecting `Transformations` per `Component`.

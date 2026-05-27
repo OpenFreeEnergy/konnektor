@@ -51,7 +51,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
             AtomMapper(s) to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges.
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             Any callable which takes a AtomMapping and returns a float.
         node_present_in_cycles: int
             The number of cycles the node should be present in.
