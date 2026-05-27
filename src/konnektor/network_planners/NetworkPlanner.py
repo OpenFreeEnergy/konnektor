@@ -2,69 +2,68 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import abc
-import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
-
-log = logging.getLogger(__name__)
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 
-# Todo: move to gufe Network planner
+def _validate_mappers(
+    mappers: AtomMapper | Iterable[AtomMapper] | None,
+) -> tuple[AtomMapper, ...] | None:
+    if mappers is None:
+        return None
+    elif isinstance(mappers, AtomMapper):
+        return (mappers,)
+    elif isinstance(mappers, Iterable):
+        mappers = tuple(mappers)
+        if all(isinstance(mapper, AtomMapper) for mapper in mappers):
+            return mappers
+    raise TypeError(
+        "`mappers` must be None, an AtomMapper, or an iterable of AtomMapper instances."
+    )
 
 
 class NetworkPlanner(abc.ABC):
-    def __init__(self, mappers: AtomMapper | list[AtomMapper], scorer):
-        """This class is an implementation for the NetworkPlanner interface.
-        It defines the std. class for a Konnektor NetworkPlanner
+    def __init__(
+        self,
+        mappers: AtomMapper | Iterable[AtomMapper] | None,
+        scorer: Callable[[AtomMapping], float] | None,
+    ):
+        """Abstract class for network planning, not to be called directly.
 
         Parameters
         ----------
-        mapper : AtomMapper
-            the AtomMappers to use to propose mappings.  At least 1 required,
-            but many can be given, in which case all will be tried to find the
-            lowest score edges
-        scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+        mappers : AtomMapper | Iterable[AtomMapper] | None
+            AtomMapper(s) to use to propose mappings.
+        scorer : Callable[[AtomMapping], float] | None
+           Any callable which takes a AtomMapping and returns a float in [0,1].
         """
 
-        # generic Network_Planner attribs
-        if isinstance(mappers, AtomMapper):
-            self._mappers = [mappers]
-        elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
-            self._mappers = mappers
-        elif mappers is None:
-            self._mappers = None
-        else:
-            raise ValueError("Atom mappers are not the required type!")
-
+        self._mappers = _validate_mappers(mappers)
         self.scorer = scorer
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.generate_ligand_network(*args, **kwargs)
 
     @property
-    def mappers(self) -> list[AtomMapper]:
+    def mappers(self) -> AtomMapper | Iterable[AtomMapper] | None:
         return self._mappers
 
     @mappers.setter
-    def mappers(self, mappers: AtomMapper | list[AtomMapper]):
-        if mappers is AtomMapper:
-            self._mappers = [mappers]
-        elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
-            self._mappers = mappers
+    def mappers(self, mappers: AtomMapper | Iterable[AtomMapper] | None):
+        self._mappers = _validate_mappers(mappers)
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+        """Generate a LigandNetwork with the given Components as nodes and using this NetworkPlanner's mappers and scorer to create AtomMapping edges.
 
         Parameters
         ----------
         components : Iterable[Component]
-        the ligands to include in the Network
+            Component(s) to include in the Network
 
         Returns
         -------
         LigandNetwork
-            the resulting ligand network.
+            LigandNetwork with Components as nodes and generated AtomMappings as edges.
         """
         raise NotImplementedError()
