@@ -7,7 +7,7 @@ from collections.abc import Iterable
 
 from gufe import AtomMapper, LigandNetwork
 
-from ...network_planners._map_scoring import _parallel_map_scoring, _serial_map_scoring
+from ...network_planners._map_scoring import _score_mappings
 from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
@@ -77,25 +77,13 @@ class MaxConcatenator(NetworkConcatenator):
             nodesA = ligandNetworkA.nodes
             nodesB = ligandNetworkB.nodes
             pedges = [(na, nb) for na in nodesA for nb in nodesB]
-
-            if self.n_processes > 1:
-                bipartite_graph_mappings = _parallel_map_scoring(
-                    possible_edges=pedges,
-                    scorer=self.scorer,
-                    mappers=self.mappers,
-                    n_processes=self.n_processes,
-                    show_progress=self.progress,
-                )
-
-            else:  # serial variant
-                bipartite_graph_mappings = _serial_map_scoring(
-                    possible_edges=pedges,
-                    scorer=self.scorer,
-                    mappers=self.mappers,
-                    n_edges_to_score=len(pedges),
-                    show_progress=self.progress,
-                )
-
+            bipartite_graph_mappings = _score_mappings(
+                possible_edges=pedges,
+                scorer=self.scorer,
+                mappers=self.mappers,
+                n_processes=self.n_processes,
+                show_progress=self.progress,
+            )
             # Add network connecting edges
             selected_edges.extend(bipartite_graph_mappings)
 

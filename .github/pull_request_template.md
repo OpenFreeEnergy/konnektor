@@ -8,11 +8,11 @@ Please note any issues this fixes using [closing keywords]( https://help.github.
 -->
 
 ## PR Author Checklist
-- [ ] add news item if changes are user-facing
-- [ ] run `pre-commit.ci autofix` when the PR is ready for review
+- [ ] added news item, or changes are not user-facing
+- [ ] pre-commit CI passes (comment `pre-commit.ci autofix` to auto-format your PR).
 
 ## Tips
-* Comment "pre-commit.ci autofix" to have pre-commit.ci auto-format your PR.
+* Comment `pre-commit.ci autofix` to have pre-commit.ci auto-format your PR.
   Since this will create a commit, it is best to make this comment when you are finished with your work.
 
 ## Developers certificate of origin

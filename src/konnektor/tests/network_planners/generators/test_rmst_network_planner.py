@@ -13,7 +13,7 @@ from konnektor.tests.network_planners.conf import (
     CustomExcludeMapper,
     ErrorMapper,
     GenAtomMapper,
-    genScorer,
+    length_scorer,
     mol_from_smiles,
 )
 
@@ -26,7 +26,7 @@ def test_rminimal_spanning_network_mappers(atom_mapping_basic_test_files):
 
     mapper = GenAtomMapper()
     planner = RedundantMinimalSpanningTreeNetworkGenerator(
-        mappers=mapper, scorer=genScorer, n_redundancy=1
+        mappers=mapper, scorer=length_scorer, n_redundancy=1
     )
     network = planner.generate_ligand_network(components=ligands)
 
@@ -41,7 +41,7 @@ def rminimal_spanning_network_redundancy(toluene_vs_others):
     mapper = GenAtomMapper()
     nred = 3
     planner = RedundantMinimalSpanningTreeNetworkGenerator(
-        mappers=mapper, scorer=genScorer, n_redundancy=nred
+        mappers=mapper, scorer=length_scorer, n_redundancy=nred
     )
     network = planner.generate_ligand_network(components=others + [toluene])
 
@@ -72,7 +72,9 @@ def test_minimal_rmst_network_no_mapping(toluene_vs_others):
     toluene, others = toluene_vs_others
     nimrod = gufe.SmallMoleculeComponent(mol_from_smiles("N"))
 
-    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=ErrorMapper(), scorer=genScorer)
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(
+        mappers=ErrorMapper(), scorer=length_scorer
+    )
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
         planner.generate_ligand_network(components=others + [toluene, nimrod])
@@ -84,7 +86,7 @@ def test_rmst_requested_too_much_redundancy(toluene_vs_others):
     components = others[0:2]
     mapper = GenAtomMapper()
 
-    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=length_scorer)
 
     err_str = r"Cannot create any minimal spanning network for redundancy iteration 2"
     with pytest.warns(match=err_str):
@@ -97,7 +99,7 @@ def test_rmst_unreachable(toluene_vs_others):
     components = others + [toluene, nimrod]
     mapper = CustomExcludeMapper()  # this will exclude nimrod due to 'exclude' in its name
 
-    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+    planner = RedundantMinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=length_scorer)
 
     err_str = r"ERROR: Unable to create edges for the following nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
     with pytest.raises(RuntimeError, match=err_str):

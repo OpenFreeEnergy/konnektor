@@ -13,7 +13,7 @@ from konnektor.tests.network_planners.conf import (
     CustomExcludeMapper,
     ErrorMapper,
     GenAtomMapper,
-    genScorer,
+    length_scorer,
     mol_from_smiles,
 )
 
@@ -25,7 +25,7 @@ def test_minimal_spanning_network_mappers(atom_mapping_basic_test_files):
     ]
 
     mapper = GenAtomMapper()
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=length_scorer)
     network = planner.generate_ligand_network(components=ligands)
 
     assert isinstance(network, LigandNetwork)
@@ -38,7 +38,7 @@ def minimal_spanning_network(toluene_vs_others):
     toluene, others = toluene_vs_others
     mapper = GenAtomMapper()
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=length_scorer)
     network = planner.generate_ligand_network(components=others + [toluene])
 
     return network
@@ -90,7 +90,7 @@ def test_minimal_spanning_network_no_mappings(toluene_vs_others):
     mapper = ErrorMapper()
 
     with pytest.raises(RuntimeError, match="Could not generate any mapping"):
-        planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+        planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=length_scorer)
         planner.generate_ligand_network(components=others + [toluene, nimrod])
 
 
@@ -100,7 +100,7 @@ def test_minimal_spanning_network_unreachable(toluene_vs_others):
     components = others + [toluene, nimrod]
     mapper = CustomExcludeMapper()  # this will exclude nimrod due to 'exclude' in its name
 
-    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=genScorer)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=length_scorer)
 
     err_str = r"ERROR: Unable to create edges for the following nodes: \[SmallMoleculeComponent\(name=exclude_me\)\]"
     with pytest.raises(RuntimeError, match=err_str):

@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import abc
-import logging
 from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
@@ -13,55 +12,46 @@ from konnektor.network_planners._networkx_implementations import (
 
 from ..NetworkPlanner import NetworkPlanner
 
-log = logging.getLogger(__name__)
-
 
 class NetworkGenerator(NetworkPlanner):
-    progress: bool = False
-    n_processes: int
-
     def __init__(
         self,
-        mappers: AtomMapper | list[AtomMapper],
-        scorer: Callable[[AtomMapping], float],
-        network_generator: _AbstractNetworkAlgorithm,  # TODO: rename this to network_algorithm?
+        mappers: AtomMapper | Iterable[AtomMapper] | None,
+        scorer: Callable[[AtomMapping], float] | None,
+        # TODO: rename this to network_algorithm and make base class not private?
+        network_generator: _AbstractNetworkAlgorithm | None,
         n_processes: int = 1,
         progress: bool = False,
-        _initial_edge_lister=None,
+        _initial_edge_lister=None,  # TODO: why is this private, can we deprecate and rename?
     ):
-        """This class is an implementation for the NetworkGenerator interface.
-        It defines the std. class for a Konnektor NetworkGenerator.
+        """Abstract class for network generation, not to be called directly.
 
         Parameters
         ----------
-        mappers : AtomMapper
-            the AtomMappers to use to propose mappings.  At least 1 required,
-            but many can be given, in which case all will be tried to find the
-            lowest score edges
-        scorer : AtomMappingScorer
-            Any callable which takes a AtomMapping and returns a float
-        network_generator: the network algorithm to use
-        n_processes: int, optional
-            Number of processes that can be used for the network generation. (default: 1)
-        progress: bool, optional
-            If `True`, displays a progress bar. (default: False)
-        _initial_edge_lister: NetworkPlanner, optional
+        mappers : AtomMapper | Iterable[AtomMapper] | None
+            AtomMapper(s) to use to propose mappings.
+        scorer : Callable[[AtomMapping], float] | None
+            Callable which takes a AtomMapping and returns a float in [0,1].
+        network_generator : _AbstractNetworkAlgorithm | None.
+            Algorithm to use when generating the network.
+        n_processes : int, optional
+            Number of processes that can be used for the network generation, by default 1.
+        progress : bool, optional
+            If True, display a progress bar, by default False
+        _initial_edge_lister : _type_, optional
             The NetworkPlanner to use to create the initial set of edges. For standard usage, the MaximalNetworkPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner. (default: None)
-
+            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner, by default None.
         """
-        # generic NetworkPlanner attribs
+
         super().__init__(mappers=mappers, scorer=scorer)
 
-        # Konnektor specific variables
         self.network_generator = network_generator
         self.n_processes = n_processes
 
         self._initial_edge_lister = _initial_edge_lister
 
         # pass on the parallelization to the edge lister
-        # edge lister performs usually the most expensive task!
-        # So parallelization is most important here.
+        # edge listing is usually the most expensive task, so parallelization is important here.
         if self._initial_edge_lister is not None and hasattr(
             self._initial_edge_lister, "n_processes"
         ):
@@ -71,10 +61,8 @@ class NetworkGenerator(NetworkPlanner):
         self._progress = progress
 
     @property
-    def progress(self) -> bool:  # noqa TODO: address this in a follow-up PR
-        """
-        shows a progress bar if True
-        """
+    def progress(self) -> bool:
+        """If True, displays a progress bar when generating the LigandNetwork."""
         return self._progress
 
     @progress.setter
@@ -85,16 +73,16 @@ class NetworkGenerator(NetworkPlanner):
 
     @abc.abstractmethod
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Plan a Network which connects all ligands following a given algorithm cost
+        """Generate a LigandNetwork with the given Components as nodes and using this NetworkPlanner's mappers and scorer to create AtomMapping edges.
 
         Parameters
         ----------
         components : Iterable[Component]
-            the ligands to include in the Network
+            Component(s) to include in the Network
 
         Returns
         -------
         LigandNetwork
-            the resulting ligand network.
+            LigandNetwork with Components as nodes and generated AtomMappings as edges.
         """
         raise NotImplementedError()

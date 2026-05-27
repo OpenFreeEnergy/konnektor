@@ -1,30 +1,25 @@
-Welcome to Konnektors's documentation!
-=========================================
+Welcome to konnektor's documentation!
+=====================================
 
-Konnektor is a package supporting you in planning your free calculations.
-It contains multiple algorithms and tools for network planning, that make setting up the calculation plans much easier.
-As an example imagen you are given a set of drug candidates that shall be ranked with relative binding free energies.
-In theory you could calculate all the possible network transformations, in order to get your ligand ranking (we call this a Maximal Network).
-However this leads to an explosion in time and compute cost, therefore we need more efficient ways on how to caluclate a drug candidate ranking.
-From a thermodynamic perspective not all transformations are actually required to retrieve a ranking.
-In fact you only need one conection per small molecules to the others in order to get the ranking, like for example in Star Networks or Minimal Spanning Tree (MST) Networks.
-However we found the very efficient networks to be sensitive to transformation failures, this can be solved with network building algorithms, that are slightly more redundant.
+**konnektor** is a Python library for planning, modifying, and analyzing free energy transformation networks.
 
-Ontop of the described ligand network planners, Konnektor gives access to tools, that allow for example to concatenate networks or delete transformations of a network.
-Analysis of networks, like calculating graph scores, getting the connectivities of network nodes or calculating the network robustness are available too.
-Last we want to bring to your attention our Network visualization tools and the provided interactive network visualization widget for IPython like in Jupyter-Lab/Notebooks.
+If you're looking for a tool to perform free energy calculations, check out `openfe <https://docs.openfree.energy/en/latest/>`_, which uses **konnektor**!
 
-Try our interactive demo: |Colab|
+In addition to network planning algorithms, **konnektor** includes tooling for:
+   - Network modification, such as concatenating networks or deleting edges.
+   - Network analysis, including calculating graph scores, getting the connectivities of network nodes, or calculating the network robustness.
+   - Network visualization tools and an interactive network visualization widget for use in IPython environments, such as jupyter notebooks.
+
+Check out our article on Konnektor in the Journal of Chemical Information and Modeling: `Konnektor: A Framework for Using Graph Theory to Plan Networks for Free Energy Calculations - Benjamin Ries*, Richard J. Gowers, Hannah M. Baumann, David W. H. Swenson,  Michael M. Henry, James R. B. Eastwood, Irfan Alibay, and David Mobley <https://pubs.acs.org/doi/10.1021/acs.jcim.4c01710>`_.
+
+You can also find our pre-print on `ChemRxiv <https://chemrxiv.org/engage/chemrxiv/article-details/66d9b574cec5d6c1423643e4>`_.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   install
-   tutorial
-   guide
+   installation
+   tutorials/index
+   guide/index
    api
    CHANGELOG
-
-.. |Colab| image:: https://colab.research.google.com/assets/colab-badge.svg
-   :target: https://colab.research.google.com/github/OpenFreeEnergy/konnektor/blob/main/examples/konnektor_example.ipynb#scrollTo=GU32PaMkzD7x

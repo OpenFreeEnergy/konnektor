@@ -32,19 +32,19 @@ jobs:
       matrix:
         os: ['ubuntu',]
         python-version:
-          - "3.10"
           - "3.11"
           - "3.12"
+          - "3.13"
         include:
           - os: 'macos'
             python-version: "3.12"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Get current date
         id: date
         run: echo "date=$(date +%Y-%m-%d)" >> "${GITHUB_OUTPUT}"
-      - uses: mamba-org/setup-micromamba@v2
+      - uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: environment.yaml
           environment-name: konnektor
@@ -73,12 +73,12 @@ jobs:
         run: |
           # another dep I don't want to include in the env
           pip install --no-deps git+https://github.com/OpenFreeEnergy/kartograf.git
-          # Only need to test the notebook(s) in examples/
-          pytest -v --nbval-lax examples/
+          # Only need to test the notebook(s) in tutorials/
+          pytest -v --nbval-lax docs/tutorials/
 
       - name: codecov
         if: ${{ github.repository == 'OpenFreeEnergy/konnektor' && github.event != 'schedule'}}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage.xml

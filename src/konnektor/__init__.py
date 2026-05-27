@@ -1,8 +1,5 @@
 # This code is part of OpenFE and is licensed under the MIT license.
-# For details, see https://github.com/OpenFreeEnergy/konnektor
-
-# basic gufe types:
-from gufe import Component, ProteinComponent, SmallMoleculeComponent
+# For details", see https://github.com/OpenFreeEnergy/konnektor
 
 from ._version import (
     __version__,
@@ -26,16 +23,12 @@ from .network_tools import (
     ComponentsDiversityClusterer,
     ScaffoldClusterer,
     append_component,
-    concatenate_networks,
     delete_transformation,
     merge_networks,
 )
 from .visualization import draw_ligand_network as draw_ligand_network
 
 __all__ = [
-    "Component",
-    "ProteinComponent",
-    "SmallMoleculeComponent",
     "ClusteredNetworkGenerator",
     "CyclicNetworkGenerator",
     "HeuristicMaximalNetworkGenerator",
@@ -49,7 +42,6 @@ __all__ = [
     "ComponentsDiversityClusterer",
     "ScaffoldClusterer",
     "append_component",
-    "concatenate_networks",
     "delete_transformation",
     "merge_networks",
     "__version__",

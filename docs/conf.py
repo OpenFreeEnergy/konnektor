@@ -32,6 +32,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
+    "nbsphinx",
+    "sphinx.ext.autosectionlabel",
 ]
 
 autosummary_generate = True
@@ -82,3 +84,14 @@ html_theme_options = {
 html_css_files = [
     "css/custom.css",
 ]
+
+# Extensions for the myst parser
+myst_enable_extensions = [
+    "dollarmath",
+    "colon_fence",
+    "smartquotes",
+    "replacements",
+    "deflist",
+    "attrs_inline",
+]
+myst_heading_anchors = 3

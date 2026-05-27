@@ -3,10 +3,11 @@
 
 import itertools
 from collections.abc import Callable, Iterable
+from typing import Any
 
 from gufe import AtomMapper, Component, LigandNetwork
 
-from .._map_scoring import _parallel_map_scoring, _serial_map_scoring
+from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
 
 
@@ -14,30 +15,31 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer: Callable | None,
+        scorer: Callable[[Any], float] | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
-        """
-        The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of `Component`/s.
+        r"""
+        The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of ``Component``/s.
 
-        The edges of the graph are ``Transformation`` s, which contain ``AtomMapping`` s of pairwise ``Component``/s.
+        The edges of the graph are ``Transformation`` s, which contain ``AtomMapping`` s of pairwise ``Component``\s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
 
         If multiple ``AtomMapper``/s are provided, but no scorer, the *first valid* ``AtomMapper`` provided will be used.
 
-        ... note::
-        This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
-        However, this approach is very important, as all other approaches use the Maximal Network as an initial solution,
-        then remove edges to achieve the desired design.
+        .. note::
+
+            This approach is not recommended for Free Energy calculations in application cases, as it is very computationally expensive.
+            However, this approach is very important, as many other approaches use the Maximal Network as an initial solution,
+            then remove edges to achieve the desired design.
 
         This class is recommended as an ``initial_edge_lister`` for other network generators.
         The ``MaximalNetworkGenerator`` is parallelized and the number of CPUs can be chosen with the ``n_processes`` argument.
 
         Parameters
         ----------
-        mappers: Union[AtomMapper, list[AtomMapper]]
-            ``AtomMapper`` to use to define the relationship between two ligands.
+        mappers: AtomMapper | list[AtomMapper]
+            AtomMapper(s) to use to define the relationship between two ligands.
         scorer: Callable, optional
             Scoring function that takes in an atom mapping and returns a score in [0,1].
         progress: bool, optional
@@ -78,25 +80,13 @@ class MaximalNetworkGenerator(NetworkGenerator):
         """
 
         components = list(components)
-        total = len(components) * (len(components) - 1) // 2
-
-        # Parallel or not Parallel:
-        if self.n_processes > 1:
-            mappings = _parallel_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_processes=self.n_processes,
-                show_progress=self.progress,
-            )
-        else:  # serial variant
-            mappings = _serial_map_scoring(
-                possible_edges=itertools.combinations(components, 2),
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_edges_to_score=total,
-                show_progress=self.progress,
-            )
+        mappings = _score_mappings(
+            possible_edges=list(itertools.combinations(components, 2)),
+            scorer=self.scorer,
+            mappers=self.mappers,
+            n_processes=self.n_processes,
+            show_progress=self.progress,
+        )
 
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")

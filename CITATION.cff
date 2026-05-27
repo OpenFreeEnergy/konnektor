@@ -22,9 +22,10 @@ authors:
 - family-names: "Eastwood"
   given-names: "James R. B."
   orcid: "https://orcid.org/0000-0003-3895-5227"
+- family-names: "Travitz"
+  given-names: "Alyssa"
+  orcid: "https://orcid.org/0000-0001-5953-8807"
 title: "Konnektor: A Tool for Planning Free Energy Networks"
-version: 1.0
-date-released: -
 url: "https://openfree.energy/"
 repository-code: "https://github.com/OpenFreeEnergy/konnektor"
-doi: -
+# doi: -
