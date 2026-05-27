@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
 
@@ -15,21 +15,20 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float] | None,
         n_processes: int = 1,
         progress: bool = False,
-        _initial_edge_lister: NetworkGenerator = None,
+        _initial_edge_lister=None,
     ):
         """
-        The ``MinimalSpanningTreeNetworkGenerator``, builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
-        The ``Transformation`` s of the network are represented by an ``AtomMapping`` s, which are scored by a ``AtomMappingScorer``.
+        The ``MinimalSpanningTreeNetworkGenerator`` builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
+        Each edge of the network is represented by an ``AtomMapping``, which is scored by the provided ``scorer.
 
         For the MST algorithm, the Kruskal Algorithm is used.
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of ``Transformations``.
-        This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
-        ``Transformation``, the network is immediately disconnected.
-        The disconnectivity will translate to a loss of ``Component``/s in the final FE Network.
+        This makes the  MST Network very efficient, but not very robust.
+        If one edge fails the network is immediately disconnected.
 
         Parameters
         ----------

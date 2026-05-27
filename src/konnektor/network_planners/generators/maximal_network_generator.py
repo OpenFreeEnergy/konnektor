@@ -3,9 +3,8 @@
 
 import itertools
 from collections.abc import Callable, Iterable
-from typing import Any
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
@@ -15,7 +14,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper],
-        scorer: Callable[[Any], float] | None,
+        scorer: Callable[[AtomMapping], float] | None,
         progress: bool = False,
         n_processes: int = 1,
     ):

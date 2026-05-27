@@ -2,52 +2,49 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import itertools
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 import numpy as np
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
-
-# Todo: is graph connectivity ensured?
 
 
 class HeuristicMaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float] | None,
         n_samples: int = 100,
         progress: bool = False,
         n_processes: int = 1,
     ):
-        """
-        The `HeuristicMaximalNetworkGenerator` builds for given set of `Component` s a set of `n_samples` `Transformation` s per `Component` build network under the assumption each `Component` can be connected to another.
-        The `Transformations` of this network are realized as `AtomMapping` s of pairwise `Component` s. If not all mappings can be created, it will ignore the mapping failure, and return a nearly fully connected graph.
+        """The ``HeuristicMaximalNetworkGenerator`` builds, for given set of `Component`/s, a network with `n_samples` edges per `Component`, assuming that each `Component` can be connected to another.
 
-        This class is can be used as initial_edge_lister, if there is a large set of `Component` s (check network connectivity!)
+        If a mapping is failed to be generated, the corresponding edge will not be generated, and it is possible that a disconnected graph will be returned.
 
-        This class is recommended as initial_edge_lister for other approaches.
-        > **Note**: the `HeuristicMaximalNetworkGenerator` is parallelized and the number of CPUs can be given with  `n_processes`.
-        > All other approaches in Konnektor benefit from this parallelization and you can use this parallelization with `n_processes` key word during class construction.
+        This class is recommended for use as an ``initial_edge_lister`` for very large networks.
 
+        .. note ::
+
+            The `HeuristicMaximalNetworkGenerator` can be parallelized and the number of CPUs can be given with  `n_processes`.
+            All other approaches in konnektor benefit from this parallelization,ß and you can use this parallelization with `n_processes` key word during class construction.
 
         Parameters
         ----------
-        mapper: AtomMapper
-            the atom mapper is required, to define the connection between two ligands.
-        scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
-        n_samples: int
-            number of random edges per node.
-        progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
-        n_processes: int
-            number of processes that can be used for the network generation. (default: 1)
-
-
+        mappers : AtomMapper | list[AtomMapper]
+            AtomMapper(s) to use to define the relationship between two ligands.
+        scorer : Callable[[AtomMapping], float] | None
+            Scoring function that takes in an atom mapping and returns a score in [0,1].
+        n_samples : int, optional
+            Max number of of random edges to generate per node, by default 100
+        progress : bool, optional
+            If True, a progress bar will be displayed, by default False
+        n_processes : int, optional
+            Number of processes to use for network generation, by default 1
         """
+
         super().__init__(
             mappers=mappers,
             scorer=scorer,
@@ -61,17 +58,22 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         self.n_samples = n_samples
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Create a network with n randomly selected edges for possible proposed mappings.
+        """Create a network with up to n randomly selected edges for each edge.
 
         Parameters
         ----------
         components : Iterable[Component]
-          the ligands to include in the LigandNetwork
+            ``Component``/s to include as nodes in the ``LigandNetwork``.
 
         Returns
         -------
         LigandNetwork
-            a heuristic max network.
+            ``LigandNetwork`` containing all possible edges, ideally a fully connected graph.
+
+        Raises
+        ------
+        RuntimeError
+            If no mappings were able to be generated.
         """
         components = list(components)
 
