@@ -28,8 +28,6 @@ class CyclicNetworkGenerator(NetworkGenerator):
     ):
         """
         A `NetworkGenerator` that generates a network containing cycles.
-        This is of interest for analyzing the uncertainty of FE Estimates along thermodynamic
-        cycles and possibly for correcting the estimates with cycle closure analysis.
 
         The greedy algorithm builds the network up from a node-wise perspective.
         For each node, the algorithm generates all cycles of size `cycle_sizes` and assigns a score to each cycle as the sum of all sub-scores.
@@ -61,7 +59,7 @@ class CyclicNetworkGenerator(NetworkGenerator):
             Number of processes that can be used for the network generation, default 1.
         progress: bool, optional
             If True, displays a progress bar, default False.
-        _initial_edge_lister: NetworkPlanner, optional
+        _initial_edge_lister: NetworkGenerator | None
             The NetworkGenerator to use  if the NetworkGenerator requires an initial set of edges.
             If None, a ``MaximalNetworkGenerator`` will be used with the provided mappers and scorer.
         """
