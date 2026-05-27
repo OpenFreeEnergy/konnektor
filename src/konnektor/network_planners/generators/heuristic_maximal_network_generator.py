@@ -53,8 +53,6 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
             progress=progress,
             _initial_edge_lister=self,
         )
-
-        self.progress = progress
         self.n_samples = n_samples
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:

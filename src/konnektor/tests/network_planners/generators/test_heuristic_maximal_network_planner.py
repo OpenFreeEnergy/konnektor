@@ -28,8 +28,8 @@ def test_generate_maximal_network(with_progress, n_process):
     )
     network = planner.generate_ligand_network(components)
 
+    assert planner.progress == with_progress
     assert len(network.nodes) == n_compounds
-
     edge_count = n_compounds * 10
     assert len(network.edges) <= edge_count
     assert len(network.edges) > n_compounds
@@ -55,6 +55,7 @@ def test_generate_heuristic_maximal_network_no_scorer(with_progress, n_process):
     # TODO: warning isn't working with multiprocessing
     network = planner.generate_ligand_network(components)
 
+    assert planner.progress == with_progress
     assert len(network.nodes) == n_compounds
     edge_count = n_compounds * 3
     assert len(network.edges) <= edge_count
