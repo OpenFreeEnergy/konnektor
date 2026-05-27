@@ -67,6 +67,9 @@ def test_generate_heuristic_maximal_network_no_mappers():
     n_compounds = 4
     components, _, _ = build_random_dataset(n_compounds=n_compounds)
 
+    # initializing should work without a mapper
     planner = HeuristicMaximalNetworkGenerator(mappers=None, scorer=None, n_samples=3)
-    # with pytest.raises(TypeError, match="must be an AtomMapper or iterable of AtomMappers"):
-    _ = planner.generate_ligand_network(components)
+
+    # error when trying to call generate_ligand_network
+    with pytest.raises(TypeError, match="must be an AtomMapper or iterable of AtomMappers"):
+        _ = planner.generate_ligand_network(components)
