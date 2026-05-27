@@ -35,7 +35,7 @@ own advantages and disadvantages. How is such a network plan generated?
 In our RBFE calculation example, each edge can be represented as an
 `AtomMapping`, indicating a common substructure between the two molecules
 to be compared. This `AtomMapping` can then be scored using an
-`AtomMappingScorer`, which indicates the expected difficulty of the
+`AtomMappingScorer` (any function that takes in two ``AtomMapping``/s and returns a float in [0,1]) which indicates the expected difficulty of the
 transformation in terms of convergence or accuracy. But you can also look at
 this more abstract, as an `ComponentMapping` is describing any relation between two
 `Component`s and the difficulty is estimated with a `ComponentMappingScorer`.

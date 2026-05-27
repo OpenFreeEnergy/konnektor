@@ -3,9 +3,9 @@
 
 import abc
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
@@ -22,7 +22,7 @@ class NetworkConcatenator(NetworkPlanner):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         network_generator: _AbstractNetworkAlgorithm,
         n_processes: int = 1,
         _initial_edge_lister=None,
@@ -36,7 +36,7 @@ class NetworkConcatenator(NetworkPlanner):
             the AtomMappers to use to propose mappings.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             any callable which takes a AtomMapping and returns a float
         n_processes: int, optional
             number of processes that can be used for the network generation.

@@ -2,10 +2,10 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import warnings
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
 import networkx as nx
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
 
@@ -17,7 +17,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_redundancy: int = 2,
         n_processes: int = 1,
         progress: bool = False,
@@ -39,7 +39,7 @@ class RedundantMinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             The ``AtomMapper``/s to use to propose ``AtomMapping``/s.  At least 1 required,
             but many can be given, in which case all will be tried to find the
             lowest score edges
-        scorer : AtomMappingScorer
+        scorer : Callable[[AtomMapping], float]
             any callable which takes a ``AtomMapping`` and returns a float
         n_redundancy: int
             use MST n times to get a redundant set of ``Transformations``. If ``n_redundancy`` is greater than the number of redundant MSTs able to be generated, a warning will be raised and the resulting network will contain the maximum number of redundant MSTs able to be generated.

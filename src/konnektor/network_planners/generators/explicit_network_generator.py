@@ -4,9 +4,9 @@
 import itertools
 import warnings
 from collections import Counter
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
@@ -16,7 +16,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         progress: bool = False,
     ):
@@ -26,7 +26,7 @@ class ExplicitNetworkGenerator(NetworkGenerator):
         ----------
         mapper: AtomMapper
             Defines the connection between two ligands.
-        scorer: AtomMappingScorer
+        scorer: Callable[[AtomMapping], float]
             scoring function evaluating an atom mapping, and giving a score between [0,1].
         n_processes: int
             number of processes to use to build the ligand network
