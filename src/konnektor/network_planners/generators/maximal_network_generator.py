@@ -58,25 +58,33 @@ class MaximalNetworkGenerator(NetworkGenerator):
         )
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Create a network with all possible proposed mappings.
+        """Create a network with all possible edges.
 
-        This will attempt to create (and optionally score) all possible mappings
-        (up to $N(N-1)/2$ for each mapper given). There may be fewer actual
-        mappings than this, because when a mapper cannot return a mapping for a
-        given pair, there is simply no suggested mapping for that pair.
+        Construct a maximally-connected ligand network (n_edges up to $N(N-1)/2$).
+        There may be fewer actual mappings than this, because when a mapper cannot
+        return a mapping for a given pair, there is simply no suggested mapping for that pair.
         This network is typically used as the starting point for other network
         generators (which then optimize based on the scores) or to debug atom
         mappers (to see which mappings the mapper fails to generate).
 
+        Note that if some mappings are not able to be generated, the resulting graph *may* be disconnected.
+
         Parameters
         ----------
-        components : Iterable[SmallMoleculeComponent]
-            ``SmallMoleculeComponent``/s to include as nodes in the ``LigandNetwork``.
+        components : Iterable[Component]
+            ``Component``/s to include as nodes in the ``LigandNetwork``.
 
         Returns
         -------
         LigandNetwork
-            ``LigandNetwork`` containing all possible mappings, ideally a fully connected graph.
+            ``LigandNetwork`` containing all possible edges, ideally a fully connected graph.
+
+        Raises
+        ------
+        TypeError
+            If inputs are invalid.
+        RuntimeError
+            If no mappings were able to be generated.
         """
 
         components = list(components)
@@ -97,6 +105,5 @@ class MaximalNetworkGenerator(NetworkGenerator):
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")
 
-        # TODO: raise an error? warning? if resulting network is disconnected
         network = LigandNetwork(edges=mappings, nodes=components)
         return network
