@@ -14,7 +14,7 @@ from ._abstract_network_generator import NetworkGenerator
 class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: AtomMapper | list[AtomMapper],
+        mappers: AtomMapper | Iterable[AtomMapper],
         scorer: Callable[[Any], float] | None,
         progress: bool = False,
         n_processes: int = 1,
@@ -80,6 +80,12 @@ class MaximalNetworkGenerator(NetworkGenerator):
         """
 
         components = list(components)
+
+        if self.mappers is None:
+            raise TypeError(
+                "`mappers` must be an AtomMapper or iterable of AtomMappers to generate a maximal network."
+            )
+
         mappings = _score_mappings(
             possible_edges=list(itertools.combinations(components, 2)),
             scorer=self.scorer,
