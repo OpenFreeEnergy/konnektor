@@ -21,7 +21,7 @@ class MaximalNetworkGenerator(NetworkGenerator):
         r"""
         The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of ``Component``/s.
 
-        The edges of the graph are ``Transformation`` s, which contain ``AtomMapping`` s of pairwise ``Component``\s.
+        The edges of the graph are ``AtomMapping`` s of pairwise ``Component``\s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
 
         If multiple ``AtomMapper``/s are provided, but no scorer, the *first valid* ``AtomMapper`` provided will be used.
@@ -38,13 +38,14 @@ class MaximalNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         mappers: AtomMapper | list[AtomMapper]
-            AtomMapper(s) to use to define the relationship between two ligands.
+            AtomMapper(s) to use to define the relationship between two ligands. If more than one AtomMapper is provided, all will be tried to find the
+            lowest score for each edges.
         scorer: Callable, optional
-            Scoring function that takes in an atom mapping and returns a score in [0,1].
+            Scoring function that takes an AtomMapping and returns a score in [0,1].
         progress: bool, optional
-            If True, a progress bar will be displayed. (default: False)
+            If True, displays a progress bar, default False.
         n_processes: int
-            Number of processes to use for network generation. (default: 1)
+            Number of processes to use for network generation, default 1.
         """
 
         super().__init__(
