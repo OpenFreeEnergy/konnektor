@@ -139,7 +139,7 @@ def test_explicit_network_planner_from_names_disconnected():
 
 def test_explicit_network_planner_invalid_mapper():
     n_compounds = 20
-    components, _, random_scorer = build_random_dataset(n_compounds=n_compounds)
+    _, _, random_scorer = build_random_dataset(n_compounds=n_compounds)
 
     with pytest.raises(ValueError, match="AtomMapper"):
         _ = ExplicitNetworkGenerator("not a mapper", random_scorer, n_processes=1)
@@ -147,7 +147,7 @@ def test_explicit_network_planner_invalid_mapper():
 
 def test_explicit_network_planner_set_invalid_mapper():
     n_compounds = 20
-    components, empty_mapper, random_scorer = build_random_dataset(n_compounds=n_compounds)
+    _, empty_mapper, random_scorer = build_random_dataset(n_compounds=n_compounds)
     planner = ExplicitNetworkGenerator(empty_mapper, random_scorer, n_processes=1)
     with pytest.raises(ValueError, match="AtomMapper"):
         planner.mappers = "not a mapper"
