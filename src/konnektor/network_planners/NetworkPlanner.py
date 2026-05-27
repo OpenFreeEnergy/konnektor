@@ -7,15 +7,20 @@ from collections.abc import Callable, Iterable
 from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 
-def _validate_mappers(mappers) -> AtomMapper | Iterable[AtomMapper] | None:
-    if isinstance(mappers, AtomMapper):
-        return [mappers]
-    elif isinstance(mappers, Iterable) and all(isinstance(m, AtomMapper) for m in mappers):
-        return mappers
-    elif mappers is None:
+def _validate_mappers(
+    mappers: AtomMapper | Iterable[AtomMapper] | None,
+) -> tuple[AtomMapper, ...] | None:
+    if mappers is None:
         return None
-    else:
-        raise ValueError("`mappers` must be of type `AtomMapper`.")
+    elif isinstance(mappers, AtomMapper):
+        return (mappers,)
+    elif isinstance(mappers, Iterable):
+        mappers = tuple(mappers)
+        if all(isinstance(mapper, AtomMapper) for mapper in mappers):
+            return mappers
+    raise TypeError(
+        "`mappers` must be None, an AtomMapper, or an iterable of AtomMapper instances."
+    )
 
 
 class NetworkPlanner(abc.ABC):
