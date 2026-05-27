@@ -145,6 +145,22 @@ def test_explicit_network_planner_invalid_mapper():
         _ = ExplicitNetworkGenerator("not a mapper", random_scorer, n_processes=1)
 
 
+def test_explicit_network_planner_set_generator_mapper():
+    """generator should not be consumed by validation"""
+
+    def mapper_generator(mapper, n):
+        for i in range(n):
+            yield mapper
+
+    n_compounds = 10
+    _, empty_mapper, random_scorer = build_random_dataset(n_compounds=n_compounds)
+    mappers = mapper_generator(empty_mapper, 2)
+
+    planner = ExplicitNetworkGenerator(mappers, random_scorer, n_processes=1)
+
+    assert tuple(planner.mappers) == (empty_mapper, empty_mapper)
+
+
 def test_explicit_network_planner_set_invalid_mapper():
     n_compounds = 20
     _, empty_mapper, random_scorer = build_random_dataset(n_compounds=n_compounds)
