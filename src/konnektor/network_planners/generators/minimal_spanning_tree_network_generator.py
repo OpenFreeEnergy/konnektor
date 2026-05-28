@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import MstNetworkAlgorithm
 
@@ -15,26 +15,24 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float] | None,
         n_processes: int = 1,
         progress: bool = False,
-        _initial_edge_lister: NetworkGenerator = None,
+        _initial_edge_lister=None,
     ):
-        """
-        The ``MinimalSpanningTreeNetworkGenerator``, builds an minimal spanning tree (MST) network for a given set of ``Component``/s.\
-        The ``Transformation`` s of the network are represented by an ``AtomMapping`` s, which are scored by a ``AtomMappingScorer``.
-
-        For the MST algorithm, the Kruskal Algorithm is used.
+        r"""
+        The ``MinimalSpanningTreeNetworkGenerator`` builds an minimal spanning tree (MST) network
+        for a given set of ``Component`` s using the Kruskal Algorithm.
+        Each edge of the network is represented by an ``AtomMapping``, which is scored by the provided ``scorer``.
 
         The MST algorithm gives the optimal graph score possible and the minimal required set of ``Transformations``.
-        This makes the  MST Network very efficient. However, the MST is not very robust, in case of one failing
-        ``Transformation``, the network is immediately disconnected.
-        The disconnectivity will translate to a loss of ``Component``/s in the final FE Network.
+        This makes the  MST Network very efficient, but not very robust.
+        If one edge fails the network is immediately disconnected.
 
         Parameters
         ----------
         mapper :  Union[AtomMapper, list[AtomMapper]]
-            ``AtomMapper`` or list of ``AtomMapper``/s to use to define the relationship between two ligands.
+            ``AtomMapper`` or list of ``AtomMapper``\s to use to define the relationship between two ligands.
         scorer : AtomMappingScorer
             The scoring function to use for evaluating an atom mapping. Should give a score in [0,1].
         n_processes: int, optional
@@ -45,6 +43,8 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
             ``NetworkPlanner`` to be used to generate the initial set of edges. For standard usage, the Maximal NetworkPlanner is often appropriate.
             For very large networks, the ``HeuristicMaximalNetworkPlanner`` might be a useful alternative.
             (default: MaximalNetworkPlanner)
+
+
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(

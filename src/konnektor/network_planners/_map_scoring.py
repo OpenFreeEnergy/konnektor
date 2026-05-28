@@ -12,7 +12,7 @@ from tqdm.auto import tqdm
 
 def _determine_best_mapping(
     component_pair: tuple[SmallMoleculeComponent, SmallMoleculeComponent],
-    mappers: list[AtomMapper],
+    mappers: tuple[AtomMapper, ...],
     scorer: Callable | None,
 ) -> AtomMapping:
     """
@@ -25,7 +25,7 @@ def _determine_best_mapping(
     ----------
     component_pair : tuple[SmallMoleculeComponent, SmallMoleculeComponent]
         The two molecules for which the best mapping will be determined.
-    mappers : AtomMapper | list[AtomMapper]
+    mappers : AtomMapper | tuple[AtomMapper,...]
         The mapper(s) to use to generate possible mappings between the molecules in the ``component_pair``.
     scorer : Optional[Callable]
         The mapping scorer to use, in the form of a ``Callable`` that takes in an ``AtomMapping`` and returns a float in [0,1].
@@ -106,7 +106,7 @@ def thread_mapping(args) -> list[AtomMapping]:
 def _parallel_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
     scorer: Callable[[AtomMapping], float],
-    mappers: list[AtomMapper],
+    mappers: tuple[AtomMapper, ...],
     n_processes: int,
     show_progress: bool = True,
 ) -> list[AtomMapping]:
@@ -158,7 +158,7 @@ def _parallel_map_scoring(
 def _serial_map_scoring(
     possible_edges: list[tuple[SmallMoleculeComponent, SmallMoleculeComponent]],
     scorer: Callable[[AtomMapping], float],
-    mappers: list[AtomMapper],
+    mappers: tuple[AtomMapper, ...],
     show_progress: bool = True,
 ) -> list[AtomMapping]:
     """_summary_

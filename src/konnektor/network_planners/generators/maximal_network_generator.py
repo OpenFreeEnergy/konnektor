@@ -3,9 +3,8 @@
 
 import itertools
 from collections.abc import Callable, Iterable
-from typing import Any
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from .._map_scoring import _score_mappings
 from ._abstract_network_generator import NetworkGenerator
@@ -14,15 +13,15 @@ from ._abstract_network_generator import NetworkGenerator
 class MaximalNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
-        mappers: AtomMapper | list[AtomMapper],
-        scorer: Callable[[Any], float] | None,
+        mappers: AtomMapper | Iterable[AtomMapper],
+        scorer: Callable[[AtomMapping], float] | None,
         progress: bool = False,
         n_processes: int = 1,
     ):
         r"""
         The ``MaximalNetworkGenerator`` attempts to build a fully connected graph (every node connected to every other node) for given set of ``Component``/s.
 
-        The edges of the graph are ``Transformation`` s, which contain ``AtomMapping`` s of pairwise ``Component``\s.
+        The edges of the graph are ``AtomMapping`` s of pairwise ``Component``\s.
         If not all mappings can be created, it will ignore the mapping failure and return a nearly fully connected graph.
 
         If multiple ``AtomMapper``/s are provided, but no scorer, the *first valid* ``AtomMapper`` provided will be used.
@@ -39,13 +38,14 @@ class MaximalNetworkGenerator(NetworkGenerator):
         Parameters
         ----------
         mappers: AtomMapper | list[AtomMapper]
-            AtomMapper(s) to use to define the relationship between two ligands.
+            AtomMapper(s) to use to define the relationship between two ligands. If more than one AtomMapper is provided, all will be tried to find the
+            lowest score for each edges.
         scorer: Callable, optional
-            Scoring function that takes in an atom mapping and returns a score in [0,1].
+            Scoring function that takes an AtomMapping and returns a score in [0,1].
         progress: bool, optional
-            If True, a progress bar will be displayed. (default: False)
+            If True, displays a progress bar, default False.
         n_processes: int
-            Number of processes to use for network generation. (default: 1)
+            Number of processes to use for network generation, default 1.
         """
 
         super().__init__(
@@ -58,28 +58,42 @@ class MaximalNetworkGenerator(NetworkGenerator):
         )
 
     def generate_ligand_network(self, components: Iterable[Component]) -> LigandNetwork:
-        """Create a network with all possible proposed mappings.
+        """Create a network with all possible edges.
 
-        This will attempt to create (and optionally score) all possible mappings
-        (up to $N(N-1)/2$ for each mapper given). There may be fewer actual
-        mappings than this, because when a mapper cannot return a mapping for a
-        given pair, there is simply no suggested mapping for that pair.
+        Construct a maximally-connected ligand network (n_edges up to $N(N-1)/2$).
+        There may be fewer actual mappings than this, because when a mapper cannot
+        return a mapping for a given pair, there is simply no suggested mapping for that pair.
         This network is typically used as the starting point for other network
         generators (which then optimize based on the scores) or to debug atom
         mappers (to see which mappings the mapper fails to generate).
 
+        Note that if some mappings are not able to be generated, the resulting graph *may* be disconnected.
+
         Parameters
         ----------
-        components : Iterable[SmallMoleculeComponent]
-            ``SmallMoleculeComponent``/s to include as nodes in the ``LigandNetwork``.
+        components : Iterable[Component]
+            ``Component``/s to include as nodes in the ``LigandNetwork``.
 
         Returns
         -------
         LigandNetwork
-            ``LigandNetwork`` containing all possible mappings, ideally a fully connected graph.
+            ``LigandNetwork`` containing all possible edges, ideally a fully connected graph.
+
+        Raises
+        ------
+        TypeError
+            If inputs are invalid.
+        RuntimeError
+            If no mappings were able to be generated.
         """
 
         components = list(components)
+
+        if self.mappers is None:
+            raise TypeError(
+                "`mappers` must be an AtomMapper or iterable of AtomMappers to generate a maximal network."
+            )
+
         mappings = _score_mappings(
             possible_edges=list(itertools.combinations(components, 2)),
             scorer=self.scorer,
@@ -91,6 +105,5 @@ class MaximalNetworkGenerator(NetworkGenerator):
         if len(mappings) == 0:
             raise RuntimeError("Could not generate any mapping!")
 
-        # TODO: raise an error? warning? if resulting network is disconnected
         network = LigandNetwork(edges=mappings, nodes=components)
         return network
