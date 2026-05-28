@@ -25,6 +25,7 @@ class CyclicConcatenator(NetworkConcatenator):
         _initial_edge_lister: NetworkConcatenator | None = None,
     ):
         """
+        NOTE: This class has not yet been implemented.
 
         Parameters
         ----------

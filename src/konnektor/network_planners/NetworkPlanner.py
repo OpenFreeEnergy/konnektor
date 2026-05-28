@@ -34,8 +34,7 @@ class NetworkPlanner(abc.ABC):
         Parameters
         ----------
         mappers : AtomMapper | Iterable[AtomMapper] | None
-            AtomMapper(s) to use to propose mappings. If more than one AtomMapper is provided, all will be tried to find the
-            lowest score for each edges.
+            AtomMapper(s) to use to propose mappings.
         scorer : Callable[[AtomMapping], float] | None
            Any callable which takes a AtomMapping and returns a float in [0,1].
         """
