@@ -9,9 +9,14 @@ from gufe import LigandNetwork, SmallMoleculeComponent
 from .. import network_tools as tools
 
 
+#  TODO: deprecate this?
 def get_is_connected(ligand_network: LigandNetwork) -> bool:
     """
-    Check if the Ligand Network graph is connected.
+    Check whether all whether all nodes in the LigandNetwork
+    are (weakly, meaning independent of direction) connected to each other.
+
+    A False value indicates that either some nodes have no edges
+    or that there are separate networks that do not link to each other.
 
     Parameters
     ----------
@@ -20,25 +25,26 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     Returns
     -------
     bool
-        if the Ligand Network graph is connected
+        True if the LigandNetwork is connected, otherwise False.
     """
     return ligand_network.is_connected()
 
 
 def get_network_score(ligand_network: LigandNetwork) -> float:
     """
-    Calculate the graph score based on summation of the edge weights.
+    Calculate the network score based on summation of the edge weights.
 
     Parameters
     ----------
     ligand_network: LigandNetwork
-        ligand network, that should return the graph score.
 
     Returns
     -------
     float
-        sum of all edges the graph score
+        Summation of all edge scores in the LigandNetwork.
     """
+    # TODO: "score" is not guaranteed to exist as an annotation,
+    # so we should have better error handling here.
     score = sum([e.annotations["score"] for e in ligand_network.edges])
     return score
 
@@ -50,12 +56,10 @@ def get_network_cost(ligand_network: LigandNetwork) -> float:
     Parameters
     ----------
     ligand_network: LigandNetwork
-        ligand network, that should return the graph score.
 
     Returns
     -------
     float
-        sum of all edges the graph score
     """
     score = sum([1 - float(e.annotations["score"]) for e in ligand_network.edges])
     return score
@@ -63,17 +67,14 @@ def get_network_cost(ligand_network: LigandNetwork) -> float:
 
 def get_network_efficiency(ligand_network: LigandNetwork) -> float:
     """
-    Calculate the graph score based on summation of the edge weights.
 
     Parameters
     ----------
     ligand_network: LigandNetwork
-        ligand network, that should return the graph score.
 
     Returns
     -------
     float
-        sum of all edges the graph score
     """
     score = sum([e.annotations["score"] for e in ligand_network.edges]) / len(ligand_network.edges)
     return score
@@ -81,7 +82,7 @@ def get_network_efficiency(ligand_network: LigandNetwork) -> float:
 
 def get_number_of_network_cycles(ligand_network: LigandNetwork, higher_bound: int = 3) -> int:
     """
-    Calculate the graph cycles, upt to the upper bound.
+    Calculate the graph cycles, up to the upper bound.
 
     Parameters
     ----------
@@ -128,6 +129,7 @@ def get_component_scores(
 ) -> dict[SmallMoleculeComponent, float]:
     """
     Calculate the score of a node, as the sum of the edge scores.
+
     Parameters
     ----------
     ligand_network: LigandNetwork
@@ -170,8 +172,8 @@ def get_component_number_cycles(
         node index with number of cycles.
     """
     graph = nx.DiGraph(ligand_network.graph).to_undirected()
-    # Todo: check if there is a possibility in nx to omit cycles going back over already chosen nodes (1-2-3-2-1)
-    # Todo: if possible remove the corresponding code
+    # TODO: check if there is a possibility in nx to omit cycles going back over already chosen nodes (1-2-3-2-1)
+    # TODO: if possible remove the corresponding code
     raw_cycles = [
         n
         for c in nx.simple_cycles(graph, length_bound=higher_bound)
