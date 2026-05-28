@@ -77,26 +77,14 @@ class MinimalSpanningTreeNetworkGenerator(NetworkGenerator):
         """
 
         initial_network = self._initial_edge_lister.generate_ligand_network(components=components)
-        mappings = initial_network.graph.edges(data=True)
 
-        # Translate Mappings to graphable:
-        edge_map = {
-            (components.index(componentA), components.index(componentB)): d["object"]
-            for componentA, componentB, d in mappings
-        }
-        edges = list(edge_map.keys())
-        weights = [edge_map[k].annotations["score"] for k in edges]
+        mst_network = self.network_generator.generate_network(initial_network.graph)
 
-        mg = self.network_generator.generate_network(edges, weights)
-
-        # TODO: collect all the mappings, use j->i mapping if i->j not found? - double check this
-        selected_mappings = [
-            edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
-        ]
+        min_mappings = [edge_data["object"] for _, _, edge_data in mst_network.edges(data=True)]
 
         # intentionally make the ligand_network based *only* on the edges,
         # so we can catch any missing nodes in the next step
-        mst_ligand_network = LigandNetwork(edges=selected_mappings)
+        mst_ligand_network = LigandNetwork(edges=min_mappings)
 
         # check for a disconnected network
         missing_nodes = set(initial_network.nodes) - set(mst_ligand_network.nodes)
