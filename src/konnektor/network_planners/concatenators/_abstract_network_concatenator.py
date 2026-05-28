@@ -7,8 +7,6 @@ from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
-from konnektor.network_planners.generators.twin_star_network_generator import NetworkGenerator
-
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
@@ -27,20 +25,21 @@ class NetworkConcatenator(NetworkPlanner):
         scorer: Callable[[AtomMapping], float] | None,
         network_generator: _AbstractNetworkAlgorithm | None,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkGenerator | None = None,
+        _initial_edge_lister=None,
     ):
         """Abstract class for network concatenation, not to be called directly.
 
         Parameters
         ----------
         mappers : AtomMapper | Iterable[AtomMapper] | None
-            AtomMapper(s) to use to propose mappings. If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
+            AtomMapper(s) to use to propose mappings.
+            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
         scorer : Callable[[AtomMapping], float] | None
             Callable which takes a AtomMapping and returns a float in [0,1].
         n_processes: int, optional
             Number of processes that can be used for the network generation, by default 1.
-        _initial_edge_lister: NetworkGenerator | None, optional
-            The NetworkGenerator to use if the NetworkConcatenator requires an initial set of edges, by default None.
+        _initial_edge_lister: NetworkConcatenator | None, optional
+            The NetworkConcatenator to use if the NetworkConcatenator requires an initial set of edges, by default None.
         """
 
         super().__init__(mappers=mappers, scorer=scorer)

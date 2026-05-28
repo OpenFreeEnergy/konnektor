@@ -2,9 +2,9 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, AtomMappingScorer, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
@@ -13,37 +13,34 @@ from .max_concatenator import MaxConcatenator
 log = logging.getLogger(__name__)
 
 
-# Todo: check this algorithm again
-
-
+# TODO: check this algorithm again
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper] | None,
-        scorer: AtomMappingScorer,
+        scorer: Callable[[AtomMapping], float] | None,
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator = None,
+        _initial_edge_lister: NetworkConcatenator | None = None,
     ):
         """
-        This concatenators is connnecting two Networks with a kruskal like
-        approach up to the number of connecting edges.
 
         Parameters
         ----------
         mappers: AtomMapper | Iterable[AtomMapper] | None
-            AtomMapper(s) to use to propose mappings. If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
-        scorer: AtomMappingScorer
-            Any callable which takes a AtomMapping and returns a float between [0,1]
+            AtomMapper(s) to use to propose mappings.
+            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
+        scorer: Callable[[AtomMapping], float] | None
+            Callable which takes a AtomMapping and returns a float in [0,1].
         n_connecting_cycles: int, optional
-            build at least n cycles between th networks. (default: 2)
+            Minimum number of cycles to build between the networks, by default 2.
         cycle_sizes: Union[int, list[int]], optional
-            build cycles of given size. or allow a range of different size
-            by passing a list[int](default:3)
-        n_processes: int
-            number of processes that can be used for the network generation.
-            (default: 1)
+            Size of the cycles to build, can be an int or range of ints, by default 3.
+        n_processes: int, optional
+            Number of processes that can be used for the network generation, by default 1.
+        _initial_edge_lister: NetworkConcatenator | None, optional
+            The NetworkConcatenator to use if the NetworkConcatenator requires an initial set of edges, by default a MaxConcatenator with the provided `mappers`, `scorer` and `n_processes` will be used.
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaxConcatenator(
