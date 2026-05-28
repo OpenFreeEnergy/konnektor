@@ -29,7 +29,7 @@ class HeuristicMaximalNetworkGenerator(NetworkGenerator):
         .. note ::
 
             The `HeuristicMaximalNetworkGenerator` can be parallelized and the number of CPUs can be given with  `n_processes`.
-            All other approaches in konnektor benefit from this parallelization,ß and you can use this parallelization with `n_processes` key word during class construction.
+            All other approaches in konnektor benefit from this parallelization, and you can use this parallelization with `n_processes` key word during class construction.
 
         Parameters
         ----------
