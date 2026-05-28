@@ -1,9 +1,9 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
 
 from konnektor.network_planners._networkx_implementations import RadialNetworkAlgorithm
 
@@ -15,45 +15,44 @@ class TwinStarNetworkGenerator(NetworkGenerator):
     def __init__(
         self,
         mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        scorer: Callable[[AtomMapping], float] | None,
         n_centers: int = 2,
         n_processes: int = 1,
         progress: bool = False,
-        _initial_edge_lister: NetworkGenerator = None,
+        _initial_edge_lister: NetworkGenerator | None = None,
     ):
         """
-        The Twin Star Network is an expansion to the Star Network. It can be described as multiple star networks that are overlayed.
+        The Twin Star Network is an expansion to the Star Network.
+        It can be described as multiple star networks that are overlayed.
 
-        The algorithm first calculates all possible `Transformation` s for all `Component` s.
+        The algorithm first calculates all initial edges using `_initial_edge_lister`.
         Next, the in average `n_centers` (default: 2) best performing `Component` s over all
-        transfromation scores are selected and placed into the center of the network.
+        AtomMapping scores are selected as the central nodes.
         Finally all components are connected to the selected centers, resulting
         in $n_{Transformations} = n_{centers}*(n_{Componentes}-n_{centers})$
 
-        This approach has, in the default version, double the number of `Transformations`
+        This approach has, in the default version, double the number of edges
         compared to the Star Network, and therefore also an increased graph cost.
-        On the plus side, this approach builds many graph cycles, which could be used to estimate the uncertainty of FE calculations.
-        Another important aspect is that the node connectivity is centralized around the `n_centers`
-        This means that the selection of the central ligands is very important, as they have a large
-        impact on the `Transformations`.
+        Since the node connectivity is centralized around the `n_centers` nodes,
+        the selection of the central ligands is very important, as they have a largeimpact on the overall quality of the network.
         The `n_centers` option allows you to change the Twin Star to a Triplet Star Network or more.
 
         Parameters
         ----------
-        mapper :  Union[AtomMapper, list[AtomMapper]]
-            the atom mapper is required, to define the connection between two ligands.
-        scorer : AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score between [0,1].
+        mappers : AtomMapper | list[AtomMapper]
+            AtomMapper(s) to use to define the relationship between two ligands. If more than one AtomMapper is provided, all will be tried to find the
+            lowest score for each edges.
+        scorer : Callable, optional
+            Scoring function that takes an AtomMapping and returns a score in [0,1].
         n_centers: int, optional
-            the number of centers in the network. (default: 2)
+            Number of central nodes in the network. (default: 2)
         n_processes: int, optional
-            number of processes that can be used for the network generation. (default: 1)
+            Number of processes that to be used for network generation. (default: 1)
         progress: bool, optional
-            if true a progress bar will be displayed. (default: False)
-        _initial_edge_lister: NetworkPlanner, optional
-            this NetworkPlanner is used to give the initial set of edges. For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner..
-            (default: MaximalNetworkPlanner)
+            If True, displays a progress bar, default False.
+        _initial_edge_lister:  NetworkGenerator | None
+            The NetworkGenerator to use  if the NetworkGenerator requires an initial set of edges.
+            If None, a ``MaximalNetworkGenerator`` will be used with the provided mappers and scorer.
         """
         if _initial_edge_lister is None:
             _initial_edge_lister = MaximalNetworkGenerator(

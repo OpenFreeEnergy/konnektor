@@ -38,9 +38,9 @@ class NetworkGenerator(NetworkPlanner):
             Number of processes that can be used for the network generation, by default 1.
         progress : bool, optional
             If True, display a progress bar, by default False
-        _initial_edge_lister : _type_, optional
-            The NetworkPlanner to use to create the initial set of edges. For standard usage, the MaximalNetworkPlanner is used.
-            However in large scale approaches, it might be interesting to use the heuristicMaximalNetworkPlanner, by default None.
+        _initial_edge_lister : NetworkGenerator | None
+            The NetworkGenerator to use  if the NetworkGenerator requires an initial set of edges. For standard usage, the MaximalNetworkGenerator is used.
+            However in large scale approaches, HeuristicMaximalNetworkGenerator might be applicable, by default None.
         """
 
         super().__init__(mappers=mappers, scorer=scorer)
