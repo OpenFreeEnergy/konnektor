@@ -19,7 +19,7 @@ log = logging.getLogger(__name__)
 class CyclicConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: AtomMapper | Iterable[AtomMapper],
+        mappers: AtomMapper | Iterable[AtomMapper] | None,
         scorer: AtomMappingScorer,
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
@@ -32,10 +32,8 @@ class CyclicConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        mappers: AtomMapper
-            The AtomMapper(s) to use to propose mappings.  At least 1 required,
-            but many can be given, in which case all will be tried to find the
-            lowest score edges
+        mappers: AtomMapper | Iterable[AtomMapper] | None
+            AtomMapper(s) to use to propose mappings. If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
         scorer: AtomMappingScorer
             Any callable which takes a AtomMapping and returns a float between [0,1]
         n_connecting_cycles: int, optional
