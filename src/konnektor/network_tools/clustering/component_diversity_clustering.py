@@ -19,24 +19,21 @@ log.setLevel(logging.WARNING)
 class ComponentsDiversityClusterer(_AbstractClusterer):
     def __init__(
         self,
-        featurize: TransformerMixin = MorganFingerprintTransformer(),
+        featurize: TransformerMixin = MorganFingerprintTransformer(),  # TODO: move this instantiation into init?
         cluster: ClusterMixin = KMeans(n_clusters=5, n_init="auto"),
         n_processes: int = 1,
     ):
-        """
-        This class can be use to seperate components by different features, like charge or morgan fingerprints.
+        """This class can be use to separate components by different features, like charge or morgan fingerprints.
 
         Parameters
         ----------
-        featurize: TransformerMixin, optional
+        featurize : TransformerMixin, optional
             A scikit-learn and scikit-mol compatible featurizer, takes a rdkit mol and transforms to an np.array[number].
-            As default the morgan fingerprints are used.
-        cluster: ClusterMixin
-            a scikit-learn compatible clustering algorithm.
-            as default a  KMeans(n_clusters=5, n_init="auto") is used.
-        parallel: int, optional
-            tries to push the parallelization triggers of featurize and cluster
-
+            By default MorganFingerprintTransformer().
+        cluster : ClusterMixin, optional
+            Clustering algorithm compatible with scikit-learn, by default KMeans(n_clusters=5, n_init="auto")
+        n_processes : int, optional
+            Number of processes that can be used for the network generation, by default 1.
         """
         self._cluster_centers = None
         self.featurize = featurize
@@ -55,20 +52,16 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
             return self._cluster_centers
 
     def cluster_compounds(self, components: list[Component]) -> dict[int, list[Component]]:
-        """
-            The method featurizes and clusters the molecules according to the features.
-
+        """Featurize and cluster `components` according to their features.
 
         Parameters
         ----------
-        components:list[Component]
-            the list of components, that should be seperated into different categories.
-
+        components : list[Component]
 
         Returns
         -------
         dict[int, list[Component]]
-            the index represents the clusterid, the values are lists of Components, corresponding to the clusters.
+            Clustered compounds, represented as {`clusterid`: [Component]}
         """
         # Build Pipeline
         self.pipe = Pipeline([("mol_transformer", self.featurize), ("Cluster", self.cluster)])
