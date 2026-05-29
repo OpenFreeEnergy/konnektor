@@ -85,7 +85,7 @@ def get_network_efficiency(ligand_network: LigandNetwork) -> float:
 
 
 def get_number_of_network_cycles(ligand_network: LigandNetwork, higher_bound: int = 3) -> int:
-    """Calculate the number of cycles present in the network for cycles up to size ``higher_bound``.
+    """Calculate the number of cycles present in the network for cycles up to size `higher_bound`.
 
     Parameters
     ----------
@@ -96,7 +96,7 @@ def get_number_of_network_cycles(ligand_network: LigandNetwork, higher_bound: in
     Returns
     -------
     int
-        Number of cycles of size < ``higher_bound`` present in the LigandNetwork.
+        Number of cycles of size < `higher_bound` present in the LigandNetwork.
     """
     graph = nx.DiGraph(ligand_network.graph).to_undirected()
     raw_cycles = [str(sorted(c)) for c in nx.simple_cycles(graph, length_bound=higher_bound)]
@@ -112,14 +112,13 @@ def get_component_connectivities(
     Parameters
     ----------
     ligand_network : LigandNetwork
-        _description_
     normalize : bool, optional
         If True, normalize each node's connectivity by the total number of edges in the LigandNetwork, by default False.
 
     Returns
     -------
     dict[SmallMoleculeComponent, float | int]
-        Dict of nodes and their corresponding connectivity (`int` if ``normalize=False``, otherwise `float`).
+        Dict of nodes and their corresponding connectivity (`int` if `normalize=False`, otherwise `float`).
     """
     if normalize:
         n_edges = ligand_network.graph.number_of_edges()
