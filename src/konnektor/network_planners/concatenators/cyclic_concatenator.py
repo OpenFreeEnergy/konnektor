@@ -41,8 +41,9 @@ class CyclicConcatenator(NetworkConcatenator):
         n_processes: int, optional
             Number of processes that can be used for the network generation, by default 1.
         _initial_edge_lister: NetworkConcatenator | None, optional
-            The NetworkConcatenator to use if the NetworkConcatenator requires an initial set of edges, by default a MaxConcatenator with the provided `mappers`, `scorer` and `n_processes` will be used.
+            The NetworkConcatenator to use if the NetworkConcatenator requires an initial set of edges.
         """
+        # TODO: this needs to be assigned to self._initial_edge_lister to actually get used.
         if _initial_edge_lister is None:
             _initial_edge_lister = MaxConcatenator(
                 mappers=mappers, scorer=scorer, n_processes=n_processes
