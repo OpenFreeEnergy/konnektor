@@ -1,5 +1,5 @@
-Welcome to konnektor's documentation!
-=====================================
+konnektor
+=========
 
 **konnektor** is a Python library for planning, modifying, and analyzing free energy transformation networks.
 
