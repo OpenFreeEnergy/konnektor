@@ -1,8 +1,6 @@
-"""Clustering compounds based on scaffolds
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
 
-This clusterer attempts to cluster compounds based on their scaffolds.
-It is built on rdkit's rdScaffoldNetwork module.
-"""
 
 import itertools
 from collections import defaultdict
@@ -21,16 +19,17 @@ class ScaffoldClusterer(_AbstractClusterer):
     cid_components: dict[int, list[Component]]
 
     def __init__(self, scaffold_looseness: int = 9):
-        """
+        """Clustering compounds based on scaffolds.
+        Attempts to cluster compounds based on their scaffolds.
+        Built on rdkit's rdScaffoldNetwork module.
+
         Parameters
         ----------
-        scaffold_looseness : int
-          a heuristic to define to what extent alternate/smaller scaffolds can
-          be used to match a certain molecule.
-          this value decides how many heavy atoms from the *largest* scaffold
-          other scaffolds may be permitted.
-          a too high value may result in inappropriately generic scaffolds being
-          used, while too low will result in too many scaffolds being identified
+        scaffold_looseness : int, optional
+            A heuristic parameter to define to what extent alternate/smaller scaffolds can be used to match a certain molecule.
+            This value decides how many heavy atoms from the *largest* scaffold other scaffolds may be permitted.
+            Assigning too high a value for `scaffold_looseness` may result in inappropriately generic scaffolds being used, while too low will result in too many scaffolds being identified.
+            By default 9.
         """
         self.scaffold_looseness = scaffold_looseness
 
@@ -54,7 +53,17 @@ class ScaffoldClusterer(_AbstractClusterer):
     def generate_scaffold_network(
         mols: list[Chem.Mol],
     ) -> rdScaffoldNetwork.ScaffoldNetwork:
-        # generates the scaffold network from the rdkit mol objects
+        """Generate the scaffold network from rdkit mol objects.
+
+        Parameters
+        ----------
+        mols : list[Chem.Mol]
+
+        Returns
+        -------
+        rdScaffoldNetwork.ScaffoldNetwork
+
+        """
         params = rdScaffoldNetwork.ScaffoldNetworkParams()
         params.includeScaffoldsWithAttachments = False
         params.flattenChirality = True
@@ -68,9 +77,20 @@ class ScaffoldClusterer(_AbstractClusterer):
         network: rdScaffoldNetwork.ScaffoldNetwork,
         mols: list[Chem.Mol],
         hac_heuristic: int,
-    ) -> dict[Chem.Mol, list[str]]:
-        # match scaffolds in network back to normalised input molecules
-        # i.e. for each molecule, which scaffolds can apply
+    ) -> dict[Chem.Mol, list[tuple[str, int]]]:
+        """Match scaffolds in `network` back to normalized input `mols`.
+        i.e. for each molecule, determine which scaffolds can apply.
+
+        Parameters
+        ----------
+        network : rdScaffoldNetwork.ScaffoldNetwork
+        mols : list[Chem.Mol]
+        hac_heuristic : int
+
+        Returns
+        -------
+        dict[Chem.Mol, list[tuple[str, int]]]
+        """
 
         # will store for each molecule, potential scaffolds and their size
         mols2scaffolds = defaultdict(list)
@@ -94,13 +114,23 @@ class ScaffoldClusterer(_AbstractClusterer):
                 key=lambda x: x[1],
                 reverse=True,
             )
-
         return mols2candidates
 
     @staticmethod
-    def find_solution(mol_to_candidates: dict[Chem.Mol, list[str]]) -> list[tuple[str, int]]:
-        # returns the best scaffolds that cover all mols
-        # returns a list of (scaffold smiles, n heavy atoms)
+    def find_solution(
+        mol_to_candidates: dict[Chem.Mol, list[tuple[str, int]]],
+    ) -> tuple[tuple[str, int], ...] | None:
+        """Find the best scaffolds that cover all mols
+
+        Parameters
+        ----------
+        mol_to_candidates : dict[Chem.Mol, list[tuple[str, int]]
+            Dict of rdkit mols and their scaffolds as  (`scaffold smiles`, `n heavy atoms`)
+        Returns
+        -------
+        list[tuple[str, int]]
+            List of (`scaffold smiles`, `n heavy atoms`)
+        """
 
         # reverse mapping of scaffolds onto the mols they cater for
         scaffold2mols = defaultdict(list)
@@ -137,6 +167,7 @@ class ScaffoldClusterer(_AbstractClusterer):
                 # pick the best, based on HAC
                 solution = max(solutions, key=lambda x: sum(s[1] for s in x))
                 return solution
+        return None
 
     @staticmethod
     def formulate_answer(

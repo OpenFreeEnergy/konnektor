@@ -3,7 +3,7 @@
 
 import abc
 
-import gufe
+from gufe import SmallMoleculeComponent
 
 
 class _AbstractClusterer:
@@ -11,6 +11,6 @@ class _AbstractClusterer:
 
     @abc.abstractmethod
     def cluster_compounds(
-        self, components: list[gufe.SmallMoleculeComponent]
-    ) -> dict[int, list[gufe.SmallMoleculeComponent]]:
+        self, components: list[SmallMoleculeComponent]
+    ) -> dict[int, list[SmallMoleculeComponent]]:
         """Cluster compounds according to a given algorithm"""
