@@ -9,7 +9,7 @@ from ._abstract_network_algorithm import _AbstractNetworkAlgorithm
 
 class MstNetworkAlgorithm(_AbstractNetworkAlgorithm):
     def generate_network(
-        self, edges: list[tuple[int, int]], weights: list[float], n_edges: int = None
+        self, edges: list[tuple[int, int]], weights: list[float], n_edges: int | None = None
     ) -> nx.Graph:
         wedges = []
         nodes = []

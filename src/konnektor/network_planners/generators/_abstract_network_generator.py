@@ -30,6 +30,7 @@ class NetworkGenerator(NetworkPlanner):
         ----------
         mappers : AtomMapper | Iterable[AtomMapper] | None
             AtomMapper(s) to use to propose mappings.
+            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
         scorer : Callable[[AtomMapping], float] | None
             Callable which takes a AtomMapping and returns a float in [0,1].
         network_generator : _AbstractNetworkAlgorithm | None.
@@ -37,21 +38,20 @@ class NetworkGenerator(NetworkPlanner):
         n_processes : int, optional
             Number of processes that can be used for the network generation, by default 1.
         progress : bool, optional
-            If True, display a progress bar, by default False
+            If True, display a progress bar, by default False.
         _initial_edge_lister : NetworkGenerator | None
-            The NetworkGenerator to use  if the NetworkGenerator requires an initial set of edges. For standard usage, the MaximalNetworkGenerator is used.
-            However in large scale approaches, HeuristicMaximalNetworkGenerator might be applicable, by default None.
+            The NetworkGenerator to use if the NetworkGenerator requires an initial set of edges, by default None.
         """
 
         super().__init__(mappers=mappers, scorer=scorer)
 
         self.network_generator = network_generator
         self.n_processes = n_processes
-
         self._initial_edge_lister = _initial_edge_lister
 
         # pass on the parallelization to the edge lister
-        # edge listing is usually the most expensive task, so parallelization is important here.
+        # edge listing is usually the most expensive task,
+        # so parallelization is important here.
         if self._initial_edge_lister is not None and hasattr(
             self._initial_edge_lister, "n_processes"
         ):
