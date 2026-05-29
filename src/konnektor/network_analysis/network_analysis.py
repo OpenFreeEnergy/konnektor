@@ -52,7 +52,7 @@ def get_network_score(ligand_network: LigandNetwork) -> float:
 def get_network_cost(ligand_network: LigandNetwork) -> float:
     """
     Calculate the network cost based on summation of the edge costs,
-    where $cost = 1 - score$.
+    `cost = 1 - score`.
 
     Parameters
     ----------
