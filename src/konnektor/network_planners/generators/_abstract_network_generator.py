@@ -29,7 +29,8 @@ class NetworkGenerator(NetworkPlanner):
         Parameters
         ----------
         mappers : AtomMapper | Iterable[AtomMapper] | None
-            AtomMapper(s) to use to propose mappings. If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
+            AtomMapper(s) to use to propose mappings.
+            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
         scorer : Callable[[AtomMapping], float] | None
             Callable which takes a AtomMapping and returns a float in [0,1].
         network_generator : _AbstractNetworkAlgorithm | None.
