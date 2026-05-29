@@ -1,21 +1,21 @@
 Installation
 ============
 
-**konnektor** comes installed with **openfe** as of ``openfe v1.5.0``!
+**konnektor** comes installed with `**openfe** <https://docs.openfree.energy/>`_ as of ``openfe v1.5.0``!
 
 If you want to use **konnektor** as a standalone package, see below.
 
 Installation from conda-forge
 -----------------------------
 
-**konnektor** can be installed from conda-forge using your choice of micromamba (recommended), mamba, or conda ::
+**konnektor** can be installed from conda-forge using your choice of micromamba (recommended), mamba, or conda: ::
 
     $ micromamba create -c -conda-forge -n konnektor konnektor
     $ micromamba activate konnektor
 
 
 Developer Installation
-======================
+----------------------
 
 For developers, we recommend setting up a local developer installation so that your changes to the code are immediately reflected in the functionality.
 
@@ -32,7 +32,7 @@ Then create and activate a conda environment that includes all of **konnektor's*
     $ micromamba activate konnektor
 
 
-Finally, create an editable installation:
+Finally, create an editable installation: ::
 
     $ python -m pip install -e .
 
