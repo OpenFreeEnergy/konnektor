@@ -13,14 +13,13 @@ class ChargeTransformer(BaseFpsTransformer):
 
         Parameters
         ----------
-        n_jobs : int, optional default=None
-            The maximum number of concurrently running jobs.
-            None is a marker for 'unset' that will be interpreted as n_jobs=1 unless the call is performed under a parallel_config()
-        Whether to parallelize the calculations, default: False
-
+        n_jobs : int | None, optional
+            Maximum number of jobs to be run in parallel.
+            `None` is a marker for 'unset' that will be interpreted as n_jobs=1 unless the call is performed under a parallel_config().
+            (default=None)
         """
         super().__init__(n_jobs=n_jobs)
         self.fpSize = 1
 
-    def _transform_mol(self, mol):
+    def _transform_mol(self, mol) -> np.array:
         return np.array([Chem.GetFormalCharge(mol)])
