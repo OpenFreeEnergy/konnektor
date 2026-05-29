@@ -51,7 +51,7 @@ class NetworkConcatenator(NetworkPlanner):
         # edge listing is usually the most expensive task,
         # so parallelization is important here.
         if self._initial_edge_lister is not None and hasattr(
-            self._initial_edge_lister, "n_processes"
+            self._initial_edge_lister, "nprocesses"
         ):
             self.n_processes = n_processes
 
