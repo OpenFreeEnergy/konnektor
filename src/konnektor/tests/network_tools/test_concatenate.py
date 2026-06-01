@@ -1,6 +1,5 @@
 import pytest
 
-from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import MstConcatenator
 from konnektor.network_tools.network_handling.concatenate import (
     append_component,
@@ -36,7 +35,7 @@ def test_concatenate_deprecated():
         assert len(new_network.edges) == sum(
             [len(n.edges) for n in networks]
         ) + n_connecting_edges * sum([i for i in range(1, n_sub_networks)])
-        assert get_is_connected(new_network)
+        assert new_network.is_connected()
 
 
 @pytest.mark.parametrize("n_sub_networks", [2, 3, 4])
@@ -61,7 +60,7 @@ def test_concatenate_mst_networks(n_sub_networks):
     assert len(new_network.edges) == sum(
         [len(n.edges) for n in networks]
     ) + n_connecting_edges * sum([i for i in range(1, n_sub_networks)])
-    assert get_is_connected(new_network)
+    assert new_network.is_connected()
 
 
 def test_append_node():
@@ -81,4 +80,4 @@ def test_append_node():
     assert len(new_network.nodes) == n_compounds
     # network edges + the network connecting edges
     assert len(new_network.edges) == len(network.edges) + n_connecting_edges
-    assert get_is_connected(new_network)
+    assert new_network.is_connected()
