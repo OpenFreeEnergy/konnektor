@@ -20,7 +20,7 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     or that there are separate networks that do not link to each other.
 
     .. note ::
-        This function is deprecated, please use the ``.is_connected`` method of the ``ligand_network`` instead.
+        This function is deprecated. Use the ``.is_connected()`` method of ``ligand_network`` instead.
         See `gufe.LigandNetwork <https://gufe.openfree.energy/en/latest/generated/gufe.ligandnetwork.html#gufe.ligandnetwork.LigandNetwork.is_connected>`_ docs for more details.
 
     Parameters
