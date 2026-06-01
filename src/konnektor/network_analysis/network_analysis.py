@@ -15,6 +15,10 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     """
     Check if the Ligand Network graph is connected.
 
+    .. note ::
+        This function is deprecated, please use the ``.is_connected`` method of the ``ligand_network`` instead.
+        See `gufe.LigandNetwork <https://gufe.openfree.energy/en/latest/generated/gufe.ligandnetwork.html#gufe.ligandnetwork.LigandNetwork.is_connected>`_ docs for more details.
+
     Parameters
     ----------
     ligand_network: LigandNetwork
