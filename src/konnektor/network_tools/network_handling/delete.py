@@ -1,7 +1,5 @@
 from gufe import Component, LigandAtomMapping, LigandNetwork
 
-from ...network_analysis import get_is_connected
-
 
 def delete_transformation(
     network: LigandNetwork,  # TODO: rename to ligand_network
@@ -42,7 +40,7 @@ def delete_transformation(
 
     new_network = LigandNetwork(edges=filtered_edges, nodes=network.nodes)
 
-    if must_stay_connected and not get_is_connected(new_network):
+    if must_stay_connected and not new_network.is_connected():
         raise RuntimeError("Resulting network is not connected anymore!")
 
     return new_network
@@ -81,7 +79,7 @@ def delete_component(
     filtered_edges = list(filter(f, network.edges))
 
     new_network = LigandNetwork(edges=filtered_edges, nodes=filtered_nodes)
-    if must_stay_connected and not get_is_connected(new_network):
+    if must_stay_connected and not new_network.is_connected():
         raise RuntimeError("Resulting network is not connected anymore!")
 
     return new_network

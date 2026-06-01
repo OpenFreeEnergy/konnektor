@@ -2,6 +2,8 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 
+import warnings
+
 import networkx as nx
 import numpy as np
 from gufe import LigandNetwork, SmallMoleculeComponent
@@ -9,13 +11,16 @@ from gufe import LigandNetwork, SmallMoleculeComponent
 from .. import network_tools as tools
 
 
-#  TODO: deprecate this?
 def get_is_connected(ligand_network: LigandNetwork) -> bool:
     """
     Check whether all nodes in the LigandNetwork are connected to each other, ignoring edge direction.
 
     A False value indicates that either some nodes have no edges
     or that there are separate networks that do not link to each other.
+
+    .. version-deprecated:: 0.4.0
+        This function is deprecated. Use the ``.is_connected()`` method of ``ligand_network`` instead.
+        See `gufe.LigandNetwork <https://gufe.openfree.energy/en/latest/generated/gufe.ligandnetwork.html#gufe.ligandnetwork.LigandNetwork.is_connected>`_ docs for more details.
 
     Parameters
     ----------
@@ -26,6 +31,9 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     bool
         True if the LigandNetwork is connected, otherwise False.
     """
+    msg = "`get_is_connected` is deprecated, please use the ligand_network's `.is_connected()` method instead"
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
+
     return ligand_network.is_connected()
 
 
@@ -235,7 +243,7 @@ def get_transformation_failure_robustness(
         nn = ligand_network
         edges_to_del = [edges[e] for e in rng.choice(len(edges), npics, replace=False)]
         nn = tools.delete_transformation(nn, edges_to_del, must_stay_connected=False)
-        connected.append(float(get_is_connected(nn)))
+        connected.append(float(nn.is_connected()))
 
     # np.mean on list of bools give expected float answer
     r = np.mean(connected)

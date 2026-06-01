@@ -1,4 +1,3 @@
-from konnektor.network_analysis import get_is_connected
 from konnektor.network_tools.network_handling.merge import (
     merge_networks,
     merge_two_networks,
@@ -13,7 +12,7 @@ def test_merge_two_mst_networks():
 
     assert len(new_network.nodes) == 20
     assert len(new_network.edges) == 19
-    assert get_is_connected(new_network)
+    assert new_network.is_connected()
 
 
 def test_merge_mst_networks():
@@ -24,7 +23,7 @@ def test_merge_mst_networks():
     assert len(networks) == 2
     assert len(new_network.nodes) == 20
     assert len(new_network.edges) == 19
-    assert get_is_connected(new_network)
+    assert new_network.is_connected()
 
     networks = build_n_random_mst_network(n_compounds=20, sub_networks=4, overlap=1, rand_seed=42)
     new_network = merge_networks(networks)
@@ -32,4 +31,4 @@ def test_merge_mst_networks():
     assert len(networks) == 4
     assert len(new_network.nodes) == 20
     assert len(new_network.edges) == 19
-    assert get_is_connected(new_network)
+    assert new_network.is_connected()
