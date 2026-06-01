@@ -12,8 +12,7 @@ from .. import network_tools as tools
 #  TODO: deprecate this?
 def get_is_connected(ligand_network: LigandNetwork) -> bool:
     """
-    Check whether all whether all nodes in the LigandNetwork
-    are (weakly, meaning independent of direction) connected to each other.
+    Check whether all nodes in the LigandNetwork are connected to each other, ignoring edge direction.
 
     A False value indicates that either some nodes have no edges
     or that there are separate networks that do not link to each other.
