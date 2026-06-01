@@ -95,7 +95,7 @@ def get_number_of_network_cycles(ligand_network: LigandNetwork, higher_bound: in
     Returns
     -------
     int
-        Number of cycles of size < `higher_bound` present in the LigandNetwork.
+        Number of cycles of size <= `higher_bound` present in the LigandNetwork.
     """
     graph = nx.DiGraph(ligand_network.graph).to_undirected()
     raw_cycles = [str(sorted(c)) for c in nx.simple_cycles(graph, length_bound=higher_bound)]
