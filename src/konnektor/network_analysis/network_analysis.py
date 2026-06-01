@@ -11,7 +11,6 @@ from gufe import LigandNetwork, SmallMoleculeComponent
 from .. import network_tools as tools
 
 
-#  TODO: deprecate this?
 def get_is_connected(ligand_network: LigandNetwork) -> bool:
     """
     Check whether all nodes in the LigandNetwork are connected to each other, ignoring edge direction.
@@ -19,7 +18,7 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     A False value indicates that either some nodes have no edges
     or that there are separate networks that do not link to each other.
 
-    .. note ::
+    .. version-deprecated:: 0.4.0
         This function is deprecated. Use the ``.is_connected()`` method of ``ligand_network`` instead.
         See `gufe.LigandNetwork <https://gufe.openfree.energy/en/latest/generated/gufe.ligandnetwork.html#gufe.ligandnetwork.LigandNetwork.is_connected>`_ docs for more details.
 
@@ -33,7 +32,7 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
         True if the LigandNetwork is connected, otherwise False.
     """
     msg = "`get_is_connected` is deprecated, please use the ligand_network's `.is_connected()` method instead"
-    warnings.warn(msg, DeprecationWarning)
+    warnings.warn(msg, DeprecationWarning, stacklevel=2)
 
     return ligand_network.is_connected()
 
