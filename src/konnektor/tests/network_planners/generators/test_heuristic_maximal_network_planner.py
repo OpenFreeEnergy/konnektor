@@ -3,7 +3,6 @@
 
 import pytest
 
-from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners import HeuristicMaximalNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     BadMapper,
@@ -33,7 +32,7 @@ def test_generate_maximal_network(with_progress, n_process):
     edge_count = n_compounds * 10
     assert len(network.edges) <= edge_count
     assert len(network.edges) > n_compounds
-    assert get_is_connected(network)
+    assert network.is_connected()
 
 
 @pytest.mark.parametrize("n_process", [1, 2])
@@ -57,7 +56,7 @@ def test_generate_heuristic_maximal_network_no_scorer(n_process):
     edge_count = n_compounds * 3
     assert len(network.edges) <= edge_count
     assert len(network.edges) > n_compounds
-    assert get_is_connected(network)
+    assert network.is_connected()
 
     # it should use the mapping ({0:2}) of the first mapper (BadMultiMapper)
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 2}]

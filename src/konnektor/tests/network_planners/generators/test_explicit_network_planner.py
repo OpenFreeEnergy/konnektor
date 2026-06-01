@@ -6,7 +6,6 @@ import itertools
 import pytest
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners.generators.explicit_network_generator import (
     ExplicitNetworkGenerator,
 )
@@ -29,7 +28,7 @@ def test_explicit_network_planner():
     result_edges = [(e.componentA, e.componentB) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_indices():
@@ -49,7 +48,7 @@ def test_explicit_network_planner_from_indices():
     result_edges = [(int(e.componentA.name), int(e.componentB.name)) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_indices_bad_index():
@@ -78,7 +77,7 @@ def test_explicit_network_planner_from_indices_disconnected():
     result_edges = [(int(e.componentA.name), int(e.componentB.name)) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert not get_is_connected(ligand_network)
+    assert not ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_names():
@@ -96,7 +95,7 @@ def test_explicit_network_planner_from_names():
     result_edges = [(e.componentA.name, e.componentB.name) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_names_bad_name():
@@ -134,7 +133,7 @@ def test_explicit_network_planner_from_names_disconnected():
     result_edges = [(e.componentA.name, e.componentB.name) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert not get_is_connected(ligand_network)
+    assert not ligand_network.is_connected()
 
 
 def test_explicit_network_planner_invalid_mapper():
