@@ -2,6 +2,8 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 
+import warnings
+
 import networkx as nx
 import numpy as np
 from gufe import LigandNetwork, SmallMoleculeComponent
@@ -22,6 +24,9 @@ def get_is_connected(ligand_network: LigandNetwork) -> bool:
     bool
         if the Ligand Network graph is connected
     """
+    msg = "`get_is_connected` is deprecated, please use the ligand_network's `.is_connected()` method instead"
+    warnings.warn(msg, DeprecationWarning)
+
     return ligand_network.is_connected()
 
 
