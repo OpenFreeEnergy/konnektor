@@ -4,9 +4,9 @@ Network Planning
 
 Building a drug candidate ranking is essentially a graph or network construction problem.
 A connected network, with candidate ligands as nodes, can describe the relationships among all candidates.
-Each edge in the ligand network represents the relationship between the ligands (nodes), and corresponds one Relative Binding Free Energy (RBFE) calculation.
+Each edge in the ligand network represents the relationship between the ligands (nodes), and corresponds to one Relative Binding Free Energy (RBFE) calculation.
 
-In practice, computational chemists construct networks of many RBFE calculations determine the relationships of  drug candidates to one another.
+In practice, computational chemists construct networks of many RBFE calculations to determine the relationships of drug candidates to one another.
 
 .. image:: ../_static/img/networks.png
 

@@ -1,7 +1,7 @@
 Installation
 ============
 
-**konnektor** comes installed with `**openfe** <https://docs.openfree.energy/>`_ as of ``openfe v1.5.0``!
+**konnektor** comes installed with `openfe <https://docs.openfree.energy/>`_ as of ``openfe v1.5.0``!
 
 If you want to use **konnektor** as a standalone package, see below.
 
@@ -10,7 +10,7 @@ Installation from conda-forge
 
 **konnektor** can be installed from conda-forge using your choice of micromamba (recommended), mamba, or conda: ::
 
-    $ micromamba create -c -conda-forge -n konnektor konnektor
+    $ micromamba create -c conda-forge -n konnektor konnektor
     $ micromamba activate konnektor
 
 
