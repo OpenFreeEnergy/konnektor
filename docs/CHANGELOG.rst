@@ -7,6 +7,9 @@ Changelog
 v0.4.0
 ====================
 
+This release includes significant improvements to documentation, as well as a few
+bug fixes and behavior improvements.
+
 **Changed:**
 
 * NetworkPlanners' ``mappers`` attribute is now always represented as a tuple (or ``None``) upon initialization (`PR #232 <https://github.com/OpenFreeEnergy/konnektor/pull/232/>`_).
