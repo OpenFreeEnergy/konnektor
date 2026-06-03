@@ -10,21 +10,22 @@ v0.4.0
 **Changed:**
 
 * NetworkPlanners' ``mappers`` attribute is now always represented as a tuple (or ``None``) upon initialization (`PR #232 <https://github.com/OpenFreeEnergy/konnektor/pull/232/>`_).
+* Reorganization and general updates to documentation (`PRs #231 <https://github.com/OpenFreeEnergy/konnektor/pull/231>`_, `#228 <https://github.com/OpenFreeEnergy/konnektor/pull/228>`_, `#229 <https://github.com/OpenFreeEnergy/konnektor/pull/229>`_, `#230 <https://github.com/OpenFreeEnergy/konnektor/pull/230>`_, `#246 <https://github.com/OpenFreeEnergy/konnektor/pull/246>`_).
 
 **Deprecated:**
 
 * Deprecated ``konnektor.network_analysis.get_is_connected()``.
-  Use the ligand_network's `.is_connected() <https://gufe.openfree.energy/en/latest/generated/gufe.ligandnetwork.html#gufe.ligandnetwork.LigandNetwork.is_connected>`_ method instead, which is functionally equivalent (`PR #250 <https://github.com/OpenFreeEnergy/konnektor/pull/250/>`_).
+  Use the ligand_network's ``.is_connected()`` `method <https://gufe.openfree.energy/en/latest/generated/gufe.ligandnetwork.html#gufe.ligandnetwork.LigandNetwork.is_connected>`_ instead, which is functionally equivalent (`PR #250 <https://github.com/OpenFreeEnergy/konnektor/pull/250/>`_).
 
 **Removed:**
 
 * ``konnektor.Component``, ``konnektor.ProteinComponent``, and ``konnektor.SmallMoleculeComponent`` have been removed.
-  Please use ``gufe.Component``, ``gufe.ProteinComponent``, and ``gufe.SmallMoleculeComponent``, which are identical, respectively, instead.
+  Please use ``gufe.Component``, ``gufe.ProteinComponent``, and ``gufe.SmallMoleculeComponent``, which are identical, respectively, instead (`PR #225 <https://github.com/OpenFreeEnergy/konnektor/pull/225/>`_).
 
 **Fixed:**
 
 * Fixed bug in NetworkPlanners where passing a generator to the ``mappers`` argument would consume the generator upon initialization (`PR #232 <https://github.com/OpenFreeEnergy/konnektor/pull/232/>`_).
-* Fixed API documentation for ``konnektor.network_analysis`` methods to accurately reflect behavior (`PR #242 <https://github.com/OpenFreeEnergy/konnektor/pull/242>`_).
+* Fixed API docstrings to accurately reflect behavior (`PRs #232 <https://github.com/OpenFreeEnergy/konnektor/pull/242>`_, `#236 <https://github.com/OpenFreeEnergy/konnektor/pull/242>`_, `#241 <https://github.com/OpenFreeEnergy/konnektor/pull/241>`_, `#242 <https://github.com/OpenFreeEnergy/konnektor/pull/242>`_, `#248 <https://github.com/OpenFreeEnergy/konnektor/pull/248>`_).
 
 
 
