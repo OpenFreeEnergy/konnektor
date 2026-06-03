@@ -2,24 +2,31 @@ from gufe import Component, LigandAtomMapping, LigandNetwork
 
 
 def delete_transformation(
-    network: LigandNetwork,
-    transformation: LigandAtomMapping | tuple[Component, Component] | list[LigandAtomMapping],
+    network: LigandNetwork,  # TODO: rename to ligand_network
+    transformation: LigandAtomMapping
+    | tuple[Component, Component]
+    | list[LigandAtomMapping],  # TODO: rename to edges
     must_stay_connected: bool = True,
 ) -> LigandNetwork:
-    """
-    Remove the desired edge from the network
+    """Remove `transformation` from `network`
 
     Parameters
     ----------
-    network: LigandNetwork
-    transformation: :Union[LigandAtomMapping, tuple[Component, Component], list[LigandAtomMapping]]
-    must_stay_connected: bool
-        ensure, that the resulting Network is still connected.
+    network : LigandNetwork
+    transformation : LigandAtomMapping | tuple[Component, Component] | list[LigandAtomMapping]
+    must_stay_connected : bool, optional
+        Require that the resulting network remain connected, by default True,
 
     Returns
     -------
     LigandNetwork
-        returns a copy of the ligand network without the removed edge.
+        Copy of `network` without `transformation`.
+
+    Raises
+    ------
+    RuntimeError
+        If the resulting LigandNetwork is not connected.
+
     """
     if isinstance(transformation, LigandAtomMapping):
         transformations = [(transformation.componentA, transformation.componentB)]
@@ -40,27 +47,28 @@ def delete_transformation(
 
 
 def delete_component(
-    network: LigandNetwork,
+    network: LigandNetwork,  # TODO: rename to ligand_network
     component: Component | list[Component],
     must_stay_connected: bool = True,
 ) -> LigandNetwork:
-    """
-    Remove the desired component, which is a node of the graph, and its
-    edges from the network.
+    """Remove the `component` and it corresponding edges from the network.
 
     Parameters
     ----------
-    network: LigandNetwork
-    component:Union[Component, list[Component]]
-        component to be removed from the network, which is a node of the graph.
-    must_stay_connected: bool
-        ensure, that the resulting Network is still connected.
+    network : LigandNetwork
+    component: Component | list[Component]
+    must_stay_connected : bool, optional
+        Require that the resulting LigandNetwork is still connected, by default True.
 
     Returns
     -------
     LigandNetwork
-        returns a copy of the ligand network without the removed component
-        and edges containing the component.
+        Copy of `network` without `component` or the corresponding edges.
+
+    Raises
+    ------
+    RuntimeError
+        If the resulting LigandNetwork is not connected.
     """
     if isinstance(component, Component):
         components = [component]
