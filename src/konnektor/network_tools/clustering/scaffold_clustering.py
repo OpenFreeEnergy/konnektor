@@ -171,7 +171,7 @@ class ScaffoldClusterer(_AbstractClusterer):
 
     @staticmethod
     def formulate_answer(
-        solution: tuple[tuple[str, int]],
+        solution: tuple[tuple[str, int], ...] | None,
         mols_to_norm: dict[Component, Chem.Mol],
     ) -> dict[str, list[Component]]:
         """Relate the solution scaffolds back to the input Components.

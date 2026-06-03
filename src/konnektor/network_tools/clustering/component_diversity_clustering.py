@@ -23,7 +23,7 @@ class ComponentsDiversityClusterer(_AbstractClusterer):
         cluster: ClusterMixin = KMeans(n_clusters=5, n_init="auto"),
         n_processes: int = 1,
     ):
-        """This class can be use to separate components by different features, like charge or morgan fingerprints.
+        """This class can be used to separate components by different features, like charge or morgan fingerprints.
 
         Parameters
         ----------
