@@ -7,8 +7,7 @@ Changelog
 v0.4.0
 ====================
 
-This release includes significant improvements to documentation, as well as a few
-bug fixes and behavior improvements.
+This release includes significant improvements to documentation, as well as a few bug fixes and behavior improvements.
 
 **Changed:**
 
