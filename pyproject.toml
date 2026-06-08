@@ -49,6 +49,9 @@ optional-dependencies.test = [
 ]
 urls.Homepage = "https://github.com/OpenFreeEnergy/konnektor"
 
+[dependency-groups]
+docs = [ "ofe-sphinx-theme @ git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@v0.2.1" ]
+
 [tool.setuptools]
 package-data.konnektor = [ "**/*.sdf" ]
 
@@ -61,8 +64,24 @@ workspace.channels = [ "conda-forge" ]
 workspace.platforms = [ "linux-64", "osx-arm64" ]
 pypi-dependencies.konnektor = { path = ".", editable = true }
 tasks = {}
+feature.docs.channels = [ "conda-forge" ]
+feature.docs.dependencies.gufe = ">=1.6.1"
+feature.docs.dependencies.ipycytoscape = "*"
+feature.docs.dependencies.myst-parser = "*"
+feature.docs.dependencies.nbsphinx = "*"
+feature.docs.dependencies.networkx = "*"
+feature.docs.dependencies.numpy = "*"
+feature.docs.dependencies.pip = "*"
+feature.docs.dependencies.pydata-sphinx-theme = "*"
+feature.docs.dependencies.python = "*"
+feature.docs.dependencies.rdkit = "==2024.3.5"
+feature.docs.dependencies.sphinx = ">=8.0"
+feature.docs.dependencies.tqdm = "*"
+feature.docs.dependencies.typing-extensions = "*"
+feature.docs.dependencies.zstandard = "*"
 environments.default = { solve-group = "default" }
 environments.dev = { features = [ "dev" ], solve-group = "default" }
+environments.docs = { features = [ "docs" ], no-default-feature = true }
 environments.test = { features = [ "test" ], solve-group = "default" }
 
 [tool.ruff]
