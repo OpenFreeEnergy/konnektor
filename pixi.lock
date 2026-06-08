@@ -512,7 +512,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstandard-0.25.0-py312h5253ce2_1.conda
       - conda: https://conda.anaconda.org/conda-forge/linux-64/zstd-1.5.7-hb78ec9c_6.conda
       - pypi: https://files.pythonhosted.org/packages/fd/5a/eb5b62641df0459a3291fc206cf5bd669c0feed7814dded8edef4ade8512/libsass-0.23.0-cp38-abi3-manylinux_2_5_x86_64.manylinux1_x86_64.whl
-      - pypi: git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme?rev=hotfix%2Fremove_pyproject_pin#c50232f426f250471f27d3df4a0dc756ad5ec929
+      - pypi: git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme?rev=v0.2.1#c50232f426f250471f27d3df4a0dc756ad5ec929
       osx-arm64:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/_openmp_mutex-4.5-7_kmp_llvm.conda
       - conda: https://conda.anaconda.org/conda-forge/noarch/_python_abi3_support-1.0-hd8ed1ab_2.conda
@@ -729,7 +729,7 @@ environments:
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstandard-0.25.0-py312h37e1c23_1.conda
       - conda: https://conda.anaconda.org/conda-forge/osx-arm64/zstd-1.5.7-hbf9d68e_6.conda
       - pypi: https://files.pythonhosted.org/packages/79/b4/ab091585eaa77299558e3289ca206846aefc123fb320b5656ab2542c20ad/libsass-0.23.0.tar.gz
-      - pypi: git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme?rev=hotfix%2Fremove_pyproject_pin#c50232f426f250471f27d3df4a0dc756ad5ec929
+      - pypi: git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme?rev=v0.2.1#c50232f426f250471f27d3df4a0dc756ad5ec929
   test:
     channels:
     - url: https://conda.anaconda.org/conda-forge/
@@ -2230,8 +2230,8 @@ packages:
   timestamp: 1773067215781
 - pypi: ./
   name: konnektor
-  version: 0.4.1.dev2+g28a600050.d20260608
-  sha256: e7a3fbce4e5f1c9731c8a9bd05eca815156be83e2e741df3dfd64a6857a160e0
+  version: 0.4.1.dev6+gfcb627d8a.d20260608
+  sha256: 07b15020db4982851d7c4f18c12ee031842d0c5bbb23c7f526d99a715ae7e9b1
   requires_dist:
   - gufe
   - ipycytoscape
@@ -3801,7 +3801,7 @@ packages:
   purls: []
   size: 18631
   timestamp: 1605242282408
-- pypi: git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme?rev=hotfix%2Fremove_pyproject_pin#c50232f426f250471f27d3df4a0dc756ad5ec929
+- pypi: git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme?rev=v0.2.1#c50232f426f250471f27d3df4a0dc756ad5ec929
   name: ofe-sphinx-theme
   version: 0.2.0+1.gc50232f
   requires_dist:
