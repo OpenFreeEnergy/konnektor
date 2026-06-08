@@ -56,6 +56,15 @@ package-data.konnektor = [ "**/*.sdf" ]
 version_file = "src/konnektor/_version.py"
 fallback_version = "0.0.0"
 
+[tool.pixi]
+workspace.channels = [ "conda-forge" ]
+workspace.platforms = [ "linux-64", "osx-arm64" ]
+pypi-dependencies.konnektor = { path = ".", editable = true }
+tasks = {}
+environments.default = { solve-group = "default" }
+environments.dev = { features = [ "dev" ], solve-group = "default" }
+environments.test = { features = [ "test" ], solve-group = "default" }
+
 [tool.ruff]
 line-length = 100
 exclude = [

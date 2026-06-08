@@ -137,3 +137,6 @@ _version.py
 
 # rever
 rever/
+# pixi environments
+.pixi/*
+!.pixi/config.toml
