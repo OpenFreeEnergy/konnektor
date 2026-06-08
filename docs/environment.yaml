@@ -18,3 +18,4 @@ dependencies:
   - zstandard
   - pip:
     - git+https://github.com/OpenFreeEnergy/ofe-sphinx-theme@v0.2.0
+
