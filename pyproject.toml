@@ -74,7 +74,7 @@ feature.docs.dependencies.numpy = "*"
 feature.docs.dependencies.pip = "*"
 feature.docs.dependencies.pydata-sphinx-theme = "*"
 feature.docs.dependencies.python = "*"
-feature.docs.dependencies.rdkit = "==2024.3.5"
+feature.docs.dependencies.rdkit = "==2024.3.5"  # TODO: unpin this
 feature.docs.dependencies.sphinx = ">=8.0"
 feature.docs.dependencies.tqdm = "*"
 feature.docs.dependencies.typing-extensions = "*"
