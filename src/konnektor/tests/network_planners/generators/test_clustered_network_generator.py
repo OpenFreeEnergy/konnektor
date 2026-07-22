@@ -5,7 +5,7 @@ import numpy as np
 from gufe import LigandNetwork
 from sklearn.cluster import KMeans
 
-from konnektor.network_analysis import get_is_connected, get_network_score
+from konnektor.network_analysis import get_network_score
 from konnektor.network_planners.generators.clustered_network_generator import (
     ClusteredNetworkGenerator,
 )
@@ -41,6 +41,6 @@ def test_clustered_network_planner():
     assert len(planner.clusters) == 3
     expected_number_of_edges = 3 * ((n_compounds // 3) - 1) + (3 * concatenator.n_connecting_edges)
     assert len(ligand_network.edges) == expected_number_of_edges
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
     np.testing.assert_allclose(get_network_score(ligand_network), 25.708691, rtol=0.05)

@@ -6,7 +6,6 @@ import itertools
 import pytest
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners.generators.explicit_network_generator import (
     ExplicitNetworkGenerator,
 )
@@ -29,7 +28,7 @@ def test_explicit_network_planner():
     result_edges = [(e.componentA, e.componentB) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_indices():
@@ -49,7 +48,7 @@ def test_explicit_network_planner_from_indices():
     result_edges = [(int(e.componentA.name), int(e.componentB.name)) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_indices_bad_index():
@@ -78,7 +77,7 @@ def test_explicit_network_planner_from_indices_disconnected():
     result_edges = [(int(e.componentA.name), int(e.componentB.name)) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert not get_is_connected(ligand_network)
+    assert not ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_names():
@@ -96,7 +95,7 @@ def test_explicit_network_planner_from_names():
     result_edges = [(e.componentA.name, e.componentB.name) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
 
 def test_explicit_network_planner_from_names_bad_name():
@@ -134,4 +133,36 @@ def test_explicit_network_planner_from_names_disconnected():
     result_edges = [(e.componentA.name, e.componentB.name) for e in ligand_network.edges]
     assert frozenset(result_edges) == frozenset(edges)
 
-    assert not get_is_connected(ligand_network)
+    assert not ligand_network.is_connected()
+
+
+def test_explicit_network_planner_invalid_mapper():
+    n_compounds = 20
+    _, _, random_scorer = build_random_dataset(n_compounds=n_compounds)
+
+    with pytest.raises(TypeError, match="AtomMapper"):
+        _ = ExplicitNetworkGenerator("not a mapper", random_scorer, n_processes=1)
+
+
+def test_explicit_network_planner_set_generator_mapper():
+    """generator should not be consumed by validation"""
+
+    def mapper_generator(mapper, n):
+        for i in range(n):
+            yield mapper
+
+    n_compounds = 10
+    _, empty_mapper, random_scorer = build_random_dataset(n_compounds=n_compounds)
+    mappers = mapper_generator(empty_mapper, 2)
+
+    planner = ExplicitNetworkGenerator(mappers, random_scorer, n_processes=1)
+
+    assert tuple(planner.mappers) == (empty_mapper, empty_mapper)
+
+
+def test_explicit_network_planner_set_invalid_mapper():
+    n_compounds = 20
+    _, empty_mapper, random_scorer = build_random_dataset(n_compounds=n_compounds)
+    planner = ExplicitNetworkGenerator(empty_mapper, random_scorer, n_processes=1)
+    with pytest.raises(TypeError, match="AtomMapper"):
+        planner.mappers = 7

@@ -5,7 +5,6 @@ import numpy as np
 
 from konnektor.network_analysis import (
     get_component_number_cycles,
-    get_is_connected,
     get_network_score,
 )
 from konnektor.network_planners import CyclicNetworkGenerator
@@ -31,7 +30,7 @@ def test_cyclic_network_planner():
     edge_count = n_compounds * 3
     assert len(network.edges) <= edge_count
     assert len(network.edges) > n_compounds
-    assert get_is_connected(network)
+    assert network.is_connected()
     nnode_cycles = get_component_number_cycles(network)
     assert all(v >= ncycles for k, v in nnode_cycles.items())
 

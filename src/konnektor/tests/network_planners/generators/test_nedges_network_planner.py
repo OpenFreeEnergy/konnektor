@@ -4,7 +4,7 @@
 import numpy as np
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_is_connected, get_network_score
+from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import NNodeEdgesNetworkGenerator
 from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
@@ -27,6 +27,6 @@ def test_nedges_network_mappers(atom_mapping_basic_test_files):
     assert isinstance(network, LigandNetwork)
     assert len(network.nodes) == len(ligands)
     assert len(network.edges) <= len(ligands) * 2
-    assert get_is_connected(network)
+    assert network.is_connected()
 
     np.testing.assert_allclose(get_network_score(network), 0.933333, rtol=0.01)

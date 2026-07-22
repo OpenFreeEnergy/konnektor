@@ -4,7 +4,7 @@
 import numpy as np
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_is_connected, get_network_score
+from konnektor.network_analysis import get_network_score
 from konnektor.network_planners import TwinStarNetworkGenerator
 from konnektor.utils.toy_data import build_random_dataset
 
@@ -24,5 +24,5 @@ def test_twin_star_network_planner():
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == n_compounds
     np.testing.assert_allclose(actual=len(ligand_network.edges), desired=approx_edges, rtol=5)
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
     np.testing.assert_allclose(get_network_score(ligand_network), 45.4256, rtol=0.01)

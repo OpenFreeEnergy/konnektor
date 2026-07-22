@@ -3,9 +3,9 @@
 
 import abc
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
@@ -21,45 +21,35 @@ class NetworkConcatenator(NetworkPlanner):
 
     def __init__(
         self,
-        mappers: AtomMapper | Iterable[AtomMapper],
-        scorer,
-        network_generator: _AbstractNetworkAlgorithm,
+        mappers: AtomMapper | Iterable[AtomMapper] | None,
+        scorer: Callable[[AtomMapping], float] | None,
+        network_generator: _AbstractNetworkAlgorithm | None,
         n_processes: int = 1,
         _initial_edge_lister=None,
     ):
-        """Base Class for the NetworkConcatenator classes.
-         It defines the std. class for a Konnektor NetworkConcatenator.
+        """Abstract class for network concatenation, not to be called directly.
 
         Parameters
         ----------
-        mappers : AtomMapper
-            the AtomMappers to use to propose mappings.  At least 1 required,
-            but many can be given, in which case all will be tried to find the
-            lowest score edges
-        scorer : AtomMappingScorer
-            any callable which takes a AtomMapping and returns a float
+        mappers : AtomMapper | Iterable[AtomMapper] | None
+            AtomMapper(s) to use to propose mappings.
+        scorer : Callable[[AtomMapping], float] | None
+            Callable which takes a AtomMapping and returns a float in [0,1].
         n_processes: int, optional
-            number of processes that can be used for the network generation.
-            (default: 1)
-        _initial_edge_lister: LigandNetworkPlanner, optional
-            this LigandNetworkPlanner is used to give the initial set of edges.
-             For standard usage, the Maximal NetworPlanner is used.
-            However in large scale approaches, it might be interesting to use
-             the heuristicMaximalNetworkPlanner. (default: None)
-
+            Number of processes that can be used for the network generation, by default 1.
+        _initial_edge_lister: NetworkConcatenator | None, optional
+            The NetworkConcatenator to use if the NetworkConcatenator requires an initial set of edges, by default None.
         """
 
-        # generic Network_Planner attribsd
         super().__init__(mappers=mappers, scorer=scorer)
 
-        # Konnektor specific variables
         self.network_generator = network_generator
         self.n_processes = n_processes
         self._initial_edge_lister = _initial_edge_lister
 
         # pass on the parallelization to the edge lister
-        # edge lister performs usually the most expensive task!
-        # So parallelization is most important here.
+        # edge listing is usually the most expensive task,
+        # so parallelization is important here.
         if self._initial_edge_lister is not None and hasattr(
             self._initial_edge_lister, "nprocesses"
         ):
@@ -70,16 +60,16 @@ class NetworkConcatenator(NetworkPlanner):
 
     @abc.abstractmethod
     def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
-        """
+        """Concatenate the `ligand_networks` into a single LigandNetwork object.
 
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
-            an iterable of ligand networks, that shall be connected.
+            LigandNetworks to concatenate.
 
         Returns
         -------
         LigandNetwork
-            returns a concatenated LigandNetwork object, containing all networks.
-
+            The concatenated LigandNetwork.
         """
+        raise NotImplementedError()

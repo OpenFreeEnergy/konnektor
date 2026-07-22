@@ -1,6 +1,6 @@
-================================
-konnektor.data
-================================
+====
+data
+====
 
 .. automodule:: konnektor.data
    :members:

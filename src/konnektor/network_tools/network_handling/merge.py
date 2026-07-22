@@ -4,24 +4,21 @@
 from gufe import LigandNetwork
 
 
+# TODO: do we need this when we have concatenate and `merge_networks`?
 def merge_two_networks(network1: LigandNetwork, network2: LigandNetwork) -> LigandNetwork:
     """
-    Merging networks, is similar to a union of a set of nodes and edgees,
-    if they are all connected via at least one edge. This means, that  at
-    least one node needs to be present in network1 and network2. If this is
-    not the case, use the network concatenators.
+    Merge `network1` with `network2`.
+    At least one node needs to be present in both `network1` and `network2`.
 
     Parameters
     ----------
-    network1: LigandNetwork
-        Network 1 for merging
-    network2
-        Network 1 for merging
+    network1 : LigandNetwork
+    network2 : LigandNetwork
 
     Returns
     -------
     LigandNetwork
-        returns the merged network
+        Merged network
     """
     connecting_nodes = network1.nodes.intersection(network2.nodes)
 
@@ -37,22 +34,17 @@ def merge_two_networks(network1: LigandNetwork, network2: LigandNetwork) -> Liga
 
 def merge_networks(networks: list[LigandNetwork]) -> LigandNetwork:
     """
-    Merging networks, is similar to a union of a set of nodes and edgees,
-    if they are all connected via at least one edge. This means, that  at
-    least one node needs to be present in network1 and network2. If this is
-    not the case, use the network concatenators.
-
-    Todo: find a mergable path in multiple sets of networks
+    Merge `networks` into a single `LigandNetwork`.
+    `networks` must have nodes in common to be merged.
 
     Parameters
     ----------
     networks: list[LigandNetwork]
-        Networks for merging
 
     Returns
     -------
     LigandNetwork
-        returns the merged network
+        Merged network
     """
 
     # merge_path

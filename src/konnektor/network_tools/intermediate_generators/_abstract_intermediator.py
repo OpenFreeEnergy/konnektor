@@ -11,7 +11,7 @@ class Intermediator(GufeTokenizable):
         return self.generate_intermediate(*args, **kwargs)
 
     @classmethod
-    def _defaults(cls):
+    def _defaults(cls) -> dict:
         sig = inspect.signature(cls.__init__)
 
         defaults = {
@@ -34,6 +34,7 @@ class Intermediator(GufeTokenizable):
                 additional_vas[key] = value
 
         new_obj = cls(**init_args)
+        # TODO: no reason for this to be list comprehension
         [setattr(new_obj, key, value) for key, value in additional_vas.items()]
 
         return new_obj

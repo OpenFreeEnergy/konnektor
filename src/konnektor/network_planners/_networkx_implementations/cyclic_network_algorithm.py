@@ -22,6 +22,7 @@ class CyclicNetworkAlgorithm(_AbstractNetworkAlgorithm):
         if isinstance(sub_cycle_size_range, int):
             self.max_sub_cycle_size = sub_cycle_size_range
             self.sub_cycle_size_range = [sub_cycle_size_range]
+        # TODO: fix this, it will break if a generator is used
         elif isinstance(sub_cycle_size_range, Iterable) and all(
             [isinstance(i, int) for i in sub_cycle_size_range]
         ):

@@ -3,9 +3,9 @@
 
 import itertools
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
 from ._abstract_network_concatenator import NetworkConcatenator
@@ -16,28 +16,26 @@ log = logging.getLogger(__name__)
 class MaxConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: AtomMapper | list[AtomMapper],
-        scorer,
+        mappers: AtomMapper | Iterable[AtomMapper] | None,
+        scorer: Callable[[AtomMapping], float] | None,
         n_processes: int = 1,
         show_progress: bool = False,
     ):
         """
-        A NetworkConcatenator that connects two Networks with all possible
-        mappings. This is usually most useful for initial edge listing.
+        A NetworkConcatenator that connects a set of LigandNetworks with all possible edges.
+        This is usually most useful for initial edge listing.
 
         Parameters
         ----------
-        mappers: AtomMapper
-            the atom mapper is required to define the connection
-            between two ligands.
-        scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a
-            score between [0,1].
-        n_processes: int
-            number of processes that can be used for the network generation.
-            (default: 1)
-        show_progress: bool
-            show progress bar
+        mappers : AtomMapper | Iterable[AtomMapper] | None
+            AtomMapper(s) to use to propose mappings. If more than one AtomMapper is provided, all will be tried to find the
+            lowest score for each edges.
+        scorer : Callable[[AtomMapping], float] | None
+           Any callable which takes a AtomMapping and returns a float in [0,1].
+        n_processes: int, optional
+            Number of processes that can be used for the network generation, by default 1.
+        show_progress:  bool, optional
+            If True, a progress bar will be displayed, by default False.
         """
 
         super().__init__(
@@ -50,7 +48,6 @@ class MaxConcatenator(NetworkConcatenator):
 
     def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
-
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
@@ -59,9 +56,7 @@ class MaxConcatenator(NetworkConcatenator):
         Returns
         -------
         LigandNetwork
-            returns a concatenated LigandNetwork object, containing all
-             networks and all possible edges, connecting them.
-
+            The concatenated LigandNetwork with all possible nodes connected by edges.
         """
 
         log.info(
@@ -76,9 +71,9 @@ class MaxConcatenator(NetworkConcatenator):
             # Generate Full Bipartite Graph
             nodesA = ligandNetworkA.nodes
             nodesB = ligandNetworkB.nodes
-            pedges = [(na, nb) for na in nodesA for nb in nodesB]
+            p_edges = [(na, nb) for na in nodesA for nb in nodesB]
             bipartite_graph_mappings = _score_mappings(
-                possible_edges=pedges,
+                possible_edges=p_edges,
                 scorer=self.scorer,
                 mappers=self.mappers,
                 n_processes=self.n_processes,

@@ -1,6 +1,6 @@
-================================
-konnektor.network\_analysis
-================================
+=================
+network\_analysis
+=================
 
 .. automodule:: konnektor.network_analysis.network_analysis
    :members:

@@ -5,7 +5,7 @@ import numpy as np
 from gufe import LigandNetwork
 from sklearn.cluster import KMeans
 
-from konnektor.network_analysis import get_is_connected, get_network_score
+from konnektor.network_analysis import get_network_score
 from konnektor.network_planners.generators.clustered_network_generator import (
     StarrySkyNetworkGenerator,
 )
@@ -35,6 +35,6 @@ def test_starry_sky_network_planner():
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == n_compounds
     np.testing.assert_allclose(actual=len(ligand_network.edges), desired=approx_edges, rtol=5)
-    assert get_is_connected(ligand_network)
+    assert ligand_network.is_connected()
 
     np.testing.assert_allclose(get_network_score(ligand_network), 26.4454, rtol=0.01)

@@ -3,7 +3,6 @@
 
 from gufe import LigandNetwork
 
-from konnektor.network_analysis import get_is_connected
 from konnektor.network_planners.concatenators import MstConcatenator
 from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
@@ -26,4 +25,4 @@ def test_mst_network_concatenation(ligand_network_ab):
     assert isinstance(cn, LigandNetwork)
     assert len(cn.nodes) == nA + nB
     assert len(cn.edges) == eA + eB + concatenator.n_connecting_edges
-    assert get_is_connected(cn)
+    assert cn.is_connected()

@@ -52,7 +52,7 @@ class ImergeIntermediator(Intermediator):
         Returns
         -------
         Iterator[SmallMoleculeComponent]
-            returns the small molecule intermediate between molA and molB.
+            Intermediate SmallMoleculeComponent between molA and molB.
 
         """
 

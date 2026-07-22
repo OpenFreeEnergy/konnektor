@@ -14,35 +14,33 @@ from ._abstract_network_concatenator import NetworkConcatenator
 log = logging.getLogger(__name__)
 
 
-# Todo: check this algorithm again
+# TODO: check this algorithm again
 
 
 class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
-        mappers: AtomMapper | list[AtomMapper],
+        mappers: AtomMapper | Iterable[AtomMapper] | None,
         scorer,
         n_connecting_edges: int = 2,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator = None,
+        _initial_edge_lister: NetworkConcatenator | None = None,  # TODO: remove this
     ):
         """
         A NetworkConcatenator that connects two Networks with a Kruskal-like
-        approach, up to the number of connecting edges.
+        approach, up to `n_connecting_edges`.
 
         Parameters
         ----------
         mapper: AtomMapper
-            the atom mapper is required, to define the connection between
-            two ligands.
-        scorer: AtomMappingScorer
-            scoring function evaluating an atom mapping, and giving a score
-            between [0,1].
+            AtomMapper(s) to use to propose mappings.
+            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
+        scorer: Callable[[AtomMapping], float] | None
+            Callable which takes a AtomMapping and returns a float in [0,1].
         n_connecting_edges: int, optional
-            maximum number of connecting edges. (default: 2)
-        n_processes: int
-            number of processes that can be used for the network generation.
-            (default: 1)
+            Maximum number of edges to create when connecting the networks, by default 2.
+        n_processes: int, optional
+            Number of processes that can be used for the network generation, by default 1.
         """
         super().__init__(
             mappers=mappers,
@@ -60,13 +58,12 @@ class MstConcatenator(NetworkConcatenator):
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
-            an iterable of ligand networks, that shall be connected.
+            LigandNetworks to concatenate.
 
         Returns
         -------
         LigandNetwork
-            returns a concatenated LigandNetwork object, containing all networks.
-
+            The concatenated LigandNetwork.
         """
 
         log.info(
@@ -82,10 +79,10 @@ class MstConcatenator(NetworkConcatenator):
             ligands = list(ligandNetworkA.nodes | ligandNetworkB.nodes)
             nodesA = ligandNetworkA.nodes
             nodesB = ligandNetworkB.nodes
-            pedges = [(na, nb) for na in nodesA for nb in nodesB]
+            p_edges = [(na, nb) for na in nodesA for nb in nodesB]
 
             bipartite_graph_mappings = _score_mappings(
-                possible_edges=pedges,
+                possible_edges=p_edges,
                 scorer=self.scorer,
                 mappers=self.mappers,
                 n_processes=self.n_processes,

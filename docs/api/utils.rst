@@ -1,6 +1,6 @@
-================================
-konnektor.utils
-================================
+=====
+utils
+=====
 
 .. automodule:: konnektor.utils.toy_data
    :members:
