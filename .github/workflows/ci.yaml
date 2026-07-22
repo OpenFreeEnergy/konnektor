@@ -31,7 +31,8 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu',]
-        python-version:
+        python-version:  # min + all SPEC0
+          - "3.10"
           - "3.11"
           - "3.12"
           - "3.13"
