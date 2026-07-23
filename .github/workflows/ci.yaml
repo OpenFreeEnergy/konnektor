@@ -31,10 +31,11 @@ jobs:
       fail-fast: false
       matrix:
         os: ['ubuntu',]
-        python-version:
+        python-version:  # min + all SPEC0
           - "3.11"
           - "3.12"
           - "3.13"
+          - "3.14"
         include:
           - os: 'macos'
             python-version: "3.12"
