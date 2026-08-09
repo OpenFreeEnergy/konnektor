@@ -10,7 +10,7 @@ from gufe import AtomMapper, AtomMapping, LigandNetwork
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
-from ..NetworkPlanner import NetworkPlanner
+from ..network_planner import NetworkPlanner
 
 log = logging.getLogger(__name__)
 
