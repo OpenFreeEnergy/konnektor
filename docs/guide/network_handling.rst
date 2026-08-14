@@ -4,8 +4,7 @@ Network handling
 Network handling covers the operations that work on a :class:`LigandNetwork`: combining several into one, or
 removing edges or ligands.
 Each operation returns a new network, and mostly do not create
-new transformations; they only rearrange the nodes and edges already present. With one exception,
- :func:`append_component`,  adds a ligand by asking a Concatenator to build the
+new transformations; they only rearrange the nodes and edges already present. With one exception, ``append_component``,  adds a ligand using a Concatenator to build the
 connecting edge.
 
 Combining networks (merge)
