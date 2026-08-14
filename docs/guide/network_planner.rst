@@ -2,37 +2,14 @@
 Network Planning
 ================
 
-Building a drug candidate ranking is essentially a graph or network construction problem.
-A connected network, with candidate ligands as nodes, can describe the relationships among all candidates.
-Each edge in the ligand network represents the relationship between the ligands (nodes), and corresponds to one Relative Binding Free Energy (RBFE) calculation.
-
-In practice, computational chemists construct networks of many RBFE calculations to determine the relationships of drug candidates to one another.
-
-.. image:: ../_static/img/networks.png
-
-It's important to note that free energy is a thermodynamic state function, making it path-independent.
-This means that a network only needs to be connected to provide insights into all relationships, provided all RBFE calculations are of high quality.
-For example, if molecule A has a direct relation x with molecule C, and they are connected through molecule B, using relations y and z, then the sum of y + z will still yield x.
-
-So, what can we do with this?
-As mentioned, the free energy network should be calculated efficiently.
-Keep in mind that computational chemists utilize high-performance computing resources to perform RBFE calculations, which can take several hours.
-Therefore, RBFE calculations are costly, and it is typically avoided to conduct too many.
-
-This consideration directly impacts the design of the free energy network.
-To orchestrate the calculations, a plan for which connections to compute is generated before the simulations.
-This is where **konnektor** comes into play.
-
-**konnektor** is a package that assists in generating the free energy network calculation plan.
-It implements multiple network layouts, each with its own advantages and disadvantages.
-
-How is such a network plan generated?
-In our RBFE calculation example, each edge can be represented as an `AtomMapping`, indicating a common substructure between the two molecules to be compared.
-This `AtomMapping` can then be scored using a `scorer`, which indicates the expected difficulty of the transformation in terms of convergence or accuracy.
-
-A `NetworkPlanner` can now use these scores along with graph construction algorithms to identify the best calculation paths.
-
-Checkout the network tools to see what you can additionally do with networks.
+Network planning turns a set of ligands into a concrete plan of which transformations to compute.
+**konnektor** does this through two kinds of planner:
+**Generators**, which build a network from a set of components, and **Concatenators**,
+which join networks that already exist.
+In both, each candidate edge is represented by an ``AtomMapping``, the common substructure between the two ligands.
+A ``scorer`` weights the ``AtomMapping`` by the expected difficulty of that transformation.
+The planner then combines those scores with a graph-construction algorithm to choose which edges make up the network.
+The planners differ only in which edges they keep.
 
 Network Generators
 __________________
@@ -40,20 +17,79 @@ __________________
 Network Generators are planners that construct networks from a set of components.
 They are usually the starting point for any network planning efforts and come in a wide variety of layouts.
 
-The minimal number of edges for ranking can be achieved with the Star Network and the Minimal Spanning Tree (MST) Network (N-1).
-More redundant layouts include the Twin Star Network, Redundant MST Network, N-Edge Node Network, and Cyclic Graph Network.
+.. image:: ../_static/img/generator.png
 
-The Maximal Network method generates all possible edges and is typically used as an initial solution, which then gets reduced to a more efficient layout.
-Additionally, there is the Heuristic Maximal Network, which aims to produce an edge-reduced version of the Maximal Network.
+konnektor provides Generators across the spectrum from minimal to fully connected:
+
+- **Minimal layouts**: the Star and Minimal Spanning Tree (MST) networks use the fewest edges that still connect the set (N−1),
+  so they are cheapest but most sensitive to failures.
+- **Redundant layouts**: the Twin Star, Redundant MST, N-Node-Edges and Cyclic networks add extra edges to survive some
+  transformation failures, trading cost for robustness.
+- **Maximal layouts**: the Maximal Network computes every possible edge, typically as a starting point that is then reduced;
+  the Heuristic Maximal Network approximates it with fewer edges.
 
 .. image:: ../_static/img/network_layouts.png
+
+For example, to build a minimal spanning tree network from a set of components:
+
+.. code-block:: python
+
+    from konnektor.utils import toy_data
+    from konnektor.network_planners import MinimalSpanningTreeNetworkGenerator
+
+    components, mapper, scorer = toy_data.build_random_dataset(n_compounds=8)
+
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=scorer)
+    network = planner.generate_ligand_network(components)
 
 
 Network Concatenators
 ______________________
 
-NetworkConcatenators address the challenge of connecting two networks that do not share any edges.
-This essentially involves solving a bipartite graph matching problem.
-These planners generate edges between two unconnected, non-overlapping networks to create a connected network.
+Where a Generator builds a network from components, a **Concatenator** joins networks
+that already exist.
+It applies when two or more networks share no ligands, so there is no common node to
+merge on. When the networks *do* share nodes, you can use the merge method, see
+:doc:`network_tools`.
+The Concatenator instead invents new edges between the networks to knit them into a single connected network.
 
-Currently, there are two Network Concatenators in **konnektor**: the Maximal Concatenator, which yields all possible edges, and the Minimal Spanning Tree Concatenator, which utilizes the best-performing edge scores.
+The motivating case is a network that has broken apart.
+When some transformations in a network fail, the surviving (successful) edges can leave the
+ligands split into disconnected pieces that can no longer be ranked against one another.
+A Concatenator reconnects those pieces so the whole set is comparable again.
+
+.. image:: ../_static/img/concatenator.png
+
+For example, to join two networks:
+
+.. code-block:: python
+
+    from konnektor.utils import toy_data
+    from konnektor.network_planners import MstConcatenator, MinimalSpanningTreeNetworkGenerator
+
+    components, mapper, scorer = toy_data.build_random_dataset(n_compounds=8)
+    planner = MinimalSpanningTreeNetworkGenerator(mappers=mapper, scorer=scorer)
+
+    # for illustration: two networks, sharing no ligands
+    net_a = planner.generate_ligand_network(components[:4])
+    net_b = planner.generate_ligand_network(components[4:])
+
+    concatenator = MstConcatenator(mappers=mapper, scorer=scorer, n_connecting_edges=2)
+    network = concatenator.concatenate_networks([net_a, net_b])   # networks -> one network
+
+Joining two pieces is a bipartite problem: the candidate edges run between the node set
+of one piece and the node set of the other.
+As with a Generator, each candidate is an ``AtomMapping`` weighted by the ``scorer``, and
+the Concatenator chooses which connecting edges to keep.
+Because a single connecting edge is a single point of failure, a Concatenator can add
+more than one, the same redundancy-for-robustness trade-off described in the introduction.
+
+konnektor currently provides two Concatenators:
+
+- the **Maximal Concatenator**, which keeps *every* possible connecting edge, an
+  exhaustive set, typically used as a starting point that is then reduced; and
+- the **Minimal Spanning Tree (MST) Concatenator**, which keeps only the best-scoring
+  connecting edges needed to join the pieces, with a tunable number of connections
+  (two by default) so the join carries some redundancy.
+
+See :doc:`network_tools` for what else you can do with existing networks.
