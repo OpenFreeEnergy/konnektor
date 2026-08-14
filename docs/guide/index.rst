@@ -10,5 +10,3 @@ User Guide
 
    network_planner
    network_tools
-   node_clusterer
-   edge_intermediator

@@ -19,6 +19,7 @@ They are usually the starting point for any network planning efforts and come in
 
 .. image:: ../_static/img/generator.png
 
+
 konnektor provides Generators across the spectrum from minimal to fully connected:
 
 - **Minimal layouts**: the Star and Minimal Spanning Tree (MST) networks use the fewest edges that still connect the set (N−1),
@@ -29,6 +30,7 @@ konnektor provides Generators across the spectrum from minimal to fully connecte
   the Heuristic Maximal Network approximates it with fewer edges.
 
 .. image:: ../_static/img/network_layouts.png
+
 
 For example, to build a minimal spanning tree network from a set of components:
 
@@ -59,6 +61,7 @@ ligands split into disconnected pieces that can no longer be ranked against one 
 A Concatenator reconnects those pieces so the whole set is comparable again.
 
 .. image:: ../_static/img/concatenator.png
+
 
 For example, to join two networks:
 
