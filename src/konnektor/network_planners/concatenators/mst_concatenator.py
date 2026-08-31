@@ -10,7 +10,6 @@ from gufe import AtomMapper, LigandNetwork
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
-from ...tests.network_planners.conftest import ligand_network_ab
 
 log = logging.getLogger(__name__)
 
