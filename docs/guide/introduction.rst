@@ -1,15 +1,22 @@
 Why use **konnektor** ?
 =======================
 
-Why might you need access to different network generation approaches?
-As an example, imagine you are given a set of drug candidates that to be ranked with relative binding free energies.
-In theory, you could calculate *all* the possible network transformations to get your ligand ranking (we call this a Maximal Network).
-Though robust, a Maximal Network approach leads to explosion in time and compute cost, and so more efficient networks are needed.
+Ranking drug candidates with relative binding free energies is essentially a graph or network construction problem.
+Each candidate ligand is a node, and each edge is a relationship between two ligands computed by one Relative Binding Free Energy (RBFE) calculation.
+To rank a whole set, these edges must form a connected network.
 
-From a thermodynamic perspective, not all the transformations in a Maximal Network are actually required to retrieve a ranking.
-In fact, the opposite extreme - a minimally connected network such as a Star Network or a Minimal Spanning Tree (MST) Networks - is actually needed to compute rankings.
-However, these very efficient networks are highly sensitive to transformation failures, and so network algorithms that add a degree of redundancy are needed to improve the network's robustness.
+.. image:: ../_static/img/networks.png
 
-**konnektor** enables you to construct and analyze the multitude of possible networks that fall between these extremes to find an appropriate network generation scheme for a given set of ligands.
+Free energy is a thermodynamic state function, so these relationships are path-independent.
+If A relates to C both directly and through B, the two routes agree.
+A network therefore doesn't need every possible edge; it only needs to be connected, provided each calculation is of high quality.
 
-See the next section for how to get started generating ligand networks with **konnektor**.
+That leaves a choice of how many edges to compute.
+A Maximal Network computes them all and is robust, but its cost explodes with the number of ligands.
+At the other extreme, a minimal layout such as a Star or Minimal Spanning Tree (MST) network uses the fewest edges that
+still rank the set and is cheap, but fragile, since a single failed transformation can disconnect it.
+Between these sit layouts that add redundancy, trading some cost for robustness.
+
+**konnektor** lets you construct and analyze this whole space of networks and choose a scheme suited to a given set of ligands.
+
+See the next section to start generating ligand networks.
