@@ -2,7 +2,7 @@
 Network Tools
 =============
 Where a planner builds a network, network tools are the
-utilities *around* that step. They help you prepare, improve, and maintain free energy
+utilities *around* that step. They help you prepare, improve, and maintain ligand
 networks, acting on different objects at different points in the workflow:
 
 - :doc:`clustering`: group components by chemical similarity before planning, so you can
