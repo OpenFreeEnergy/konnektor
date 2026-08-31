@@ -7,9 +7,8 @@ Network planning turns a set of ligands into a concrete plan of which transforma
 **Generators**, which build a network from a set of components, and **Concatenators**,
 which join networks that already exist.
 In both, each candidate edge is represented by an ``AtomMapping``, the common substructure between the two ligands.
-An ``AtomMappingScorer`` (any function that takes in two ``AtomMapping``\ s and returns a float in [0,1]) weights the ``AtomMapping`` by the expected difficulty of that transformation.
+An ``AtomMappingScorer`` (any function that takes an ``AtomMapping`` and returns a float in [0,1]) assigns an edge weight proportional to the expected difficulty of that transformation.
 The planner then combines those scores with a graph-construction algorithm to choose which edges make up the network.
-The planners differ only in which edges they keep.
 
 Network Generators
 __________________
@@ -80,7 +79,7 @@ For example, to join two networks:
     concatenator = MstConcatenator(mappers=mapper, scorer=scorer, n_connecting_edges=2)
     network = concatenator.concatenate_networks([net_a, net_b])   # networks -> one network
 
-Joining two pieces is a bipartite problem: the candidate edges run between the node set
+Joining two networks is a bipartite problem: the candidate edges run between the node set
 of one piece and the node set of the other.
 As with a Generator, each candidate is an ``AtomMapping`` weighted by the ``scorer``, and
 the Concatenator chooses which connecting edges to keep.

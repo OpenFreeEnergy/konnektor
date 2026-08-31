@@ -30,9 +30,9 @@ supply a Concatenator, which builds the connecting edge that attaches it.
 Removing from networks
 ======================
 
-:func:`delete_transformation` removes one or more edges; :func:`delete_component` removes a
+:func:`delete_transformation` removes one or more edges but does _not_ remove the nodes; :func:`delete_component` removes a
 ligand along with every edge attached to it. Both return a new network, and by default
 refuse the deletion if it would disconnect the network. Pass ``must_stay_connected=False``
-when you actually want the separate pieces.
+when you want to allow the resulting network to be disconnected.
 
 .. image:: ../_static/img/delete.png
