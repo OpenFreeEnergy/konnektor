@@ -1,0 +1,53 @@
+# This code is part of OpenFE and is licensed under the MIT license.
+# For details, see https://github.com/OpenFreeEnergy/konnektor
+
+import pytest
+
+from gufe import LigandNetwork
+
+from konnektor.network_planners.concatenators import MstConcatenator
+from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_mst_network
+
+from src.konnektor.tests.network_planners.conftest import ligand_network_ab
+
+
+@pytest.mark.parametrize("n_sub_networks", [2,3,4,6])
+def test_mst_network_concatenation(n_sub_networks):
+    n_compounds = 30
+    n_connecting_edges = 1
+    networks = build_n_random_mst_network(
+        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42,
+    )
+    concatenator = MstConcatenator(
+        EmptyMapper(), RandomScorer(n=n_compounds), n_connecting_edges=n_connecting_edges,
+    )
+
+    connected_network = concatenator.concatenate_network(ligand_networks=networks)
+
+    # Check the network is connected
+    assert connected_network.is_connected()
+    # Check we didn't loose any ligands
+    assert len(connected_network.nodes) == n_compounds
+    # Check that the subnetworks were connected as an MST, meaning k-1 sub-network connections
+    n_edges_new = len(connected_network.edges) - sum(len(n.edges) for n in networks)
+    assert n_edges_new == n_connecting_edges * (n_sub_networks - 1)
+
+
+def test_n_connecting_edges():
+    n_connecting_edges = 3
+    n_compounds = 30
+    n_sub_networks = 4
+
+    networks = build_n_random_mst_network(
+        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0,
+        rand_seed=42
+    )
+    concatenator = MstConcatenator(
+        EmptyMapper(), RandomScorer(n=n_compounds),
+        n_connecting_edges=n_connecting_edges
+    )
+    connected_network = concatenator.concatenate_networks(ligand_networks=networks)
+
+    assert connected_network.is_connected()
+    n_edges_new = len(connected_network.edges) - sum(len(n.edges) for n in networks)
+    assert n_edges_new == n_connecting_edges * (n_sub_networks - 1)
