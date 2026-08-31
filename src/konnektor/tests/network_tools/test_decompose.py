@@ -26,9 +26,7 @@ def test_decompose_connected_network_returns_single():
 
 
 def test_decompose_disconnected_network():
-    networkA, networkB = build_n_random_mst_network(
-        n_compounds=20, sub_networks=2, rand_seed=42
-    )
+    networkA, networkB = build_n_random_mst_network(n_compounds=20, sub_networks=2, rand_seed=42)
     disconnected = _combine([networkA, networkB])
     assert not disconnected.is_connected()
 
