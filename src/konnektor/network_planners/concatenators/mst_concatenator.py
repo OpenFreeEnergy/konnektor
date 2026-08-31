@@ -153,6 +153,6 @@ class MstConcatenator(NetworkConcatenator):
         log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
         if not concat_network.is_connected():
-            raise RuntimeError("could not build a connected network!")
+            raise RuntimeError("Could not build a connected network.")
 
         return concat_network
