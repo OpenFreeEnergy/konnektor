@@ -1,7 +1,7 @@
 ================
 Network handling
 ================
-Network handling covers the operations that work on a :class:`.LigandNetwork`: combining several into one, or
+Network handling covers the operations that work on a :class:`LigandNetwork`: combining several into one, or
 removing edges or ligands.
 Each operation returns a new network, and mostly do not create
 new transformations; they only rearrange the nodes and edges already present. With one exception, :func:`.append_component`,  adds a ligand using a Concatenator to build the
@@ -10,7 +10,7 @@ connecting edge.
 Combining networks (merge)
 ==========================
 
-:func:`network_tools.merge_two_networks` returns the union of two networks that already overlap. They
+:func:`.merge_two_networks` returns the union of two networks that already overlap. They
 must share at least one ligand which is the join point. No new edges
 are added, so the result holds exactly the edges the two inputs already had. If the
 networks share no ligand there is nothing to join on; instead you would use a Concatenator to build
