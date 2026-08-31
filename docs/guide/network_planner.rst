@@ -80,7 +80,7 @@ For example, to join two networks:
     concatenator = MstConcatenator(mappers=mapper, scorer=scorer, n_connecting_edges=2)
     network = concatenator.concatenate_networks([net_a, net_b])   # networks -> one network
 
-Joining two pieces is a bipartite problem: the candidate edges run between the node set
+Joining two networks is a bipartite problem: the candidate edges run between the node set
 of one piece and the node set of the other.
 As with a Generator, each candidate is an ``AtomMapping`` weighted by the ``scorer``, and
 the Concatenator chooses which connecting edges to keep.
