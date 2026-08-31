@@ -3,23 +3,24 @@
 
 import pytest
 
-from gufe import LigandNetwork
-
 from konnektor.network_planners.concatenators import MstConcatenator
 from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_mst_network
 
-from src.konnektor.tests.network_planners.conftest import ligand_network_ab
 
-
-@pytest.mark.parametrize("n_sub_networks", [2,3,4,6])
+@pytest.mark.parametrize("n_sub_networks", [2, 3, 4, 6])
 def test_mst_network_concatenation(n_sub_networks):
     n_compounds = 30
     n_connecting_edges = 1
     networks = build_n_random_mst_network(
-        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42,
+        n_compounds=n_compounds,
+        sub_networks=n_sub_networks,
+        overlap=0,
+        rand_seed=42,
     )
     concatenator = MstConcatenator(
-        EmptyMapper(), RandomScorer(n=n_compounds), n_connecting_edges=n_connecting_edges,
+        EmptyMapper(),
+        RandomScorer(n=n_compounds),
+        n_connecting_edges=n_connecting_edges,
     )
 
     connected_network = concatenator.concatenate_network(ligand_networks=networks)
@@ -39,12 +40,10 @@ def test_n_connecting_edges():
     n_sub_networks = 4
 
     networks = build_n_random_mst_network(
-        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0,
-        rand_seed=42
+        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42
     )
     concatenator = MstConcatenator(
-        EmptyMapper(), RandomScorer(n=n_compounds),
-        n_connecting_edges=n_connecting_edges
+        EmptyMapper(), RandomScorer(n=n_compounds), n_connecting_edges=n_connecting_edges
     )
     connected_network = concatenator.concatenate_networks(ligand_networks=networks)
 

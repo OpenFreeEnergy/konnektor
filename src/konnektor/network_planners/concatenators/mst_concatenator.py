@@ -75,10 +75,7 @@ class MstConcatenator(NetworkConcatenator):
         super_edges = list(pair_mappings)
         # Weigh each sub-network connection by the score of the best possible
         # connection between those sub-networks.
-        super_weights = [
-            max(m.annotations["score"] for m in pair_mappings[e]) for e in
-            super_edges
-        ]
+        super_weights = [max(m.annotations["score"] for m in pair_mappings[e]) for e in super_edges]
         # Create an MST where each node is a sub-network
         mst = self.network_generator.generate_network(
             super_edges, super_weights, n_edges=n_networks - 1
@@ -88,24 +85,18 @@ class MstConcatenator(NetworkConcatenator):
         return subnetwork_pairs
 
     def _select_connecting_edges(
-            self, networkA: LigandNetwork, networkB: LigandNetwork, mappings: list
+        self, networkA: LigandNetwork, networkB: LigandNetwork, mappings: list
     ) -> list:
         """Pick up to `n_connecting_edges` mappings between two sub-networks."""
         ligands = list(networkA.nodes | networkB.nodes)
-        edge_map = {
-            (ligands.index(m.componentA), ligands.index(m.componentB)): m for m
-            in mappings
-        }
+        edge_map = {(ligands.index(m.componentA), ligands.index(m.componentB)): m for m in mappings}
         edges = list(edge_map.keys())
         weights = [edge_map[k].annotations["score"] for k in edges]
 
         mg = self.network_generator.generate_network(
             edges, weights, n_edges=self.n_connecting_edges
         )
-        return [
-            edge_map[k] if k in edge_map else edge_map[tuple(list(k)[::-1])]
-            for k in mg.edges
-        ]
+        return [edge_map[k] if k in edge_map else edge_map[tuple(list(k)[::-1])] for k in mg.edges]
 
     def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
@@ -147,9 +138,7 @@ class MstConcatenator(NetworkConcatenator):
             # Connect each subnetwork pair with up to n_connecting_edges
             for i, j in subnetwork_pairs:
                 connecting = self._select_connecting_edges(
-                    ligand_networks[i],
-                    ligand_networks[j],
-                    pair_mappings[(i, j)]
+                    ligand_networks[i], ligand_networks[j], pair_mappings[(i, j)]
                 )
                 log.info(f"Adding ConnectingEdges: {len(connecting)}")
                 selected_edges.extend(connecting)
