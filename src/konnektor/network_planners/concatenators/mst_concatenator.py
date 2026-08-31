@@ -147,7 +147,7 @@ class MstConcatenator(NetworkConcatenator):
         # Add all old network edges:
         for network in ligand_networks:
             selected_edges.extend(network.edges)
-            selected_nodes.extend(network.nodes)
+            selected_nodes |= network.nodes
 
         concat_network = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
         log.info(f"Total Concatenated Edges: {len(selected_edges)}")

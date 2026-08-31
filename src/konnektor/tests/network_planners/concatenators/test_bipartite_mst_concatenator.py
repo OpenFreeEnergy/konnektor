@@ -23,7 +23,7 @@ def test_mst_network_concatenation(n_sub_networks):
         n_connecting_edges=n_connecting_edges,
     )
 
-    connected_network = concatenator.concatenate_network(ligand_networks=networks)
+    connected_network = concatenator.concatenate_networks(ligand_networks=networks)
 
     # Check the network is connected
     assert connected_network.is_connected()
