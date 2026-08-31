@@ -16,12 +16,16 @@ are added, so the result holds exactly the edges the two inputs already had. If 
 networks share no ligand there is nothing to join on; instead you would use a Concatenator to build
 connecting edges (see :doc:`network_planner`).
 
+.. image:: ../_static/img/merge.png
+
 Adding a component
 ==================
 
 :func:`append_component` adds a single ligand that is not yet in the network. Because the
 new ligand shares no edge with the existing nodes, it can't be merged in. Instead you
 supply a Concatenator, which builds the connecting edge that attaches it.
+
+.. image:: ../_static/img/append.png
 
 Removing from networks
 ======================
@@ -30,3 +34,5 @@ Removing from networks
 ligand along with every edge attached to it. Both return a new network, and by default
 refuse the deletion if it would disconnect the network. Pass ``must_stay_connected=False``
 when you actually want the separate pieces.
+
+.. image:: ../_static/img/delete.png
