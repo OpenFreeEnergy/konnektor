@@ -50,3 +50,11 @@ def test_mst_network_concatenation_redundancy():
     assert connected_network.is_connected()
     n_edges_new = len(connected_network.edges) - sum(len(n.edges) for n in networks)
     assert n_edges_new == n_connecting_edges * (n_sub_networks - 1)
+
+
+def test_concatenate_rejects_disconnected_input():
+    a, b = build_n_random_mst_network(n_compounds=20, sub_networks=2, overlap=0, rand_seed=42)
+    disconnected = LigandNetwork(nodes=a.nodes | b.nodes, edges=a.edges | b.edges)
+    concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=20))
+    with pytest.raises(RuntimeError, match="are disconnected"):
+        concatenator.concatenate_networks(ligand_networks=[disconnected])

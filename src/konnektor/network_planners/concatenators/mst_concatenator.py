@@ -4,6 +4,7 @@
 import itertools
 import logging
 from collections.abc import Iterable
+import networkx as nx
 
 from gufe import AtomMapper, LigandNetwork
 
@@ -31,13 +32,13 @@ class MstConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        mapper: AtomMapper
+        mappers: AtomMapper
             AtomMapper(s) to use to propose mappings.
-            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
+            If more than one AtomMapper is provided, the mapping with the best score (as scored by `scorer`) will be used.
         scorer: Callable[[AtomMapping], float] | None
             Callable which takes a AtomMapping and returns a float in [0,1].
         n_connecting_edges: int, optional
-            Maximum number of edges to create when connecting the networks, by default 2.
+            Maximum number of edges added per connection between two sub-networks, by default 2.
         n_processes: int, optional
             Number of processes that can be used for the network generation, by default 1.
         """
@@ -143,7 +144,7 @@ class MstConcatenator(NetworkConcatenator):
                 log.info(f"Adding ConnectingEdges: {len(connecting)}")
                 selected_edges.extend(connecting)
 
-        # Constructed final Edges:
+        # Constructed final edges:
         # Add all old network edges:
         for network in ligand_networks:
             selected_edges.extend(network.edges)
@@ -153,6 +154,17 @@ class MstConcatenator(NetworkConcatenator):
         log.info(f"Total Concatenated Edges: {len(selected_edges)}")
 
         if not concat_network.is_connected():
-            raise RuntimeError("Could not build a connected network.")
+            disconnected_inputs = [i for i, n in enumerate(ligand_networks) if not n.is_connected()]
+            if disconnected_inputs:
+                raise RuntimeError(
+                    f"Could not build a connected network: input subnetworks "
+                    f"{disconnected_inputs} are disconnected. "
+                    f"MstConcatenator expects a list of connected LigandNetworks; "
+                    f"use decompose_network to split a disconnected network first."
+                )
+            raise RuntimeError(
+                "Could not build a connected network. Some subnetworks have no "
+                "mappable edges between them and could not be joined."
+            )
 
         return concat_network
