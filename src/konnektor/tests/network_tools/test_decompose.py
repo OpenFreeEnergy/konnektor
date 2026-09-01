@@ -7,15 +7,9 @@ from konnektor.network_tools.network_handling.decompose import decompose_network
 from konnektor.utils.toy_data import build_n_random_mst_network
 
 
-def _combine(networks):
-    """Combine networks into one (disconnected) network."""
-    nodes = set().union(*(n.nodes for n in networks))
-    edges = set().union(*(n.edges for n in networks))
-    return LigandNetwork(nodes=nodes, edges=edges)
-
 
 def test_decompose_connected_network_returns_single():
-    (network,) = build_n_random_mst_network(n_compounds=20, sub_networks=1, rand_seed=42)
+    (network,) = build_n_random_mst_network(n_compounds=20, rand_seed=42)
     assert network.is_connected()
 
     sub_networks = decompose_network(network)
@@ -26,8 +20,13 @@ def test_decompose_connected_network_returns_single():
 
 
 def test_decompose_disconnected_network():
-    networkA, networkB = build_n_random_mst_network(n_compounds=20, sub_networks=2, rand_seed=42)
-    disconnected = _combine([networkA, networkB])
+    networkA, networkB = build_n_random_mst_network(
+        n_compounds=20, sub_networks=2, overlap=0, rand_seed=42,
+    )
+    networks = [networkA, networkB]
+    nodes = set().union(*(n.nodes for n in networks))
+    edges = set().union(*(n.edges for n in networks))
+    disconnected = LigandNetwork(nodes=nodes, edges=edges)
     assert not disconnected.is_connected()
 
     sub_networks = decompose_network(disconnected)
