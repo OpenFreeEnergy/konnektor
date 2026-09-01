@@ -5,7 +5,7 @@ import itertools
 import logging
 from collections.abc import Iterable
 
-from gufe import AtomMapper, LigandNetwork, LigandAtomMapping
+from gufe import AtomMapper, LigandAtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
@@ -54,14 +54,16 @@ class MstConcatenator(NetworkConcatenator):
         )
         self.n_connecting_edges = n_connecting_edges
         self._avoid_edges = {
-            frozenset((edge.componentA, edge.componentB))
-            for edge in (avoid_edges or [])
+            frozenset((edge.componentA, edge.componentB)) for edge in (avoid_edges or [])
         }
 
     def _score_pair_edges(self, networkA: LigandNetwork, networkB: LigandNetwork) -> list:
         """Score every bipartite candidate edge between two sub-networks."""
         possible_edges = [
-            (na, nb) for na in networkA.nodes for nb in networkB.nodes if frozenset((na, nb)) not in self._avoid_edges
+            (na, nb)
+            for na in networkA.nodes
+            for nb in networkB.nodes
+            if frozenset((na, nb)) not in self._avoid_edges
         ]
         return _score_mappings(
             possible_edges=possible_edges,

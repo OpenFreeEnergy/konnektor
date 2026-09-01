@@ -87,10 +87,7 @@ def test_avoid_edges_excludes_candidate():
     )
     mappings = concatenator._score_pair_edges(networkA, networkB)
 
-    resulting_pairs = {
-        frozenset((mapping.componentA, mapping.componentB))
-        for mapping in mappings
-    }
+    resulting_pairs = {frozenset((mapping.componentA, mapping.componentB)) for mapping in mappings}
     avoided_pair = frozenset((avoided.componentA, avoided.componentB))
 
     assert avoided_pair not in resulting_pairs
