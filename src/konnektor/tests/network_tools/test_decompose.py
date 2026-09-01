@@ -4,7 +4,7 @@
 from gufe import LigandNetwork
 
 from konnektor.network_tools.network_handling.decompose import decompose_network
-from konnektor.utils.toy_data import build_n_random_mst_network
+from konnektor.utils.toy_data import build_n_random_mst_network, build_random_mst_network
 
 
 def test_decompose_connected_network_returns_single():
