@@ -50,7 +50,9 @@ class MstConcatenator(NetworkConcatenator):
         )
         self.n_connecting_edges = n_connecting_edges
 
-    def _score_pair_edges(self, networkA: LigandNetwork, networkB: LigandNetwork) -> list[LigandAtomMapping]:
+    def _score_pair_edges(
+        self, networkA: LigandNetwork, networkB: LigandNetwork
+    ) -> list[LigandAtomMapping]:
         """Score every bipartite candidate edge between two sub-networks."""
         possible_edges = [(na, nb) for na in networkA.nodes for nb in networkB.nodes]
         return _score_mappings(
@@ -80,10 +82,12 @@ class MstConcatenator(NetworkConcatenator):
         subnetwork_edges = list(pair_mappings)
         # Score each subnetwork connection by the score of the best possible
         # connection between those subnetworks.
-        subnetwork_scores = [max(m.annotations["score"] for m in pair_mappings[e]) for e in  subnetwork_edges]
+        subnetwork_scores = [
+            max(m.annotations["score"] for m in pair_mappings[e]) for e in subnetwork_edges
+        ]
         # Create an MST where each node is a subnetwork
         mst = self.network_generator.generate_network(
-            subnetwork_edges,  subnetwork_scores, n_edges=n_networks - 1
+            subnetwork_edges, subnetwork_scores, n_edges=n_networks - 1
         )
         if not mst.connected:
             raise RuntimeError(
@@ -93,14 +97,12 @@ class MstConcatenator(NetworkConcatenator):
         # Reorder the subnetwork indices to match keys in pair_mappings
         return [(min(i, j), max(i, j)) for i, j in mst.edges]
 
-    def _select_connecting_edges(self, mappings: list[LigandAtomMapping]) -> list[LigandAtomMapping]:
+    def _select_connecting_edges(
+        self, mappings: list[LigandAtomMapping]
+    ) -> list[LigandAtomMapping]:
         """Pick up to `n_connecting_edges` mappings between two sub-networks."""
-        edge_map = {
-            frozenset((m.componentA, m.componentB)): m for m in mappings
-        }
-        edges = [
-            (m.componentA, m.componentB) for m in mappings
-        ]
+        edge_map = {frozenset((m.componentA, m.componentB)): m for m in mappings}
+        edges = [(m.componentA, m.componentB) for m in mappings]
         scores = [m.annotations["score"] for m in mappings]
 
         selected = self.network_generator.generate_network(
@@ -159,9 +161,7 @@ class MstConcatenator(NetworkConcatenator):
 
         # Connect each subnetwork pair with up to n_connecting_edges
         for i, j in subnetwork_pairs:
-            connecting = self._select_connecting_edges(
-                pair_mappings[(i, j)]
-            )
+            connecting = self._select_connecting_edges(pair_mappings[(i, j)])
             log.info(f"Adding ConnectingEdges: {len(connecting)}")
             selected_edges.extend(connecting)
 
