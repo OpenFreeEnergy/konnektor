@@ -3,6 +3,8 @@
 
 import pytest
 
+from gufe import LigandNetwork
+
 from konnektor.network_planners.concatenators import MstConcatenator
 from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_mst_network
 
