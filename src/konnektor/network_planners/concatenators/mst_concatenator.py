@@ -5,7 +5,7 @@ import itertools
 import logging
 from collections.abc import Iterable
 
-from gufe import AtomMapper, LigandNetwork, LigandAtomMapping, Component
+from gufe import AtomMapper, LigandNetwork, LigandAtomMapping
 
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
