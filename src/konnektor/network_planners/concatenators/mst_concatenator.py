@@ -4,7 +4,6 @@
 import itertools
 import logging
 from collections.abc import Iterable
-import networkx as nx
 
 from gufe import AtomMapper, LigandNetwork
 
