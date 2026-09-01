@@ -5,7 +5,7 @@ import itertools
 import logging
 from collections.abc import Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, LigandNetwork, LigandAtomMapping, Component
 
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
@@ -23,6 +23,7 @@ class MstConcatenator(NetworkConcatenator):
         mappers: AtomMapper | Iterable[AtomMapper] | None,
         scorer,
         n_connecting_edges: int = 2,
+        avoid_edges: Iterable[LigandAtomMapping] | None = None,
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator | None = None,  # TODO: remove this
     ):
@@ -38,6 +39,9 @@ class MstConcatenator(NetworkConcatenator):
             Callable which takes a AtomMapping and returns a float in [0,1].
         n_connecting_edges: int, optional
             Maximum number of edges added per connection between two sub-networks, by default 2.
+        avoid_edges: Iterable[LigandAtomMapping], optional
+            Mappings that cannot be proposed as new connections which is useful for excluding edges
+            that had already failed. If avoiding these edges leaves the network unbridgeable, an error is raised.
         n_processes: int, optional
             Number of processes that can be used for the network generation, by default 1.
         """
@@ -49,10 +53,16 @@ class MstConcatenator(NetworkConcatenator):
             _initial_edge_lister=_initial_edge_lister,
         )
         self.n_connecting_edges = n_connecting_edges
+        self._avoid_edges = {
+            frozenset((edge.componentA, edge.componentB))
+            for edge in (avoid_edges or [])
+        }
 
     def _score_pair_edges(self, networkA: LigandNetwork, networkB: LigandNetwork) -> list:
         """Score every bipartite candidate edge between two sub-networks."""
-        possible_edges = [(na, nb) for na in networkA.nodes for nb in networkB.nodes]
+        possible_edges = [
+            (na, nb) for na in networkA.nodes for nb in networkB.nodes if frozenset((na, nb)) not in self._avoid_edges
+        ]
         return _score_mappings(
             possible_edges=possible_edges,
             scorer=self.scorer,
@@ -111,6 +121,12 @@ class MstConcatenator(NetworkConcatenator):
         -------
         LigandNetwork
             The concatenated LigandNetwork.
+
+        Raises
+        ------
+        RuntimeError
+            If the network cannot be connected, either because the input network
+            was disconnected or no mappable edges could be found between the subnetworks.
         """
 
         ligand_networks = list(ligand_networks)
@@ -125,7 +141,7 @@ class MstConcatenator(NetworkConcatenator):
         selected_nodes = set()
 
         if len(ligand_networks) > 1:
-            # Score candidate connecting edges for every pair of sub-networks
+            # Score candidate connecting edges for every pair of subnetworks
             pair_mappings = {}
             for i, j in itertools.combinations(range(len(ligand_networks)), 2):
                 mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j])
@@ -163,7 +179,8 @@ class MstConcatenator(NetworkConcatenator):
                 )
             raise RuntimeError(
                 "Could not build a connected network. Some subnetworks have no "
-                "mappable edges between them and could not be joined."
+                "mappable edges between them and could not be joined, possibly "
+                "because all candidate bridges were excluded through avoid_edges."
             )
 
         return concat_network

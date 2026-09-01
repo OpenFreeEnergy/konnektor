@@ -59,3 +59,38 @@ def test_concatenate_rejects_disconnected_input():
     concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=20))
     with pytest.raises(RuntimeError, match="are disconnected"):
         concatenator.concatenate_networks(ligand_networks=[disconnected])
+
+
+def test_avoid_edges_excludes_candidate():
+    """The avoid_edges should never get scored."""
+    n_compounds = 20
+    networkA, networkB = build_n_random_mst_network(
+        n_compounds=n_compounds,
+        sub_networks=2,
+        overlap=0,
+        rand_seed=42,
+    )
+
+    # First don't exclude any edges
+    concatenator = MstConcatenator(
+        EmptyMapper(),
+        RandomScorer(n=n_compounds),
+    )
+    mappings = concatenator._score_pair_edges(networkA, networkB)
+    avoided = mappings[0]
+
+    # Re-run with that mapping excluded.
+    concatenator = MstConcatenator(
+        EmptyMapper(),
+        RandomScorer(n=n_compounds),
+        avoid_edges=[avoided],
+    )
+    mappings = concatenator._score_pair_edges(networkA, networkB)
+
+    resulting_pairs = {
+        frozenset((mapping.componentA, mapping.componentB))
+        for mapping in mappings
+    }
+    avoided_pair = frozenset((avoided.componentA, avoided.componentB))
+
+    assert avoided_pair not in resulting_pairs
