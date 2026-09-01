@@ -2,7 +2,6 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 import pytest
-
 from gufe import LigandNetwork
 
 from konnektor.network_planners.concatenators import MstConcatenator
