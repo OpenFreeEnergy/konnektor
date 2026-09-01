@@ -7,7 +7,6 @@ from konnektor.network_tools.network_handling.decompose import decompose_network
 from konnektor.utils.toy_data import build_n_random_mst_network
 
 
-
 def test_decompose_connected_network_returns_single():
     (network,) = build_n_random_mst_network(n_compounds=20, rand_seed=42)
     assert network.is_connected()
@@ -21,7 +20,10 @@ def test_decompose_connected_network_returns_single():
 
 def test_decompose_disconnected_network():
     networkA, networkB = build_n_random_mst_network(
-        n_compounds=20, sub_networks=2, overlap=0, rand_seed=42,
+        n_compounds=20,
+        sub_networks=2,
+        overlap=0,
+        rand_seed=42,
     )
     networks = [networkA, networkB]
     nodes = set().union(*(n.nodes for n in networks))
