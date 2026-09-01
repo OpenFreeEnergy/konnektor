@@ -8,7 +8,7 @@ from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_m
 
 
 @pytest.mark.parametrize("n_sub_networks", [2, 3, 4, 6])
-def test_mst_network_concatenation(n_sub_networks):
+def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     n_compounds = 30
     n_connecting_edges = 1
     networks = build_n_random_mst_network(
@@ -34,7 +34,7 @@ def test_mst_network_concatenation(n_sub_networks):
     assert n_edges_new == n_connecting_edges * (n_sub_networks - 1)
 
 
-def test_n_connecting_edges():
+def test_mst_network_concatenation_redundancy():
     n_connecting_edges = 3
     n_compounds = 30
     n_sub_networks = 4
