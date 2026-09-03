@@ -4,6 +4,7 @@
 from .concatenate import append_component
 from .delete import delete_component, delete_transformation
 from .merge import merge_networks, merge_two_networks
+from .decompose import decompose_network
 
 __all__ = [
     "append_component",
@@ -11,4 +12,5 @@ __all__ = [
     "delete_transformation",
     "merge_networks",
     "merge_two_networks",
+    "decompose_network",
 ]

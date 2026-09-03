@@ -8,6 +8,7 @@ from .network_handling import (
     delete_transformation,
     merge_networks,
     merge_two_networks,
+    decompose_network,
 )
 
 __all__ = [
@@ -20,4 +21,5 @@ __all__ = [
     "delete_transformation",
     "merge_networks",
     "merge_two_networks",
+    "decompose_network",
 ]
