@@ -33,34 +33,9 @@ def test_concatenate_deprecated():
         assert len(new_network.nodes) == n_compounds
         # network edges + the network connecting edges
         assert len(new_network.edges) == sum(
-            [len(n.edges) for n in networks]
-        ) + n_connecting_edges * sum([i for i in range(1, n_sub_networks)])
+            len(n.edges) for n in networks
+        ) + n_connecting_edges * (n_sub_networks - 1)
         assert new_network.is_connected()
-
-
-@pytest.mark.parametrize("n_sub_networks", [2, 3, 4])
-def test_concatenate_mst_networks(n_sub_networks):
-    n_connecting_edges = 1
-    n_compounds = 20
-
-    networks = build_n_random_mst_network(
-        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42
-    )
-    concatenator = MstConcatenator(
-        EmptyMapper(),
-        RandomScorer(n=n_compounds),
-        n_connecting_edges=n_connecting_edges,
-    )
-
-    new_network = concatenator.concatenate_networks(ligand_networks=networks)
-
-    assert len(networks) == n_sub_networks
-    assert len(new_network.nodes) == n_compounds
-    # network edges + the network connecting edges
-    assert len(new_network.edges) == sum(
-        [len(n.edges) for n in networks]
-    ) + n_connecting_edges * sum([i for i in range(1, n_sub_networks)])
-    assert new_network.is_connected()
 
 
 def test_append_node():

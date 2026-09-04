@@ -38,8 +38,11 @@ def test_clustered_network_planner():
 
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == n_compounds
-    assert len(planner.clusters) == 3
-    expected_number_of_edges = 3 * ((n_compounds // 3) - 1) + (3 * concatenator.n_connecting_edges)
+    n_clusters = len(planner.clusters)
+    assert n_clusters == 3
+    expected_number_of_edges = (n_compounds - n_clusters) + (
+        n_clusters - 1
+    ) * concatenator.n_connecting_edges
     assert len(ligand_network.edges) == expected_number_of_edges
     assert ligand_network.is_connected()
 

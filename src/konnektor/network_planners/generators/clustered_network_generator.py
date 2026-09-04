@@ -124,7 +124,7 @@ class ClusteredNetworkGenerator(NetworkGenerator):
 
         """
 
-        # Step 1: Seperate nodes by diversity
+        # Step 1: Separate nodes by diversity
         log.info("Clustering")
         self.clusters = self.clusterer.cluster_compounds(components)
         log.info("Clusters: " + str(self.clusters))
@@ -212,11 +212,12 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         a. Translate the Molecules into Morgan Fingerprints. (default)
         b. Cluster the Morgan Fingerprints with HDBSCAN. (default)
         2. Build Sub-Star Networks in each Cluster using the `StarNetworkGenerator`.
-        3. Concatenate the Sub-Star Networks to the final Starry  Sky Network, with 3 `Transformations` per cluster pair using the `MSTConcatenator`.
+        3. Concatenate the Sub-Star Networks to the final Starry  Sky Network,
+        with the `MSTConcatenator` which joins the clusters with a minimum spanning tree (`n_connecting_edges` transformations per join).
 
-        This approach allows in comparison to the Star Network, to build a network containing multiple centers imopoving the graph score.
+        This approach allows in comparison to the Star Network, to build a network containing multiple centers improving the graph score.
         Still adding a limited amount of `Transformation` s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated.
-        So the Starry Sky Network is a compromise betwen graph score optimization and number of `Transformations`.
+        So the Starry Sky Network is a compromise between graph score optimization and number of `Transformations`.
 
         Parameters
         ----------
