@@ -11,7 +11,6 @@ from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_m
 @pytest.mark.parametrize("n_sub_networks", [2, 3, 4, 6])
 def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     n_compounds = 30
-    n_connecting_edges = 1
     networks = build_n_random_mst_network(
         n_compounds=n_compounds,
         sub_networks=n_sub_networks,
@@ -21,7 +20,6 @@ def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     concatenator = MstConcatenator(
         EmptyMapper(),
         RandomScorer(n=n_compounds),
-        n_connecting_edges=n_connecting_edges,
     )
 
     connected_network = concatenator.concatenate_networks(ligand_networks=networks)
@@ -32,25 +30,7 @@ def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     assert len(connected_network.nodes) == n_compounds
     # Check that the subnetworks were connected as an MST, meaning k-1 sub-network connections
     n_edges_new = len(connected_network.edges) - sum(len(n.edges) for n in networks)
-    assert n_edges_new == n_connecting_edges * (n_sub_networks - 1)
-
-
-def test_mst_network_concatenation_redundancy():
-    n_connecting_edges = 3
-    n_compounds = 30
-    n_sub_networks = 4
-
-    networks = build_n_random_mst_network(
-        n_compounds=n_compounds, sub_networks=n_sub_networks, overlap=0, rand_seed=42
-    )
-    concatenator = MstConcatenator(
-        EmptyMapper(), RandomScorer(n=n_compounds), n_connecting_edges=n_connecting_edges
-    )
-    connected_network = concatenator.concatenate_networks(ligand_networks=networks)
-
-    assert connected_network.is_connected()
-    n_edges_new = len(connected_network.edges) - sum(len(n.edges) for n in networks)
-    assert n_edges_new == n_connecting_edges * (n_sub_networks - 1)
+    assert n_edges_new == n_sub_networks - 1
 
 
 def test_concatenate_rejects_disconnected_input():
