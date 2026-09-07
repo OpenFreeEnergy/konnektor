@@ -60,13 +60,7 @@ def test_avoid_edges_excludes_candidate():
     avoided = frozenset((mappings[0].componentA, mappings[0].componentB))
 
     # Re-run with that mapping excluded.
-    concatenator = MstConcatenator(
-        EmptyMapper(),
-        RandomScorer(n=n_compounds),
-    )
-
     mappings = concatenator._score_pair_edges(networkA, networkB, avoid={avoided})
-
     resulting_pairs = {frozenset((mapping.componentA, mapping.componentB)) for mapping in mappings}
 
     assert avoided not in resulting_pairs
