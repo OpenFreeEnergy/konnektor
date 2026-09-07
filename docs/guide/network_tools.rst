@@ -16,5 +16,4 @@ networks, acting on different objects at different points in the workflow:
    :maxdepth: 1
 
    clustering
-   intermediate_generators
    network_handling

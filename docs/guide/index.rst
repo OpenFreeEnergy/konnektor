@@ -8,5 +8,5 @@ User Guide
 .. toctree::
    :maxdepth: 2
 
-   network_planner
+   network_planning
    network_tools
