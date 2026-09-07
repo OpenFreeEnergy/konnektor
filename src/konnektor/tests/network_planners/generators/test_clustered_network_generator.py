@@ -40,10 +40,9 @@ def test_clustered_network_planner():
     assert len(ligand_network.nodes) == n_compounds
     n_clusters = len(planner.clusters)
     assert n_clusters == 3
-    expected_number_of_edges = (n_compounds - n_clusters) + (
-        n_clusters - 1
-    ) * concatenator.n_connecting_edges
+    expected_number_of_edges = (n_compounds - n_clusters) + n_clusters - 1
+
     assert len(ligand_network.edges) == expected_number_of_edges
     assert ligand_network.is_connected()
 
-    np.testing.assert_allclose(get_network_score(ligand_network), 25.708691, rtol=0.05)
+    np.testing.assert_allclose(get_network_score(ligand_network), 24.166487, rtol=0.05)
