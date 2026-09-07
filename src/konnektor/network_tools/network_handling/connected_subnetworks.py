@@ -5,8 +5,8 @@ import networkx as nx
 from gufe import LigandNetwork
 
 
-def decompose_network(network: LigandNetwork) -> list[LigandNetwork]:
-    """Split a disconnected LigandNetwork into its connected sub-networks.
+def connected_subnetworks(network: LigandNetwork) -> list[LigandNetwork]:
+    """Split a LigandNetwork into its connected subnetworks.
 
     Parameters
     ----------
@@ -16,12 +16,10 @@ def decompose_network(network: LigandNetwork) -> list[LigandNetwork]:
     Returns
     -------
     list[LigandNetwork]
-        The connected sub-networks of `network`.
+        The connected subnetworks of `network`.
     """
-    graph = network.graph.to_undirected()
-
     sub_networks = []
-    for component in nx.connected_components(graph):
+    for component in nx.weakly_connected_components(network.graph):
         sub_edges = [
             edge
             for edge in network.edges
