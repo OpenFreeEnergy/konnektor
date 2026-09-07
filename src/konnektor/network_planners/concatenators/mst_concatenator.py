@@ -45,7 +45,10 @@ class MstConcatenator(NetworkConcatenator):
         )
 
     def _score_pair_edges(
-        self, networkA: LigandNetwork, networkB: LigandNetwork, avoid: set[frozenset],
+        self,
+        networkA: LigandNetwork,
+        networkB: LigandNetwork,
+        avoid: set[frozenset],
     ) -> list[LigandAtomMapping]:
         """Score every bipartite candidate edge between two subnetworks."""
         possible_edges = self._filter_avoided(
@@ -148,7 +151,7 @@ class MstConcatenator(NetworkConcatenator):
     def concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        avoid_edges: Iterable[LigandAtomMapping] | None = None
+        avoid_edges: Iterable[LigandAtomMapping] | None = None,
     ) -> LigandNetwork:
         """
         Concatenate the given networks.

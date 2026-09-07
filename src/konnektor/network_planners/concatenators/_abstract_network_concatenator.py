@@ -64,14 +64,12 @@ class NetworkConcatenator(NetworkPlanner):
     ) -> set[frozenset]:
         """Normalize `avoid_edges` into a set of undirected component-pairs."""
         return {
-            frozenset((mapping.componentA, mapping.componentB))
-            for mapping in (avoid_edges or ())
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (avoid_edges or ())
         }
 
     @staticmethod
     def _filter_avoided(
-        possible_edges: list[tuple[Component, Component]],
-        avoid: set[frozenset]
+        possible_edges: list[tuple[Component, Component]], avoid: set[frozenset]
     ) -> list[tuple[Component, Component]]:
         """Drop candidate edges whose component-pair is in `avoid`."""
         return [(a, b) for (a, b) in possible_edges if frozenset((a, b)) not in avoid]

@@ -46,7 +46,11 @@ class MaxConcatenator(NetworkConcatenator):
         )
         self.progress = show_progress
 
-    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork], avoid_edges: Iterable[AtomMapping] | None = None) -> LigandNetwork:
+    def concatenate_networks(
+        self,
+        ligand_networks: Iterable[LigandNetwork],
+        avoid_edges: Iterable[AtomMapping] | None = None,
+    ) -> LigandNetwork:
         """
         Parameters
         ----------
