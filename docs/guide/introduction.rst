@@ -5,8 +5,6 @@ Ranking drug candidates with relative binding free energies is essentially a gra
 Each candidate ligand is a node, and each edge is a relationship between two ligands computed by one Relative Binding Free Energy (RBFE) calculation.
 To rank a whole set, these edges must form a connected network.
 
-.. image:: ../_static/img/networks.png
-
 Free energy is a thermodynamic state function, so these relationships are path-independent.
 If A relates to C both directly and through B, the two routes agree.
 A network therefore doesn't need every possible edge; it only needs to be connected, provided each calculation is of high quality.

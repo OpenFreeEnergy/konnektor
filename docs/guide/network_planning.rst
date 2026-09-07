@@ -10,6 +10,8 @@ In both, each edge is represented by an ``AtomMapping``, which defines the relat
 An ``AtomMappingScorer`` (any function that takes an ``AtomMapping`` and returns a float in [0,1]) assigns an edge weight proportional to the expected difficulty of that transformation.
 The planner then combines those scores with a graph-construction algorithm to choose which edges make up the network.
 
+.. image:: ../_static/img/networks.png
+
 Network Generators
 __________________
 
