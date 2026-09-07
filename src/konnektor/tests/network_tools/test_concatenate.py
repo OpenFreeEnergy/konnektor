@@ -48,5 +48,5 @@ def test_append_node():
 
     assert len(new_network.nodes) == n_compounds
     # network edges + the network connecting edges
-    assert len(new_network.edges) == len(network.edges) - 1
+    assert len(new_network.edges) == len(network.edges) + 1
     assert new_network.is_connected()
