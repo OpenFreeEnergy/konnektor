@@ -30,9 +30,7 @@ def test_concatenate_deprecated():
         assert len(networks) == n_sub_networks
         assert len(new_network.nodes) == n_compounds
         # network edges + the network connecting edges
-        assert len(new_network.edges) == sum(
-            len(n.edges) for n in networks
-        ) + n_sub_networks - 1
+        assert len(new_network.edges) == sum(len(n.edges) for n in networks) + n_sub_networks - 1
         assert new_network.is_connected()
 
 
