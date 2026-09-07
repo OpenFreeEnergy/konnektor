@@ -3,22 +3,22 @@
 
 from gufe import LigandNetwork
 
-from konnektor.network_tools.network_handling.decompose import decompose_network
+from konnektor.network_tools.network_handling.decompose import connected_subnetworks
 from konnektor.utils.toy_data import build_n_random_mst_network, build_random_mst_network
 
 
-def test_decompose_connected_network_returns_single():
+def test_connected_network_single_subnetwork():
     network = build_random_mst_network(n_compounds=20, rand_seed=42)
     assert network.is_connected()
 
-    sub_networks = decompose_network(network)
+    sub_networks = connected_subnetworks(network)
 
     assert len(sub_networks) == 1
     assert sub_networks[0].nodes == network.nodes
     assert sub_networks[0].edges == network.edges
 
 
-def test_decompose_disconnected_network():
+def test_connected_subnetworks_disconnected_network():
     networkA, networkB = build_n_random_mst_network(
         n_compounds=20,
         sub_networks=2,
@@ -31,7 +31,7 @@ def test_decompose_disconnected_network():
     disconnected = LigandNetwork(nodes=nodes, edges=edges)
     assert not disconnected.is_connected()
 
-    sub_networks = decompose_network(disconnected)
+    sub_networks = connected_subnetworks(disconnected)
 
     assert len(sub_networks) == 2
     assert all(sn.is_connected() for sn in sub_networks)
@@ -39,3 +39,14 @@ def test_decompose_disconnected_network():
     assert set().union(*(sn.nodes for sn in sub_networks)) == disconnected.nodes
     assert set().union(*(sn.edges for sn in sub_networks)) == disconnected.edges
     assert sum(len(sn.nodes) for sn in sub_networks) == len(disconnected.nodes)
+
+
+def test_connected_subnetworks_lone_node_is_subnetwork():
+    components, _, _ = build_random_dataset(n_compounds=1, rand_seed=42)
+    single = LigandNetwork(nodes=[components[0]], edges=[])
+
+    subs = connected_subnetworks(single)
+
+    assert len(subs) == 1
+    assert subs[0].nodes == {components[0]}
+    assert len(subs[0].edges) == 0
