@@ -2,7 +2,7 @@
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
 from .concatenate import append_component
-from .decompose import decompose_network
+from .connected_subnetworks import connected_subnetworks
 from .delete import delete_component, delete_transformation
 from .merge import merge_networks, merge_two_networks
 
@@ -12,5 +12,5 @@ __all__ = [
     "delete_transformation",
     "merge_networks",
     "merge_two_networks",
-    "decompose_network",
+    "connected_subnetworks",
 ]

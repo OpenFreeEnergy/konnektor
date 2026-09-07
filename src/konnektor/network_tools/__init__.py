@@ -4,7 +4,7 @@ from .clustering.scaffold_clustering import ScaffoldClusterer
 from .intermediate_generators.imerge_intermediator import ImergeIntermediator
 from .network_handling import (
     append_component,
-    decompose_network,
+    connected_subnetworks,
     delete_component,
     delete_transformation,
     merge_networks,
@@ -21,5 +21,5 @@ __all__ = [
     "delete_transformation",
     "merge_networks",
     "merge_two_networks",
-    "decompose_network",
+    "connected_subnetworks",
 ]

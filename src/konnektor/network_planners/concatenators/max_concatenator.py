@@ -46,18 +46,24 @@ class MaxConcatenator(NetworkConcatenator):
         )
         self.progress = show_progress
 
-    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork], avoid_edges: Iterable[AtomMapping] | None = None) -> LigandNetwork:
         """
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
             An iterable of LigandNetworks to connect.
+        avoid_edges: Iterable[AtomMapping], optional
+            Mappings that cannot be proposed as new connections which is useful for excluding edges
+            that had already failed. If avoiding these edges leaves the network unbridgeable, an error is raised.
+            Default: None
 
         Returns
         -------
         LigandNetwork
             The concatenated LigandNetwork with all possible nodes connected by edges.
         """
+        ligand_networks = list(ligand_networks)
+        avoid = self._normalize_avoid_edges(avoid_edges)
 
         log.info(
             f"Number of edges in individual networks:\n"
@@ -68,10 +74,10 @@ class MaxConcatenator(NetworkConcatenator):
         selected_edges = []
         selected_nodes = []
         for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
-            # Generate Full Bipartite Graph
-            nodesA = ligandNetworkA.nodes
-            nodesB = ligandNetworkB.nodes
-            p_edges = [(na, nb) for na in nodesA for nb in nodesB]
+            # Generate Full Bipartite Graph, avoiding specified edges
+            p_edges = self._filter_avoided(
+                [(na, nb) for na in ligandNetworkA.nodes for nb in ligandNetworkB.nodes], avoid
+            )
             bipartite_graph_mappings = _score_mappings(
                 possible_edges=p_edges,
                 scorer=self.scorer,
