@@ -99,7 +99,11 @@ class MstConcatenator(NetworkConcatenator):
             mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j])
             if mappings:
                 best_mapping_by_pair[(i, j)] = max(
-                    mappings, key=lambda mapping: mapping.annotations["score"]
+                    mappings,
+                    key=lambda mapping: (
+                        mapping.annotations["score"],
+                        mapping.key, # deterministic tie-break
+                    ),
                 )
 
         # Identify which subnetworks to connect (MST over subnetworks)
