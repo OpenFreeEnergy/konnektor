@@ -66,6 +66,19 @@ class MstConcatenator(NetworkConcatenator):
     ) -> list[tuple[int, int]]:
         """
         Build an MST over subnetworks to decide which subnetworks to join.
+
+        Parameters
+        ----------
+        best_mapping_by_pair : dict[tuple[int, int], LigandAtomMapping]
+            The best-scoring mapping for each pair of subnetworks.
+            Each key (i, j) identifies ligand_networks[i] and ligand_networks[j].
+        n_networks : int
+            Number of input subnetworks.
+
+        Returns
+        -------
+        list[tuple[int, int]]
+            Pairs of input subnetwork indices defining the edges of the MST.
         """
         if not best_mapping_by_pair:
             raise RuntimeError(
@@ -102,7 +115,11 @@ class MstConcatenator(NetworkConcatenator):
             mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j], avoid)
             if mappings:
                 best_mapping_by_pair[(i, j)] = max(
-                    mappings, key=lambda mapping: mapping.annotations["score"]
+                    mappings,
+                    key=lambda mapping: (
+                        mapping.annotations["score"],
+                        mapping.key,  # deterministic tie-break
+                    ),
                 )
 
         # Identify which subnetworks to connect (MST over subnetworks)
