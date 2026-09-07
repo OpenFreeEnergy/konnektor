@@ -65,7 +65,7 @@ def test_avoid_edges_excludes_candidate():
 
     assert avoided not in resulting_pairs
 
-    
+
 def test_tied_scores_pick_highest_key():
     """On a score tie, the mapping with the max .key is chosen (deterministic)."""
     n = 20
