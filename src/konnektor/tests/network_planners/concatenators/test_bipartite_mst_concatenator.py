@@ -39,3 +39,25 @@ def test_concatenate_rejects_disconnected_input():
     concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=20))
     with pytest.raises(RuntimeError, match="are disconnected"):
         concatenator.concatenate_networks(ligand_networks=[disconnected])
+
+
+def test_tied_scores_pick_highest_key():
+    """On a score tie, the mapping with the max .key is chosen (deterministic)."""
+    n = 20
+    networkA, networkB = build_n_random_mst_network(
+        n_compounds=n, sub_networks=2, overlap=0, rand_seed=42
+    )
+
+    class ConstantScorer:
+        def __call__(self, mapping):
+            return 0.5
+
+    concatenator = MstConcatenator(EmptyMapper(), ConstantScorer())
+
+    # every candidate between the two subnetworks scores 0.5
+    candidates = concatenator._score_pair_edges(networkA, networkB)
+    expected = max(candidates, key=lambda m: m.key)
+
+    bridges = concatenator._connect_subnetworks_mst([networkA, networkB])
+    assert len(bridges) == 1
+    assert bridges[0] == expected
