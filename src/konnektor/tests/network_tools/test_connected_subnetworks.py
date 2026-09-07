@@ -3,7 +3,7 @@
 
 from gufe import LigandNetwork
 
-from konnektor.network_tools.network_handling.decompose import connected_subnetworks
+from konnektor.network_tools.network_handling.connected_subnetworks import connected_subnetworks
 from konnektor.utils.toy_data import build_n_random_mst_network, build_random_mst_network
 
 
