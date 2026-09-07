@@ -88,10 +88,8 @@ class MstConcatenator(NetworkConcatenator):
                 "Could not connect all subnetworks. No mappable edges exist "
                 "between the subnetworks."
             )
-        # Create an "edge" between each subnetwork pair
         subnetwork_edges = list(best_mapping_by_pair)
-        # Score each subnetwork connection by the score of the best possible
-        # connection between those subnetworks.
+        # Get the score of the best possible mapping between the subnetworks.
         subnetwork_scores = [
             best_mapping_by_pair[pair].annotations["score"] for pair in subnetwork_edges
         ]
@@ -112,7 +110,7 @@ class MstConcatenator(NetworkConcatenator):
         ligand_networks: list[LigandNetwork],
         avoid: set[frozenset],
     ) -> list[LigandAtomMapping]:
-        # Score candidate connecting edges for every pair of subnetworks
+        # Find the best scored edge for every pair of subnetworks
         best_mapping_by_pair = {}
         for i, j in itertools.combinations(range(len(ligand_networks)), 2):
             mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j], avoid)
