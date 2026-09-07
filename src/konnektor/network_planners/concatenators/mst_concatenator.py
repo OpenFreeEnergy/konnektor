@@ -186,7 +186,7 @@ class MstConcatenator(NetworkConcatenator):
             raise RuntimeError(
                 f"Input subnetworks {disconnected_inputs} are disconnected. "
                 f"MstConcatenator expects connected LigandNetworks; "
-                f"use decompose_network to split a disconnected network first."
+                f"use connected_subnetworks to split a disconnected network first."
             )
 
         log.info(
