@@ -115,7 +115,7 @@ class MstConcatenator(NetworkConcatenator):
                     mappings,
                     key=lambda mapping: (
                         mapping.annotations["score"],
-                        mapping.key, # deterministic tie-break
+                        mapping.key,  # deterministic tie-break
                     ),
                 )
 
