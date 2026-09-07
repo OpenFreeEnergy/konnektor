@@ -4,7 +4,11 @@
 from gufe import LigandNetwork
 
 from konnektor.network_tools.network_handling.connected_subnetworks import connected_subnetworks
-from konnektor.utils.toy_data import build_n_random_mst_network, build_random_mst_network, build_random_dataset
+from konnektor.utils.toy_data import (
+    build_n_random_mst_network,
+    build_random_dataset,
+    build_random_mst_network,
+)
 
 
 def test_connected_network_single_subnetwork():
