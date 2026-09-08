@@ -93,7 +93,7 @@ def test_redundant_raises_if_first_tree_cannot_be_built(two_singleton_subnetwork
         n_redundancy=2,
     )
     network_a, network_b = two_singleton_subnetworks
-    mappings = concatenator._score_pair_edges(network_a, network_b,avoid=set())
+    mappings = concatenator._score_pair_edges(network_a, network_b, avoid=set())
     assert len(mappings) == 1
 
     with pytest.raises(RuntimeError, match="Could not connect"):
@@ -156,9 +156,7 @@ def test_redundant_partial_forest_not_counted_as_a_tree():
     avoid = [e for e in all_cross if frozenset((e.componentA, e.componentB)) not in keep]
     assert len(avoid) == 2  # we kept 4 edges
 
-    concatenator = RedundantMstConcatenator(
-        EmptyMapper(), RandomScorer(n=n), n_redundancy=2
-    )
+    concatenator = RedundantMstConcatenator(EmptyMapper(), RandomScorer(n=n), n_redundancy=2)
     with pytest.warns(UserWarning, match="Could only build"):
         result = concatenator.concatenate_networks(frags, avoid_edges=avoid)
 
