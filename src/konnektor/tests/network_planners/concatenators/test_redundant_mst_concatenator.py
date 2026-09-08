@@ -77,7 +77,7 @@ def test_redundant_does_not_reuse_bridge_pairs(three_subnetworks):
     """Each pass excludes earlier edges, so the bridges don't repeat."""
     n, networks = three_subnetworks
     result = RedundantMstConcatenator(
-        EmptyMapper(), RandomScorer(n=n), n_redundancy=n_redundancy
+        EmptyMapper(), RandomScorer(n=n), n_redundancy=2
     ).concatenate_networks(networks)
 
     bridges = _bridges(result, networks)

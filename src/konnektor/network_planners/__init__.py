@@ -34,7 +34,7 @@ from .generators.star_network_generator import (
 from .generators.twin_star_network_generator import TwinStarNetworkGenerator
 
 __all__ = [
-    "MaxConcatenator"
+    "MaxConcatenator",
     "MstConcatenator",
     "ClusteredNetworkGenerator",
     "StarrySkyNetworkGenerator",
