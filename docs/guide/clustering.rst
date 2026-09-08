@@ -11,5 +11,6 @@ In **konnektor**, the following clustering classes are currently available:
 * `DiversityClusterer`: uses fingerprints to cluster the different molecules.
 
 .. note::
-The clustering tools are provided as-is and are not yet part of konnektor's
-validated featuresand their behaviour may change in the future.
+
+    The clustering tools are provided as-is and are not yet part of konnektor's
+    validated features and their behavior may change in the future.

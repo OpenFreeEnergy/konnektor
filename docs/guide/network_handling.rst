@@ -1,6 +1,7 @@
 ================
 Network handling
 ================
+
 Network handling covers the operations that work on a :class:`LigandNetwork`: combining several into one, or
 removing edges or ligands.
 Each operation returns a new network, and mostly do not create
@@ -14,7 +15,7 @@ Combining networks (merge)
 must share at least one ligand which is the join point. No new edges
 are added, so the result holds exactly the edges the two inputs already had. If the
 networks share no ligand there is nothing to join on; instead you would use a Concatenator to build
-connecting edges (see :doc:`network_planner`).
+connecting edges (see :doc:`network_planning`).
 
 .. image:: ../_static/img/merge.png
 
