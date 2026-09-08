@@ -3,7 +3,7 @@
 
 # Network Generators
 # Network Concatenation
-from .concatenators import MstConcatenator, MaxConcatenator, RedundantMstConcatenator
+from .concatenators import MaxConcatenator, MstConcatenator, RedundantMstConcatenator
 from .generators.clustered_network_generator import (
     ClusteredNetworkGenerator,
     StarrySkyNetworkGenerator,
