@@ -3,7 +3,7 @@
 
 # Network Generators
 # Network Concatenation
-from .concatenators import MstConcatenator
+from .concatenators import MstConcatenator, MaxConcatenator, RedundantMstConcatenator
 from .generators.clustered_network_generator import (
     ClusteredNetworkGenerator,
     StarrySkyNetworkGenerator,
@@ -34,6 +34,7 @@ from .generators.star_network_generator import (
 from .generators.twin_star_network_generator import TwinStarNetworkGenerator
 
 __all__ = [
+    "MaxConcatenator"
     "MstConcatenator",
     "ClusteredNetworkGenerator",
     "StarrySkyNetworkGenerator",
@@ -44,6 +45,7 @@ __all__ = [
     "MinimalSpanningTreeNetworkGenerator",
     "NNodeEdgesNetworkGenerator",
     "RedundantMinimalSpanningTreeNetworkGenerator",
+    "RedundantMstConcatenator",
     "RadialNetworkGenerator",
     "StarNetworkGenerator",
     "TwinStarNetworkGenerator",
