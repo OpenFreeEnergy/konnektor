@@ -83,6 +83,6 @@ def test_tied_scores_pick_highest_key():
     candidates = concatenator._score_pair_edges(networkA, networkB, avoid=[])
     expected = max(candidates, key=lambda m: m.key)
 
-    bridges = concatenator._connect_subnetworks_mst([networkA, networkB], avoid=[])
+    bridges = concatenator._select_mst_bridges([networkA, networkB], avoid=[])
     assert len(bridges) == 1
     assert bridges[0] == expected

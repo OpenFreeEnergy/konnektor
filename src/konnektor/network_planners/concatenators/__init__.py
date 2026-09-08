@@ -1,1 +1,3 @@
 from .mst_concatenator import MstConcatenator as MstConcatenator
+from .max_concatenator import MaxConcatenator
+from .redundant_mst_concatenator import RedundantMstConcatenator
