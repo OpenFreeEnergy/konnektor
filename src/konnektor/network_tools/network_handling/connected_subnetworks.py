@@ -18,13 +18,18 @@ def connected_subnetworks(network: LigandNetwork) -> list[LigandNetwork]:
     list[LigandNetwork]
         The connected subnetworks of `network`.
     """
-    sub_networks = []
-    for component in nx.weakly_connected_components(network.graph):
-        sub_edges = [
+    subnetwork_node_sets = list(nx.weakly_connected_components(network.graph))
+
+    if len(subnetwork_node_sets) == 1:
+        return [network]
+
+    subnetworks = []
+    for subnetwork_nodes in subnetwork_node_sets:
+        subnetwork_edges = [
             edge
             for edge in network.edges
-            if edge.componentA in component and edge.componentB in component
+            if edge.componentA in component and edge.componentB in subnetwork_nodes
         ]
-        sub_networks.append(LigandNetwork(nodes=component, edges=sub_edges))
+        subnetworks.append(LigandNetwork(nodes=subnetwork_nodes, edges=subnetwork_edges))
 
-    return sub_networks
+    return subnetworks
