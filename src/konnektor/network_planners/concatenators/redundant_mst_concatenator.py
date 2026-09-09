@@ -76,8 +76,7 @@ class RedundantMstConcatenator(MstConcatenator):
         RuntimeError
             If any input LigandNetwork is disconnected.
         """
-        disconnected_inputs = [n for n in ligand_networks if
-                               not n.is_connected()]
+        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
         if disconnected_inputs:
             raise RuntimeError(
                 f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
