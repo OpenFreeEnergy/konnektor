@@ -93,9 +93,9 @@ class NetworkConcatenator(NetworkPlanner):
         ligand_networks: Iterable[LigandNetwork]
             LigandNetworks to concatenate.
         exclude_edges: Iterable[AtomMapping], optional
-            Mappings that cannot be proposed as new connections which is useful for excluding edges
-            that had already failed. If excluding these edges leaves the network unbridgeable, an error is raised.
-            Default: None
+            Mappings identifying ligand pairs that must not be proposed as new
+            connections. Exclusion is based on the unordered component pair, so all
+            mappings between the same two ligands are excluded. Default: None.
 
         Returns
         -------
