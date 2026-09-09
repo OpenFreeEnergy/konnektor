@@ -1,6 +1,6 @@
 **Added:**
 
-* Added an argument `avoid_edges` to the `concatenate_networks` for the Concatenators. If provided, those edges will not be considered as candidate edges by the Concatenator.
+* Added an argument `exclude_edges` to the `concatenate_networks` for the Concatenators. If provided, those edges will not be considered as candidate edges by the Concatenator.
 
 **Changed:**
 

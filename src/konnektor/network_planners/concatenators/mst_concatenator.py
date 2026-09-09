@@ -48,12 +48,10 @@ class MstConcatenator(NetworkConcatenator):
         self,
         networkA: LigandNetwork,
         networkB: LigandNetwork,
-        avoid: set[frozenset],
+        exclude: set[frozenset],
     ) -> list[LigandAtomMapping]:
         """Score every bipartite candidate edge between two subnetworks."""
-        possible_edges = self._filter_avoided(
-            [(na, nb) for na in networkA.nodes for nb in networkB.nodes], avoid
-        )
+        possible_edges = self._generate_bipartite_edges(networkA, networkB, exclude)
         return _score_mappings(
             possible_edges=possible_edges,
             scorer=self.scorer,
@@ -108,12 +106,12 @@ class MstConcatenator(NetworkConcatenator):
     def _connect_subnetworks_mst(
         self,
         ligand_networks: list[LigandNetwork],
-        avoid: set[frozenset],
+        exclude: set[frozenset],
     ) -> list[LigandAtomMapping]:
         # Find the best scored edge for every pair of subnetworks
         best_mapping_by_pair = {}
         for i, j in itertools.combinations(range(len(ligand_networks)), 2):
-            mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j], avoid)
+            mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j], exclude)
             if mappings:
                 best_mapping_by_pair[(i, j)] = max(
                     mappings,
@@ -149,7 +147,7 @@ class MstConcatenator(NetworkConcatenator):
     def concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        avoid_edges: Iterable[LigandAtomMapping] | None = None,
+        exclude_edges: Iterable[LigandAtomMapping] | None = None,
     ) -> LigandNetwork:
         """
         Concatenate the given networks.
@@ -158,9 +156,9 @@ class MstConcatenator(NetworkConcatenator):
         ----------
         ligand_networks: Iterable[LigandNetwork]
             LigandNetworks to concatenate.
-        avoid_edges: Iterable[AtomMapping], optional
+        exclude_edges: Iterable[AtomMapping], optional
             Mappings that cannot be proposed as new connections which is useful for excluding edges
-            that had already failed. If avoiding these edges leaves the network unbridgeable, an error is raised.
+            that had already failed. If excluding these edges leaves the network unbridgeable, an error is raised.
             Default: None
 
         Returns
@@ -179,7 +177,7 @@ class MstConcatenator(NetworkConcatenator):
         if not ligand_networks:
             raise ValueError("At least one LigandNetwork is required")
 
-        avoid = self._normalize_avoid_edges(avoid_edges)
+        exclude = self._normalize_excluded_edges(exclude_edges)
 
         disconnected_inputs = [i for i, n in enumerate(ligand_networks) if not n.is_connected()]
         if disconnected_inputs:
@@ -198,7 +196,7 @@ class MstConcatenator(NetworkConcatenator):
         if len(ligand_networks) == 1:
             return ligand_networks[0]
 
-        selected_bridges = self._connect_subnetworks_mst(ligand_networks, avoid)
+        selected_bridges = self._connect_subnetworks_mst(ligand_networks, exclude)
         concat_network = self._build_concatenated_network(ligand_networks, selected_bridges)
 
         return concat_network

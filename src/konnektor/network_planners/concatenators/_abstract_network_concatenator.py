@@ -59,26 +59,33 @@ class NetworkConcatenator(NetworkPlanner):
         return self.concatenate_networks(*args, **kwargs)
 
     @staticmethod
-    def _normalize_avoid_edges(
-        avoid_edges: Iterable[AtomMapping] | None,
+    def _normalize_excluded_edges(
+        exclude_edges: Iterable[AtomMapping] | None,
     ) -> set[frozenset]:
-        """Normalize `avoid_edges` into a set of undirected component-pairs."""
+        """Normalize `exclude_edges` into a set of undirected component-pairs."""
         return {
-            frozenset((mapping.componentA, mapping.componentB)) for mapping in (avoid_edges or ())
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges or ())
         }
 
     @staticmethod
-    def _filter_avoided(
-        possible_edges: list[tuple[Component, Component]], avoid: set[frozenset]
-    ) -> list[tuple[Component, Component]]:
-        """Drop candidate edges whose component-pair is in `avoid`."""
-        return [(a, b) for (a, b) in possible_edges if frozenset((a, b)) not in avoid]
+    def _generate_bipartite_edges(
+        networkA: LigandNetwork,
+        networkB: LigandNetwork,
+        exclude: set[frozenset],
+    ) -> list[tuple]:
+        """Generate allowed edges between two ligand networks."""
+        return [
+            (ligandA, ligandB)
+            for ligandA in networkA.nodes
+            for ligandB in networkB.nodes
+            if frozenset((ligandA, ligandB)) not in exclude
+        ]
 
     @abc.abstractmethod
     def concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        avoid_edges: Iterable[AtomMapping] | None = None,
+        exclude_edges: Iterable[AtomMapping] | None = None,
     ) -> LigandNetwork:
         """Concatenate the `ligand_networks` into a single LigandNetwork object.
 
@@ -86,9 +93,9 @@ class NetworkConcatenator(NetworkPlanner):
         ----------
         ligand_networks: Iterable[LigandNetwork]
             LigandNetworks to concatenate.
-        avoid_edges: Iterable[AtomMapping], optional
+        exclude_edges: Iterable[AtomMapping], optional
             Mappings that cannot be proposed as new connections which is useful for excluding edges
-            that had already failed. If avoiding these edges leaves the network unbridgeable, an error is raised.
+            that had already failed. If excluding these edges leaves the network unbridgeable, an error is raised.
             Default: None
 
         Returns
