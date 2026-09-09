@@ -4,12 +4,15 @@
 import pytest
 from gufe import LigandNetwork
 
-from konnektor.network_planners.concatenators._abstract_network_concatenator import NetworkConcatenator
+from konnektor.network_planners.concatenators._abstract_network_concatenator import (
+    NetworkConcatenator,
+)
 from konnektor.utils.toy_data import (
     EmptyMapper,
     RandomScorer,
     build_random_dataset,
 )
+
 
 class DummyConcatenator(NetworkConcatenator):
     def __init__(self, result=None):
@@ -88,9 +91,7 @@ def test_concatenate_networks_normalizes_excluded_edges(two_ligands):
         exclude_edges=[mapping],
     )
 
-    assert concatenator.received_exclude == {
-        frozenset((mapping.componentA, mapping.componentB))
-    }
+    assert concatenator.received_exclude == {frozenset((mapping.componentA, mapping.componentB))}
 
 
 def test_concatenate_networks_rejects_disconnected_result(two_ligands):
@@ -103,4 +104,3 @@ def test_concatenate_networks_rejects_disconnected_result(two_ligands):
 
     with pytest.raises(RuntimeError, match="Could not build a connected network"):
         concatenator.concatenate_networks([network_a, network_b])
-

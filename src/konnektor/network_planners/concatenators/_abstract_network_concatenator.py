@@ -8,7 +8,6 @@ from collections.abc import Callable, Iterable
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
-
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
@@ -124,8 +123,7 @@ class NetworkConcatenator(NetworkPlanner):
         if not ligand_networks:
             raise ValueError("At least one LigandNetwork is required")
 
-        disconnected_inputs = [n for n in ligand_networks if
-                               not n.is_connected()]
+        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
         if disconnected_inputs:
             raise RuntimeError(
                 f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
