@@ -18,7 +18,7 @@ class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper] | None,
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator | None = None,  # TODO: remove this
     ):
