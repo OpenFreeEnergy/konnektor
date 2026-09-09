@@ -28,13 +28,10 @@ def test_starry_sky_network_planner():
 
     ligand_network = planner(components)
     n_clusters = len(planner.clusters)
-    n_connecting_edges = 2
-    approx_edges = n_clusters * ((n_compounds // n_clusters) - 1) + (
-        n_connecting_edges * n_clusters
-    )
+    approx_edges = n_clusters * ((n_compounds // n_clusters) - 1) + n_clusters
     assert isinstance(ligand_network, LigandNetwork)
     assert len(ligand_network.nodes) == n_compounds
     np.testing.assert_allclose(actual=len(ligand_network.edges), desired=approx_edges, rtol=5)
     assert ligand_network.is_connected()
 
-    np.testing.assert_allclose(get_network_score(ligand_network), 26.4454, rtol=0.01)
+    np.testing.assert_allclose(get_network_score(ligand_network), 24.166487, rtol=0.01)

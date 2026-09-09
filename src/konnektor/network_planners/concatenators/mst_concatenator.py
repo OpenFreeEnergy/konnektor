@@ -3,9 +3,9 @@
 
 import itertools
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
@@ -14,31 +14,25 @@ from ._abstract_network_concatenator import NetworkConcatenator
 log = logging.getLogger(__name__)
 
 
-# TODO: check this algorithm again
-
-
 class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper] | None,
-        scorer,
-        n_connecting_edges: int = 2,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator | None = None,  # TODO: remove this
     ):
         """
-        A NetworkConcatenator that connects two Networks with a Kruskal-like
-        approach, up to `n_connecting_edges`.
+        A NetworkConcatenator that connects subnetworks by treating each
+        subnetwork as a node in an MST.
 
         Parameters
         ----------
-        mapper: AtomMapper
+        mappers: AtomMapper
             AtomMapper(s) to use to propose mappings.
-            If more than one AtomMapper is provided, the mapping with the lowest score (as scored by `scorer`) will be used.
+            If more than one AtomMapper is provided, the mapping with the best score (as scored by `scorer`) will be used.
         scorer: Callable[[AtomMapping], float] | None
             Callable which takes a AtomMapping and returns a float in [0,1].
-        n_connecting_edges: int, optional
-            Maximum number of edges to create when connecting the networks, by default 2.
         n_processes: int, optional
             Number of processes that can be used for the network generation, by default 1.
         """
@@ -47,13 +41,114 @@ class MstConcatenator(NetworkConcatenator):
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
-            _initial_edge_lister=None,  # TODO: should this be _initial_edge_lister?
+            _initial_edge_lister=_initial_edge_lister,
         )
-        self.n_connecting_edges = n_connecting_edges
+
+    def _score_pair_edges(
+        self, networkA: LigandNetwork, networkB: LigandNetwork
+    ) -> list[AtomMapping]:
+        """Score every bipartite candidate edge between two subnetworks."""
+        possible_edges = [(na, nb) for na in networkA.nodes for nb in networkB.nodes]
+        return _score_mappings(
+            possible_edges=possible_edges,
+            scorer=self.scorer,
+            mappers=self.mappers,
+            n_processes=self.n_processes,
+            show_progress=self.progress,
+        )
+
+    def _spanning_tree_pairs(
+        self,
+        best_mapping_by_pair: dict[tuple[int, int], AtomMapping],
+        n_networks: int,
+    ) -> list[tuple[int, int]]:
+        """
+        Build an MST over subnetworks to decide which subnetworks to join.
+
+        Parameters
+        ----------
+        best_mapping_by_pair : dict[tuple[int, int], AtomMapping]
+            The best-scoring mapping for each pair of subnetworks.
+            Each key (i, j) identifies ligand_networks[i] and ligand_networks[j].
+        n_networks : int
+            Number of input subnetworks.
+
+        Returns
+        -------
+        list[tuple[int, int]]
+            Pairs of input subnetwork indices defining the edges of the MST.
+        """
+        if not best_mapping_by_pair:
+            return []
+        subnetwork_edges = list(best_mapping_by_pair)
+        # Get the score of the best possible mapping between the subnetworks.
+        subnetwork_scores = [
+            best_mapping_by_pair[pair].annotations["score"] for pair in subnetwork_edges
+        ]
+        # Create an MST where each node is a subnetwork
+        mst = self.network_generator.generate_network(
+            subnetwork_edges,
+            subnetwork_scores,
+        )
+
+        # Reorder the subnetwork indices to match keys in best_mapping_by_pair
+        subnetwork_pairs = [(min(i, j), max(i, j)) for i, j in mst.edges]
+
+        # A spanning tree over n subnetworks must contain exactly n - 1 edges.
+        # Discard incomplete spanning forests.
+        if len(subnetwork_pairs) != n_networks - 1:
+            return []
+
+        return subnetwork_pairs
+
+    def _connect_subnetworks_mst(
+        self,
+        ligand_networks: list[LigandNetwork],
+    ) -> list[AtomMapping]:
+        # Find the best scored edge for every pair of subnetworks
+        best_mapping_by_pair = {}
+        for i, j in itertools.combinations(range(len(ligand_networks)), 2):
+            mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j])
+            if mappings:
+                best_mapping_by_pair[(i, j)] = max(
+                    mappings,
+                    key=lambda mapping: (
+                        mapping.annotations["score"],
+                        mapping.key,  # deterministic tie-break
+                    ),
+                )
+
+        # Identify which subnetworks to connect (MST over subnetworks)
+        subnetwork_pairs = self._spanning_tree_pairs(best_mapping_by_pair, len(ligand_networks))
+
+        # Connect each subnetwork pair with best scored edge
+        selected_bridges = [best_mapping_by_pair[pair] for pair in subnetwork_pairs]
+        return selected_bridges
+
+    def _build_concatenated_network(
+        self,
+        ligand_networks: list[LigandNetwork],
+        selected_bridges: list[AtomMapping],
+    ) -> LigandNetwork:
+        # Add the original subnetworks
+        edges = list(selected_bridges)
+        nodes = set()
+        for network in ligand_networks:
+            edges.extend(network.edges)
+            nodes.update(network.nodes)
+
+        concat_network = LigandNetwork(edges=edges, nodes=nodes)
+        if not concat_network.is_connected():
+            raise RuntimeError(
+                "Could not connect all subnetworks. No mappable edges exist "
+                "between some subnetworks (possibly all excluded via avoid_edges)."
+            )
+
+        return concat_network
 
     def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
-        Concatenate the given networks.
+        Concatenate the given ligand_networks, treating each ligand_network as a node in a Minimal Spanning Tree.
 
         Parameters
         ----------
@@ -66,57 +161,29 @@ class MstConcatenator(NetworkConcatenator):
             The concatenated LigandNetwork.
         """
 
+        ligand_networks = list(ligand_networks)
+        if not ligand_networks:
+            raise ValueError("At least one LigandNetwork is required")
+
+        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
+        if disconnected_inputs:
+            raise RuntimeError(
+                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
+                f"subnetworks are disconnected. "
+                f"MstConcatenator expects connected LigandNetworks; "
+                f"use connected_subnetworks to split a disconnected network first."
+            )
+
         log.info(
             f"Number of edges in individual networks:\n"
-            f"{sum([len(s.edges) for s in ligand_networks])}/"
+            f"{sum(len(s.edges) for s in ligand_networks)}/"
             f"{[len(s.edges) for s in ligand_networks]}"
         )
 
-        selected_edges = []
-        selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
-            # Generate fully connected Bipartite Graph
-            ligands = list(ligandNetworkA.nodes | ligandNetworkB.nodes)
-            nodesA = ligandNetworkA.nodes
-            nodesB = ligandNetworkB.nodes
-            p_edges = [(na, nb) for na in nodesA for nb in nodesB]
+        if len(ligand_networks) == 1:
+            return ligand_networks[0]
 
-            bipartite_graph_mappings = _score_mappings(
-                possible_edges=p_edges,
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_processes=self.n_processes,
-                show_progress=self.progress,
-            )
+        selected_bridges = self._connect_subnetworks_mst(ligand_networks)
+        concat_network = self._build_concatenated_network(ligand_networks, selected_bridges)
 
-            # Find MST subset for Bipartite
-            edge_map = {
-                (ligands.index(m.componentA), ligands.index(m.componentB)): m
-                for m in bipartite_graph_mappings
-            }
-            edges = list(edge_map.keys())
-            weights = [edge_map[k].annotations["score"] for k in edges]
-
-            mg = self.network_generator.generate_network(
-                edges, weights, n_edges=self.n_connecting_edges
-            )
-
-            selected_mappings = [
-                edge_map[k] if (k in edge_map) else edge_map[tuple(list(k)[::-1])] for k in mg.edges
-            ]
-
-            log.info(f"Adding ConnectingEdges: {len(selected_mappings)}")
-
-            # Add network connecting edges
-            selected_edges.extend(selected_mappings)
-
-        # Constructed final Edges:
-        # Add all old network edges:
-        for network in ligand_networks:
-            selected_edges.extend(network.edges)
-            selected_nodes.extend(network.nodes)
-
-        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
-        log.info(f"Total Concatenated Edges: {len(selected_edges)}")
-
-        return concat_LigandNetwork
+        return concat_network
