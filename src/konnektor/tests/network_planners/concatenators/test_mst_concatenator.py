@@ -5,7 +5,7 @@ import pytest
 from gufe import LigandNetwork
 
 from konnektor.network_planners.concatenators import MstConcatenator
-from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_mst_network
+from konnektor.utils.toy_data import EmptyMapper, RandomScorer, build_n_random_mst_network, build_random_dataset
 
 
 @pytest.mark.parametrize("n_sub_networks", [2, 3, 4, 6])
