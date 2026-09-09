@@ -141,19 +141,12 @@ class MstConcatenator(NetworkConcatenator):
             edges.extend(network.edges)
             nodes.update(network.nodes)
 
-        concat_network = LigandNetwork(edges=edges, nodes=nodes)
-        if not concat_network.is_connected():
-            raise RuntimeError(
-                "Could not connect all subnetworks. No mappable edges exist "
-                "between some subnetworks (possibly all excluded via avoid_edges)."
-            )
+        return LigandNetwork(edges=edges, nodes=nodes)
 
-        return concat_network
-
-    def concatenate_networks(
+    def _concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        exclude_edges: Iterable[AtomMapping] | None = None,
+        exclude: set[frozenset],
     ) -> LigandNetwork:
         """
         Concatenate the given networks.
@@ -162,10 +155,8 @@ class MstConcatenator(NetworkConcatenator):
         ----------
         ligand_networks: Iterable[LigandNetwork]
             LigandNetworks to concatenate.
-        exclude_edges: Iterable[AtomMapping], optional
-            Mappings that cannot be proposed as new connections which is useful for excluding edges
-            that had already failed. If excluding these edges leaves the network unbridgeable, an error is raised.
-            Default: None
+        exclude : set[frozenset]
+            Unordered ligand pairs that must not be proposed as new connections.
 
         Returns
         -------
@@ -175,16 +166,8 @@ class MstConcatenator(NetworkConcatenator):
         Raises
         ------
         RuntimeError
-            If the network cannot be connected, either because the input network
-            was disconnected or no mappable edges could be found between the subnetworks.
+            If any input LigandNetwork is disconnected.
         """
-
-        ligand_networks = list(ligand_networks)
-        if not ligand_networks:
-            raise ValueError("At least one LigandNetwork is required")
-
-        exclude = self._normalize_excluded_edges(exclude_edges)
-
         disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
         if disconnected_inputs:
             raise RuntimeError(
