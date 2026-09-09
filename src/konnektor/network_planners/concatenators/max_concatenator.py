@@ -46,29 +46,24 @@ class MaxConcatenator(NetworkConcatenator):
         )
         self.progress = show_progress
 
-    def concatenate_networks(
+    def _concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        exclude_edges: Iterable[AtomMapping] | None = None,
+        exclude: set[frozenset],
     ) -> LigandNetwork:
         """
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
             An iterable of LigandNetworks to connect.
-        exclude_edges: Iterable[AtomMapping], optional
-            Mappings that cannot be proposed as new connections which is useful for excluding edges
-            that had already failed. If excluding these edges leaves the network unbridgeable, an error is raised.
-            Default: None
+        exclude : set[frozenset]
+            Unordered ligand pairs that must not be proposed as new connections.
 
         Returns
         -------
         LigandNetwork
             The concatenated LigandNetwork with all possible nodes connected by edges.
         """
-        ligand_networks = list(ligand_networks)
-        exclude = self._normalize_excluded_edges(exclude_edges)
-
         log.info(
             f"Number of edges in individual networks:\n"
             f"{sum([len(s.edges) for s in ligand_networks])}/"
@@ -76,7 +71,7 @@ class MaxConcatenator(NetworkConcatenator):
         )
 
         selected_edges = []
-        selected_nodes = []
+        selected_nodes = set()
         for networkA, networkB in itertools.combinations(ligand_networks, 2):
             # Generate Full Bipartite Graph, excluding specified edges
             possible_edges = self._generate_bipartite_edges(networkA, networkB, exclude)
@@ -94,13 +89,10 @@ class MaxConcatenator(NetworkConcatenator):
         # Add all old network edges:
         for network in ligand_networks:
             selected_edges.extend(network.edges)
-            selected_nodes.extend(network.nodes)
+            selected_nodes.update(network.nodes)
 
-        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
+        concat_network = LigandNetwork(edges=selected_edges, nodes=selected_nodes)
 
         log.info(f"Total Concatenated Edges: {len(selected_edges)} ")
 
-        if not concat_LigandNetwork.is_connected():
-            raise RuntimeError("could not build a connected network!")
-
-        return concat_LigandNetwork
+        return concat_network

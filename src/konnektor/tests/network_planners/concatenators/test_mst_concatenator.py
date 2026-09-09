@@ -113,8 +113,8 @@ def test_spanning_tree_pairs_discards_partial_forest():
     concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=n))
 
     # Only subnetworks 0, 1, and 2 are connected by candidate mappings.
-    mapping_01 = concatenator._score_pair_edges(subnetworks[0], subnetworks[1])[0]
-    mapping_12 = concatenator._score_pair_edges(subnetworks[1], subnetworks[2])[0]
+    mapping_01 = concatenator._score_pair_edges(subnetworks[0], subnetworks[1], exclude=[])[0]
+    mapping_12 = concatenator._score_pair_edges(subnetworks[1], subnetworks[2], exclude=[])[0]
     best_mapping_by_pair = {(0, 1): mapping_01, (1, 2): mapping_12}
 
     # Two edges are sufficient to span three subnetworks, but not four.

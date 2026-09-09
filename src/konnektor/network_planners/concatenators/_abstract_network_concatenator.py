@@ -59,15 +59,6 @@ class NetworkConcatenator(NetworkPlanner):
         return self.concatenate_networks(*args, **kwargs)
 
     @staticmethod
-    def _normalize_excluded_edges(
-        exclude_edges: Iterable[AtomMapping] | None,
-    ) -> set[frozenset]:
-        """Normalize `exclude_edges` into a set of undirected component-pairs."""
-        return {
-            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges or ())
-        }
-
-    @staticmethod
     def _generate_bipartite_edges(
         networkA: LigandNetwork,
         networkB: LigandNetwork,
@@ -82,9 +73,17 @@ class NetworkConcatenator(NetworkPlanner):
         ]
 
     @abc.abstractmethod
+    def _concatenate_networks(
+        self,
+        ligand_networks: list[LigandNetwork],
+        exclude: set[frozenset],
+    ) -> LigandNetwork:
+        """Implement the concatenation algorithm."""
+        ...
+
     def concatenate_networks(
         self,
-        ligand_networks: Iterable[LigandNetwork],
+        ligand_networks: list[LigandNetwork],
         exclude_edges: Iterable[AtomMapping] | None = None,
     ) -> LigandNetwork:
         """Concatenate the `ligand_networks` into a single LigandNetwork object.
@@ -103,4 +102,22 @@ class NetworkConcatenator(NetworkPlanner):
         LigandNetwork
             The concatenated LigandNetwork.
         """
-        raise NotImplementedError()
+        ligand_networks = list(ligand_networks)
+
+        if not ligand_networks:
+            raise ValueError("At least one LigandNetwork is required")
+
+        # Store excluded mappings as undirected ligand pairs.
+        exclude = {
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges or ())
+        }
+
+        concat_network = self._concatenate_networks(
+            ligand_networks=ligand_networks,
+            exclude=exclude,
+        )
+
+        if not concat_network.is_connected():
+            raise RuntimeError("Could not build a connected network.")
+
+        return concat_network
