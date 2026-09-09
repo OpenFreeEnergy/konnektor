@@ -7,7 +7,6 @@ from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
-from ...network_planners._map_scoring import _score_mappings
 from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
@@ -55,7 +54,7 @@ class MaxConcatenator(NetworkConcatenator):
         Parameters
         ----------
         ligand_networks: list[LigandNetwork]
-            An iterable of LigandNetworks to connect.
+            LigandNetworks to concatenate.
         exclude : set[frozenset]
             Unordered ligand pairs that must not be proposed as new connections.
 
@@ -64,29 +63,19 @@ class MaxConcatenator(NetworkConcatenator):
         LigandNetwork
             The concatenated LigandNetwork with all possible nodes connected by edges.
         """
-        log.info(
-            f"Number of edges in individual networks:\n"
-            f"{sum([len(s.edges) for s in ligand_networks])}/"
-            f"{[len(s.edges) for s in ligand_networks]}"
-        )
-
         selected_edges = []
         selected_nodes = set()
         for networkA, networkB in itertools.combinations(ligand_networks, 2):
-            # Generate Full Bipartite Graph, excluding specified edges
-            possible_edges = self._generate_bipartite_edges(networkA, networkB, exclude)
-            bipartite_graph_mappings = _score_mappings(
-                possible_edges=possible_edges,
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_processes=self.n_processes,
-                show_progress=self.progress,
+            # Generate and keep all scored mappings between this network pair
+            mappings = self._score_bipartite_edges(
+                networkA,
+                networkB,
+                exclude,
             )
             # Add network connecting edges
-            selected_edges.extend(bipartite_graph_mappings)
+            selected_edges.extend(mappings)
 
-        # Constructed final Edges:
-        # Add all old network edges:
+        # Add all original network edges:
         for network in ligand_networks:
             selected_edges.extend(network.edges)
             selected_nodes.update(network.nodes)
