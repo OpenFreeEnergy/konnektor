@@ -148,7 +148,7 @@ class MstConcatenator(NetworkConcatenator):
 
     def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
         """
-        Concatenate the given networks.
+        Concatenate the given ligand_networks, treating each ligand_network as a node in a Minimal Spanning Tree.
 
         Parameters
         ----------
