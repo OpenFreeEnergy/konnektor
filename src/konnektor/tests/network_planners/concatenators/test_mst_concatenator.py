@@ -58,8 +58,8 @@ def test_concatenate_rejects_disconnected_input():
         concatenator.concatenate_networks(ligand_networks=[disconnected])
 
 
-def test_avoid_edges_excludes_candidate():
-    """The avoid_edges should never get scored."""
+def test_exclude_edges_excludes_candidate():
+    """The exclude_edges should never get scored."""
     n_compounds = 20
     networkA, networkB = build_n_random_mst_network(
         n_compounds=n_compounds,
@@ -73,14 +73,14 @@ def test_avoid_edges_excludes_candidate():
         EmptyMapper(),
         RandomScorer(n=n_compounds),
     )
-    mappings = concatenator._score_pair_edges(networkA, networkB, avoid=[])
-    avoided = frozenset((mappings[0].componentA, mappings[0].componentB))
+    mappings = concatenator._score_pair_edges(networkA, networkB, exclude=[])
+    excluded = frozenset((mappings[0].componentA, mappings[0].componentB))
 
     # Re-run with that mapping excluded.
-    mappings = concatenator._score_pair_edges(networkA, networkB, avoid={avoided})
+    mappings = concatenator._score_pair_edges(networkA, networkB, exclude={excluded})
     resulting_pairs = {frozenset((mapping.componentA, mapping.componentB)) for mapping in mappings}
 
-    assert avoided not in resulting_pairs
+    assert excluded not in resulting_pairs
 
 
 def test_tied_scores_pick_highest_key():
@@ -96,10 +96,11 @@ def test_tied_scores_pick_highest_key():
     concatenator = MstConcatenator(EmptyMapper(), constant_scorer)
 
     # every candidate between the two subnetworks scores 0.5
-    candidates = concatenator._score_pair_edges(networkA, networkB, avoid=[])
+    candidates = concatenator._score_pair_edges(networkA, networkB, exclude=[])
     expected = max(candidates, key=lambda m: m.key)
 
-    bridges = concatenator._select_mst_bridges([networkA, networkB], avoid=[])
+    bridges = concatenator._select_mst_bridges([networkA, networkB], exclude=[])
+
     assert len(bridges) == 1
     assert bridges[0] == expected
 
