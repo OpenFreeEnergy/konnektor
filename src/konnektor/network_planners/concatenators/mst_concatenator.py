@@ -149,7 +149,7 @@ class MstConcatenator(NetworkConcatenator):
         exclude: set[frozenset],
     ) -> LigandNetwork:
         """
-        Concatenate the given networks.
+        Concatenate the given ligand_networks, treating each ligand_network as a node in a Minimal Spanning Tree.
 
         Parameters
         ----------

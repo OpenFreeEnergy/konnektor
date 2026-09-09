@@ -5,7 +5,7 @@ import abc
 import logging
 from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, AtomMapping, Component, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
