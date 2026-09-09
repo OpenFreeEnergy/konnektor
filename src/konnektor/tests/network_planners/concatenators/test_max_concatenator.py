@@ -4,7 +4,8 @@
 import pytest
 from gufe import LigandNetwork
 
-from konnektor.network_planners.concatenators.max_concatenator import MaxConcatenatorfrom konnektor.network_planners.concatenators.max_concatenator import MaxConcatenator
+from konnektor.network_planners.concatenators.max_concatenator import MaxConcatenator
+from konnektor.network_planners.concatenators.max_concatenator import MaxConcatenator
 from konnektor.tests.network_planners.conf import (
     GenAtomMapper,
     length_scorer,
