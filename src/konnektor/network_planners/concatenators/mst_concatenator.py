@@ -87,7 +87,8 @@ class MstConcatenator(NetworkConcatenator):
         ]
         # Create an MST where each node is a subnetwork
         mst = self.network_generator.generate_network(
-            subnetwork_edges, subnetwork_scores,
+            subnetwork_edges,
+            subnetwork_scores,
         )
 
         # Reorder the subnetwork indices to match keys in best_mapping_by_pair
