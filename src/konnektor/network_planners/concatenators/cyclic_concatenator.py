@@ -22,7 +22,6 @@ class CyclicConcatenator(NetworkConcatenator):
         n_connecting_cycles: int = 2,
         cycle_sizes: int | list[int] = 3,
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator | None = None,
     ):
         """
         NOTE: This class has not yet been implemented.
@@ -40,15 +39,7 @@ class CyclicConcatenator(NetworkConcatenator):
             Size of the cycles to build, can be an int or range of ints, by default 3.
         n_processes: int, optional
             Number of processes that can be used for the network generation, by default 1.
-        _initial_edge_lister: NetworkConcatenator | None, optional
-            The NetworkConcatenator to use if the NetworkConcatenator requires an initial set of edges.
         """
-        # TODO: this needs to be assigned to self._initial_edge_lister to actually get used.
-        if _initial_edge_lister is None:
-            _initial_edge_lister = MaxConcatenator(
-                mappers=mappers, scorer=scorer, n_processes=n_processes
-            )
-
         super().__init__(
             mappers=mappers,
             scorer=scorer,
