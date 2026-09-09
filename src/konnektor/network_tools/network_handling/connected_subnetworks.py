@@ -28,7 +28,7 @@ def connected_subnetworks(network: LigandNetwork) -> list[LigandNetwork]:
         subnetwork_edges = [
             edge
             for edge in network.edges
-            if edge.componentA in component and edge.componentB in subnetwork_nodes
+            if edge.componentA in subnetwork_nodes and edge.componentB in subnetwork_nodes
         ]
         subnetworks.append(LigandNetwork(nodes=subnetwork_nodes, edges=subnetwork_edges))
 
