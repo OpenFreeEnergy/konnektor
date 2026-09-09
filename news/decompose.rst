@@ -1,6 +1,6 @@
 **Added:**
 
-* Implemented a network tool that splits a disconnected LigandNetwork into connected sub-networks (PR #267).
+* Implemented the network tool ``connected_subnetworks()`` that splits a disconnected LigandNetwork into connected sub-networks (PR #267).
 
 **Changed:**
 

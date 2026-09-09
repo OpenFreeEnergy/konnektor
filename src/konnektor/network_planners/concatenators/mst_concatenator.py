@@ -3,9 +3,9 @@
 
 import itertools
 import logging
-from collections.abc import Iterable
+from collections.abc import Callable, Iterable
 
-from gufe import AtomMapper, LigandAtomMapping, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
@@ -18,7 +18,7 @@ class MstConcatenator(NetworkConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper] | None,
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator | None = None,  # TODO: remove this
     ):
@@ -45,11 +45,8 @@ class MstConcatenator(NetworkConcatenator):
         )
 
     def _score_pair_edges(
-        self,
-        networkA: LigandNetwork,
-        networkB: LigandNetwork,
-        avoid: set[frozenset],
-    ) -> list[LigandAtomMapping]:
+        self, networkA: LigandNetwork, networkB: LigandNetwork, avoid: set[frozenset],
+    ) -> list[AtomMapping]:
         """Score every bipartite candidate edge between two subnetworks."""
         possible_edges = self._filter_avoided(
             [(na, nb) for na in networkA.nodes for nb in networkB.nodes], avoid
@@ -64,7 +61,7 @@ class MstConcatenator(NetworkConcatenator):
 
     def _spanning_tree_pairs(
         self,
-        best_mapping_by_pair: dict[tuple[int, int], LigandAtomMapping],
+        best_mapping_by_pair: dict[tuple[int, int], AtomMapping],
         n_networks: int,
     ) -> list[tuple[int, int]]:
         """
@@ -72,7 +69,7 @@ class MstConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        best_mapping_by_pair : dict[tuple[int, int], LigandAtomMapping]
+        best_mapping_by_pair : dict[tuple[int, int], AtomMapping]
             The best-scoring mapping for each pair of subnetworks.
             Each key (i, j) identifies ligand_networks[i] and ligand_networks[j].
         n_networks : int
@@ -92,10 +89,13 @@ class MstConcatenator(NetworkConcatenator):
         ]
         # Create an MST where each node is a subnetwork
         mst = self.network_generator.generate_network(
-            subnetwork_edges, subnetwork_scores, n_edges=n_networks - 1
+            subnetwork_edges,
+            subnetwork_scores,
         )
+
         # Reorder the subnetwork indices to match keys in best_mapping_by_pair
         subnetwork_pairs = [(min(i, j), max(i, j)) for i, j in mst.edges]
+
         # A spanning tree over n subnetworks must contain exactly n - 1 edges.
         # Discard incomplete spanning forests.
         if len(subnetwork_pairs) != n_networks - 1:
@@ -107,7 +107,7 @@ class MstConcatenator(NetworkConcatenator):
         self,
         ligand_networks: list[LigandNetwork],
         avoid: set[frozenset],
-    ) -> list[LigandAtomMapping]:
+    ) -> list[AtomMapping]:
         # Find the best scored edge for every pair of subnetworks
         best_mapping_by_pair = {}
         for i, j in itertools.combinations(range(len(ligand_networks)), 2):
@@ -131,7 +131,7 @@ class MstConcatenator(NetworkConcatenator):
     def _build_concatenated_network(
         self,
         ligand_networks: list[LigandNetwork],
-        selected_bridges: list[LigandAtomMapping],
+        selected_bridges: list[AtomMapping],
     ) -> LigandNetwork:
         # Add the original subnetworks
         edges = list(selected_bridges)
@@ -184,10 +184,11 @@ class MstConcatenator(NetworkConcatenator):
 
         avoid = self._normalize_avoid_edges(avoid_edges)
 
-        disconnected_inputs = [i for i, n in enumerate(ligand_networks) if not n.is_connected()]
+        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
         if disconnected_inputs:
             raise RuntimeError(
-                f"Input subnetworks {disconnected_inputs} are disconnected. "
+                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
+                f"subnetworks are disconnected. "
                 f"MstConcatenator expects connected LigandNetworks; "
                 f"use connected_subnetworks to split a disconnected network first."
             )
