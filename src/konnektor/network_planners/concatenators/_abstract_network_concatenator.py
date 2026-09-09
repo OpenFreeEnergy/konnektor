@@ -74,9 +74,9 @@ class NetworkConcatenator(NetworkPlanner):
 
     @abc.abstractmethod
     def _concatenate_networks(
-            self,
-            ligand_networks: list[LigandNetwork],
-            exclude: set[frozenset],
+        self,
+        ligand_networks: list[LigandNetwork],
+        exclude: set[frozenset],
     ) -> LigandNetwork:
         """Implement the concatenation algorithm."""
         ...
@@ -109,8 +109,7 @@ class NetworkConcatenator(NetworkPlanner):
 
         # Store excluded mappings as undirected ligand pairs.
         exclude = {
-            frozenset((mapping.componentA, mapping.componentB))
-            for mapping in (exclude_edges or ())
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges or ())
         }
 
         concat_network = self._concatenate_networks(
