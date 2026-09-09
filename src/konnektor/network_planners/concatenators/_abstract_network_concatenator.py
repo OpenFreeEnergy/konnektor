@@ -110,6 +110,14 @@ class NetworkConcatenator(NetworkPlanner):
         -------
         LigandNetwork
             The concatenated LigandNetwork.
+
+        Raises
+        ------
+        ValueError
+            If no LigandNetworks are provided.
+        RuntimeError
+            If any input LigandNetwork is disconnected or if the concatenation
+            algorithm cannot produce a connected LigandNetwork.
         """
         ligand_networks = list(ligand_networks)
 
