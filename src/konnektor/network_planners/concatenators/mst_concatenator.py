@@ -156,7 +156,7 @@ class MstConcatenator(NetworkConcatenator):
         exclude_edges: Iterable[AtomMapping] | None = None,
     ) -> LigandNetwork:
         """
-        Concatenate the given networks.
+        Concatenate the given ligand_networks, treating each ligand_network as a node in a Minimal Spanning Tree.
 
         Parameters
         ----------
