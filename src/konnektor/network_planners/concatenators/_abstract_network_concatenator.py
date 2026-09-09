@@ -7,6 +7,8 @@ from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
+from ...network_planners._map_scoring import _score_mappings
+
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
@@ -51,26 +53,33 @@ class NetworkConcatenator(NetworkPlanner):
         # edge listing is usually the most expensive task,
         # so parallelization is important here.
         if self._initial_edge_lister is not None and hasattr(
-            self._initial_edge_lister, "nprocesses"
+            self._initial_edge_lister, "n_processes"
         ):
-            self.n_processes = n_processes
+            self._initial_edge_lister.n_processes = n_processes
 
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
-    @staticmethod
-    def _generate_bipartite_edges(
+    def _score_bipartite_edges(
+        self,
         networkA: LigandNetwork,
         networkB: LigandNetwork,
         exclude: set[frozenset],
-    ) -> list[tuple]:
-        """Generate allowed edges between two ligand networks."""
-        return [
+    ) -> list[AtomMapping]:
+        """Generate and score allowed mappings between two networks."""
+        possible_edges = [
             (ligandA, ligandB)
             for ligandA in networkA.nodes
             for ligandB in networkB.nodes
             if frozenset((ligandA, ligandB)) not in exclude
         ]
+        return _score_mappings(
+            possible_edges=possible_edges,
+            scorer=self.scorer,
+            mappers=self.mappers,
+            n_processes=self.n_processes,
+            show_progress=self.progress,
+        )
 
     @abc.abstractmethod
     def _concatenate_networks(
@@ -83,7 +92,7 @@ class NetworkConcatenator(NetworkPlanner):
 
     def concatenate_networks(
         self,
-        ligand_networks: list[LigandNetwork],
+        ligand_networks: Iterable[LigandNetwork],
         exclude_edges: Iterable[AtomMapping] | None = None,
     ) -> LigandNetwork:
         """Concatenate the `ligand_networks` into a single LigandNetwork object.
@@ -106,6 +115,25 @@ class NetworkConcatenator(NetworkPlanner):
 
         if not ligand_networks:
             raise ValueError("At least one LigandNetwork is required")
+
+        disconnected_inputs = [n for n in ligand_networks if
+                               not n.is_connected()]
+        if disconnected_inputs:
+            raise RuntimeError(
+                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
+                f"subnetworks are disconnected. "
+                f"Network concatenation expects each input LigandNetworks to be connected. "
+                f"Use connected_subnetworks to split disconnected networks first."
+            )
+
+        log.info(
+            f"Number of edges in individual networks:\n"
+            f"{sum(len(s.edges) for s in ligand_networks)}/"
+            f"{[len(s.edges) for s in ligand_networks]}"
+        )
+
+        if len(ligand_networks) == 1:
+            return ligand_networks[0]
 
         # Store excluded mappings as undirected ligand pairs.
         exclude = {

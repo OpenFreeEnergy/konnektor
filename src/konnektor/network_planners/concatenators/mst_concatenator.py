@@ -7,7 +7,6 @@ from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
-from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
 
@@ -42,22 +41,6 @@ class MstConcatenator(NetworkConcatenator):
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
             _initial_edge_lister=_initial_edge_lister,
-        )
-
-    def _score_pair_edges(
-        self,
-        networkA: LigandNetwork,
-        networkB: LigandNetwork,
-        exclude: set[frozenset],
-    ) -> list[AtomMapping]:
-        """Score every bipartite candidate edge between two subnetworks."""
-        possible_edges = self._generate_bipartite_edges(networkA, networkB, exclude)
-        return _score_mappings(
-            possible_edges=possible_edges,
-            scorer=self.scorer,
-            mappers=self.mappers,
-            n_processes=self.n_processes,
-            show_progress=self.progress,
         )
 
     def _spanning_tree_pairs(
@@ -104,7 +87,7 @@ class MstConcatenator(NetworkConcatenator):
 
         return subnetwork_pairs
 
-    def _connect_subnetworks_mst(
+    def _select_mst_bridges(
         self,
         ligand_networks: list[LigandNetwork],
         exclude: set[frozenset],
@@ -112,8 +95,13 @@ class MstConcatenator(NetworkConcatenator):
         # Find the best scored edge for every pair of subnetworks
         best_mapping_by_pair = {}
         for i, j in itertools.combinations(range(len(ligand_networks)), 2):
-            mappings = self._score_pair_edges(ligand_networks[i], ligand_networks[j], exclude)
+            mappings = self._score_bipartite_edges(
+                ligand_networks[i],
+                ligand_networks[j],
+                exclude,
+            )
             if mappings:
+                # Best ligand mapping for this pair of subnetworks
                 best_mapping_by_pair[(i, j)] = max(
                     mappings,
                     key=lambda mapping: (
@@ -145,7 +133,7 @@ class MstConcatenator(NetworkConcatenator):
 
     def _concatenate_networks(
         self,
-        ligand_networks: Iterable[LigandNetwork],
+        ligand_networks: list[LigandNetwork],
         exclude: set[frozenset],
     ) -> LigandNetwork:
         """
@@ -153,7 +141,7 @@ class MstConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks: list[LigandNetwork]
             LigandNetworks to concatenate.
         exclude : set[frozenset]
             Unordered ligand pairs that must not be proposed as new connections.
@@ -162,31 +150,7 @@ class MstConcatenator(NetworkConcatenator):
         -------
         LigandNetwork
             The concatenated LigandNetwork.
-
-        Raises
-        ------
-        RuntimeError
-            If any input LigandNetwork is disconnected.
         """
-        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
-        if disconnected_inputs:
-            raise RuntimeError(
-                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
-                f"subnetworks are disconnected. "
-                f"MstConcatenator expects connected LigandNetworks; "
-                f"use connected_subnetworks to split a disconnected network first."
-            )
+        selected_bridges = self._select_mst_bridges(ligand_networks, exclude)
 
-        log.info(
-            f"Number of edges in individual networks:\n"
-            f"{sum(len(s.edges) for s in ligand_networks)}/"
-            f"{[len(s.edges) for s in ligand_networks]}"
-        )
-
-        if len(ligand_networks) == 1:
-            return ligand_networks[0]
-
-        selected_bridges = self._connect_subnetworks_mst(ligand_networks, exclude)
-        concat_network = self._build_concatenated_network(ligand_networks, selected_bridges)
-
-        return concat_network
+        return self._build_concatenated_network(ligand_networks, selected_bridges)

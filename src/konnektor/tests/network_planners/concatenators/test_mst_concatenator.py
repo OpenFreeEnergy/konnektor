@@ -73,11 +73,11 @@ def test_exclude_edges_excludes_candidate():
         EmptyMapper(),
         RandomScorer(n=n_compounds),
     )
-    mappings = concatenator._score_pair_edges(networkA, networkB, exclude=[])
+    mappings = concatenator._score_bipartite_edges(networkA, networkB, exclude=[])
     excluded = frozenset((mappings[0].componentA, mappings[0].componentB))
 
     # Re-run with that mapping excluded.
-    mappings = concatenator._score_pair_edges(networkA, networkB, exclude={excluded})
+    mappings = concatenator._score_bipartite_edges(networkA, networkB, exclude={excluded})
     resulting_pairs = {frozenset((mapping.componentA, mapping.componentB)) for mapping in mappings}
 
     assert excluded not in resulting_pairs
@@ -96,10 +96,10 @@ def test_tied_scores_pick_highest_key():
     concatenator = MstConcatenator(EmptyMapper(), constant_scorer)
 
     # every candidate between the two subnetworks scores 0.5
-    candidates = concatenator._score_pair_edges(networkA, networkB, exclude=[])
+    candidates = concatenator._score_bipartite_edges(networkA, networkB, exclude=[])
     expected = max(candidates, key=lambda m: m.key)
 
-    bridges = concatenator._connect_subnetworks_mst([networkA, networkB], exclude=[])
+    bridges = concatenator._select_mst_bridges([networkA, networkB], exclude=[])
     assert len(bridges) == 1
     assert bridges[0] == expected
 
@@ -112,8 +112,8 @@ def test_spanning_tree_pairs_discards_partial_forest():
     concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=n))
 
     # Only subnetworks 0, 1, and 2 are connected by candidate mappings.
-    mapping_01 = concatenator._score_pair_edges(subnetworks[0], subnetworks[1], exclude=[])[0]
-    mapping_12 = concatenator._score_pair_edges(subnetworks[1], subnetworks[2], exclude=[])[0]
+    mapping_01 = concatenator._score_bipartite_edges(subnetworks[0], subnetworks[1], exclude=[])[0]
+    mapping_12 = concatenator._score_bipartite_edges(subnetworks[1], subnetworks[2], exclude=[])[0]
     best_mapping_by_pair = {(0, 1): mapping_01, (1, 2): mapping_12}
 
     # Two edges are sufficient to span three subnetworks, but not four.
