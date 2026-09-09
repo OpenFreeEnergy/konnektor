@@ -213,7 +213,7 @@ class StarrySkyNetworkGenerator(ClusteredNetworkGenerator):
         b. Cluster the Morgan Fingerprints with HDBSCAN. (default)
         2. Build Sub-Star Networks in each Cluster using the `StarNetworkGenerator`.
         3. Concatenate the Sub-Star Networks to the final Starry  Sky Network,
-        with the `MSTConcatenator` which joins the clusters with a minimum spanning tree (`n_connecting_edges` transformations per join).
+        with the `MSTConcatenator` which joins the clusters with a minimum spanning tree.
 
         This approach allows in comparison to the Star Network, to build a network containing multiple centers improving the graph score.
         Still adding a limited amount of `Transformation` s increasing the computational cost, but not as much `Transformations` as with the Twin Star Network would be generated.
