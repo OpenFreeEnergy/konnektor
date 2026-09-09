@@ -70,27 +70,9 @@ class RedundantMstConcatenator(MstConcatenator):
         -------
         LigandNetwork
             The concatenated LigandNetwork.
-
-        Raises
-        ------
-        RuntimeError
-            If any input LigandNetwork is disconnected.
         """
-        disconnected_inputs = [n for n in ligand_networks if
-                               not n.is_connected()]
-        if disconnected_inputs:
-            raise RuntimeError(
-                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
-                f"subnetworks are disconnected. "
-                f"RedundantMstConcatenator expects connected LigandNetworks; "
-                f"use connected_subnetworks to split a disconnected network first."
-            )
-
-        if len(ligand_networks) == 1:
-            return ligand_networks[0]
-
-        # Overlay n_redundancy spanning trees, excluding edges from earlier passes
         bridges: list[LigandAtomMapping] = []
+
         for n in range(self.n_redundancy):
             new_bridges = self._select_mst_bridges(ligand_networks, exclude)
             if not new_bridges:
