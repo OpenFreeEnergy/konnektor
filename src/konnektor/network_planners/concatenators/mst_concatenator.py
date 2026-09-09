@@ -79,10 +79,7 @@ class MstConcatenator(NetworkConcatenator):
             Pairs of input subnetwork indices defining the edges of the MST.
         """
         if not best_mapping_by_pair:
-            raise RuntimeError(
-                "Could not connect all subnetworks. No mappable edges exist "
-                "between the subnetworks."
-            )
+            return []
         subnetwork_edges = list(best_mapping_by_pair)
         # Get the score of the best possible mapping between the subnetworks.
         subnetwork_scores = [
@@ -90,15 +87,18 @@ class MstConcatenator(NetworkConcatenator):
         ]
         # Create an MST where each node is a subnetwork
         mst = self.network_generator.generate_network(
-            subnetwork_edges, subnetwork_scores, n_edges=n_networks - 1
+            subnetwork_edges, subnetwork_scores,
         )
-        if not mst.connected:
-            raise RuntimeError(
-                "Could not connect all subnetworks. No mappable path exists "
-                "between some subnetworks."
-            )
+
         # Reorder the subnetwork indices to match keys in best_mapping_by_pair
-        return [(min(i, j), max(i, j)) for i, j in mst.edges]
+        subnetwork_pairs = [(min(i, j), max(i, j)) for i, j in mst.edges]
+
+        # A spanning tree over n subnetworks must contain exactly n - 1 edges.
+        # Discard incomplete spanning forests.
+        if len(subnetwork_pairs) != n_networks - 1:
+            return []
+
+        return subnetwork_pairs
 
     def _connect_subnetworks_mst(
         self,
@@ -137,6 +137,11 @@ class MstConcatenator(NetworkConcatenator):
             nodes.update(network.nodes)
 
         concat_network = LigandNetwork(edges=edges, nodes=nodes)
+        if not concat_network.is_connected():
+            raise RuntimeError(
+                "Could not connect all subnetworks. No mappable edges exist "
+                "between some subnetworks (possibly all excluded via avoid_edges)."
+            )
 
         return concat_network
 
@@ -159,10 +164,11 @@ class MstConcatenator(NetworkConcatenator):
         if not ligand_networks:
             raise ValueError("At least one LigandNetwork is required")
 
-        disconnected_inputs = [i for i, n in enumerate(ligand_networks) if not n.is_connected()]
+        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
         if disconnected_inputs:
             raise RuntimeError(
-                f"Input subnetworks {disconnected_inputs} are disconnected. "
+                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
+                f"subnetworks are disconnected. "
                 f"MstConcatenator expects connected LigandNetworks; "
                 f"use connected_subnetworks to split a disconnected network first."
             )
