@@ -48,15 +48,17 @@ This is achieved by combining the Tools and Network Generator Algorithms, to bui
 # Here we generate some input data.
 from konnektor.data import get_benzene_ligands
 
-compounds = list(filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"],
-                        get_benzene_ligands()))
+compounds = list(
+    filter(lambda x: not x.name in ["lig_2", "lig_3", "lig_4", "lig_7"], get_benzene_ligands())
+)
 
 # Pick your Favourite Network layout with favourite AtomMapper and Scorer
 from openfe.setup import KartografAtomMapper, lomap_scorers
 from konnektor.network_planners import CyclicNetworkGenerator
 
-networker = CyclicNetworkGenerator(mappers=KartografAtomMapper(),
-                                   scorer=lomap_scorers.default_lomap_score)
+networker = CyclicNetworkGenerator(
+    mappers=KartografAtomMapper(), scorer=lomap_scorers.default_lomap_score
+)
 
 # Generate Network
 network = networker.generate_ligand_network(compounds)
@@ -64,6 +66,7 @@ network.name = "Cyclic Network"
 
 # Visualize the generated network
 from konnektor.visualization import draw_ligand_network
+
 fig = draw_ligand_network(network=network, title=network.name)
 
 fig.show()
