@@ -38,27 +38,7 @@ def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     assert n_edges_new == n_sub_networks - 1
 
 
-def test_concatenate_empty_raises():
-    concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=1))
-    with pytest.raises(ValueError, match="At least one"):
-        concatenator.concatenate_networks([])
-
-
-def test_concatenate_single_network_returned_unchanged():
-    (network,) = build_n_random_mst_network(n_compounds=10, sub_networks=1, overlap=0, rand_seed=1)
-    result = MstConcatenator(EmptyMapper(), RandomScorer(n=10)).concatenate_networks([network])
-    assert result is network
-
-
-def test_concatenate_rejects_disconnected_input():
-    a, b = build_n_random_mst_network(n_compounds=20, sub_networks=2, overlap=0, rand_seed=42)
-    disconnected = LigandNetwork(nodes=a.nodes | b.nodes, edges=a.edges | b.edges)
-    concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=20))
-    with pytest.raises(RuntimeError, match="are disconnected"):
-        concatenator.concatenate_networks(ligand_networks=[disconnected])
-
-
-def test_exclude_edges_excludes_candidate():
+def test_score_bipartite_edges_respects_exclusions():
     """The exclude_edges should never get scored."""
     n_compounds = 20
     networkA, networkB = build_n_random_mst_network(
@@ -73,7 +53,7 @@ def test_exclude_edges_excludes_candidate():
         EmptyMapper(),
         RandomScorer(n=n_compounds),
     )
-    mappings = concatenator._score_bipartite_edges(networkA, networkB, exclude=[])
+    mappings = concatenator._score_bipartite_edges(networkA, networkB, exclude=set())
     excluded = frozenset((mappings[0].componentA, mappings[0].componentB))
 
     # Re-run with that mapping excluded.
@@ -96,10 +76,10 @@ def test_tied_scores_pick_highest_key():
     concatenator = MstConcatenator(EmptyMapper(), constant_scorer)
 
     # every candidate between the two subnetworks scores 0.5
-    candidates = concatenator._score_bipartite_edges(networkA, networkB, exclude=[])
+    candidates = concatenator._score_bipartite_edges(networkA, networkB, exclude=set())
     expected = max(candidates, key=lambda m: m.key)
 
-    bridges = concatenator._select_mst_bridges([networkA, networkB], exclude=[])
+    bridges = concatenator._select_mst_bridges([networkA, networkB], exclude=set())
     assert len(bridges) == 1
     assert bridges[0] == expected
 

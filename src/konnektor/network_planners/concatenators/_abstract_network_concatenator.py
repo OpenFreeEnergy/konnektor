@@ -129,7 +129,7 @@ class NetworkConcatenator(NetworkPlanner):
         if disconnected_inputs:
             raise RuntimeError(
                 f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
-                f"subnetworks are disconnected. "
+                f"networks are disconnected. "
                 f"Network concatenation expects each input LigandNetworks to be connected. "
                 f"Use connected_subnetworks to split disconnected networks first."
             )
