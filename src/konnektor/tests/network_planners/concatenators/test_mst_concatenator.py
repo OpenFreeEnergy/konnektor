@@ -33,6 +33,18 @@ def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     assert n_edges_new == n_sub_networks - 1
 
 
+def test_concatenate_empty_raises():
+    concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=1))
+    with pytest.raises(ValueError, match="At least one"):
+        concatenator.concatenate_networks([])
+
+
+def test_concatenate_single_network_returned_unchanged():
+    (network,) = build_n_random_mst_network(n_compounds=10, sub_networks=1, overlap=0, rand_seed=1)
+    result = MstConcatenator(EmptyMapper(), RandomScorer(n=10)).concatenate_networks([network])
+    assert result is network
+
+
 def test_concatenate_rejects_disconnected_input():
     a, b = build_n_random_mst_network(n_compounds=20, sub_networks=2, overlap=0, rand_seed=42)
     disconnected = LigandNetwork(nodes=a.nodes | b.nodes, edges=a.edges | b.edges)
@@ -73,11 +85,10 @@ def test_tied_scores_pick_highest_key():
         n_compounds=n, sub_networks=2, overlap=0, rand_seed=42
     )
 
-    class ConstantScorer:
-        def __call__(self, mapping):
-            return 0.5
+    def constant_scorer(mapping):
+        return 0.5
 
-    concatenator = MstConcatenator(EmptyMapper(), ConstantScorer())
+    concatenator = MstConcatenator(EmptyMapper(), constant_scorer)
 
     # every candidate between the two subnetworks scores 0.5
     candidates = concatenator._score_pair_edges(networkA, networkB, avoid=[])
@@ -86,3 +97,23 @@ def test_tied_scores_pick_highest_key():
     bridges = concatenator._connect_subnetworks_mst([networkA, networkB], avoid=[])
     assert len(bridges) == 1
     assert bridges[0] == expected
+
+
+def test_spanning_tree_pairs_discards_partial_forest():
+    """A forest that does not span all subnetworks is discarded."""
+    n = 4
+    components, _, _ = build_random_dataset(n_compounds=n, rand_seed=1)
+    subnetworks = [LigandNetwork(nodes=[c], edges=[]) for c in components]
+    concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=n))
+
+    # Only subnetworks 0, 1, and 2 are connected by candidate mappings.
+    mapping_01 = concatenator._score_pair_edges(subnetworks[0], subnetworks[1])[0]
+    mapping_12 = concatenator._score_pair_edges(subnetworks[1], subnetworks[2])[0]
+    best_mapping_by_pair = {(0, 1): mapping_01, (1, 2): mapping_12}
+
+    # Two edges are sufficient to span three subnetworks, but not four.
+    partial = concatenator._spanning_tree_pairs(best_mapping_by_pair, n_networks=4)
+    assert partial == []
+    # Sanity check: the same candidate graph is a complete tree over three.
+    complete = concatenator._spanning_tree_pairs(best_mapping_by_pair, n_networks=3)
+    assert len(complete) == 2

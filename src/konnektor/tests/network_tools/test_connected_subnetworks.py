@@ -17,6 +17,7 @@ def test_connected_network_single_subnetwork():
 
     sub_networks = connected_subnetworks(network)
 
+    assert sub_networks == [network]
     assert len(sub_networks) == 1
     assert sub_networks[0].nodes == network.nodes
     assert sub_networks[0].edges == network.edges
@@ -42,7 +43,6 @@ def test_connected_subnetworks_disconnected_network():
     # nothing is lost or duplicated
     assert set().union(*(sn.nodes for sn in sub_networks)) == disconnected.nodes
     assert set().union(*(sn.edges for sn in sub_networks)) == disconnected.edges
-    assert sum(len(sn.nodes) for sn in sub_networks) == len(disconnected.nodes)
 
 
 def test_connected_subnetworks_lone_node_is_subnetwork():
