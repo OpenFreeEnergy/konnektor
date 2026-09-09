@@ -153,7 +153,7 @@ class MstConcatenator(NetworkConcatenator):
     def concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        exclude_edges: Iterable[LigandAtomMapping] | None = None,
+        exclude_edges: Iterable[AtomMapping] | None = None,
     ) -> LigandNetwork:
         """
         Concatenate the given networks.
