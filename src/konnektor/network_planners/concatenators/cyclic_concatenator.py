@@ -8,7 +8,6 @@ from gufe import AtomMapper, AtomMapping, LigandNetwork
 
 from .._networkx_implementations import MstNetworkAlgorithm
 from ._abstract_network_concatenator import NetworkConcatenator
-from .max_concatenator import MaxConcatenator
 
 log = logging.getLogger(__name__)
 
