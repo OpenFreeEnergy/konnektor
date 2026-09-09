@@ -51,22 +51,20 @@ class RedundantMstConcatenator(MstConcatenator):
             raise ValueError(f"n_redundancy must be at least 1, got {n_redundancy}")
         self.n_redundancy = n_redundancy
 
-    def concatenate_networks(
+    def _concatenate_networks(
         self,
-        ligand_networks: Iterable[LigandNetwork],
-        avoid_edges: Iterable[LigandAtomMapping] | None = None,
+        ligand_networks: list[LigandNetwork],
+        exclude: set[frozenset],
     ) -> LigandNetwork:
         """
         Concatenate the given networks with `n_redundancy` overlaid spanning trees.
 
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks: list[LigandNetwork]
             LigandNetworks to concatenate.
-        avoid_edges: Iterable[AtomMapping], optional
-            Mappings identifying ligand pairs that must not be proposed as new
-            connections. Avoidance is based on the unordered component pair, so all
-            mappings between the same two ligands are excluded. Default: None.
+        exclude : set[frozenset]
+            Unordered ligand pairs that must not be proposed as new connections.
 
         Returns
         -------
@@ -76,19 +74,14 @@ class RedundantMstConcatenator(MstConcatenator):
         Raises
         ------
         RuntimeError
-            If the network cannot be connected, either because an input network
-            was disconnected or no mappable edges could be found between the subnetworks.
+            If any input LigandNetwork is disconnected.
         """
-        ligand_networks = list(ligand_networks)
-        if not ligand_networks:
-            raise ValueError("At least one LigandNetwork is required")
-
-        avoid = self._normalize_avoid_edges(avoid_edges)
-
-        disconnected_inputs = [i for i, n in enumerate(ligand_networks) if not n.is_connected()]
+        disconnected_inputs = [n for n in ligand_networks if
+                               not n.is_connected()]
         if disconnected_inputs:
             raise RuntimeError(
-                f"Input subnetworks {disconnected_inputs} are disconnected. "
+                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
+                f"subnetworks are disconnected. "
                 f"RedundantMstConcatenator expects connected LigandNetworks; "
                 f"use connected_subnetworks to split a disconnected network first."
             )
@@ -99,7 +92,7 @@ class RedundantMstConcatenator(MstConcatenator):
         # Overlay n_redundancy spanning trees, excluding edges from earlier passes
         bridges: list[LigandAtomMapping] = []
         for n in range(self.n_redundancy):
-            new_bridges = self._select_mst_bridges(ligand_networks, avoid)
+            new_bridges = self._select_mst_bridges(ligand_networks, exclude)
             if not new_bridges:
                 if n > 0:
                     warnings.warn(
@@ -109,6 +102,6 @@ class RedundantMstConcatenator(MstConcatenator):
                     )
                 break
             bridges.extend(new_bridges)
-            avoid |= {frozenset((b.componentA, b.componentB)) for b in new_bridges}
+            exclude |= {frozenset((b.componentA, b.componentB)) for b in new_bridges}
 
         return self._build_concatenated_network(ligand_networks, bridges)

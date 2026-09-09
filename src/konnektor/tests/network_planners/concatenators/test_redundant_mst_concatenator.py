@@ -93,13 +93,13 @@ def test_redundant_raises_if_first_tree_cannot_be_built(two_singleton_subnetwork
         n_redundancy=2,
     )
     network_a, network_b = two_singleton_subnetworks
-    mappings = concatenator._score_pair_edges(network_a, network_b, avoid=set())
+    mappings = concatenator._score_pair_edges(network_a, network_b, exclude=set())
     assert len(mappings) == 1
 
-    with pytest.raises(RuntimeError, match="Could not connect"):
+    with pytest.raises(RuntimeError, match="Could not build"):
         concatenator.concatenate_networks(
             two_singleton_subnetworks,
-            avoid_edges=[mappings[0]],
+            exclude_edges=[mappings[0]],
         )
 
 
@@ -120,16 +120,16 @@ def test_redundant_warns_if_later_tree_cannot_be_built(
     assert len(_bridges(result, two_singleton_subnetworks)) == 1
 
 
-def test_redundant_avoid_edges_never_used(three_subnetworks):
-    """avoid_edges are excluded across every pass."""
+def test_redundant_exclude_edges_never_used(three_subnetworks):
+    """aexclude_edges are excluded across every pass."""
     n, networks = three_subnetworks
     concatenator = RedundantMstConcatenator(EmptyMapper(), RandomScorer(n=n), n_redundancy=2)
 
     base = concatenator.concatenate_networks(networks)
-    avoid = [_bridges(base, networks)[0]]
+    exclude = [_bridges(base, networks)[0]]
 
-    result = concatenator.concatenate_networks(networks, avoid_edges=avoid)
-    assert _pairs(avoid).isdisjoint(_pairs(_bridges(result, networks)))
+    result = concatenator.concatenate_networks(networks, exclude_edges=exclude)
+    assert _pairs(exclude).isdisjoint(_pairs(_bridges(result, networks)))
     assert result.is_connected()
 
 
@@ -153,12 +153,12 @@ def test_redundant_partial_forest_not_counted_as_a_tree():
         frozenset((c2, c3)),
         frozenset((c1, c3)),
     }
-    avoid = [e for e in all_cross if frozenset((e.componentA, e.componentB)) not in keep]
-    assert len(avoid) == 2  # we kept 4 edges
+    exclude = [e for e in all_cross if frozenset((e.componentA, e.componentB)) not in keep]
+    assert len(exclude) == 2  # we kept 4 edges
 
     concatenator = RedundantMstConcatenator(EmptyMapper(), RandomScorer(n=n), n_redundancy=2)
     with pytest.warns(UserWarning, match="Could only build"):
-        result = concatenator.concatenate_networks(frags, avoid_edges=avoid)
+        result = concatenator.concatenate_networks(frags, exclude_edges=exclude)
 
     # only the first full tree's bridges remain; the partial 2nd pass is discarded
     assert result.is_connected()

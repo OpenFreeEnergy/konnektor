@@ -145,7 +145,7 @@ class MstConcatenator(NetworkConcatenator):
 
     def _concatenate_networks(
         self,
-        ligand_networks: Iterable[LigandNetwork],
+        ligand_networks: list[LigandNetwork],
         exclude: set[frozenset],
     ) -> LigandNetwork:
         """
@@ -153,7 +153,7 @@ class MstConcatenator(NetworkConcatenator):
 
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks: list[LigandNetwork]
             LigandNetworks to concatenate.
         exclude : set[frozenset]
             Unordered ligand pairs that must not be proposed as new connections.
@@ -188,6 +188,4 @@ class MstConcatenator(NetworkConcatenator):
 
         selected_bridges = self._select_mst_bridges(ligand_networks, exclude)
 
-        concat_network = self._build_concatenated_network(ligand_networks, selected_bridges)
-
-        return concat_network
+        return self._build_concatenated_network(ligand_networks, selected_bridges)

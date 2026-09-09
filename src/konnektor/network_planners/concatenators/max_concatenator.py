@@ -48,13 +48,13 @@ class MaxConcatenator(NetworkConcatenator):
 
     def _concatenate_networks(
         self,
-        ligand_networks: Iterable[LigandNetwork],
+        ligand_networks: list[LigandNetwork],
         exclude: set[frozenset],
     ) -> LigandNetwork:
         """
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
+        ligand_networks: list[LigandNetwork]
             An iterable of LigandNetworks to connect.
         exclude : set[frozenset]
             Unordered ligand pairs that must not be proposed as new connections.
