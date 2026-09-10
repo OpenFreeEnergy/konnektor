@@ -83,10 +83,10 @@ class NetworkConcatenator(NetworkPlanner):
     def _assemble_concatenated_network(
         self,
         ligand_networks: list[LigandNetwork],
-        selected_edges: Iterable[AtomMapping],
+        new_edges: Iterable[AtomMapping],
     ) -> LigandNetwork:
-        """Combine the input networks with selected inter-network edges."""
-        edges = list(selected_edges)
+        """Combine the input networks with new inter-network edges."""
+        edges = list(new_edges)
         nodes = set()
         for network in ligand_networks:
             edges.extend(network.edges)
