@@ -67,7 +67,7 @@ class MstConcatenator(NetworkConcatenator):
         list[tuple[int, int]]
             Pairs of input subnetwork indices defining the edges of the MST.
         """
-        if not best_mapping_by_pair:
+        if not best_mapping_by_network_pair:
             return []
         subnetwork_edges = list(best_mapping_by_network_pair)
         # Get the score of the best possible mapping between the subnetworks.
@@ -80,7 +80,7 @@ class MstConcatenator(NetworkConcatenator):
             subnetwork_scores,
         )
 
-        # Reorder the subnetwork indices to match keys in best_mapping_by_pair
+        # Reorder the subnetwork indices to match keys in best_mapping_by_network_pair
         subnetwork_pairs = [(min(i, j), max(i, j)) for i, j in mst.edges]
 
         # A spanning tree over n subnetworks must contain exactly n - 1 edges.

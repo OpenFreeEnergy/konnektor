@@ -97,8 +97,8 @@ def test_spanning_tree_pairs_discards_partial_forest():
     best_mapping_by_pair = {(0, 1): mapping_01, (1, 2): mapping_12}
 
     # Two edges are sufficient to span three subnetworks, but not four.
-    partial = concatenator._spanning_tree_pairs(best_mapping_by_pair, n_networks=4)
+    partial = concatenator._select_spanning_tree_pairs(best_mapping_by_pair, n_networks=4)
     assert partial == []
     # Sanity check: the same candidate graph is a complete tree over three.
-    complete = concatenator._spanning_tree_pairs(best_mapping_by_pair, n_networks=3)
+    complete = concatenator._select_spanning_tree_pairs(best_mapping_by_pair, n_networks=3)
     assert len(complete) == 2
