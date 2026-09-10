@@ -93,7 +93,7 @@ def test_redundant_raises_if_first_tree_cannot_be_built(two_singleton_subnetwork
         n_redundancy=2,
     )
     network_a, network_b = two_singleton_subnetworks
-    mappings = concatenator._score_pair_edges(network_a, network_b, exclude=set())
+    mappings = concatenator._score_inter_network_edges(network_a, network_b, exclude=set())
     assert len(mappings) == 1
 
     with pytest.raises(RuntimeError, match="Could not build"):
