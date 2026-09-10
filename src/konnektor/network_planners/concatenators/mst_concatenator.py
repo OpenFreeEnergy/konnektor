@@ -114,7 +114,9 @@ class MstConcatenator(NetworkConcatenator):
                 )
 
         # Identify which subnetworks to connect (MST over subnetworks)
-        subnetwork_pairs = self._select_spanning_tree_pairs(best_mapping_by_network_pair, len(ligand_networks))
+        subnetwork_pairs = self._select_spanning_tree_pairs(
+            best_mapping_by_network_pair, len(ligand_networks)
+        )
 
         # Connect each subnetwork pair with best scored edge
         selected_bridges = [best_mapping_by_network_pair[pair] for pair in subnetwork_pairs]

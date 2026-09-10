@@ -147,10 +147,7 @@ class NetworkConcatenator(NetworkPlanner):
             )
 
         edge_counts = [len(network.edges) for network in ligand_networks]
-        log.info(
-            f"Number of edges in individual networks:\n"
-            f"{sum(edge_counts)}/{edge_counts}"
-        )
+        log.info(f"Number of edges in individual networks:\n{sum(edge_counts)}/{edge_counts}")
 
         if len(ligand_networks) == 1:
             return ligand_networks[0]
