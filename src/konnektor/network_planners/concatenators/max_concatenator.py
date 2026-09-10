@@ -7,7 +7,6 @@ from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
-from ...network_planners._map_scoring import _score_mappings
 from ._abstract_network_concatenator import NetworkConcatenator
 
 log = logging.getLogger(__name__)
@@ -46,53 +45,35 @@ class MaxConcatenator(NetworkConcatenator):
         )
         self.progress = show_progress
 
-    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+    def _concatenate_networks(
+        self,
+        ligand_networks: list[LigandNetwork],
+        exclude: set[frozenset],
+    ) -> LigandNetwork:
         """
         Parameters
         ----------
-        ligand_networks: Iterable[LigandNetwork]
-            An iterable of LigandNetworks to connect.
+        ligand_networks: list[LigandNetwork]
+            LigandNetworks to concatenate.
+        exclude : set[frozenset]
+            Unordered ligand pairs that must not be proposed as new connections.
 
         Returns
         -------
         LigandNetwork
             The concatenated LigandNetwork with all possible nodes connected by edges.
         """
-
-        log.info(
-            f"Number of edges in individual networks:\n"
-            f"{sum([len(s.edges) for s in ligand_networks])}/"
-            f"{[len(s.edges) for s in ligand_networks]}"
-        )
-
-        selected_edges = []
-        selected_nodes = []
-        for ligandNetworkA, ligandNetworkB in itertools.combinations(ligand_networks, 2):
-            # Generate Full Bipartite Graph
-            nodesA = ligandNetworkA.nodes
-            nodesB = ligandNetworkB.nodes
-            p_edges = [(na, nb) for na in nodesA for nb in nodesB]
-            bipartite_graph_mappings = _score_mappings(
-                possible_edges=p_edges,
-                scorer=self.scorer,
-                mappers=self.mappers,
-                n_processes=self.n_processes,
-                show_progress=self.progress,
+        new_edges = []
+        for network_a, network_b in itertools.combinations(ligand_networks, 2):
+            # Generate and keep all scored mappings between this network pair
+            mappings = self._score_inter_network_edges(
+                network_a,
+                network_b,
+                exclude,
             )
             # Add network connecting edges
-            selected_edges.extend(bipartite_graph_mappings)
+            new_edges.extend(mappings)
 
-        # Constructed final Edges:
-        # Add all old network edges:
-        for network in ligand_networks:
-            selected_edges.extend(network.edges)
-            selected_nodes.extend(network.nodes)
+        log.info(f"Number of new inter-network edges: {len(new_edges)}")
 
-        concat_LigandNetwork = LigandNetwork(edges=selected_edges, nodes=set(selected_nodes))
-
-        log.info(f"Total Concatenated Edges: {len(selected_edges)} ")
-
-        if not concat_LigandNetwork.is_connected():
-            raise RuntimeError("could not build a connected network!")
-
-        return concat_LigandNetwork
+        return self._assemble_concatenated_network(ligand_networks, new_edges)
