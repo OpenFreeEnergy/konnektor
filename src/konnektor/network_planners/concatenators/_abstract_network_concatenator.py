@@ -59,18 +59,18 @@ class NetworkConcatenator(NetworkPlanner):
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
-    def _score_bipartite_edges(
+    def _score_inter_network_edges(
         self,
-        networkA: LigandNetwork,
-        networkB: LigandNetwork,
+        network_a: LigandNetwork,
+        network_b: LigandNetwork,
         exclude: set[frozenset],
     ) -> list[AtomMapping]:
         """Generate and score allowed mappings between two networks."""
         possible_edges = [
-            (ligandA, ligandB)
-            for ligandA in networkA.nodes
-            for ligandB in networkB.nodes
-            if frozenset((ligandA, ligandB)) not in exclude
+            (ligand_a, ligand_b)
+            for ligand_a in network_a.nodes
+            for ligand_b in network_b.nodes
+            if frozenset((ligand_a, ligand_b)) not in exclude
         ]
         return _score_mappings(
             possible_edges=possible_edges,
@@ -79,6 +79,20 @@ class NetworkConcatenator(NetworkPlanner):
             n_processes=self.n_processes,
             show_progress=self.progress,
         )
+
+    def _assemble_concatenated_network(
+        self,
+        ligand_networks: list[LigandNetwork],
+        selected_edges: Iterable[AtomMapping],
+    ) -> LigandNetwork:
+        """Combine the input networks with selected inter-network edges."""
+        edges = list(selected_edges)
+        nodes = set()
+        for network in ligand_networks:
+            edges.extend(network.edges)
+            nodes.update(network.nodes)
+
+        return LigandNetwork(edges=edges, nodes=nodes)
 
     @abc.abstractmethod
     def _concatenate_networks(
@@ -127,15 +141,15 @@ class NetworkConcatenator(NetworkPlanner):
         if disconnected_inputs:
             raise RuntimeError(
                 f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
-                f"networks are disconnected. "
-                f"Network concatenation expects each input LigandNetworks to be connected. "
-                f"Use connected_subnetworks to split disconnected networks first."
+                f"networks are disconnected. Network concatenation expects "
+                f"each input LigandNetwork to be connected. Use "
+                f"connected_subnetworks to split disconnected networks first."
             )
 
+        edge_counts = [len(network.edges) for network in ligand_networks]
         log.info(
             f"Number of edges in individual networks:\n"
-            f"{sum(len(s.edges) for s in ligand_networks)}/"
-            f"{[len(s.edges) for s in ligand_networks]}"
+            f"{sum(edge_counts)}/{edge_counts}"
         )
 
         if len(ligand_networks) == 1:
