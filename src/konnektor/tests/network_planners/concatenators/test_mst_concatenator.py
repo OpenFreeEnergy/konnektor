@@ -38,7 +38,7 @@ def test_mst_concatenation_is_spanning_tree(n_sub_networks):
     assert n_edges_new == n_sub_networks - 1
 
 
-def test_score_bipartite_edges_respects_exclusions():
+def test_score_inter_network_edges_respects_exclusions():
     """The exclude_edges should never get scored."""
     n_compounds = 20
     networkA, networkB = build_n_random_mst_network(
@@ -53,11 +53,11 @@ def test_score_bipartite_edges_respects_exclusions():
         EmptyMapper(),
         RandomScorer(n=n_compounds),
     )
-    mappings = concatenator._score_bipartite_edges(networkA, networkB, exclude=set())
+    mappings = concatenator._score_inter_network_edges(networkA, networkB, exclude=set())
     excluded = frozenset((mappings[0].componentA, mappings[0].componentB))
 
     # Re-run with that mapping excluded.
-    mappings = concatenator._score_bipartite_edges(networkA, networkB, exclude={excluded})
+    mappings = concatenator._score_inter_network_edges(networkA, networkB, exclude={excluded})
     resulting_pairs = {frozenset((mapping.componentA, mapping.componentB)) for mapping in mappings}
 
     assert excluded not in resulting_pairs
@@ -76,7 +76,7 @@ def test_tied_scores_pick_highest_key():
     concatenator = MstConcatenator(EmptyMapper(), constant_scorer)
 
     # every candidate between the two subnetworks scores 0.5
-    candidates = concatenator._score_bipartite_edges(networkA, networkB, exclude=set())
+    candidates = concatenator._score_inter_network_edges(networkA, networkB, exclude=set())
     expected = max(candidates, key=lambda m: m.key)
 
     bridges = concatenator._select_mst_bridges([networkA, networkB], exclude=set())
@@ -92,8 +92,8 @@ def test_spanning_tree_pairs_discards_partial_forest():
     concatenator = MstConcatenator(EmptyMapper(), RandomScorer(n=n))
 
     # Only subnetworks 0, 1, and 2 are connected by candidate mappings.
-    mapping_01 = concatenator._score_bipartite_edges(subnetworks[0], subnetworks[1], exclude=[])[0]
-    mapping_12 = concatenator._score_bipartite_edges(subnetworks[1], subnetworks[2], exclude=[])[0]
+    mapping_01 = concatenator._score_inter_network_edges(subnetworks[0], subnetworks[1], exclude=[])[0]
+    mapping_12 = concatenator._score_inter_network_edges(subnetworks[1], subnetworks[2], exclude=[])[0]
     best_mapping_by_pair = {(0, 1): mapping_01, (1, 2): mapping_12}
 
     # Two edges are sufficient to span three subnetworks, but not four.

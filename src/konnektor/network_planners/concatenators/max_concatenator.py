@@ -63,25 +63,17 @@ class MaxConcatenator(NetworkConcatenator):
         LigandNetwork
             The concatenated LigandNetwork with all possible nodes connected by edges.
         """
-        selected_edges = []
-        selected_nodes = set()
-        for networkA, networkB in itertools.combinations(ligand_networks, 2):
+        new_edges = []
+        for network_a, network_b in itertools.combinations(ligand_networks, 2):
             # Generate and keep all scored mappings between this network pair
-            mappings = self._score_bipartite_edges(
-                networkA,
-                networkB,
+            mappings = self._score_inter_network_edges(
+                network_a,
+                network_b,
                 exclude,
             )
             # Add network connecting edges
-            selected_edges.extend(mappings)
+            new_edges.extend(mappings)
 
-        # Add all original network edges:
-        for network in ligand_networks:
-            selected_edges.extend(network.edges)
-            selected_nodes.update(network.nodes)
+        log.info(f"Number of new inter-network edges: {len(new_edges)}")
 
-        concat_network = LigandNetwork(edges=selected_edges, nodes=selected_nodes)
-
-        log.info(f"Total Concatenated Edges: {len(selected_edges)} ")
-
-        return concat_network
+        return self._assemble_concatenated_network(ligand_networks, new_edges)
