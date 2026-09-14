@@ -20,7 +20,6 @@ class MstConcatenator(NetworkConcatenator):
         mappers: AtomMapper | Iterable[AtomMapper] | None,
         scorer: Callable[[AtomMapping], float],
         n_processes: int = 1,
-        _initial_edge_lister: NetworkConcatenator | None = None,  # TODO: remove this
     ):
         """
         A NetworkConcatenator that connects subnetworks by treating each
@@ -41,7 +40,6 @@ class MstConcatenator(NetworkConcatenator):
             scorer=scorer,
             network_generator=MstNetworkAlgorithm(),
             n_processes=n_processes,
-            _initial_edge_lister=_initial_edge_lister,
         )
 
     def _score_pair_edges(
