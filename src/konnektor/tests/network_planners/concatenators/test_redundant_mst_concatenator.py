@@ -121,7 +121,7 @@ def test_redundant_warns_if_later_tree_cannot_be_built(
 
 
 def test_redundant_exclude_edges_never_used(three_subnetworks):
-    """aexclude_edges are excluded across every pass."""
+    """make sure exclude_edges are excluded across every pass."""
     n, networks = three_subnetworks
     concatenator = RedundantMstConcatenator(EmptyMapper(), RandomScorer(n=n), n_redundancy=2)
 
