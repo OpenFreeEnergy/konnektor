@@ -17,7 +17,7 @@ class RedundantMstConcatenator(MstConcatenator):
     def __init__(
         self,
         mappers: AtomMapper | Iterable[AtomMapper] | None,
-        scorer,
+        scorer: Callable[[AtomMapping], float],
         n_redundancy: int = 2,
         n_processes: int = 1,
         _initial_edge_lister: NetworkConcatenator | None = None,
@@ -34,7 +34,7 @@ class RedundantMstConcatenator(MstConcatenator):
         mappers: AtomMapper
             AtomMapper(s) to use to propose mappings.
             If more than one AtomMapper is provided, the mapping with the best score (as scored by `scorer`) will be used.
-        scorer: Callable[[AtomMapping], float] | None
+        scorer: Callable[[AtomMapping], float]
             Callable which takes a AtomMapping and returns a float in [0,1].
         n_redundancy: int, optional
             Number of spanning trees to overlay, by default 2.
