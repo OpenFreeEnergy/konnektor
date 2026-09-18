@@ -3,7 +3,7 @@
 
 import logging
 import warnings
-from collections.abc import Iterable
+from collections.abc import Iterable, Callable
 
 from gufe import AtomMapper, LigandAtomMapping, LigandNetwork
 
