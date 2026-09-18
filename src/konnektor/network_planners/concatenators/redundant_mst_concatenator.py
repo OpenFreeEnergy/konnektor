@@ -5,7 +5,7 @@ import logging
 import warnings
 from collections.abc import Iterable, Callable
 
-from gufe import AtomMapper, LigandAtomMapping, LigandNetwork
+from gufe import AtomMapper, AtomMapping, LigandAtomMapping, LigandNetwork
 
 from ._abstract_network_concatenator import NetworkConcatenator
 from .mst_concatenator import MstConcatenator
