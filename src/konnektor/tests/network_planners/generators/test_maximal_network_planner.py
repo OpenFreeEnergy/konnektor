@@ -80,10 +80,11 @@ def test_generate_maximal_network_no_scorer(toluene_vs_others, n_process, with_p
         progress=with_progress,
         n_processes=n_process,
     )
-    # with pytest.warns(match="Only the first mapper provided will be used: <BadMulti"):
-    # TODO: warning isn't working with multiprocessing
-
-    network = planner.generate_ligand_network(components)
+    if n_process == 1:  # TODO: warning isn't working with multiprocessing
+        with pytest.warns(UserWarning, match="Only the first valid mapper will be used: <BadMulti"):
+            network = planner.generate_ligand_network(components)
+    else:
+        network = planner.generate_ligand_network(components)
 
     # it should use the mapping ({0:2}) of the first mapper (BadMultiMapper)
     assert [e.componentA_to_componentB for e in network.edges] == len(network.edges) * [{0: 2}]
