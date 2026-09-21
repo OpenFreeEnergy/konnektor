@@ -59,7 +59,7 @@ class NetworkConcatenator(NetworkPlanner):
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
-    def _score_inter_network_edges(
+    def _score_all_inter_network_edges(
         self,
         network_a: LigandNetwork,
         network_b: LigandNetwork,
