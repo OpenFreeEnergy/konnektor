@@ -142,6 +142,6 @@ class MstConcatenator(NetworkConcatenator):
         LigandNetwork
             The concatenated LigandNetwork.
         """
-        selected_bridges = self._select_mst_bridges(ligand_networks, exclude)
+        selected_bridges: list[AtomMapping] = self._select_mst_bridges(ligand_networks, exclude)
 
         return self._assemble_concatenated_network(ligand_networks, selected_bridges)
