@@ -86,4 +86,4 @@ class RedundantMstConcatenator(MstConcatenator):
             bridges.extend(new_bridges)
             exclude |= {frozenset((b.componentA, b.componentB)) for b in new_bridges}
 
-        return self._build_concatenated_network(ligand_networks, bridges)
+        return self._assemble_concatenated_network(ligand_networks, bridges)

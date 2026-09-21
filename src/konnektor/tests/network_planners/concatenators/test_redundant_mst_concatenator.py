@@ -145,20 +145,15 @@ def test_redundant_partial_forest_not_counted_as_a_tree():
     )
     assert len(all_cross) == 6  # complete graph over 4 singletons
 
-    # Keep exactly four edges. The first spanning tree consumes three, so only
-    # one edge remains and a second complete spanning tree is impossible.
-    keep = {
-        frozenset((c0, c1)),
-        frozenset((c1, c2)),
-        frozenset((c2, c3)),
-        frozenset((c1, c3)),
-    }
-    exclude = [e for e in all_cross if frozenset((e.componentA, e.componentB)) not in keep]
-    assert len(exclude) == 2  # we kept 4 edges
+    # Exclude two edges
+    exclude_edges = [
+        all_cross[1],
+        all_cross[2],
+    ]
 
     concatenator = RedundantMstConcatenator(EmptyMapper(), RandomScorer(n=n), n_redundancy=2)
     with pytest.warns(UserWarning, match="Could only build"):
-        result = concatenator.concatenate_networks(frags, exclude_edges=exclude)
+        result = concatenator.concatenate_networks(frags, exclude_edges=exclude_edges)
 
     # only the first full tree's bridges remain; the partial 2nd pass is discarded
     assert result.is_connected()
