@@ -98,7 +98,7 @@ class MstConcatenator(NetworkConcatenator):
         # Find the best scored edge for every pair of subnetworks
         best_mapping_by_network_pair = {}
         for i, j in itertools.combinations(range(len(ligand_networks)), 2):
-            mappings = self._score_inter_network_edges(
+            mappings = self._score_all_inter_network_edges(
                 ligand_networks[i],
                 ligand_networks[j],
                 exclude,
@@ -142,6 +142,6 @@ class MstConcatenator(NetworkConcatenator):
         LigandNetwork
             The concatenated LigandNetwork.
         """
-        selected_bridges = self._select_mst_bridges(ligand_networks, exclude)
+        selected_bridges: list[AtomMapping] = self._select_mst_bridges(ligand_networks, exclude)
 
         return self._assemble_concatenated_network(ligand_networks, selected_bridges)

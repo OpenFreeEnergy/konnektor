@@ -59,7 +59,7 @@ class NetworkConcatenator(NetworkPlanner):
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
-    def _score_inter_network_edges(
+    def _score_all_inter_network_edges(
         self,
         network_a: LigandNetwork,
         network_b: LigandNetwork,
@@ -106,7 +106,7 @@ class NetworkConcatenator(NetworkPlanner):
     def concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        exclude_edges: Iterable[AtomMapping] | None = None,
+        exclude_edges: Iterable[AtomMapping] = [],
     ) -> LigandNetwork:
         """Concatenate the `ligand_networks` into a single LigandNetwork object.
 
@@ -116,8 +116,8 @@ class NetworkConcatenator(NetworkPlanner):
             LigandNetworks to concatenate.
         exclude_edges: Iterable[AtomMapping], optional
             Mappings identifying ligand pairs that must not be proposed as new
-            connections. Exclusion is based on the unordered component pair, so all
-            mappings between the same two ligands are excluded. Default: None.
+            connections. Exclusion is based on the unordered component pair, so any
+            mappings between the pair of ligands are excluded. Default: [], meaning no excluded edges.
 
         Returns
         -------
@@ -143,18 +143,18 @@ class NetworkConcatenator(NetworkPlanner):
                 f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
                 f"networks are disconnected. Network concatenation expects "
                 f"each input LigandNetwork to be connected. Use "
-                f"connected_subnetworks to split disconnected networks first."
+                f"connected_subnetworks to split disconnected networks into subnetworks first."
             )
 
         edge_counts = [len(network.edges) for network in ligand_networks]
-        log.info(f"Concatenating {len(ligand_networks)} networks with edge counts: {edge_counts}")
+        log.info(f"Concatenating {len(ligand_networks)} networks with {edge_counts} total edges")
 
         if len(ligand_networks) == 1:
             return ligand_networks[0]
 
         # Store excluded mappings as undirected ligand pairs.
         exclude = {
-            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges or ())
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges)
         }
 
         concat_network = self._concatenate_networks(
