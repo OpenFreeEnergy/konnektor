@@ -93,10 +93,10 @@ def test_spanning_tree_pairs_discards_partial_forest():
 
     # Only subnetworks 0, 1, and 2 are connected by candidate mappings.
     mapping_01 = concatenator._score_all_inter_network_edges(
-        subnetworks[0], subnetworks[1], exclude=[]
+        subnetworks[0], subnetworks[1], exclude=set()
     )[0]
     mapping_12 = concatenator._score_all_inter_network_edges(
-        subnetworks[1], subnetworks[2], exclude=[]
+        subnetworks[1], subnetworks[2], exclude=set()
     )[0]
     best_mapping_by_pair = {(0, 1): mapping_01, (1, 2): mapping_12}
 

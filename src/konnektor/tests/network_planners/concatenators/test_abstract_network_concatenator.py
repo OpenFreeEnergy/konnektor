@@ -14,7 +14,8 @@ from konnektor.utils.toy_data import (
 )
 
 
-class DummyConcatenator(NetworkConcatenator):
+class MinimalConcatenator(NetworkConcatenator):
+    """A minimal NetworkConcatenator for testing the abstract base class."""
     def __init__(self, result=None):
         super().__init__(
             mappers=EmptyMapper(),
@@ -47,7 +48,7 @@ def two_ligands():
 
 
 def test_concatenate_networks_requires_input():
-    concatenator = DummyConcatenator()
+    concatenator = MinimalConcatenator()
 
     with pytest.raises(
         ValueError,
@@ -59,7 +60,7 @@ def test_concatenate_networks_requires_input():
 def test_concatenate_networks_rejects_disconnected_input(two_ligands):
     ligand_a, ligand_b = two_ligands
     network = LigandNetwork(nodes=[ligand_a, ligand_b], edges=[])
-    concatenator = DummyConcatenator()
+    concatenator = MinimalConcatenator()
 
     with pytest.raises(
         RuntimeError,
@@ -71,19 +72,19 @@ def test_concatenate_networks_rejects_disconnected_input(two_ligands):
 def test_concatenate_networks_returns_single_network_unchanged(two_ligands):
     ligand_a, _ = two_ligands
     network = LigandNetwork(nodes=[ligand_a], edges=[])
-    concatenator = DummyConcatenator()
+    concatenator = MinimalConcatenator()
 
     result = concatenator.concatenate_networks([network])
 
     assert result is network
 
 
-def test_concatenate_networks_normalizes_excluded_edges(two_ligands):
+def test_concatenate_networks_converts_excluded_edges_to_ligand_pairs(two_ligands):
     ligand_a, ligand_b = two_ligands
 
     network_a = LigandNetwork(nodes=[ligand_a], edges=[])
     network_b = LigandNetwork(nodes=[ligand_b], edges=[])
-    concatenator = DummyConcatenator()
+    concatenator = MinimalConcatenator()
     mapping = next(EmptyMapper().suggest_mappings(ligand_a, ligand_b))
 
     concatenator.concatenate_networks(
@@ -100,7 +101,7 @@ def test_concatenate_networks_rejects_disconnected_result(two_ligands):
     network_a = LigandNetwork(nodes=[ligand_a], edges=[])
     network_b = LigandNetwork(nodes=[ligand_b], edges=[])
     disconnected_result = LigandNetwork(nodes=[ligand_a, ligand_b], edges=[])
-    concatenator = DummyConcatenator(result=disconnected_result)
+    concatenator = MinimalConcatenator(result=disconnected_result)
 
     with pytest.raises(RuntimeError, match="Could not build a connected network"):
         concatenator.concatenate_networks([network_a, network_b])

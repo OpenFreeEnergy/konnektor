@@ -117,7 +117,7 @@ class NetworkConcatenator(NetworkPlanner):
         exclude_edges: Iterable[AtomMapping], optional
             Mappings identifying ligand pairs that must not be proposed as new
             connections. Exclusion is based on the unordered component pair, so any
-            mappings between the pair of ligands are excluded. Default: None.
+            mappings between the pair of ligands are excluded. Default: [], meaning no excluded edges.
 
         Returns
         -------
@@ -147,7 +147,7 @@ class NetworkConcatenator(NetworkPlanner):
             )
 
         edge_counts = [len(network.edges) for network in ligand_networks]
-        log.info(f"Concatenating {len(ligand_networks)} networks with edge counts: {edge_counts}")
+        log.info(f"Concatenating {len(ligand_networks)} networks with {edge_counts} total edges")
 
         if len(ligand_networks) == 1:
             return ligand_networks[0]
