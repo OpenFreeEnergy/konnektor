@@ -106,7 +106,7 @@ class NetworkConcatenator(NetworkPlanner):
     def concatenate_networks(
         self,
         ligand_networks: Iterable[LigandNetwork],
-        exclude_edges: Iterable[AtomMapping] | None = None,
+        exclude_edges: Iterable[AtomMapping] = [],
     ) -> LigandNetwork:
         """Concatenate the `ligand_networks` into a single LigandNetwork object.
 
