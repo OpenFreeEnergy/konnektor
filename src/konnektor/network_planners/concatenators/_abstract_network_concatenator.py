@@ -143,7 +143,7 @@ class NetworkConcatenator(NetworkPlanner):
                 f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
                 f"networks are disconnected. Network concatenation expects "
                 f"each input LigandNetwork to be connected. Use "
-                f"connected_subnetworks to split disconnected networks first."
+                f"connected_subnetworks to split disconnected networks into subnetworks first."
             )
 
         edge_counts = [len(network.edges) for network in ligand_networks]
