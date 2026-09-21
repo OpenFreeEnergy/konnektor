@@ -154,7 +154,7 @@ class NetworkConcatenator(NetworkPlanner):
 
         # Store excluded mappings as undirected ligand pairs.
         exclude = {
-            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges or ())
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges)
         }
 
         concat_network = self._concatenate_networks(
