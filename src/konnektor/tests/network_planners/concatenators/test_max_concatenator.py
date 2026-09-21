@@ -33,7 +33,7 @@ def test_max_network_concatenation(ligand_network_ab, n_process):
 
 
 def test_exclude_edges_excludes_candidate():
-    """The exclude_edges should never get scored."""
+    """The exclude_edges should never exist in the result network"""
     n_compounds = 20
     networkA, networkB = build_n_random_mst_network(
         n_compounds=n_compounds,

@@ -66,7 +66,7 @@ class MaxConcatenator(NetworkConcatenator):
         new_edges = []
         for network_a, network_b in itertools.combinations(ligand_networks, 2):
             # Generate and keep all scored mappings between this network pair
-            mappings = self._score_inter_network_edges(
+            mappings = self._score_all_inter_network_edges(
                 network_a,
                 network_b,
                 exclude,
