@@ -16,6 +16,7 @@ from konnektor.utils.toy_data import (
 
 class MinimalConcatenator(NetworkConcatenator):
     """A minimal NetworkConcatenator for testing the abstract base class."""
+
     def __init__(self, result=None):
         super().__init__(
             mappers=EmptyMapper(),
