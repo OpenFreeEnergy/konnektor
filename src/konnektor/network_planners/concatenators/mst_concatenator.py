@@ -53,6 +53,7 @@ class MstConcatenator(NetworkConcatenator):
     ) -> list[tuple[int, int]]:
         """
         Select the subnetwork pairs that form a complete spanning tree.
+        If a complete spanning tree cannot be constructed, an empty list is returned.
 
         Parameters
         ----------
