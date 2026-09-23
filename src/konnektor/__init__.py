@@ -1,10 +1,7 @@
 # This code is part of OpenFE and is licensed under the MIT license.
 # For details, see https://github.com/OpenFreeEnergy/konnektor
 
-from ._version import (
-    __version__,
-    __version_tuple__,
-)
+from importlib.metadata import version
 
 # Konnektor content
 from .network_planners import (
@@ -44,6 +41,5 @@ __all__ = [
     "append_component",
     "delete_transformation",
     "merge_networks",
-    "__version__",
-    "__version_tuple__",
 ]
+__version__ = version("konnektor")

@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
-  "setuptools>=77.0.3",
+  "setuptools>=80",
   "setuptools-scm>=8",
 ]
 
@@ -57,7 +57,6 @@ docs = [ "ofe-sphinx-theme @ git+https://github.com/OpenFreeEnergy/ofe-sphinx-th
 package-data.konnektor = [ "**/*.sdf" ]
 
 [tool.setuptools_scm]
-version_file = "src/konnektor/_version.py"
 fallback_version = "0.0.0"
 
 [tool.pixi]
