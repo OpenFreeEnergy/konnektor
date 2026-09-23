@@ -60,14 +60,12 @@ def test_concatenate_networks_requires_input():
 
 def test_concatenate_networks_rejects_disconnected_input(two_ligands):
     ligand_a, ligand_b = two_ligands
-    network = LigandNetwork(nodes=[ligand_a, ligand_b], edges=[])
+    disconnected_network = LigandNetwork(nodes=[ligand_a, ligand_b], edges=[])
+    connected_network = LigandNetwork(nodes=[ligand_a], edges=[])
     concatenator = MinimalConcatenator()
 
-    with pytest.raises(
-        RuntimeError,
-        match="input networks are disconnected",
-    ):
-        concatenator.concatenate_networks([network])
+    with pytest.raises(RuntimeError, match="input networks are disconnected"):
+        concatenator.concatenate_networks([disconnected_network, connected_network])
 
 
 def test_concatenate_networks_requires_two_networks(two_ligands):
