@@ -79,6 +79,7 @@ feature.docs.dependencies.sphinx = ">=8.0"
 feature.docs.dependencies.tqdm = "*"
 feature.docs.dependencies.typing-extensions = "*"
 feature.docs.dependencies.zstandard = "*"
+feature.docs.pypi-dependencies.konnektor = { path = ".", editable = true }
 environments.default = { solve-group = "default" }
 environments.dev = { features = [ "dev" ], solve-group = "default" }
 environments.docs = { features = [ "docs" ], no-default-feature = true }
