@@ -4,6 +4,30 @@ Changelog
 
 .. current developments
 
+v0.5.0
+====================
+
+**Added:**
+
+* Added an argument `exclude_edges` to the `concatenate_networks` for the Concatenators. If provided, those edges will not be considered as candidate edges by the Concatenator (`PR #270 <https://github.com/OpenFreeEnergy/konnektor/pull/270/>`_).
+* Implemented the network tool ``connected_subnetworks()`` that splits a disconnected LigandNetwork into connected sub-networks (`PR #267 <https://github.com/OpenFreeEnergy/konnektor/pull/267/>`_).
+* Added a `RedundantMstConcatenator` class, a `NetworkConcatenator` that connects subnetworks with  `n_redundancy` overlaid minimum spanning trees (`PR #274 <https://github.com/OpenFreeEnergy/konnektor/pull/274/>`_).
+
+**Changed:**
+
+* Moved some checks and base functionality of Concatenators into the `NetworkConcatenator` base class (`PR #270 <https://github.com/OpenFreeEnergy/konnektor/pull/270/>`_).
+
+**Removed:**
+
+* The `n_connecting_edges` argument was removed from the MstConcatenator class to ensure true MST-like behaviour (PR #268).
+
+**Fixed:**
+
+* The MstConcatenator used to connect each subnetwork with each other subnetwork using `n_connecting_edges`.
+  This is not an MST like behaviour, therefore this was changed to instead connect the subnetworks with each other by treating each subnetwork as a node in an MST (`PR #268 <https://github.com/OpenFreeEnergy/konnektor/pull/268/>`_).
+
+
+
 v0.4.0
 ====================
 
