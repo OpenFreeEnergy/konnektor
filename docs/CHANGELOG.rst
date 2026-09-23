@@ -9,13 +9,13 @@ v0.5.0
 
 **Added:**
 
-* Added an argument `exclude_edges` to the `concatenate_networks` for the Concatenators. If provided, those edges will not be considered as candidate edges by the Concatenator (PR #270)
-* Implemented the network tool ``connected_subnetworks()`` that splits a disconnected LigandNetwork into connected sub-networks (PR #267).
-* Added a `RedundantMstConcatenator` class, a `NetworkConcatenator` that connects subnetworks with  `n_redundancy` overlaid minimum spanning trees.
+* Added an argument `exclude_edges` to the `concatenate_networks` for the Concatenators. If provided, those edges will not be considered as candidate edges by the Concatenator (`PR #270 <https://github.com/OpenFreeEnergy/konnektor/pull/270/>`_).
+* Implemented the network tool ``connected_subnetworks()`` that splits a disconnected LigandNetwork into connected sub-networks (`PR #267 <https://github.com/OpenFreeEnergy/konnektor/pull/267/>`_).
+* Added a `RedundantMstConcatenator` class, a `NetworkConcatenator` that connects subnetworks with  `n_redundancy` overlaid minimum spanning trees (`PR #274 <https://github.com/OpenFreeEnergy/konnektor/pull/274/>`_).
 
 **Changed:**
 
-* Moved some checks and base functionality of Concatenators into the `NetworkConcatenator` base class.
+* Moved some checks and base functionality of Concatenators into the `NetworkConcatenator` base class (`PR #270 <https://github.com/OpenFreeEnergy/konnektor/pull/270/>`_).
 
 **Removed:**
 
