@@ -7,6 +7,7 @@ from collections.abc import Callable, Iterable
 
 from gufe import AtomMapper, AtomMapping, LigandNetwork
 
+from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
@@ -58,18 +59,107 @@ class NetworkConcatenator(NetworkPlanner):
     def __call__(self, *args, **kwargs) -> LigandNetwork:
         return self.concatenate_networks(*args, **kwargs)
 
+    def _score_all_inter_network_edges(
+        self,
+        network_a: LigandNetwork,
+        network_b: LigandNetwork,
+        exclude: set[frozenset],
+    ) -> list[AtomMapping]:
+        """Generate and score allowed mappings between two networks."""
+        possible_edges = [
+            (ligand_a, ligand_b)
+            for ligand_a in network_a.nodes
+            for ligand_b in network_b.nodes
+            if frozenset((ligand_a, ligand_b)) not in exclude
+        ]
+        return _score_mappings(
+            possible_edges=possible_edges,
+            scorer=self.scorer,
+            mappers=self.mappers,
+            n_processes=self.n_processes,
+            show_progress=self.progress,
+        )
+
+    def _assemble_concatenated_network(
+        self,
+        ligand_networks: list[LigandNetwork],
+        new_edges: Iterable[AtomMapping],
+    ) -> LigandNetwork:
+        """Combine the input networks with new inter-network edges."""
+        edges = list(new_edges)
+        nodes = set()
+        for network in ligand_networks:
+            edges.extend(network.edges)
+            nodes.update(network.nodes)
+
+        return LigandNetwork(edges=edges, nodes=nodes)
+
     @abc.abstractmethod
-    def concatenate_networks(self, ligand_networks: Iterable[LigandNetwork]) -> LigandNetwork:
+    def _concatenate_networks(
+        self,
+        ligand_networks: list[LigandNetwork],
+        exclude: set[frozenset],
+    ) -> LigandNetwork:
+        """Implement the concatenation algorithm."""
+        ...
+
+    def concatenate_networks(
+        self,
+        ligand_networks: Iterable[LigandNetwork],
+        exclude_edges: Iterable[AtomMapping] = [],
+    ) -> LigandNetwork:
         """Concatenate the `ligand_networks` into a single LigandNetwork object.
 
         Parameters
         ----------
         ligand_networks: Iterable[LigandNetwork]
             LigandNetworks to concatenate.
+        exclude_edges: Iterable[AtomMapping], optional
+            Mappings identifying ligand pairs that must not be proposed as new
+            connections. Exclusion is based on the unordered component pair, so any
+            mappings between the pair of ligands are excluded. Default: [], meaning no excluded edges.
 
         Returns
         -------
         LigandNetwork
             The concatenated LigandNetwork.
+
+        Raises
+        ------
+        ValueError
+            If no LigandNetworks are provided.
+        RuntimeError
+            If any input LigandNetwork is disconnected or if the concatenation
+            algorithm cannot produce a connected LigandNetwork.
         """
-        raise NotImplementedError()
+        ligand_networks = list(ligand_networks)
+
+        if len(ligand_networks) < 2:
+            raise ValueError("At least two LigandNetworks are required for concatenation.")
+
+        disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
+        if disconnected_inputs:
+            raise RuntimeError(
+                f"{len(disconnected_inputs)} of {len(ligand_networks)} input "
+                f"networks are disconnected. Network concatenation expects "
+                f"each input LigandNetwork to be connected. Use "
+                f"connected_subnetworks to split disconnected networks into subnetworks first."
+            )
+
+        edge_counts = [len(network.edges) for network in ligand_networks]
+        log.info(f"Concatenating {len(ligand_networks)} networks with {edge_counts} total edges")
+
+        # Store excluded mappings as undirected ligand pairs.
+        exclude = {
+            frozenset((mapping.componentA, mapping.componentB)) for mapping in (exclude_edges)
+        }
+
+        concat_network = self._concatenate_networks(
+            ligand_networks=ligand_networks,
+            exclude=exclude,
+        )
+
+        if not concat_network.is_connected():
+            raise RuntimeError("Could not build a connected network.")
+
+        return concat_network
