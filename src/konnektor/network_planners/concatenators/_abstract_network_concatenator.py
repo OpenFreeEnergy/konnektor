@@ -134,8 +134,8 @@ class NetworkConcatenator(NetworkPlanner):
         """
         ligand_networks = list(ligand_networks)
 
-        if not ligand_networks:
-            raise ValueError("At least one LigandNetwork is required")
+        if len(ligand_networks) < 2:
+            raise ValueError("At least two LigandNetworks are required for concatenation.")
 
         disconnected_inputs = [n for n in ligand_networks if not n.is_connected()]
         if disconnected_inputs:
@@ -148,9 +148,6 @@ class NetworkConcatenator(NetworkPlanner):
 
         edge_counts = [len(network.edges) for network in ligand_networks]
         log.info(f"Concatenating {len(ligand_networks)} networks with {edge_counts} total edges")
-
-        if len(ligand_networks) == 1:
-            return ligand_networks[0]
 
         # Store excluded mappings as undirected ligand pairs.
         exclude = {

@@ -53,7 +53,7 @@ def test_concatenate_networks_requires_input():
 
     with pytest.raises(
         ValueError,
-        match="At least one LigandNetwork is required",
+        match="At least two LigandNetworks",
     ):
         concatenator.concatenate_networks([])
 
@@ -70,14 +70,16 @@ def test_concatenate_networks_rejects_disconnected_input(two_ligands):
         concatenator.concatenate_networks([network])
 
 
-def test_concatenate_networks_returns_single_network_unchanged(two_ligands):
+def test_concatenate_networks_requires_two_networks(two_ligands):
     ligand_a, _ = two_ligands
     network = LigandNetwork(nodes=[ligand_a], edges=[])
     concatenator = MinimalConcatenator()
 
-    result = concatenator.concatenate_networks([network])
-
-    assert result is network
+    with pytest.raises(
+        ValueError,
+        match="At least two LigandNetworks are required",
+    ):
+        concatenator.concatenate_networks([network])
 
 
 def test_concatenate_networks_converts_excluded_edges_to_ligand_pairs(two_ligands):
