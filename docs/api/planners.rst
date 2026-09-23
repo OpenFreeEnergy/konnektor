@@ -51,6 +51,11 @@ konnektor.network\_planners.concatenators
    :undoc-members:
    :show-inheritance:
 
+.. automodule:: konnektor.network_planners.concatenators.redundant_mst_concatenator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 .. automodule:: konnektor.network_planners.concatenators.max_concatenator
    :members:
    :undoc-members:

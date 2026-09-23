@@ -39,3 +39,8 @@ network\_tools.network\_handling
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: konnektor.network_tools.network_handling.connected_subnetworks
+   :members:
+   :undoc-members:
+   :show-inheritance:
