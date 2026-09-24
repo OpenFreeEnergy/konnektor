@@ -54,17 +54,18 @@ that already exist.
 It applies when two or more networks share no ligands, so there is no common node to
 merge on. When the networks *do* share nodes, you can use the merge method, see
 :doc:`network_tools`.
-The Concatenator instead invents new edges between the networks to knit them into a single connected network.
+The Concatenator instead connects otherwise disjoint networks by introducing new edges between them.
 
-The motivating case is a network that has broken apart.
+One application is the repair of disconnected ligand networks.
 When some transformations in a network fail, the surviving (successful) edges can leave the
-ligands split into disconnected pieces that can no longer be ranked against one another.
-A Concatenator reconnects those pieces so the whole set is comparable again.
+ligands split into disconnected subnetworks that can no longer be ranked against one another.
+A Concatenator can introduce new edges between these subnetworks to restore connectivity.
 
 .. image:: ../_static/img/concatenator.png
 
 
-For example, to join two networks:
+The following example constructs two independent networks and connects them using an
+:class:`MstConcatenator`:
 
 .. code-block:: python
 
@@ -78,22 +79,34 @@ For example, to join two networks:
     net_a = planner.generate_ligand_network(components[:4])
     net_b = planner.generate_ligand_network(components[4:])
 
-    concatenator = MstConcatenator(mappers=mapper, scorer=scorer, n_connecting_edges=2)
+    concatenator = MstConcatenator(mappers=mapper, scorer=scorer)
     network = concatenator.concatenate_networks([net_a, net_b])   # networks -> one network
 
-Joining two networks is a bipartite problem: the candidate edges run between the node set
-of one piece and the node set of the other.
-As with a Generator, each candidate is an ``AtomMapping`` weighted by the ``scorer``, and
+For two networks, candidate mappings are generated between ligands belonging to
+different networks.
+As with a Generator, each candidate ``AtomMapping`` is evaluated using the supplied ``scorer``, and
 the Concatenator chooses which connecting edges to keep.
-Because a single connecting edge is a single point of failure, a Concatenator can add
-more than one, the same redundancy-for-robustness trade-off described in the introduction.
 
-konnektor currently provides two Concatenators:
+When more than two subnetworks are concatenated, :class:`MstConcatenator` treats each
+subnetwork as a node in a graph. A minimum spanning tree over these
+subnetworks determines the connections required to produce a connected ligand
+network. Consequently, connecting ``k`` subnetworks requires ``k - 1`` new edges.
 
-- the **Maximal Concatenator**, which keeps *every* possible connecting edge, an
-  exhaustive set, typically used as a starting point that is then reduced; and
-- the **Minimal Spanning Tree (MST) Concatenator**, which keeps only the best-scoring
-  connecting edges needed to join the pieces, with a tunable number of connections
-  (two by default) so the join carries some redundancy.
+A single edge connecting two parts of a network is a point of failure.
+Where additional redundancy is required, :class:`RedundantMstConcatenator` provides more than one connection per join.
+
+konnektor currently provides three Concatenators:
+
+- :class:`MaxConcatenator`: keeps *every* possible connecting edge. Typically used as a starting point that is then reduced.
+- :class:`MstConcatenator`: selects the edges required to connect the subnetworks
+  using a minimum spanning tree, giving the minimal reconnection (``k - 1`` edges for ``k`` subnetworks).
+- :class:`RedundantMstConcatenator`: constructs multiple (``n_redundancy``) spanning trees, where possible,
+  to introduce additional connections and reduce dependence on individual
+  connecting edges.
+
+All Concatenators accept ``exclude_edges`` in :func:`concatenate_networks`. These
+mappings identify ligand pairs that should be excluded when proposing new
+connections. This is useful when repairing a network because transformations that
+have already failed can be prevented from being proposed again.
 
 See :doc:`network_tools` for what else you can do with existing networks.
