@@ -11,7 +11,7 @@ from ...network_planners._map_scoring import _score_mappings
 from .._networkx_implementations._abstract_network_algorithm import (
     _AbstractNetworkAlgorithm,
 )
-from ..NetworkPlanner import NetworkPlanner
+from ..network_planner import NetworkPlanner
 
 log = logging.getLogger(__name__)
 
