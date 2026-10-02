@@ -22,7 +22,6 @@ class MaxConcatenator(NetworkConcatenator):
     ):
         """
         A NetworkConcatenator that connects a set of LigandNetworks with all possible edges.
-        This is usually most useful for initial edge listing.
 
         Parameters
         ----------
