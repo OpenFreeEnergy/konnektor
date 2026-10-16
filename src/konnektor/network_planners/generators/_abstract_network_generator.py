@@ -10,7 +10,7 @@ from konnektor.network_planners._networkx_implementations import (
     _AbstractNetworkAlgorithm,
 )
 
-from ..NetworkPlanner import NetworkPlanner
+from ..network_planner import NetworkPlanner
 
 
 class NetworkGenerator(NetworkPlanner):
